@@ -1,0 +1,45 @@
+<%= form_tag 'referred_lead_create', :html => {:class => 'form-horizontal'} do %>
+  <div class="col-lg-4 col-lg-offset-3">
+    <div class="well bs-component">
+      <center><legend>&nbspRefer New Lead</legend></center>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Name:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= text_field_tag 'lead[name]', '', :class => 'form-control'%>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Email:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= text_field_tag 'lead[email]', '', :class => 'form-control'%>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Mobile:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= text_field_tag 'lead[mobile]', '', :class => 'form-control'%>
+        </div>
+      </div>
+      <br>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= submit_tag 'Refer Lead',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<%end%>
+<style>
+  .btn_width{
+    width: 50% !important;
+  }
+</style>

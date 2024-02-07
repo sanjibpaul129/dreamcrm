@@ -1,0 +1,124 @@
+<h1>EM Report</h1>
+<%= form_tag 'em_report_testing_index', :html => {:class => 'form-horizontal'} do %>  
+	<div class="row">
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag 'from', @from.to_date, :class => 'form-control' %>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag 'to', @to.to_date, :class => 'form-control' %>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'View Details', :class => 'btn btn-primary' %>
+		</div>
+	</div>	
+<%end%>
+<% if request.post? %>
+	<table class="customers">
+		<thead>
+			<th>Name</th>
+			<th>Project</th>
+			<th>Role</th>
+			<th>Total Connected Calls</th>
+			<th>Qualified</th>
+			<th>Score</th>
+		</thead>
+		<tbody>
+			<% @phase_one.each do |key, value|%>
+				<tr>
+					<td><%= key%></td>
+					<% value.each do |subkey, subvalue|%>
+						<td><%= subvalue%></td>
+					<%end%>
+				</tr>
+			<%end%>
+		</tbody>
+	</table><br>
+	<table class="customers">
+		<thead>
+			<th>Name</th>
+			<th>Project</th>
+			<th>Role</th>
+			<th>Qualified</th>
+			<th>SV Conducted</th>
+			<th>Score</th>
+		</thead>
+		<tbody>
+			<% @phase_two.each do |key, value|%>
+				<tr>
+					<td><%= key%></td>
+					<% value.each do |subkey, subvalue|%>
+						<td><%= subvalue%></td>
+					<%end%>
+				</tr>
+			<%end%>
+		</tbody>
+	</table><br>
+	<table class="customers">
+		<thead>
+			<th>Name</th>
+			<th>Project</th>
+			<th>Role</th>
+			<th>Total Connected Calls</th>
+			<th>SV Conducted</th>
+			<th>Score</th>
+		</thead>
+		<tbody>
+			<% @phase_three.each do |key, value|%>
+				<tr>
+					<td><%= key%></td>
+					<% value.each do |subkey, subvalue|%>
+						<td><%= subvalue%></td>
+					<%end%>
+				</tr>
+			<%end%>
+		</tbody>
+	</table><br>
+	<table class="customers">
+		<thead>
+			<th>Name</th>
+			<th>Project</th>
+			<th>Role</th>
+			<th>Total Followups</th>
+			<th>Revived</th>
+		</thead>
+		<tbody>
+			<% @phase_four.each do |key, value|%>
+				<tr>
+					<td><%= key%></td>
+					<% value.each do |subkey, subvalue|%>
+						<td><%= subvalue%></td>
+					<%end%>
+				</tr>
+			<%end%>
+		</tbody>
+	</table><br>
+	<table class="customers">
+		<thead>
+			<th>Name</th>
+			<th>Project</th>
+			<th>Role</th>
+			<th>SV Conducted</th>
+			<th>Sale</th>
+			<th>Score</th>
+		</thead>
+		<tbody>
+			<% @phase_five.each do |key, value|%>
+				<tr>
+					<td><%= key%></td>
+					<% value.each do |subkey, subvalue|%>
+						<td><%= subvalue%></td>
+					<%end%>
+				</tr>
+			<%end%>
+		</tbody>
+	</table><br>
+<%end%>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

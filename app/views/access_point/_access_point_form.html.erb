@@ -1,0 +1,70 @@
+<%= form_for @access_point, url: {action: @access_point_action} do |f| %>
+  <div class="col-lg-4 col-lg-offset-4">
+    <div class="well bs-component">
+      <legend>&nbspAccess Point</legend>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :Action %>
+          </div>
+          <div class="col-lg-9">
+            <%= f.text_field :action, :class => 'form-control'%>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :Controller %>
+          </div>
+          <div class="col-lg-9">
+            <%= f.text_field :controller, :class => 'form-control'%>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :Menu %>
+          </div>
+          <div class="col-lg-9">
+          <%= select(:access_point, :menu, options_for_select(@menues , selected: @access_point.try(:menu)) , {:prompt => 'Select'}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+          <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :'Sub Menu' %>
+          </div>
+          <div class="col-lg-9">
+            <%= select(:access_point, :submenu, options_for_select(@submenues , selected: @access_point.try(:submenu)) , {:prompt => 'Select'}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :Order %>
+          </div>
+          <div class="col-lg-9">
+            <%= f.text_field :order, :class => 'form-control'%>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :Name %>
+          </div>
+          <div class="col-lg-9">
+            <%= f.text_field :name, :class => 'form-control'%>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :Method %>
+          </div>
+          <div class="col-lg-9">
+            <%= f.text_field :method, :class => 'form-control'%>
+          </div>
+        </div>
+      <div class="form-group row">
+        <div class="col-lg-4 col-lg-offset-4">
+          <%= f.submit :class => 'btn btn-primary'%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= hidden_field_tag :access_point_id, @access_point.id %>
+<% end %>
+  

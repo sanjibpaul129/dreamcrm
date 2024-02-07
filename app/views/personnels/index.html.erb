@@ -1,0 +1,72 @@
+<%@header = 'Personnels'%>
+<h1>Personnels</h1><!-- 
+<%= form_tag 'index', :html => {:class => 'form-horizontal'} do %>  
+  <div class="row">
+    <div class="col-lg-2">
+      Projects:
+    </div>
+    <div class="col-lg-3">
+      <%= select_tag "business_unit_id", options_for_select(@projects, selected: @project), :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag "View Details", :class => 'btn btn-primary'%>
+    </div>
+  </div>
+<%end%> -->
+<table id="customers" id="personnel_index">
+  <thead>
+    <tr>
+      <th>Organisation</th>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Mobile</th>
+      <th>Status</th>
+      <th>Project</th>
+      <th>Manager</th>
+      <th>Absent</th>
+      <th>Expanded</th>
+      <th>Inactive</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @personnels.each do |personnel| %>
+      <tr>
+        <td><%= personnel.organisation.name %></td>
+        <td><%= personnel.email %></td>
+        <td><%= personnel.name %></td>
+        <td><%= personnel.mobile %></td>
+        <td><%= personnel.status %></td>
+       
+        <% if personnel.business_unit_id != nil %>
+        <td><%= personnel.business_unit.name %></td>
+        <% else %>
+        <td></td>
+        <% end %>
+        <% if personnel.predecessor!=nil %>
+        <td><%= Personnel.find(personnel.predecessor).name %></td>
+        <% else %>
+        <td></td>
+        <% end %> 
+        <td><%= personnel.absent %></td>
+        <td><%= personnel.try(:expanded) %></td>
+        <% if personnel.access_right == -1 %>
+          <td>Inactive</td>
+        <%else%>
+          <td>Active</td>
+        <%end%>
+        <% if current_personnel.access_right==0 %>        
+        <td><%= link_to 'Edit', edit_personnel_path(personnel), :class => "edit_btn", :style => "text-decoration: none;"%></td>    
+        <% else %>
+        <td></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<% if current_personnel.email=='ayush@thejaingroup.com' %>
+<%= link_to 'New Personnel', new_personnel_path, :class => 'btn btn-primary' %>
+<% end %>

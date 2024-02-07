@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ad_id: MyString
+  amount: 9.99
+  week: 1
+
+two:
+  ad_id: MyString
+  amount: 9.99
+  week: 1

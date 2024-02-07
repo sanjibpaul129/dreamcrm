@@ -1,0 +1,10 @@
+json.total_leads @total_leads
+json.fresh_leads @fresh_leads
+json.follow_ups_due @follow_ups_due
+json.follow_ups_due_site_visited @follow_ups_due_site_visited
+json.follow_ups_due_field_visited  @follow_ups_due_field_visited
+json.follow_ups_due_visit_organised  @follow_ups_due_visit_organised  
+json.future_follow_ups @future_follow_ups
+json.future_follow_ups_field_visited @future_follow_ups_field_visited
+json.future_follow_ups_visit_organised @future_follow_ups_visit_organised
+json.future_follow_ups_site_visited @future_follow_ups_site_visited

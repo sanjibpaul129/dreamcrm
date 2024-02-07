@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @personnel.email %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @personnel.name %>
+</p>
+
+<p>
+  <strong>Passwordhash:</strong>
+  <%= @personnel.passwordhash %>
+</p>
+
+<p>
+  <strong>Passwordsalt:</strong>
+  <%= @personnel.passwordsalt %>
+</p>
+
+<p>
+  <strong>Auth token:</strong>
+  <%= @personnel.auth_token %>
+</p>
+
+<p>
+  <strong>Password reset token:</strong>
+  <%= @personnel.password_reset_token %>
+</p>
+
+<p>
+  <strong>Password reset sent at:</strong>
+  <%= @personnel.password_reset_sent_at %>
+</p>
+
+<p>
+  <strong>Mobile:</strong>
+  <%= @personnel.mobile %>
+</p>
+
+<%= link_to 'Edit', edit_personnel_path(@personnel) %> |
+<%= link_to 'Back', personnels_path %>

@@ -1,0 +1,244 @@
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart"
+            },
+            title: {
+                text: 'Project Wise Leads'
+            },
+            xAxis: {
+                categories: <%= @months %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @series %>
+           
+        });
+    });
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_online"
+            },
+            title: {
+                text: 'Source: Online'
+            },
+            xAxis: {
+                categories: <%= @months %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @online_series %>
+           
+        });
+    });
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_facebook"
+            },
+            title: {
+                text: 'Source: Facebook'
+            },
+            xAxis: {
+                categories: <%= @months %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @facebook_series %>
+           
+        });
+    });
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_google"
+            },
+            title: {
+                text: 'Source: Google'
+            },
+            xAxis: {
+                categories: <%= @months %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @google_series %>
+           
+        });
+    });
+  </script>
+  <%= form_tag 'monthly_chart_last_year' do  %>
+    <div class="row">
+      <div class="col-lg-1">
+        Project:
+      </div>
+      <div class="col-lg-3">
+        <%= select(:project, :selected, options_for_select(@projects, selected: @project_selected),{}, {:class => 'form-control'})  %>
+      </div>
+      <div class="col-lg-2">
+        <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  <%end%>
+  <div class="jumbotron">
+    <div id="consumption_chart"></div>
+  </div>
+
+  <div class="jumbotron">
+    <div id="consumption_chart_online"></div>
+  </div>
+
+  <div class="jumbotron">
+    <div id="consumption_chart_facebook"></div>
+  </div>
+
+  <div class="jumbotron">
+    <div id="consumption_chart_google"></div>
+  </div>

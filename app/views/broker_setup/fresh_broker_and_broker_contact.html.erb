@@ -1,0 +1,46 @@
+<%= form_tag 'fresh_broker_and_broker_contact_create', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-2">
+			Company:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "broker_id", options_for_select(@brokers), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => "Please Select"%><%= text_field_tag "broker_name", "Individual Broker", :class => 'form-control', :placeholder => "Other Broker Name"%>
+		</div>
+	</div>
+	<table class="customers">
+		<thead>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Mobile</th>
+			<th>Other Number</th>
+			<th></th>
+			<th></th>
+		</thead>
+		<tbody>
+			<tr class="tr_clone">
+				<td><%= text_field_tag "name[]", "", :class => 'form-control'%></td>
+				<td><%= text_field_tag "email[]", "", :class => 'form-control'%></td>
+				<td><%= text_field_tag "mobile_one[]", "", :class => 'form-control'%></td>
+				<td><%= text_field_tag "mobile_two[]", "", :class => 'form-control'%></td>
+				<td><input type="button" name="add" value="Remove" class="tr_clone_remove btn btn-danger btn-xs"></td>
+        <td><input type="button" name="add" value="Duplicate" class="tr_clone_duplicate btn btn-info btn-xs"></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="row">
+		<div class="col-lg-2 col-lg-offset-5">
+			<%= submit_tag "Create Broker", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<script>
+  $("table").on('click',"input.tr_clone_duplicate" , function() {
+      var tr    = $(this).closest('.tr_clone');
+      var clone = tr.clone();
+      tr.after(clone);
+  });  
+
+  $("table").on('click',"input.tr_clone_remove" , function() {
+      $(this).closest('tr').remove();
+  });
+</script>

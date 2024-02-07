@@ -1,0 +1,2 @@
+module LostReasonsHelper
+end

@@ -1,0 +1,53 @@
+<%= form_for(@follow_up) do |f| %>
+  <% if @follow_up.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@follow_up.errors.count, "error") %> prohibited this follow_up from being saved:</h2>
+
+      <ul>
+      <% @follow_up.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :lead_id %><br>
+    <%= f.number_field :lead_id %>
+  </div>
+  <div class="field">
+    <%= f.label :remarks %><br>
+    <%= f.text_field :remarks %>
+  </div>
+  <div class="field">
+    <%= f.label :communication_time %><br>
+    <%= f.datetime_select :communication_time %>
+  </div>
+  <div class="field">
+    <%= f.label :follow_up_time %><br>
+    <%= f.datetime_select :follow_up_time %>
+  </div>
+  <div class="field">
+    <%= f.label :personnel_id %><br>
+    <%= f.number_field :personnel_id %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.check_box :status %>
+  </div>
+  <div class="field">
+    <%= f.label :business_unit_id %><br>
+    <%= f.number_field :business_unit_id %>
+  </div>
+  <div class="field">
+    <%= f.label :escalated %><br>
+    <%= f.check_box :escalated %>
+  </div>
+  <div class="field">
+    <%= f.label :hot %><br>
+    <%= f.check_box :hot %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

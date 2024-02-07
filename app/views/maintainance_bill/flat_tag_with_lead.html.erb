@@ -1,0 +1,63 @@
+<%@header = 'Flat Tag with Leads'%>
+<%= form_tag 'flat_tag_with_lead', :html => {:class => 'form-horizontal'} do %>    
+  <div class="row">   
+    <div class="col-lg-2 col-lg-offset-2">
+      <h4>Select Project:</h4>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Submit',:class => 'btn btn-primary btn-block' %>
+    </div>
+  </div>
+<%end%><br>
+<% if request.post?%>
+<%= form_tag 'flat_tagging', :html => {:class => 'form-horizontal'} do %>    
+  <div class="row">
+    <div class="col-lg-6">
+      <table class="customers">
+        <thead>
+          <th></th>
+          <th>Block</th>
+          <th>UnTagged Flats</th>
+        </thead>  
+        <tbody>
+          <%@flats.each do |flat|%>
+            <tr>
+              <td><%= radio_button_tag 'flat_id',flat.id%></td>
+              <td><%= flat.block.name %></td>
+              <td><%= flat.full_name%></td>
+            </tr>
+          <%end%>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-6">
+      <table class="customers">
+        <thead>
+          <th></th>
+          <th>UnTagged Leads</th>
+          <th>Mobile</th>
+          <th>email</th>
+        </thead>  
+        <tbody>
+          <%@leads.each do |lead|%>
+            <tr>
+              <td><%= radio_button_tag 'lead_id',lead.id%></td>
+              <td><%= lead.name%></td>
+              <td><%= lead.mobile%></td>
+              <td><%= lead.email%></td>
+            </tr>
+          <%end%>
+        </tbody>
+      </table>
+    </div>
+  </div><br>
+  <div class="row">
+    <div class="col-lg-3 col-lg-offset-5">
+      <%= submit_tag 'Tag Flat With Lead',:class => 'btn btn-primary btn-block' %>
+    </div>
+  </div>
+<%end%>
+<%end%>

@@ -1,0 +1,36 @@
+<div class="col-lg-4 col-lg-offset-4">
+  <div class="well bs-component">
+    <legend>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspImport Bulk Recipient</legend> 
+    <%= form_tag 'bulk_recipient_upload', multipart: true  do %>
+      <div class="row">
+        <div class="col-lg-8">
+          <%= file_field_tag :file, class: 'filestyle', :'data-classButton' => 'btn btn-primary' %>
+        </div>
+        <div class="col-lg-4">
+          <%= button_tag type: 'submit', :class =>"btn btn-primary"  ,'data-toogle' => "tooltip",'title' => "Import Leads"  do %>
+            <%= content_tag :strong, 'Import Recipient' %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <b>INSTRUCTIONS:</b>
+    </div>
+  </div>
+  <div class="panel-body">
+    Populate as per headings(mobile, email, field_one, field_two, field_three, field_four, field_five)
+  </div>
+</div>
+
+
+</div>
+</div>
+<style>
+  .btn{
+    font-size: 11px!important;
+  }
+</style>

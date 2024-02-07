@@ -1,0 +1,35 @@
+<h1>Listing block_extra_charges</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Block</th>
+      <th>Extra charge</th>
+      <th>Percentage</th>
+      <th>Amount</th>
+      <th>Rate</th>
+      <th>Flat type</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @block_extra_charges.each do |block_extra_charge| %>
+      <tr>
+        <td><%= block_extra_charge.block_id %></td>
+        <td><%= block_extra_charge.extra_charge_id %></td>
+        <td><%= block_extra_charge.percentage %></td>
+        <td><%= block_extra_charge.amount %></td>
+        <td><%= block_extra_charge.rate %></td>
+        <td><%= block_extra_charge.flat_type %></td>
+        <td><%= link_to 'Show', block_extra_charge %></td>
+        <td><%= link_to 'Edit', edit_block_extra_charge_path(block_extra_charge) %></td>
+        <td><%= link_to 'Destroy', block_extra_charge, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Block extra charge', new_block_extra_charge_path %>

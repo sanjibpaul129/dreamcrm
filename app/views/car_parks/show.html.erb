@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nature:</strong>
+  <%= @car_park.car_park_nature.description %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @car_park.rate %>
+</p>
+
+<p>
+  <strong>Block:</strong>
+  <%= @car_park.block_id %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @car_park.date %>
+</p>
+
+<%= link_to 'Edit', edit_car_park_path(@car_park) %> |
+<%= link_to 'Back', car_parks_path %>

@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cost_sheet_id: 1
+  personnel_id: 1
+  date: 2019-12-13 17:09:28
+  allotment_date: 2019-12-13 17:09:28
+  agreement_date: 2019-12-13 17:09:28
+  posession_date: 2019-12-13 17:09:28
+  reqistration_date: 2019-12-13 17:09:28
+  cancellation_date: 2019-12-13 17:09:28
+
+two:
+  cost_sheet_id: 1
+  personnel_id: 1
+  date: 2019-12-13 17:09:28
+  allotment_date: 2019-12-13 17:09:28
+  agreement_date: 2019-12-13 17:09:28
+  posession_date: 2019-12-13 17:09:28
+  reqistration_date: 2019-12-13 17:09:28
+  cancellation_date: 2019-12-13 17:09:28

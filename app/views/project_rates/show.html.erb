@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Business unit:</strong>
+  <%= @project_rate.business_unit_id %>
+</p>
+
+<p>
+  <strong>Base rate:</strong>
+  <%= @project_rate.base_rate %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @project_rate.date %>
+</p>
+
+<%= link_to 'Edit', edit_project_rate_path(@project_rate) %> |
+<%= link_to 'Back', project_rates_path %>

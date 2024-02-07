@@ -1,0 +1,73 @@
+<%@header = 'Project Wise Leads Barchart'%>
+<script type="text/javascript" charset="utf-8">
+
+Highcharts.setOptions({
+  lang: {
+    decimalPoint: '.',
+    thousandsSep: ','
+  }
+});
+
+$(function () {
+    // Create the chart
+   new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: "consumption_chart"
+        },
+        title: {
+            text: 'Project Wise Leads'
+        },
+        xAxis: {
+            categories: <%= @projects_array %>,
+            crosshair: true
+            },
+        yAxis: {
+            title: {
+                text: 'Count'
+            }
+
+        },
+        legend: {
+            enabled: true
+        },
+        plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0,
+            dataLabels: {
+                    align: "left",
+                    enabled: true,
+                    format: '{point.y:,.05f}',
+                    padding: 0,
+                    rotation: -45                }
+        }
+        },
+
+        tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+        },
+
+        series: <%= @series %>
+       
+    });
+});
+
+
+</script>
+
+<div class="jumbotron">
+<div id="consumption_chart"></div>
+</div>
+
+
+  <%= form_tag 'project_wise_open_leads_pie_chart' do  %>
+  <%= select(:executive, :selected, options_for_select(@executives, selected: @executive_selected),{}, {})  %>
+  <%= image_submit_tag("reload.png", :class=> 'btn btn-default btn-xs refrash_button', name: 'refreshnow','title'=>"Refresh") %>
+  <% end %>
+

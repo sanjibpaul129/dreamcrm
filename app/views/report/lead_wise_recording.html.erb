@@ -1,0 +1,34 @@
+<h1>Lead Call Recordings</h1>
+<div class="row">
+  <div class="col-lg-2">
+    Customer Name:
+  </div>
+  <div class="col-lg-5">
+    <%= @lead.name%>
+  </div>
+</div>
+<table class="customers">
+  <thead>
+    <th>File Name</th>
+    <th>Created On</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <% @telephony_calls.each do |telephony_call| %>
+      <% if telephony_call.recording_url == "None" %>
+      <%else%>
+        <tr>
+          <td><%= telephony_call.recording_url%></td>
+          <td><%= (telephony_call.created_at+5.hours+30.minutes).strftime("%d/%m/%y") %></td>
+          <td><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), telephony_call.recording_url%></td>
+        </tr>
+      <%end%>
+    <%end%>
+  </tbody>
+</table>
+<style>
+  .play_btn{
+      width: 30px!important;
+      height: auto;
+    }
+</style>

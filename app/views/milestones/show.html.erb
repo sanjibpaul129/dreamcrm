@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @milestone.payment_milestone.try(:description) %>
+</p>
+
+<p>
+  <strong>Flat value percentage:</strong>
+  <%= @milestone.flat_value_percentage %>
+</p>
+
+<p>
+  <strong>Extra charge percentage:</strong>
+  <%= @milestone.extra_development_charge_percentage %>
+</p>
+
+<p>
+  <strong>Extra charge percentage:</strong>
+  <%= @milestone.amount %>
+</p>
+<p>
+  <strong>Extra charge percentage:</strong>
+  <%= @milestone.order %>
+</p>
+
+<p>
+  <strong>Nature:</strong>
+  <%= @milestone.nature %>
+</p>
+
+<p>
+  <strong>Payment plan:</strong>
+  <%= @milestone.payment_plan_id %>
+</p>
+
+<%= link_to 'Edit', edit_milestone_path(@milestone) %> |
+<%= link_to 'Back', milestones_path %>

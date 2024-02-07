@@ -1,0 +1,111 @@
+<%@header = 'Field Visit Register'%>
+<% flash.each do |key, value| %>
+  <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+  </div>
+<% end %>
+
+<div align="center"><h3><b>Field Visits</b></h3></div>
+<%= form_tag 'field_visit_register' do  %>
+  <div class="row"> 
+    <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' %>
+      <div class="col-lg-2">
+        <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+      </div>
+      <div class="col-lg-2">
+        <%= select(:salesteam, :personnel, options_for_select(@sales_team, selected: @sales_person),{}, {:class => 'form-control'})  %>
+      </div>
+    <% end %>
+    <div class="col-lg-2">
+      <%= date_field(:range, :from, :value => @from,:class => 'form-control') %>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field(:range, :to, :value => @to,:class => 'form-control') %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag "Refresh", name: "refresh", :class => 'btn btn-primary' %>
+    </div>
+  </div>
+  <table class="customers " id="field_visit_register" style="width: 100% height:100%">
+    <thead>
+      <tr>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Name</th>
+        <% if current_personnel.organisation_id == 6 %>
+          <th>Mobile</th>
+          <th>Other No.</th>
+          <th>Email</th>
+        <%end%>
+        
+        <th>Budget From</th>
+        <th>Budget To</th>
+        <th>BHK</th>
+        <th>Source</th>
+        <th>Remarks</th>
+        <th>Status</th>
+        <th>Generated on</th>
+        <th>Generated on sort</th>
+        <th>Field Visited on</th>
+        <th>Field Visited on sort</th>
+        <th>Executive</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @field_visits.each do |field_visit| %>
+        <tr>
+          <td><%= field_visit.follow_up.lead.id %></td>
+          <td><%= field_visit.follow_up.lead.business_unit.name %></td>
+          <td><%= field_visit.follow_up.lead.name %></td>
+          <% if current_personnel.organisation_id == 6 %>
+            <td><%= field_visit.follow_up.lead.mobile %></td>
+            <td><%= field_visit.follow_up.lead.other_number %></td>
+            <td><%= field_visit.follow_up.lead.email %></td>
+          <%end%>
+          <td><%= field_visit.follow_up.lead.budget_from %></td>
+          <td><%= field_visit.follow_up.lead.budget_to %></td>
+          <td><%= field_visit.follow_up.lead.flat_type %></td>
+          <td><%= field_visit.follow_up.lead.source_category.heirarchy %></td>
+          <td><%= field_visit.follow_up.lead.customer_remarks %></td>
+          <% if field_visit.follow_up.lead.osv == true && field_visit.follow_up.lead.status == false && field_visit.follow_up.interested_in_site_visit_on == nil && field_visit.follow_up.lead.qualified_on != nil %>
+            <td>Qualified</td>
+          <% elsif field_visit.follow_up.lead.osv == true && field_visit.follow_up.lead.status == false && field_visit.follow_up.lead.interested_in_site_visit_on != nil%>
+            <td>Interested In Site Visit</td>
+          <% elsif field_visit.follow_up.lead.status == nil %>
+            <td>Fresh</td>
+          <% elsif field_visit.follow_up.lead.status== false %>
+            <td>Field Visited</td>
+          <% elsif field_visit.follow_up.lead.status== true && field_visit.follow_up.lead.lost_reason_id==nil %>
+            <td>Booked</td>
+          <% else %>
+            <td>Lost:<%= field_visit.follow_up.lead.lost_reason.description %></td>
+          <% end %>
+          <td><%= field_visit.follow_up.lead.generated_on.strftime("%d/%m/%y") %></td>
+          <td><%= field_visit.follow_up.lead.generated_on.strftime("%m/%d/%y") %></td>
+          <td><%= field_visit.date.strftime("%d/%m/%y") %></td>
+          <td><%= field_visit.date.strftime("%m/%d/%y") %></td>
+          <td><%= field_visit.follow_up.lead.personnel.name %></td>
+          <td><%= submit_tag ">", name: field_visit.follow_up.lead.id, :class => 'btn btn-primary btn-xs' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+<% end %>
+
+<style >
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+</style>

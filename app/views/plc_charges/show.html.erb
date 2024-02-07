@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Block:</strong>
+  <%= @plc_charge.block_id %>
+</p>
+
+<p>
+  <strong>Plc:</strong>
+  <%= @plc_charge.plc_id %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @plc_charge.rate %>
+</p>
+
+<%= link_to 'Edit', edit_plc_charge_path(@plc_charge) %> |
+<%= link_to 'Back', plc_charges_path %>

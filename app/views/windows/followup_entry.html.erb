@@ -1,0 +1,87 @@
+<div class="container">
+  <div class="form-group">
+    <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Sales Executive' || current_personnel.status=='Team Lead' || current_personnel.status == "Audit" %>
+      <div class="row">
+        <div class="col-md-3 executive_div">
+          <div ><b><i><font color="#004fff">  Executive </font></i></b></div>
+            <%= select_tag 'personnel_id', options_for_select(@executives), :class => 'form-control'%>
+          </div> 
+    <% end %>
+    <div class="col-md-5">
+      <div ><b><i><font color="#004fff">  Followed up/Site Visited/Booked/Lost Date </font></i></b></div>
+        <% min_date=Time.now%>
+        <%= date_field(:leading, :flexible_date, max: Date.today, :class => "form-control", :value => min_date.strftime('%Y-%m-%d'), :required => true)%>
+      </div>   
+      <div class="col-md-4">
+        <div ><b><i><font color="#004fff">To Followup On</font></i></b></div>
+        <%= date_field(:leading, :followup_date, :class => "form-control", :value => ((min_date.to_date)+1.day)) %>
+        <%= time_select :leading, :followup_time, {ampm: true, minute_step: 30, default: Time.now.beginning_of_day+19.hours} %>
+      </div>    
+    </div>
+    <div class="row">
+        <div class="col-md-2 list_design">
+          <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot' %>Hot</p>
+          <p class="text-success"><%= radio_button_tag :anticipation , 'Good', true %>Good</p>
+          <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+        </div>  
+      <div class="col-md-4">
+        <div ><b><i><font color="#004fff"> Status </font></i></b></div>
+          <%= select(:leading, :status, options_for_select([['Site Visited',2 ],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]]),{}, { :class => 'form-control' })   %>&nbsp;
+        <%= select_tag 'lost_reason_id', options_for_select(@lost_reasons), :prompt => 'Reason for Lead Lost', :class => 'form-control' %>
+      </div>
+      <div class="col-md-6 follow_up_status_div">
+        <div>
+          <b><i><font color="#004fff">Followup Remarks</font></i></b>
+        </div>
+        <%= select_tag 'remarks', options_for_select(@common_followup_remarks), :class => 'form-control', :id => 'dropdown_remarks', :prompt => 'Select Followup Remarks',:onchange => 'textarea_remarks_disable("textarea_remarks")'%><br>
+        <div class="row">
+          <div class="col-lg-9">
+            <%= text_area_tag(:remarks, nil, placeholder: 'Enter Followup Remarks', class: "form-control", autocomplete: 'remarks', :id => 'textarea_remarks', :onchange => 'dropdown_remarks_disable("dropdown_remarks")') %>
+          </div>
+          <div class="col-lg-2">
+            Feedback:
+          </div>
+          <div class="col-lg-1">
+            <%= check_box_tag 'site_visit_feedback', true, nil%>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><div class="small_dividor"></div><br>
+    <div class="row">
+        <div class="col-md-3">
+          Place of Residence:
+          <%= select_tag 'leading[area_id]', options_for_select(@areas), :prompt => 'Select Area', :class => 'form-control chosen',  :onchange => 'populate_area_other()' %>
+          <div id="area_other">
+          </div>
+        </div>
+        <div class="col-md-3">
+          Age Bracket:
+          <%= select_tag 'leading[age_bracket]', options_for_select(@age_brackets), :class => 'form-control', :prompt => 'Select Age Bracket' %>
+        </div>
+        <div class="col-md-3">
+          Occupation:
+          <%= select_tag 'leading[occupation_id]', options_for_select(@occupations), :class => 'form-control chosen', :prompt => 'Select Occupation', :onchange => 'populate_occupation_other()' %>
+          <div id="occupation_other">
+          </div>
+        </div>
+        <div class="col-md-3">
+          Company Area:
+          <%= select_tag 'leading[work_area_id]', options_for_select(@areas), :prompt => 'Select Area', :class => 'form-control chosen', :onchange => 'populate_work_area_other()' %>
+          <div id="work_area_other">
+          </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div ><i>  &nbsp;</i></div>
+        <%= submit_tag 'Update',name: 'update', :class => 'btn btn-primary', id: 'follow_up_update' %>
+        <% params[:id]%>
+        <%= submit_tag 'SMS Followup', name: 'sms_followup', :class => 'btn btn-info' %>
+        <%= submit_tag 'Email Followup', name: 'email_followup', :class => 'btn btn-info' %>
+          <%= submit_tag 'Cost Sheet', name: 'cost_sheet', :class => 'btn btn-info' %>
+        <%= link_to 'Site Visit Form', windows_site_visit_form_path(@lead), :class => 'btn btn-primary' %>
+      </div>
+    </div><br>
+  </div>
+</div>

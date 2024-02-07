@@ -1,0 +1,59 @@
+<%@header = 'Electrical Reminder Logs'%>
+<h1>Electrical Reminder Logs</h1>
+<%= form_tag 'electrical_reminder_log_index', :html => {:class => 'form-horizontal'} do %>    
+      <div class="row">
+        <div class="col-lg-1">
+          <h5>Project:</h5>
+        </div>
+        <div class="col-lg-3">
+          <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{prompt: "Select Project"}, {:class => 'form-control'}) %>
+        </div>
+        <div class="col-lg-1">
+          <h5>From:</h5>
+        </div>
+        <% 
+          if request.get?
+            previous_from = DateTime.now.beginning_of_month
+            previous_to = DateTime.now.end_of_month
+          else
+            previous_from = @from
+            previous_to = @to
+          end
+        %>
+        <div class="col-lg-2">
+          <%= date_field_tag 'electrical_reminder_log[from]',previous_from.to_date, :class => 'form-control'%>
+        </div>
+        <div class="col-lg-1">
+          <h5>To:</h5>
+        </div>
+        <div class="col-lg-2">
+          <%= date_field_tag 'electrical_reminder_log[to]',previous_to.to_date, :class => 'form-control'%>
+        </div>
+        <div class="col-lg-2">
+          <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+        </div>
+      </div><br>
+    <%end%>
+<table id="customers" >
+  <thead>
+    <tr>
+    	<th>Project</th>
+    	<th>Customer</th>
+    	<th>Block</th>
+    	<th>Flat</th>
+    	<th>Reminder Sent On</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @electrical_reminder_logs.each do |electrical_reminder_log|%>
+  		<tr>
+  			<td><%= electrical_reminder_log.flat.block.business_unit.name%></td>
+  			<td><%= electrical_reminder_log.flat.lead.name%></td>
+  			<td><%= electrical_reminder_log.flat.block.name%></td>
+  			<td><%= electrical_reminder_log.flat.full_name%></td>
+  			<td><%= electrical_reminder_log.sent_on.to_date.strftime('%d/%m/%Y')%></td>
+  		</tr>
+  	<%end%>
+  </tbody>
+</table>

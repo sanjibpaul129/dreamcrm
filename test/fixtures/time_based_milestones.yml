@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  previous_payment_milestone_id: 1
+  subsequent_payment_milestone_id: 1
+  days_after: 1
+
+two:
+  previous_payment_milestone_id: 1
+  subsequent_payment_milestone_id: 1
+  days_after: 1

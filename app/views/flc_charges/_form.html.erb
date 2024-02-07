@@ -1,0 +1,42 @@
+<%= form_for(@flc_charge) do |f| %>
+  <% if @flc_charge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@flc_charge.errors.count, "error") %> prohibited this flc_charge from being saved:</h2>
+
+      <ul>
+      <% @flc_charge.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Flc Charges</legend>
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Block', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+           <%= select(:flc_charge, :block_id, options_for_select(@blocks, selected: @flc_charge.block_id),{}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="form-group"> 
+          <%= f.label :Rate, :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-3">
+            <%= f.number_field :rate, :class => 'form-control'%>
+          </div>
+          <%= f.label :From_floor, :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-3">
+            <%= f.number_field :from_floor, :class => 'form-control'%>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-6 col-lg-offset-4">
+          <br>
+          <%= f.submit :class => 'btn btn-primary btn-block btn_width'%>
+        </div>
+      </div>
+<% end %>

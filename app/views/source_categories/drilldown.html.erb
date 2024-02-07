@@ -1,0 +1,71 @@
+<%= form_tag 'drilldown' do  %>
+
+<h1><%= @leafgroup %></h1>
+<div class="col-lg-2">
+  <% if SourceCategory.find(@chosen).predecessor != nil%>
+    <%= link_to 'back', source_categories_drilldown_path(SourceCategory.find(@chosen).predecessor => '>>'), method: :post, :class => 'btn btn-primary'%>
+  <%end%>
+
+
+</div>
+
+
+
+<table class="customers" id="source_list">
+  <thead>
+    <tr>
+      <th></th>
+      
+      <th>Description</th>
+      <th>Heirarchy</th>
+	  <th>Not used since</th>
+	  <th>Created since</th>
+	  <th>Inactive</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @source_categories.each do |source_category| %>
+      <tr>
+        <td><%= radio_button_tag :source_category_id , source_category.id %></td>
+        <td><%= source_category.description %></td>
+        <td><%= source_category.heirarchy %></td>
+        <td><%=  %></td>
+		<td><%= ((Time.now-source_category.created_at)/86400).round(0) %></td>
+		<% if source_category.inactive == true %>
+          <td><i class="glyphicon glyphicon-exclamation-sign"></i></td>
+        <% else %>
+          <td></td>
+        <% end %>
+      <% if SourceCategory.where(predecessor: source_category.id) != [] %>
+        <td><%= submit_tag   ">>", name: source_category.id, :class => 'btn btn-default btn-xs' %></td>
+        <% else %>
+        <td></td>
+        <% end %>
+         
+       <td> <%= link_to :controller => "source_categories", :action => "edit", :id => source_category.id, :source_category_id => source_category.predecessor, class: "btn btn-default btn-xs" do%>
+    <i class="glyphicon glyphicon-pencil edit_btn"></i>
+<% end %></td>
+
+         
+
+       <td> <%= link_to source_category, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default btn-xs dlt_btn" do%>
+    <i class="glyphicon glyphicon-fire"></i>
+<% end %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= submit_tag 'New Source', :class => 'btn btn-primary' %>
+<% end %>
+<style>
+  .edit_btn{
+    width: 32Px!important;
+  }
+</style>

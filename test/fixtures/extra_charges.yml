@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  organisation_id: 1
+  description: MyString
+  service_tax: 9.99
+
+two:
+  organisation_id: 1
+  description: MyString
+  service_tax: 9.99

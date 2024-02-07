@@ -1,0 +1,56 @@
+<h1>All Telephony Calls</h1>
+<%= form_tag 'sr_call_report', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "from", @from.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "to", @to.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>duration</th>
+		<th>recording_url</th>
+		<th>k_number</th>
+		<th>start_time</th>
+		<th>call_type</th>
+		<th>call_outcome</th>
+		<th>agent_number</th>
+		<th>customer_number</th>
+		<th>lead_id</th>
+		<th>fresh</th>
+		<th>untagged</th>
+	</thead>
+	<tbody>
+		<% @telephony_calls.each do |telephony_call| %>
+			<tr>
+				<td><%= telephony_call.try(:duration)%></td>
+				<% if telephony_call.recording_url == "None" %>
+					<td><%= telephony_call.try(:recording_url)%></td>
+				<%else%>
+					<td><%= link_to telephony_call.recording_url, telephony_call.recording_url, target: "_blank"%></td>
+				<%end%>
+				<td><%= telephony_call.try(:k_number)%></td>
+				<td><%= telephony_call.try(:start_time).strftime("%d/%m/%Y")%></td>
+				<td><%= telephony_call.try(:call_type)%></td>
+				<td><%= telephony_call.try(:call_outcome)%></td>
+				<td><%= telephony_call.try(:agent_number)%></td>
+				<td><%= telephony_call.try(:customer_number)%></td>
+				<td><%= telephony_call.try(:lead_id)%></td>
+				<td><%= telephony_call.try(:fresh)%></td>
+				<td><%= telephony_call.try(:untagged)%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

@@ -1,0 +1,36 @@
+<%= form_tag 'reply_to_customer_over_whatsapp', :html => {:class => 'form-horizontal'} do %>  
+	<%= hidden_field_tag "customer_number", params[:customer_number]%>
+	<%= hidden_field_tag "whatsapp_number", params[:whatsapp_number]%>
+	<div class="col-lg-6 col-lg-offset-3">
+		<div class="well">
+			<div class="row">
+				<div class="col-lg-3">
+					Message:
+				</div>
+				<div class="col-lg-9">
+					<%= text_area_tag "reply_to_customer", '', :class => 'form-control'%>
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-lg-3">
+					Other Details:
+				</div>
+				<div class="col-lg-9">
+					<%= select_tag 'whatsapp_templates[]', options_for_select(@gurukul_whatsapp_templates), :class => 'form-control, multi_select_style', :multiple => true %>
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-lg-2 col-lg-offset-4">
+					<%= submit_tag "Message Send", :class => 'btn btn-primary' %>
+				</div>
+			</div>
+		</div>
+	</div>
+<%end%>
+<script>
+	$(document).ready(function() {
+		$(".multi_select_style").multiselect().multiselectfilter();
+		$(".ui-multiselect-all").hide();
+		$(".ui-multiselect-none").hide()
+	});
+</script>

@@ -1,0 +1,42 @@
+<%@header = 'Opening Balance Edit'%>
+<%= form_tag 'opening_balance_update', :html => {:class => 'form-horizontal'} do %>
+  
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspUpdate Opening Balance</legend>
+      <div class="row">
+        <div class="form-group">
+          <div class="col-lg-2">
+            <%= label_tag :'Flat:' %>
+          </div>
+          <div class="col-lg-3">
+            <p><font color="black"><b><%= @flat.full_name%></b></font></p>
+          </div>
+          <div class="col-lg-3">
+            <%= label_tag :'Opening Balance:' %>
+          </div>
+          <div class="col-lg-4">
+            <%= number_field_tag 'flat[opening_balance]', @flat.opening_balance, required: true, step: "any", :class => 'form-control'%>
+          </div>
+        </div>
+      </div>
+<br>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= submit_tag 'Update Opening Balance',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= hidden_field_tag :flat_id, @flat.id %>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>

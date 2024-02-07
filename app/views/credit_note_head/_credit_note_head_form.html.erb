@@ -1,0 +1,32 @@
+<div class="col-lg-5 col-lg-offset-3">
+	<div class="well bs-component">
+		<center><legend>Credit Note Head</legend></center>
+		<%= form_for @credit_note_head, url: {action: @credit_note_head_action} do |f| %>
+  		  <% if @credit_note_head.errors.any? %>
+		    <div id="error_explanation">
+		      <h2><%= pluralize(@credit_note_head.errors.count, "error") %> prohibited this credit_note_head from being saved:</h2>
+
+		      <ul>
+		      <% @credit_note_head.errors.full_messages.each do |message| %>
+		        <li><%= message %></li>
+		      <% end %>
+		      </ul>
+		    </div>
+		  <% end %>
+		  <div class="row">
+		  	<div class="col-lg-2">
+		    	<%= f.label :Description, :class => "control-label" %>
+		    </div>
+		    <div class="col-lg-10">
+		    	<%= f.text_field :description, :class => "form-control" %>
+		  	</div>
+	      </div><br>
+	  	  <div class="row">
+	      	<div class="col-lg-8 col-lg-offset-2">
+	    		<%= f.submit :class => 'btn btn-primary btn-block'%>
+	  		</div>
+	      </div>
+	      <%= hidden_field_tag :credit_note_head_id, @credit_note_head.id%>
+	    <% end %>
+  	</div>
+</div>

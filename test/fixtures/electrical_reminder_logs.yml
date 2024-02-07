@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  flat_id: 1
+  sent_on: 2020-07-31 19:39:46
+
+two:
+  flat_id: 1
+  sent_on: 2020-07-31 19:39:46

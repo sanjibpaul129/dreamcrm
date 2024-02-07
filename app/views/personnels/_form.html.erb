@@ -1,0 +1,104 @@
+<%= form_for(@personnel) do |f| %>
+  <% if @personnel.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@personnel.errors.count, "error") %> prohibited this personnel from being saved:</h2>
+
+      <ul>
+      <% @personnel.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-6 col-lg-offset-3">
+    <div class="well bs-component">
+      <div class="row">
+        <div class="col-lg-2">
+          <%= f.label :project%>
+        </div>
+        <div class="col-lg-4">
+          <%= select(:personnel, :business_unit_id, options_for_select(@business_units, selected: @personnel.business_unit_id),{}, {:class => 'form-control'})   %>      
+        </div>
+        <div class="col-lg-2">
+          <%= f.label :team_lead %>
+        </div>
+        <div class="col-lg-4">
+          <%= select(:personnel, :predecessor, options_for_select(@predecessors, selected: @personnel.predecessor),{}, {:class => 'form-control'})   %>      
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-4">
+          Mapped One:
+        </div>
+        <div class="col-lg-4">
+          <%= select_tag "personnel[mapped]", options_for_select(@personnels, selected: @personnel.mapped), :class => 'form-control', :prompt => 'Please Select'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-4">
+          Mapped Two:
+        </div>
+        <div class="col-lg-4">
+          <%= select_tag "personnel[mapped_two]", options_for_select(@personnels, selected: @personnel.mapped_two), :class => 'form-control', :prompt => 'Please Select'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-4">
+          Mapped Three:
+        </div>
+        <div class="col-lg-4">
+          <%= select_tag "personnel[mapped_three]", options_for_select(@personnels, selected: @personnel.mapped_three), :class => 'form-control', :prompt => 'Please Select'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-2">
+          <%= f.label :absent %>
+        </div>
+        <div class="col-lg-2">
+          <% if @personnel.absent==true %>
+            <%= check_box_tag 'personnel[absent]', 'absent', checked: true %>
+          <% else %>
+            <%= check_box_tag 'personnel[absent]', 'absent' %>
+          <% end %>
+        </div>
+        <div class="col-lg-2">
+          <%= f.label :inactive %>
+        </div>
+        <div class="col-lg-2">
+          <% if @personnel.access_right==-1 %>
+            <%= check_box_tag 'personnel[access_right]', 'inactive', checked: true %>
+          <% else %>
+            <%= check_box_tag 'personnel[access_right]', 'inactive' %>
+          <% end %>
+        </div>
+        <div class="col-lg-2">
+          <%= f.label :expanded %>
+        </div>
+        <div class="col-lg-2">
+          <% if @personnel.expanded==nil %>
+            <%= check_box_tag 'personnel[expanded]', true, nil%>
+          <% else %>
+            <%= check_box_tag 'personnel[expanded]', true, nil, checked: true %>
+          <% end %>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= f.label :allocation_weight %>
+        </div>
+        <div class="col-lg-9">
+          <%= f.number_field :allocation_weight, :class => 'form-control' %>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-2 col-lg-offset-4">
+          <%= f.submit :class => 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div> 
+<% end %>

@@ -1,0 +1,119 @@
+<%@header = 'Demand Money Receipt Register'%>
+<h1>Demand Money Receipt register</h1>
+    <%= form_tag 'demand_money_receipt_submit', :html => {:class => 'form-horizontal'} do %>    
+      <div class="row">
+        <div class="col-lg-1">
+          <h5>Project:</h5>
+        </div>
+        <div class="col-lg-3">
+          <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{prompt: "Select Project"}, {:class => 'form-control'}) %>
+        </div>
+        <div class="col-lg-1">
+          <h5>From:</h5>
+        </div>
+        <% 
+          if request.get?
+            previous_from = DateTime.now.beginning_of_month-3.month
+            previous_to = (previous_from+2.month).end_of_month
+          else
+            previous_from = @from
+            previous_to = @to
+          end
+        %>
+        <div class="col-lg-2">
+          <%= date_field_tag 'demand_money_receipt[from]',previous_from.to_date, :class => 'form-control'%>
+        </div>
+        <div class="col-lg-1">
+          <h5>To:</h5>
+        </div>
+        <div class="col-lg-2">
+          <%= date_field_tag 'demand_money_receipt[to]',previous_to.to_date, :class => 'form-control'%>
+        </div>
+        <div class="col-lg-2">
+          <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          
+          <%= submit_tag 'Last 6 month status',:class => 'btn btn-primary btn-block' %>
+        </div>
+      </div><br>
+    <%end%>
+<%= form_tag 'multi_demand_money_receipt_destroy', :html => {:class => 'form-horizontal'} do %>    
+  <table id="customers">
+    <thead>
+      <tr>
+        <% if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'gyanprakash@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+          <th></th>
+        <%end%>
+        <th>Receipt No.</th>
+        <th>Project</th>
+        <th>Customer</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Block</th>
+        <th>Flat</th>
+        <th>Payment Date</th>
+        <th>Cheque No.</th>
+        <th>Bank</th>
+        <th>Amount</th>
+        <th>Remarks</th>
+        <th></th>
+        <th></th>
+        <% if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'gyanprakash@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+          <th></th>
+        <%end%>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% grand_total=0 %>
+    	<% @money_receipts.each do |money_receipt|%>
+      		<tr>
+            <% if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'gyanprakash@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+              <td><%= check_box_tag 'money_receipt_ids[]', money_receipt.id%></td>
+            <%end%>
+            <td><%= money_receipt.serial%></td>
+            <td><%= money_receipt.booking.cost_sheet.flat.block.business_unit.name%></td>
+      			<td><%= money_receipt.booking.cost_sheet.lead.try(:name)%></td>
+            <td><%= money_receipt.booking.cost_sheet.lead.try(:email)%></td>
+            <td><%= money_receipt.booking.cost_sheet.lead.try(:mobile)%></td>
+            <td><%= money_receipt.booking.cost_sheet.flat.block.name%></td>
+      			<td><%= money_receipt.booking.cost_sheet.flat.full_name%></td>
+      			<td><%= money_receipt.date.to_date.strftime('%d/%m/%y')%></td>
+            <td><%= money_receipt.try(:cheque_number)%></td>
+            <td><%= money_receipt.try(:bank_name)%></td>
+            <td><%= money_receipt.amount%></td>
+            <% grand_total += money_receipt.amount%>
+            <td><%= money_receipt.try(:remarks)%></td>
+            <% if current_personnel.organisation_id == 6 %>
+              <td></td>
+            <%else%>
+              <td><%= link_to 'Preview', demand_demand_money_receipt_preview_index_path(money_receipt),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+            <%end%>
+            <td><%= link_to 'Preview_with_GST', demand_demand_money_receipt_with_gst_preview_index_path(money_receipt),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+            <% if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'gyanprakash@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+              <td><%= link_to 'Destroy', demand_report_demand_money_receipt_destroy_path(money_receipt), :class => 'dlt_btn', :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+            <%end%>
+      		</tr>
+    	<%end%>
+          <tr>
+            <% if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'gyanprakash@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+              <td></td>
+            <%end%>
+            <td><b>Grand Total:</b></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            <td><b><%= grand_total%></b></td><td></td><td></td><td></td>
+            <% if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'gyanprakash@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+              <td></td>
+            <%end%>
+          </tr>
+    </tbody>
+  </table><br>
+  <div class="row">
+    <div class="col-lg-2">
+      <%= submit_tag 'Multi Demand Destroy', :class => 'btn btn-primary'%>
+    </div>
+  </div>
+<%end%>

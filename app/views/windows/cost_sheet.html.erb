@@ -1,0 +1,209 @@
+<%@header = 'Cost Sheet'%>
+  <div align="center"><h3><b>Cost Sheet Generator</b></h3></div>
+  <%= form_tag 'cost_sheet' do %>
+    <% if current_personnel.organisation_id == 6%>
+      <div class="col-lg-6 col-lg-offset-3">
+    <%else%>
+      <div class="col-lg-8 col-lg-offset-2">
+    <%end%>
+    <div class="well bs-component">
+      <div class="form-group">
+        <div class="row">
+          <% if @standalone_cost_sheet=='true'%>
+            <%= hidden_field_tag 'standalone_cost_sheet', @standalone_cost_sheet %>
+            <div class="col-lg-4">
+              <i>  Project </i>
+            </div>
+            <div class="col-lg-8">
+              <%= select(:project, :business_unit_id, options_for_select(@business_units), {}, {:onchange => 'fetch_car_parks()', :class => 'form-control'})%>
+            </div>
+          <%else%>
+            <%= hidden_field_tag 'lead_id', params[:lead_id] %>
+          <%end%>
+        </div>
+      </div>
+      <% if current_personnel.organisation_id == 6%>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-4">
+              <i>  Blocks </i>
+            </div>
+            <div class="col-lg-8">
+              <%= select(:project, :block_id, options_for_select(@blocks), {}, {:onchange => 'fetch_flats()', :class => 'form-control'})%>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-4">
+              <i> Flats </i>
+            </div>
+            <div class="col-lg-8">
+              <div id='flats'>
+                <%= select(:flat_status, :flat_id, options_for_select(@flats),{}, { :class => 'form-control selectpicker', data: { live_search: true } })   %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-4">
+              <i>Rate:</i>
+            </div>
+            <div class="col-lg-8">
+              <%= number_field_tag 'flat[rate]' , nil, step: "any", min: 1, :class => 'form-control', :required => "true"%>
+            </div>
+          </div>
+        </div>
+      <%else%>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-2">
+              <i>  Blocks </i>
+            </div>
+            <div class="col-lg-4">
+              <%= select(:project, :block_id, options_for_select(@blocks), {}, {:onchange => 'fetch_flats_and_rate()', :class => 'form-control'})%>
+            </div>
+            <div class="col-lg-2">
+              <i> Flats </i>
+            </div>
+            <div class="col-lg-4">
+              <div id='flats'>
+                <%= select(:flat_status, :flat_id, options_for_select(@flats),{}, { :class => 'form-control selectpicker', data: { live_search: true } })   %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-2">
+              <i>Rate:</i>
+            </div>
+            <div class="col-lg-4">
+              <div id="project_rate">
+                <%= number_field_tag 'flat[rate]' , nil, step: "any", min: 1, :class => 'form-control', :required => "true", :readonly => true%>
+              </div>
+            </div>
+            <div class="col-lg-2">
+              <i>Discount:</i>
+            </div>
+            <div class="col-lg-4">
+              <%= number_field_tag 'flat[discount_rate]' , nil, step: "any", min: 1, :class => 'form-control'%>
+            </div>
+          </div>
+        </div>
+      <%end%>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-lg-4">
+            <i> Payment Plan </i>
+          </div>
+          <div class="col-lg-8">
+            <div id="payment_plans">
+              <%= select(:flat_status, :payment_plan_id, options_for_select(@payment_plans),{}, { :class => 'form-control' })   %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div id='car_park'>
+            <% @car_parks.each do |car_park|%>
+              <div class="form-group">
+                <div class="col-lg-4">
+                  <%= car_park.car_park_nature.description %>
+                </div>
+                <div class="col-lg-8">
+                  <%= number_field_tag 'quantity['+car_park.car_park_nature_id.to_s+']' , nil,min: 1, :class => ' form-control'%>
+                </div>
+              </div>
+            <% end%>
+          </div>
+        </div>
+      </div>
+      <% if current_personnel.organisation_id != 6 %>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-4">
+              <i> Servant Quarter </i>
+            </div>
+            <div class="col-lg-2">
+              Yes<%= radio_button_tag("servant_quarter", "yes") %>
+            </div>
+            <div class="col-lg-2">
+              No<%= radio_button_tag("servant_quarter", "no") %>
+            </div>
+            <div class="col-lg-4">
+              <%= number_field_tag 'servant_quarter_quantity' , nil,min: 1, :class => 'form-control'%><br>
+            </div>
+          </div>
+        </div>
+      <%end%>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-lg-2">
+            <i>Final:</i>
+          </div>
+          <div class="col-lg-1">
+            <%= check_box_tag 'final', true, nil%>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-lg-4">
+            <i> Discount </i>
+          </div>
+          <div class="col-lg-8">
+            <%= text_field_tag 'discount','', :class => 'form-control' %><br>
+          </div>
+        </div>
+      </div>
+      <% if current_personnel.organisation_id == 6 %>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-4">
+              <i> Rate Valid Till </i>
+            </div>
+            <div class="col-lg-8">
+              <%= text_area_tag 'remarks_for_validation','', :class => 'form-control' %><br>
+            </div>
+          </div>
+        </div>
+      <%end%>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-5">     
+            <%= submit_tag 'Review', name: 'review', :class => 'btn btn-primary' %><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<%end%>
+
+<script>
+function fetch_flats()
+{
+  var block_id=event.target.value; 
+  $.getScript('/windows/populate_flats.js?block_id='+block_id);
+  $.getScript('/windows/populate_payment_plans.js?block_id='+block_id);
+}
+
+function fetch_flats_and_rate()
+{
+  var block_id=event.target.value;
+  $.getScript('/windows/populate_flats.js?block_id='+block_id);
+  $.getScript('/windows/populate_project_rate.js?block_id='+block_id);
+  $.getScript('/windows/populate_payment_plans.js?block_id='+block_id);
+}
+function fetch_car_parks()
+{
+  var business_unit_id=event.target.value;
+  $.getScript('/windows/populate_car_parks.js?business_unit_id='+business_unit_id);
+}
+</script>
+
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>

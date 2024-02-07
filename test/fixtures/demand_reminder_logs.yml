@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  booking_id: 1
+  sent_on: 2020-08-19 23:06:53
+
+two:
+  booking_id: 1
+  sent_on: 2020-08-19 23:06:53

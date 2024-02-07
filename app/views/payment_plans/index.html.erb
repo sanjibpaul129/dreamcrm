@@ -1,0 +1,30 @@
+<%@header = 'Payments Plans'%>
+<h1>Listing Payment Plans</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Block</th>
+      <th>Description</th>
+      <th>Business unit</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @payment_plans.each do |payment_plan| %>
+      <tr>
+        <td><%= payment_plan.block.try(:name) %></td>
+        <td><%= payment_plan.description %></td>
+        <td><%= payment_plan.business_unit.name %></td>
+        <td><%= link_to 'Show', payment_plan, :class => "link_btn" %></td>
+        <td><%= link_to 'Edit', edit_payment_plan_path(payment_plan), :class => "edit_btn", :style => "text-decoration:none;" %></td>
+        <td><%= link_to 'Destroy', payment_plan, method: :delete, :class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Payment plan', new_payment_plan_path, :class => "btn btn-primary" %>

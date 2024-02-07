@@ -1,0 +1,72 @@
+    
+<%= form_for @email_template, url: {action: @email_template_action} do |f| %>
+  <% if @email_template.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@email_template.errors.count, "error") %> prohibited this raw material from being saved:</h2>
+      <ul>
+      <% @email_template.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="row">
+  <div class="col-lg-12">
+    <center><h1>Email Template</h1></center>
+    <div class="row">
+      <div class="col-lg-1">
+        <h5>Project:</h5>
+      </div>
+      <div class="col-lg-3">
+        <%= select_tag 'email_template[business_unit_id]', options_for_select(@business_units, selected: @email_template.business_unit_id), :class => 'form-control ', :required => true, :prompt => 'Select Project'%>
+      </div>
+      <div class="col-lg-2">
+        <h5>Send-after-days:</h5>
+      </div>
+      <div class="col-lg-2">
+        <%= f.number_field :send_after_days, :required => true, :class => 'form-control' %>
+      </div>
+      <div class="col-lg-1">
+        <h5>Title:</h5>
+      </div>
+      <div class="col-lg-2">
+        <%= f.text_field :title, :required => true, :class => 'form-control'%>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-1">
+        <h5>Lead Type:</h5>
+      </div>
+      <div class="col-lg-3">
+        <%= select_tag 'email_type', options_for_select(@email_types), :class => 'form-control ',:required => true, :prompt => 'Select Lead Type'%>
+      </div>
+      <div class="col-lg-1">
+        <h5>File Name:</h5>
+      </div>
+      <div class="col-lg-2">
+        <%= f.text_field :file_name, :class => 'form-control'%>
+      </div>
+      <div class="col-lg-1">
+        <h5>File URL:</h5>
+      </div>
+      <div class="col-lg-4">
+        <%= f.text_area :file_url, :class => 'form-control'%>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <h5>Email Body:</h5>
+        <%= f.cktext_area :body, :required => true, :class => 'form-control'%>
+      </div>
+    </div>
+      <br>
+    <div class="row">
+      <div class="col-lg-2 col-lg-offset-5">
+        <%= f.submit :class => 'btn btn-primary btn-block'%>
+      </div>
+    </div><br>
+  </div>
+</div>
+  <%= hidden_field_tag :email_template_id, @email_template.id %>
+<%end%>

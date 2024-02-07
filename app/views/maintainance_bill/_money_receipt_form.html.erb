@@ -1,0 +1,89 @@
+<%= form_for @money_receipt, url: {action: @money_receipt_action} do |f| %>
+  <% if @money_receipt.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@money_receipt.errors.count, "error") %> prohibited this raw material from being saved:</h2>
+      <ul>
+      <% @money_receipt.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Money Receipt</legend>
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Customer With Flat', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+           <%= select(:money_receipt, :flat_id, options_for_select(@customer_with_flats, selected: @money_receipt.flat_id),{:prompt => 'Select Customer With Their Flats'}, {:class => 'form-control selectpicker', data: { live_search: true }}) %>
+          </div>
+        </div>
+      </div><br>
+      
+      <div class="row">
+        <div class="form-group">
+          <%= f.label :'Payment Date', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-4">
+            <%= f.date_field :date, :class => 'form-control', :required => true%>
+          </div>    
+          <%= f.label :Amount, :class => 'col-lg-2 control-label' %>
+          <div class="col-lg-3">
+           <%= f.number_field :amount, :class => 'form-control', :required => true%>
+          </div>
+        </div>
+      </div>
+<br>
+      <div class="row">
+        <div class="form-group">
+          <%= f.label :'Cheque Number', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-4">
+            <%= f.text_field :cheque_number, :class => 'form-control'%>
+          </div>    
+          <%= f.label :'Bank Name', :class => 'col-lg-2 control-label' %>
+          <div class="col-lg-3">
+           <%= f.text_field :bank_name, :class => 'form-control'%>
+          </div>
+        </div>
+      </div>
+    <br> 
+       <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Period:', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+            <%= f.text_area :period, :class => 'form-control', :required => true%>
+          </div>
+        </div>
+      </div>
+<br>
+     <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Remarks', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+            <%= f.text_area :remarks, :class => 'form-control'%>
+          </div>
+        </div>
+      </div>
+     
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= f.submit :class => 'btn btn-primary btn-block btn_width'%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= hidden_field_tag :money_receipt_id, @money_receipt.id %>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

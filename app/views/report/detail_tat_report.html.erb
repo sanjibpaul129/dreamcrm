@@ -1,0 +1,21 @@
+<h1>Detail Turn Around Time Report</h1>
+<table class="customers">
+	<thead>
+		<th>Lead Id</th>
+		<th>Generated On</th>
+		<th>Calling Time</th>
+		<th>Turn Around Time</th>
+		<th>Executive</th>
+	</thead>
+	<tbody>
+		<%@detail_report.each do |data|%>
+			<tr>
+				<td><%= data[0]%></td>
+				<td><%= data[1].strftime("%d/%m/%y-%H:%M")%></td>
+				<td><%= data[2].strftime("%d/%m/%y-%H:%M")%></td>
+				<td><%= data[3]%></td>
+				<td><%= data[4]%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

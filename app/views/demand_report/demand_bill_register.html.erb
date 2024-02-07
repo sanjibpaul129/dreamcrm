@@ -1,0 +1,61 @@
+<%@header = 'Demand Bill Register'%>
+<h1>Demand Bill Register</h1>
+    <%= form_tag 'demand_bill_register', :html => {:class => 'form-horizontal'} do %>    
+      <div class="row">
+        <div class="col-lg-1">
+          <h5>Project:</h5>
+        </div>
+        <div class="col-lg-3">
+          <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+        </div>
+        <div class="col-lg-2">
+          <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+        </div>
+      </div><br>
+    <%end%>
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Customer</th>
+      <th>Block</th>
+      <th>Flat</th>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Amount</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%grand_total=0%>
+  	<% @ledger_entry_headers.each do |ledger_entry_header|%>
+  		<tr>
+        <td><%= ledger_entry_header.booking.cost_sheet.flat.block.business_unit.name%></td>
+        <td><%= ledger_entry_header.booking.cost_sheet.lead.name%></td>
+        <td><%= ledger_entry_header.booking.cost_sheet.flat.block.name %></td>
+        <td><%= ledger_entry_header.booking.cost_sheet.flat.full_name %></td>
+        <td><%= ledger_entry_header.date.to_date.strftime('%d/%m/%Y')%></td>
+        <%  full_description=''
+            ledger_entry_header.ledger_entry_items.each do |ledger_entry_item|
+              full_description+=ledger_entry_item.milestone.payment_milestone.description+','  
+            end
+            full_description[full_description.length]='' 
+        %>
+        <td><%= full_description%></td>
+        <td><%= ledger_entry_header.amount%></td>
+        <%grand_total+=ledger_entry_header.amount%>
+        <td><%= link_to 'Edit', demand_report_ledger_entry_header_date_edit_path(ledger_entry_header), :class => 'edit_btn'%></td>
+        <td><%= link_to 'Preview', demand_demand_preview_index_path(ledger_entry_header),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+        <td><%= link_to 'Demand_Notice', demand_report_demand_notice_index_path(ledger_entry_header),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+  		</tr>
+  	<%end%>
+      <tr>
+        <td><b>Grand Total:</b></td>
+        <td></td><td></td><td></td><td></td><td></td><td><%= grand_total%></td><td></td><td></td>
+      </tr>
+  </tbody>
+</table>
+<br>

@@ -1,0 +1,56 @@
+<h1>Telecaller Calling Report</h1>
+<%= form_tag 'telecaller_calling_report', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%if request.post?%>
+				<%= date_field_tag "from", (@from+5.hours+30.minutes).to_date, :class => "form-control"%>
+			<%else%>
+				<%= date_field_tag "from", @from.to_date, :class => "form-control"%>
+			<%end%>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "to", @to.to_date, :class => "form-control"%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Executives</th>
+		<th>Working Days</th>
+		<th>Attempted Calls</th>
+		<th>Connected Calls</th>
+		<th>Connected Call Duration</th>
+		<th>Not Connected Duration</th>
+		<th>Qualified</th>
+		<th>Site Visited</th>
+		<th>Start Time</th>
+		<th>End Time</th>
+	</thead>
+	<tbody>
+		<%@telecaller_wise_data.each do |key, value|%>
+			<tr>
+				<td><%= key%></td>
+				<% value.each_with_index do |data, index|%>
+					<td><%= data%></td>
+				<%end%>
+			</tr>
+		<%end%>
+	</tbody>
+</table><br><br>
+<div class="row">
+	<div class="col-lg-1">
+		<b>Note:</b>
+	</div>
+	<div class="col-lg-11">
+		<b>In case of Working Days if the attempted calls count is less than 25 then that day is not counted in the working days.</b>
+	</div>
+</div>

@@ -1,0 +1,24 @@
+<h1>Test Leads</h1>
+<%
+	leads = Lead.where(business_unit_id: current_personnel.business_unit_id).where('mobile is not ? OR mobile = ?', nil, "")
+%>
+<%= form_tag 'customer_followup_entry', :html => {:class => 'form-horizontal'} do %>
+	<table class="customers">
+		<thead>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Mobile</th>
+			<th></th>
+		</thead>
+		<tbody>
+			<% leads.each do |lead| %>
+				<tr>
+					<td><%= lead.id%></td>
+					<td><%= lead.name%></td>
+					<td><%= lead.try(:mobile)%></td>
+					<td><%= button_tag 'Call', value: lead.id, type: :submit, name: :lead_id%></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<%end%>

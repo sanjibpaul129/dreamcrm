@@ -1,0 +1,83 @@
+<div class="col-lg-4 col-lg-offset-4">
+    <div class="well bs-component">
+
+<legend></legend>
+
+<%= form_for @company, :html => {:class => 'form-horizontal'} do |f| %>
+  <% if @company.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@company.errors.count, "error") %> prohibited this company from being saved:</h2>
+
+      <ul>
+      <% @company.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+   <div class="form-group">
+    <%= f.label :name, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :name, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :organisation, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= select(:company, :organisation_id, options_for_select(@organisations),{}, { :class => 'form-control' })   %>
+  </div>
+   </div>
+ <div class="form-group">
+    <%= f.label :address_1, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :address_1, :class => "form-control" %>
+  </div>
+  </div>
+ <div class="form-group">
+    <%= f.label :'GSTIN NO', :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :GSTIN, :class => "form-control" %>
+  </div>
+  </div>
+ <div class="form-group">
+    <%= f.label :'Bank Details', :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :bank_details, :class => "form-control" %>
+  </div>
+  </div>
+ <div class="form-group">
+    <%= f.label :address_2, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :address_2, :class => "form-control" %>
+  </div>
+  </div>
+ <div class="form-group">
+    <%= f.label :address_3, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :address_3, :class => "form-control" %>
+  </div>
+  </div>
+ <div class="form-group">
+    <%= f.label :address_4, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :address_4, :class => "form-control" %>
+  </div>
+  </div>
+ <div class="form-group">
+    <%= f.label :phone, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :phone, :class => "form-control" %>
+  </div>
+  </div>
+ <div class="form-group">
+      <div class="col-lg-8 col-lg-offset-2">
+    <%= f.submit :class => 'btn btn-primary btn-block'%>
+  </div>
+  </div>
+
+  </div>
+  </div>
+<% end %>

@@ -1,0 +1,28 @@
+<%= form_tag 'broker_source_category_tag_create', :html => {:class => 'form-horizontal'} do %>  
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Broker Source category</legend>
+      <div class="row">
+        <div class="col-lg-5">
+          Source category Name:
+        </div>
+        <div class="col-lg-7">
+          <%= select_tag "source_category_id", options_for_select(@source_categories), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Please Select' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-5">
+          Broker Contact Name:
+        </div>
+        <div class="col-lg-7">
+          <%= select_tag "broker_contact_id", options_for_select(@broker_contacts), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Please Select' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2 col-lg-offset-4">
+          <%= submit_tag 'Create Broker Source category',:class => 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

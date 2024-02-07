@@ -1,0 +1,6 @@
+One Broker signed the Channel Partner contract the details are given below:<br><br>
+<b>Broker name:</b><%= @broker_contact.broker.name%><br>
+<b>Broker Id:</b><%= @broker_contact.broker_id%><br>
+<b>Broker Contact name:</b><%= @broker_contact.name%><br>
+<b>Broker Contact Id:</b><%= @broker_contact.id%><br>
+<b>BrokerProject Status Id:</b><%= BrokerProjectStatus.find_by_broker_id(@broker_contact.broker_id).id%><br>

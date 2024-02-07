@@ -1,0 +1,47 @@
+<%@header = 'Maintenance Credit Note Register'%>
+<h1>Credit Notes</h1>
+  <%= form_tag 'credit_note_register', :html => {:class => 'form-horizontal'} do %>    
+    <div class="row">
+      <div class="col-lg-1">
+        <h5>Project:</h5>
+      </div>
+      <div class="col-lg-3">
+        <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+      </div>
+      <div class="col-lg-2">
+        <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+      </div>
+    </div><br>
+  <%end%>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Customer</th>
+      <th>Credit Note Head</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Remarks To Show</th>
+      <th>Personnel Remarks</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @credit_note_entries.each do |credit_note_entry| %>
+      <tr>
+        <td><%= credit_note_entry.lead.name %></td>
+        <td><%= credit_note_entry.head%></td>
+        <td><%= credit_note_entry.amount%></td>
+        <td><%= credit_note_entry.date.to_date.strftime('%d/%m/%Y')%></td>
+        <td><%= credit_note_entry.try(:remarks_to_show)%></td>
+        <td><%= credit_note_entry.try(:remarks)%></td>
+        <td><%= link_to 'Edit', maintainance_bill_credit_note_edit_path(credit_note_entry), :class => "edit_btn", :style => "text-decoration: none;"%></td>
+        <td><%= link_to 'Destroy', maintainance_bill_credit_note_destroy_path(credit_note_entry), :class => "dlt_btn", :style => "text-decoration: none;", data: { confirm: 'Are you sure ?'}%></td>
+        <td><%= link_to 'Preview', maintainance_bill_credit_note_preview_index_path(credit_note_entry), :class => 'btn btn-primary', :style => 'text-decoration: none;'%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

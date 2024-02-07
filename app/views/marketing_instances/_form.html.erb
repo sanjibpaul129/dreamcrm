@@ -1,0 +1,45 @@
+<%= form_for(@marketing_instance) do |f| %>
+  <% if @marketing_instance.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@marketing_instance.errors.count, "error") %> prohibited this marketing_instance from being saved:</h2>
+
+      <ul>
+      <% @marketing_instance.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :business_unit_id %><br>
+    <%= f.number_field :business_unit_id %>
+  </div>
+  <div class="field">
+    <%= f.label :source_category_id %><br>
+    <%= f.number_field :source_category_id %>
+  </div>
+  <div class="field">
+    <%= f.label :work_order_id %><br>
+    <%= f.number_field :work_order_id %>
+  </div>
+  <div class="field">
+    <%= f.label :rate %><br>
+    <%= f.text_field :rate %>
+  </div>
+  <div class="field">
+    <%= f.label :quantity %><br>
+    <%= f.text_field :quantity %>
+  </div>
+  <div class="field">
+    <%= f.label :tax %><br>
+    <%= f.text_field :tax %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

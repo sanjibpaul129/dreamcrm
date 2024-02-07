@@ -1,0 +1,28 @@
+<%@header = 'Extra Charges'%>
+<h1>Listing Extra Charges</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Service tax</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @extra_charges.each do |extra_charge| %>
+      <tr>
+        <td><%= extra_charge.description %></td>
+        <td><%= extra_charge.service_tax %></td>
+        <td><%= link_to 'Show', extra_charge, :class => "link_btn" %></td>
+        <td><%= link_to 'Edit', edit_extra_charge_path(extra_charge), :class => "edit_btn", :style => "text-decoration:none;" %></td>
+        <td><%= link_to 'Destroy', extra_charge, method: :delete, :class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Extra charge', new_extra_charge_path, :class => "btn btn-primary" %>

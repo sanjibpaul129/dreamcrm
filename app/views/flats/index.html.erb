@@ -1,0 +1,79 @@
+<%= form_tag 'flat_index', :html => {:class => 'form-horizontal'} do %>
+<h1>Flats</h1>
+<div class="row">
+  <div class="form-group">
+    <div class="col-lg-1">
+      <%= label_tag 'Projects:' %>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:flat_index, :business_unit_id, options_for_select(@business_units),{prompt: "Select Project"}, {:class => 'form-control'}) %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>          
+    </div>
+  </div>
+</div>
+<%end%><br>
+<table id="customers">
+
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Project</th>
+      <th>Block</th>
+      <th>Floor</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Sba</th>
+      <th>Ota</th>
+      <th>Chargeable Terrace</th>
+      <th>Base Rate</th>
+      <th>Flc</th>
+      <th>Plc</th>
+      <th>Net Rate</th>
+      <th>Flat Value</th>
+      <th>Plc Details</th>
+      
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <% @flats.each do |flat| %>
+    <% plc_charge_rate=0
+       flc_rate=0
+       plc_charge_rate=flat.plc_charge_rate[1].to_i
+       flc_rate=flat.flc_charge_rate.to_i
+       %>
+      <tr>
+        <td><%= flat.id %></td>
+        <td><%= flat.block.business_unit.name %></td>
+        <td><%= flat.block.try(:name) %></td>
+        <td><%= flat.floor %></td>
+        <td><%= flat.name %></td>
+        <% if flat.status%>
+          <td>Booked</td>
+        <%else%>
+          <td>Available</td>
+        <%end%>
+        <td><%= flat.SBA %></td>
+        <td><%= flat.OTA %></td>
+        <td><%= flat.chargeable_terrace%></td>
+        <td><%= flat.try(:rate) %></td>
+        <td><%= flc_rate %></td>
+        <td><%= plc_charge_rate%></td>
+        <% net_rate=(flat.try(:rate).to_i)+flc_rate+plc_charge_rate %>
+        <td><%= net_rate%></td>
+        <td><%= (flat.rate.to_i)*net_rate %></td>
+        <td><%= flat.plc_charge_rate[0]%></td>
+        <td><%= link_to 'Edit', edit_flat_path(flat), :class => "edit_btn", :style => "text-decoration:none;"%></td>       
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Flat', new_flat_path, :class => 'btn btn-primary' %>

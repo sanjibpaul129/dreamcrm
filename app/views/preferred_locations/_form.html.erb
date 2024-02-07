@@ -1,0 +1,41 @@
+<div class="col-lg-4 col-lg-offset-4">
+  <div class="well bs-component">
+<!--   <legend>New preferred_location</legend> -->
+  <%= form_for(@preferred_location) do |f| %>
+    <% if @preferred_location.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@preferred_location.errors.count, "error") %> prohibited this preferred_location from being saved:</h2>
+
+        <ul>
+        <% @preferred_location.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group row">
+      <div class="col-lg-3">
+        <%= f.label :description %>
+      </div>
+      <div class="col-lg-9">
+        <%= f.text_field :description, :class => 'form-control'%>
+      </div>
+    </div><br><!-- 
+    <div class="form-group row">
+      <div class="col-lg-3">
+        <%= f.label :organisation_id %>
+      </div>
+      <div class="col-lg-9">
+        <%= f.number_field :organisation_id, :class => 'form-control' %>
+      </div>
+    </div><br> -->
+    <div class="form-group row">
+      <div class="col-lg-4 col-lg-offset-4">
+        <%= f.submit :class => 'btn btn-primary'%>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>
+  

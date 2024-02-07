@@ -1,0 +1,10 @@
+Dear <%= @personnel.name%>,<br><br>
+Please check the details of the incoming call of the broker given below:
+<br><br>
+<b>Id: </b><%= @broker_contact.id%><br>
+<b>Company: </b><%= @broker_contact.broker.name%><br>
+<b>Name: </b><%= @broker_contact.name%><br>
+<b>Email: </b><%= @broker_contact.try(:email)%><br>
+<b>Mobile: </b><%= @customer_number%><br><br>
+Thanks and regards,<br>
+Jain Group.

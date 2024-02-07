@@ -1,0 +1,36 @@
+<p>Dear Sir,</p>
+<h1>Listing leads</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+       <th>name</th>
+        <th>mobile</th>
+        <th>other_number</th>
+        <th>email</th>
+        <th>project</th>
+        
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @data.each do |lead| %>
+      <tr>
+        <td><%= lead.id %></td>
+        <td><%= lead.name %></td>
+        <% if lead.business_unit.organisation_id == 1 %>
+          <td></td>
+          <td></td>
+          <td></td>
+        <%else%>
+          <td><%= lead.mobile %></td>
+          <td><%= lead.other_number %></td>
+          <td><%= lead.email %></td>
+        <%end%>
+        <td><%= lead.business_unit.name %></td>        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

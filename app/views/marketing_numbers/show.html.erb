@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @marketing_number.number %>
+</p>
+
+<p>
+  <strong>Organisation:</strong>
+  <%= @marketing_number.organisation_id %>
+</p>
+
+<%= link_to 'Edit', edit_marketing_number_path(@marketing_number) %> |
+<%= link_to 'Back', marketing_numbers_path %>

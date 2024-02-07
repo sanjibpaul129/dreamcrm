@@ -1,0 +1,2 @@
+class SmsFollowup < ApplicationRecord
+end

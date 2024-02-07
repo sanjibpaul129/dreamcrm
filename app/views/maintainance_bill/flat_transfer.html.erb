@@ -1,0 +1,56 @@
+<%@header = 'Flat Transfer'%>
+<%= form_tag 'transfer_to_new_lead', :html => {:class => 'form-horizontal'} do %>
+	<div class="col-lg-6 col-lg-offset-3">
+    	<div class="well bs-component">
+    		<center><h3>Flat Transfer</h3></center>
+    		<div class="row form-group">
+	    		<div class="col-lg-4">
+	      			Customer With Flats:
+	      		</div>
+	    		<div class="col-lg-8">
+	      			<%= select_tag 'flat_id', options_for_select(@customer_with_flats), :class => 'form-control selectpicker', data: { live_search: true },:prompt => 'Please Select'%>
+			    </div>
+			</div>
+		    <div class="row form-group">
+		    	<div class="col-lg-3">
+		     		Transfer Date:
+		     	</div>
+				<div class="col-lg-4">
+		    		<%= date_field_tag 'transfer_date', '', :class => 'form-control'%>
+		    	</div>
+		    </div>
+			<center><h3>Transfer To</h3></center>
+		    <div class="form-group row">
+		    	<div class="col-lg-3">
+	     			Name:
+	     		</div>
+		    	<div class="col-lg-9">
+		    		<%= text_field_tag 'lead[name]', '', :class => 'form-control'%>
+		        </div>
+			</div>
+			<div class="form-group row">
+		    	<div class="col-lg-3">
+	     			Email:
+	     		</div>
+		    	<div class="col-lg-9">
+		    		<%= text_field_tag 'lead[email]', '', :class => 'form-control'%>
+		        </div>
+			</div>
+			<div class="form-group row">
+		    	<div class="col-lg-3">
+	     			Mobile:
+	     		</div>
+		    	<div class="col-lg-9">
+		    		<%= text_field_tag 'lead[mobile]', '', :class => 'form-control'%>
+		        </div>
+			</div>
+		    <div class="col-lg-4 col-lg-offset-4">
+		    	<%= submit_tag 'Transfer',:class => 'btn btn-primary btn-block' %>
+		    </div>
+		    <br><br>
+		</div>
+	</div>
+<%end%>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

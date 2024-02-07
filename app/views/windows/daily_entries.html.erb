@@ -1,0 +1,240 @@
+<%@header = 'Executive Wise Activity Report'%>
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+<center><h1>Activity Report</h1></center>
+
+<%= form_tag 'daily_entries' do  %>
+<div class="row">
+  <div class="col-lg-1">
+    From
+  </div>
+  <div class="col-lg-2">
+    <%= date_field(:lead, :from, :value => @from, :class => 'form-control') %>
+  </div>
+  <div class="col-lg-1">
+    To
+  </div>
+  <div class="col-lg-2">
+    <%= date_field(:lead, :to, :value => @to, :class => 'form-control') %>
+  </div>
+  <div class="col-lg-3">
+    <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+  </div>
+  <div class="col-lg-2">
+    <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+  </div>
+</div>
+<table class="customers" id="orderedtasks">
+  <thead>
+    <tr>
+      
+      <th>Executive</th>
+      <th>FreshCalls</th>
+      <th>Score</th>
+      <th>Flwups</th>
+      <th>Score</th>
+      <th>Qualified</th>
+      <th>Interested In Site Visit</th>
+      <th>SV Orgnsd</th>
+      <th>SV(%)</th>
+      <th>SV Recd</th>
+      <th>Rpt SV</th>
+      <th>FV</th>
+      <th>Bkd</th>
+      <th>Bkd(%)</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @site_executives.each do |site_executive| %>
+      <% if @lead_entries[site_executive.id]==nil && @followup_entries[site_executive.id]==nil %>
+      <% else %> 
+        <tr>
+         <td><%= site_executive.name %></td>
+         <td><%= @fresh_call_entries[site_executive.id] %></td>
+         <% if @fresh_call_score[site_executive.id]==nil %>
+          <td></td>
+         <% else %>
+          <td><%= ((@fresh_call_score[site_executive.id])/(@fresh_call_entries[site_executive.id])).round %></td>
+         <% end %>
+
+         <td><%= @followup_entries[site_executive.id] %></td>
+         <% if @followup_score[site_executive.id]==nil %>
+          <td></td>
+         <% else %>
+          <td><%= ((@followup_score[site_executive.id])/(@followup_entries[site_executive.id])).round %></td>
+         <% end %>
+         <% if current_personnel.organisation_id == 6 %>
+          <% if @qualified_leads[site_executive.id] == nil%>
+            <td></td>
+          <%else%>
+            <td><%= link_to @qualified_leads[site_executive.id], windows_all_live_leads_index_path("site_executive" => {"current_executive" => site_executive.id}, "commit" => 'Refresh', "qualified" => 'true'),  method: :post %></td>
+          <%end%>
+          <% if @isv_leads[site_executive.id] == nil%>
+            <td></td>
+          <%else%>
+            <td><%= link_to @isv_leads[site_executive.id], windows_all_live_leads_index_path("site_executive" => {"current_executive" => site_executive.id}, "commit" => 'Refresh', "interested" => 'true'),  method: :post %></td>
+          <%end%>
+         <%else%>
+          <td><%= @qualified_leads[site_executive.id]%></td>
+          <td><%= @isv_leads[site_executive.id]%></td>
+         <%end%>
+         <td><%= @site_visits_organised[site_executive.id] %></td>
+         <% if @fresh_call_entries[site_executive.id].to_i==0 || @site_visits_organised[site_executive.id].to_i==0 %>
+          <td></td>
+         <% else %>
+          <td><%= (((@site_visits_organised[site_executive.id]).to_f/(@fresh_call_entries[site_executive.id]).to_f)*100).round(2) %>%</td>
+         <% end %>
+         <td><%= @site_visits_received[site_executive.id] %></td>
+         <td><%= @repeat_site_visit_entries[site_executive.id] %></td>
+         <td><%= @field_visit_entries[site_executive.id] %></td>
+         <td><%= @booked_entries[site_executive.id] %></td>
+         <% if @booked_entries[site_executive.id].to_i==0 || @site_visits_received[site_executive.id].to_i==0 %>
+          <td></td>
+         <% else %>
+          <td><%= (((@booked_entries[site_executive.id]).to_f/(@site_visits_received[site_executive.id]).to_f)*100).round(2) %>%</td>
+         <% end %>
+         
+        </tr>
+      <% end %>  
+    <% end %>
+    <tfoot>
+    <tr>
+      <td><b>TOTAL</b></td>
+      <td><b><%= @fresh_call_entries.sum{|key,value| value} %></b></td> 
+      <td></td>
+      <td><b><%= @followup_entries.sum{|key,value| value} %></b></td>
+      <td></td>
+      <td><b><%= @qualified_leads.sum{|key,value| value} %></b></td> 
+      <td><b><%= @isv_leads.sum{|key,value| value}%></b></td>
+      <td><b><%= @site_visits_organised.sum{|key,value| value} %></b></td>
+      <td></td>
+      <td><b><%= @site_visits_received.sum{|key,value| value} %></b></td>
+      <td><b><%= @repeat_site_visit_entries.sum{|key,value| value} %></b></td>
+      <td><b><%= @field_visit_entries.sum{|key,value| value} %></b></td>
+      <td><b><%= @booked_entries.sum{|key,value| value}  %></b></td> 
+      <td></td>
+    </tr>
+    </tfoot>
+  </tbody>
+</table>
+
+    <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' %>
+    <h2>New</h2>
+    <table class="customers" id="orderedtasks">
+      <thead>
+        <tr>
+          
+          <th>Executive</th>
+          <th>Leads Generated</th>
+          <th>Fresh Calls</th>
+          <th>Followups</th>
+          <th>Lost</th>
+          <th>Site Visits</th>
+          <th>Booked</th>
+          <th>Qualified</th>
+          <th>Interested In Site Visit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @site_executives.each do |site_executive| %>
+        <% if @lead_entries[site_executive.id]==nil && @followup_entries[site_executive.id]==nil %>
+        <% else %> 
+          <tr>
+           <td><%= site_executive.name %></td>
+           <td><%= @lead_entries[site_executive.id] %></td>
+           <td><%= @new_fresh_call_entries[site_executive.id] %></td>
+           <td><%= @new_followup_entries[site_executive.id] %></td>
+           <td><%= @new_lost_entries[site_executive.id] %></td>
+           <td><%= @new_site_visited_entries[site_executive.id] %></td>
+           <td><%= @new_booked_entries[site_executive.id] %></td>
+           <%if @qualified_entries[site_executive.id] == nil%>
+             <td></td>
+           <%else%>
+             <td><%= @qualified_entries[site_executive.id]%></td>
+           <%end%>
+           <%if @isv_entries[site_executive.id] == nil%>
+             <td></td>
+           <%else%>
+             <td><%= @isv_entries[site_executive.id]%></td>
+           <%end%>
+          </tr>
+        <% end %>  
+        <% end %>
+        <tfoot>
+    <tr>
+      <td><b>TOTAL</b></td>
+      <td><b><%= @lead_entries.sum{|key,value| value} %> </b></td>
+      <td><b><%= @new_fresh_call_entries.sum{|key,value| value} %></b></td> 
+      <td><b><%= @new_followup_entries.sum{|key,value| value} %></b></td>
+      <td><b><%= @new_lost_entries.sum{|key,value| value} %></b></td>
+      <td><b><%= @new_site_visited_entries.sum{|key,value| value} %></b></td>
+      <td><b><%= @new_booked_entries.sum{|key,value| value}  %></b></td> 
+      <td><b><%= @qualified_entries.sum{|key,value| value} %> </b></td>
+      <td><b><%= @isv_entries.sum{|key,value| value} %> </b></td>
+    </tr>
+    </tfoot>
+      </tbody>
+    </table>
+    <h2>Old</h2>
+    <table class="customers" id="orderedtasks">
+      <thead>
+        <tr>
+          
+          <th>Executive</th>
+          <th>Fresh Calls</th>
+          <th>Followups</th>
+          <th>Lost</th>
+          <th>Site Visits</th>
+          <th>Booked</th>
+          <th>Qualified</th>
+          <th>Interested In Site Visit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @site_executives.each do |site_executive| %>
+        <% if @lead_entries[site_executive.id]==nil && @followup_entries[site_executive.id]==nil %>
+        <% else %> 
+          <tr>
+           <td><%= site_executive.name %></td>
+           <td><%= @old_fresh_call_entries[site_executive.id] %></td>
+           <td><%= @old_followup_entries[site_executive.id] %></td>
+           <td><%= @old_lost_entries[site_executive.id] %></td>
+           <td><%= @old_site_visited_entries[site_executive.id] %></td>
+           <td><%= @old_booked_entries[site_executive.id] %></td>
+           <%if @qualified_entries[site_executive.id] == nil%>
+             <td></td>
+           <%else%>
+             <td><%= @qualified_entries[site_executive.id]%></td>
+           <%end%>
+           <%if @isv_entries[site_executive.id] == nil%>
+             <td></td>
+           <%else%>
+             <td><%= @isv_entries[site_executive.id]%></td>
+           <%end%>
+          </tr>
+        <% end %>  
+        <% end %>
+            <tfoot>
+        <tr>
+          <td><b>TOTAL</b></td>
+          <td><b><%= @old_fresh_call_entries.sum{|key,value| value} %></b></td> 
+          <td><b><%= @old_followup_entries.sum{|key,value| value} %></b></td>
+          <td><b><%= @old_lost_entries.sum{|key,value| value} %></b></td>
+          <td><b><%= @old_site_visited_entries.sum{|key,value| value} %></b></td>
+          <td><b><%= @old_booked_entries.sum{|key,value| value}  %></b></td> 
+          <td><b><%= @qualified_entries.sum{|key,value| value} %> </b></td>
+          <td><b><%= @isv_entries.sum{|key,value| value} %> </b></td>
+        </tr>
+        </tfoot>
+      </tbody>
+    </table>
+    
+<% end %>
+<% end %>

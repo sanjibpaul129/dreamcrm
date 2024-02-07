@@ -1,0 +1,30 @@
+<%@header = 'Demand Adhoc Charge Register'%>
+<h1>Adhoc Charges</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Customer</th>
+      <th>Adhoc Charge</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Remarks</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @adhoc_charge_entries.each do |adhoc_charge_entry| %>
+      <tr>
+        <td><%= adhoc_charge_entry.booking.cost_sheet.lead.name %></td>
+        <td><%= adhoc_charge_entry.adhoc_charge.description%></td>
+        <td><%= adhoc_charge_entry.amount%></td>
+        <td><%= adhoc_charge_entry.date.to_date.strftime('%d/%m/%Y')%></td>
+        <td><%= adhoc_charge_entry.try(:remarks)%></td>
+        <td><%= link_to 'Edit', demand_adhoc_charge_edit_path(adhoc_charge_entry), :class => "edit_btn", :style => "text-decoration: none;"%></td>
+        <td><%= link_to 'Destroy', demand_adhoc_charge_destroy_path(adhoc_charge_entry), :class => "dlt_btn", :style => "text-decoration: none;", data: { confirm: 'Are you sure ?'}%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

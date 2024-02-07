@@ -1,0 +1,2 @@
+module ElectricalBillHelper
+end

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @preferred_location.description %>
+</p>
+
+<p>
+  <strong>Organisation:</strong>
+  <%= @preferred_location.organisation_id %>
+</p>
+
+<%= link_to 'Edit', edit_preferred_location_path(@preferred_location) %> |
+<%= link_to 'Back', preferred_locations_path %>

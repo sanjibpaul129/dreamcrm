@@ -1,0 +1,86 @@
+<p>Dear <%=@lead.name%>,</p>
+<p>
+Your flat <%= @flat.full_name %> in <%= @flat.block.name %> of area <%= @flat.SBA %> sq ft, in our project - <%= @flat.block.business_unit.name %>, being charged @ <%= MaintainenceCharge.find_by_business_unit_id(@flat.block.business_unit_id).rate %>/sft, has a total outstanding amount of Rs. <%= @flat.outstanding %>/-</p>	<br>
+<br>
+<p>Ledger is as follows:</p><br>
+<table border="3">
+  <thead>
+    <th>Date</th>
+    <th>Description</th>
+    <th style="text-align: right!important;">Amount</th>
+    <th style="text-align: right!important;">Balance</th>
+  </thead>
+  <tbody>
+    <% 
+      maintainance_bill_amount=0
+      money_receipt_amount=0
+      balance=0
+    %>
+    <% if @flat.opening_balance != nil %>
+        <tr>
+          <td>22.06.20</td>
+          <td>Opening Balance: </td>
+          <td style="text-align: right!important;"><%= @flat.opening_balance %></td>
+          <% balance += @flat.opening_balance %>
+          <td style="text-align: right!important;"><%= balance %></td>
+        </tr>
+    <% end %>   
+    <% @both_documents.each do |both_document|%>
+      <%if both_document.class == MaintainenceBill%>
+        <tr>
+          <td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+          <td>Maintenance Bill-Period: <%= both_document.from.to_date.strftime('%d.%m.%y')%>to <%= both_document.to.to_date.strftime('%d.%m.%y')%>-Rate: <%= both_document.rate%></td>
+          <td style="text-align: right!important;"><%= both_document.amount%></td>
+          <% balance += both_document.amount %>
+          <td style="text-align: right!important;"><%= balance %></td>
+        </tr>
+      <%elsif both_document.class == MoneyReceipt%>
+        <tr>
+          <td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+          <td>Money Receipt-Customer: <%= both_document.lead.name%>-Flat: <%= both_document.flat.full_name%></td>
+          <td style="text-align: right!important;">-<%= both_document.amount%></td>
+          <% balance = balance-both_document.amount %>
+          <td style="text-align: right!important;"><%= balance %></td>
+        </tr>
+      <%elsif both_document.class == MaintenanceCreditNoteEntry%>
+        <tr>
+          <td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+          <td>Credit Note:<%= both_document.head%></td>
+          <td style="text-align: right!important;">-<%= (both_document.amount*1.18).round(2)%></td>
+          <% balance = balance-((both_document.amount*1.18).round(2)) %>
+          <td style="text-align: right!important;"><%= balance %></td>
+        </tr>
+      <%end%>
+    <%end%>
+  </tbody>
+</table><br>
+<br>
+<p>
+This is a computer generated mail, kindly ignore if already paid.
+</p>
+<p>
+Kindly clear the dues as stated above within next 3 days.
+<br>
+Delay in payment of these dues results in degradation of maintenance services in your own complex. Hence it is our humble request to clear the same at the earliest.
+<br>
+As per clause no. 10.1.3 delay in maintenance charges entails 18% p.a. delay charges.
+<br>
+As per our records, current delay charges for your account have not yet been added to your account till date. However,after next 3 days the same will be added with your outstanding amount.
+<br>
+The Details of Bank Account is :
+<br>
+HDFC BANK LTD<br>
+PALANHARE MAINTENANCE LLP<br>
+Bank Branch Add : 72 SARAT BOSE ROAD<br>
+Kolkata : 700025<br>
+Bank A/C No : 50200026846903<br>
+IFSC : HDFC0001404<br><br>
+<i>You can also pay the amount through the UPI ID <b>palanharemaintenance.99712537@hdfcbank</b> or by scanning the QR-Code attached below.</i>
+</p>
+In case of any clarification, disputes please feel free to call.
+<br>
+<p>
+Regards,<br>
+Sarnali Halder/Suvrajyoti Dey<br>
++91 9007576657/+91 9903088846<br>
+</p>

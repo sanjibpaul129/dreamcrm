@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Marketing number:</strong>
+  <%= @call.marketing_number_id %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @call.number_id %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @call.number %>
+</p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @call.start_time %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @call.end_time %>
+</p>
+
+<p>
+  <strong>Personnels:</strong>
+  <%= @call.personnels_id %>
+</p>
+
+<p>
+  <strong>Nature:</strong>
+  <%= @call.nature %>
+</p>
+
+<%= link_to 'Edit', edit_call_path(@call) %> |
+<%= link_to 'Back', calls_path %>

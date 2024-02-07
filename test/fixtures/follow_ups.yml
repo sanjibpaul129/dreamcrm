@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  lead_id: 1
+  remarks: MyString
+  communication_time: 2016-03-27 13:58:46
+  follow_up_time: 2016-03-27 13:58:46
+  personnel_id: 1
+  status: false
+  business_unit_id: 1
+  escalated: false
+  hot: false
+
+two:
+  lead_id: 1
+  remarks: MyString
+  communication_time: 2016-03-27 13:58:46
+  follow_up_time: 2016-03-27 13:58:46
+  personnel_id: 1
+  status: false
+  business_unit_id: 1
+  escalated: false
+  hot: false

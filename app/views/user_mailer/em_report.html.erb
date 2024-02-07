@@ -1,0 +1,62 @@
+<p>Dear Sir,</p>
+<table border="1">
+  <thead>
+    <tr>
+       <th>Name</th>
+       <th>Fresh Calls</th>
+       <th>Site Visits Organised</th>
+       <th>SV%</th>
+       <th>Site Visits Received</th>
+       <th>Bookings</th>
+        <th>Bkg%</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @site_executives.each do |site_executive| %>
+      <% if @fresh_leads[site_executive.id]==nil && @fresh_calls[site_executive.id]==nil && @bookings[site_executive.id]==nil %>
+      <% else %>
+  	      <tr>
+  	        <td><%= site_executive.name %></td>
+  	        <td><%= @fresh_calls[site_executive.id] %></td>
+  	        <td><%= @site_visits_organised[site_executive.id] %></td>
+            <% if @site_visits_organised[site_executive.id].to_i==0 || @site_visits_organised[site_executive.id].to_i==0 %>
+            <td></td>
+            <% else %>
+            <td><%= (((@site_visits_organised[site_executive.id].to_f)/(@fresh_calls[site_executive.id].to_f))*100).round(2) %>%</td>
+            <% end %>
+            <td><%= @site_visits_received[site_executive.id] %></td>
+  	        <td><%= @bookings[site_executive.id] %></td>
+            <% if @site_visits_received[site_executive.id].to_i==0 || @bookings[site_executive.id].to_i==0 %>
+            <td></td>
+            <% else %>
+            <td><%= (((@bookings[site_executive.id].to_f)/(@site_visits_received[site_executive.id].to_f))*100).round(2) %>%</td>
+            <% end %> 
+          </tr>
+      <% end %>    
+    <% end %>
+  </tbody>
+</table>
+<br><br><br>
+<p>Site Visit Count Supporting:</p>
+
+<table border="1">
+  <thead>
+    <tr>
+       <th>Tele</th>
+       <th>Site</th>
+       <th>LeadID</th> 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @personnel_site_visits.each do |personnel_site_visit| %>
+        <tr>
+          <td><%= personnel_site_visit[1].name %></td>
+          <td><%= personnel_site_visit[2].name %></td>
+          <td><%= personnel_site_visit[0].id %></td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
+

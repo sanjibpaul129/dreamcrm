@@ -1,0 +1,25 @@
+<%@header = 'Radio Stations'%>
+<h1>Listing stations</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @stations.each do |station| %>
+      <tr>
+        <td><%= station.description %></td>
+        <td><%= link_to 'Edit', edit_station_path(station), :class => 'edit_btn'  %></td>
+        <td><%= link_to 'Destroy', station, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'dlt_btn'  %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Station', new_station_path, :class => 'btn btn-primary'  %>

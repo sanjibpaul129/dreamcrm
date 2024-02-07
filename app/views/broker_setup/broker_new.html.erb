@@ -1,0 +1,49 @@
+<%= form_tag 'broker_create', :html => {:class => 'form-horizontal'} do %>  
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Broker</legend>
+      <div class="row">
+        <div class="col-lg-2">
+          Name:
+        </div>
+        <div class="col-lg-10">
+          <%= text_field_tag "name", "", :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Landline:
+        </div>
+        <div class="col-lg-10">
+          <%= text_field_tag "landline", "", :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-6">
+          Firm:
+          <%= check_box_tag "firm", true, nil%>
+        </div>
+        <div class="col-lg-6">
+          Premium:
+          <%= check_box_tag "premium", true, nil%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Address:
+        </div>
+        <div class="col-lg-10">
+          <%= text_area_tag "address", "", :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2 col-lg-offset-4">
+          <%= submit_tag 'Create Broker',:class => 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

@@ -1,0 +1,2 @@
+class MonthlyFacebookExpense < ApplicationRecord
+end

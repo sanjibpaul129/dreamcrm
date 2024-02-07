@@ -1,0 +1,103 @@
+<%@header = 'Electrical Outstanding And Ledger'%>
+<div class="row">
+  <div class="col-lg-12">
+    <center><h1>Electrical Outstanding report</h1></center>
+      <div class="row">
+        <%= form_tag 'outstanding_electric_bill_index', :html => {:class => 'form-horizontal'} do %>    
+          <div class="col-lg-1">
+            <h5>Project:</h5>
+          </div>
+          <div class="col-lg-4">
+            <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+          </div>
+          <div class="col-lg-2">
+            <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+          </div>
+        <%end%>
+      </div><br>
+<%= form_tag 'outstanding_electrical_reminder', :html => {:class => 'form-horizontal'} do %>
+    <table class= "customers" id="outstanding_electric_bill_index" >
+      <thead>
+        <tr>
+          <th id="check_all" style="cursor: pointer!important;">Select All</th>
+          <th>Project</th>
+          <th>Block</th>
+          <th>Customer</th>
+          <th>Mobile</th>
+          <th>Email</th>
+          <th></th>
+          <th>Flat</th>
+          <th>Reminder</th>
+          <th style="text-align: right!important;">Outstanding</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% grand_total=0%>
+        <% @flats.each do |flat|%>
+        <% if flat.electrical_outstanding != 0%>
+        <tr>
+          <%if flat.lead.email == nil || flat.lead.email == ''%>
+          <td></td>
+          <%else%>
+          <td><%= check_box_tag 'flat_ids[]',flat.id%></td>
+          <%end%>
+          <td><%= flat.block.business_unit.name%></td>
+          <td><%= flat.block.name%></td>
+          <td><%= flat.lead.name%></td>
+          <td><%= flat.lead.try(:mobile)%></td>
+          <td><%= flat.lead.try(:email)%></td>
+          <td style="text-align: right!important;"><%= link_to 'Edit', edit_lead_path(flat.lead),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+          <td><%= flat.full_name%></td>
+          <% if flat.on_7d_reminder? %>
+            <td>7 Days Reminder</td>
+          <%elsif flat.on_3d_reminder?%>
+            <td>3 Days Reminder</td>
+          <%else%>
+            <td>No Reminder</td>
+          <%end%>
+          <td style="text-align: right!important;"><%= flat.electrical_outstanding%></td>
+          <% grand_total += flat.electrical_outstanding %>
+          <td style="text-align: right!important;"><%= link_to 'Ledger', electrical_report_individual_customer_electric_ledger_path(flat.id),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+        </tr>
+        <% end %>
+        <%end%>
+        <tr>
+          <td><b>Grand Total:</b></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style="text-align: right!important;"><b><%= grand_total%></b></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-offset-2">
+    <%= submit_tag 'Send E-mail Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag 'Send Whatsapp Reminder',:class => 'btn btn-success' %>
+    <%= submit_tag 'No Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag '7d Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag '3d Reminder',:class => 'btn btn-primary' %>
+  </div>
+</div>
+<%end%>
+<style>
+ .col-lg-offset-1 {
+    margin-left: 16.333333% !important;
+}
+</style>
+<script type="text/javascript">
+      $('#check_all').on("click", function(){
+  var cbxs = $('input[type="checkbox"]');
+  cbxs.prop("checked", !cbxs.prop("checked"));
+});
+</script>

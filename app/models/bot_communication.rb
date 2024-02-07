@@ -1,0 +1,2 @@
+class BotCommunication < ApplicationRecord
+end

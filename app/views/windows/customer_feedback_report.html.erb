@@ -1,0 +1,104 @@
+<%@header = 'Customer Feedback Report'%>
+<% flash.each do |key, value| %>
+  <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+  </div>
+<% end %>
+
+<div align="center"><h3><b>Customer Feedback Report</b></h3></div><br>
+
+<%= form_tag 'customer_feedback_report' do  %>
+  <div class="row">
+    <div class="col-lg-1">
+      Projects:
+    </div>
+   <div class="col-lg-2">  
+      <%= select_tag "business_unit_id", options_for_select(@projects, selected: @project_selected), :class => 'form-control', :prompt => 'Please Select'  %>
+    </div>
+    <div class="col-lg-1">
+      From:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "from", @from.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-1">
+      To:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "to", @to.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag "Refresh", :class => 'btn btn-primary' %>
+    </div>
+ </div>
+ <table class="customers " id="site_visit_form_register">
+    <thead>
+      <tr>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Name</th>
+        <th>Hospitality Rating</th>
+        <th>Site Executive Rating</th>
+        <th>Project Explanation Rating</th>
+        <th>Cleanliness Rating</th>
+        <th>Jain Group Rating</th>
+        <th>Quality Conscious Rating</th>
+        <th>Customer Feedback</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <td><%= lead.id %></td>
+          <td><%= lead.business_unit.name %></td>
+          <td><%= lead.name %></td>
+          <td><%= lead.try(:hospitality_rating) %></td>
+          <td><%= lead.try(:site_executive_rating) %></td>
+          <td><%= lead.try(:project_explanation_rating) %></td>
+          <td><%= lead.try(:cleanliness_rating) %></td>
+          <td><%= lead.try(:jain_group_rating) %></td>
+          <td><%= lead.try(:quality_conscious_rating) %></td>
+          <td><%= lead.try(:customer_feedback) %></td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+<%end%>
+<script>
+  $(document).ready(function(){
+var FilterTable=$("#site_visit_form_register").DataTable({  
+   "fixedHeader": true,   
+   "dom": '<"wrapper"lit>',
+   "bAutoWidth": false,
+   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+   "bDeferRender": true,
+   "aoColumns": [
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true}
+                             ]
+});
+
+$("#filterbox").keyup(function() {
+        FilterTable.search(this.value).draw();
+    });
+});
+</script>

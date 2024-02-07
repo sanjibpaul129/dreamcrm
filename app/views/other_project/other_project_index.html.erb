@@ -1,0 +1,28 @@
+<%@header ='Other Projects'%>
+<h1>Other Projects</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Project Name</th>
+      <th>organisation</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @other_projects.each do |other_project| %>
+      <tr>
+        <td><%= other_project.name %></td>
+        <td><%= other_project.try(:organisation_id) %></td>
+        <td><%= link_to 'Edit', other_project_other_project_edit_path(other_project), :class => 'edit_btn', :style => "text-decoration: none" %></td>
+        <td><%= link_to 'Destroy', other_project_other_project_destroy_path(other_project),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Other Project', other_project_other_project_new_path, :class => 'btn btn-primary' %>

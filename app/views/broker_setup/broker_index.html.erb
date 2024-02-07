@@ -1,0 +1,36 @@
+<h1>Broker List</h1>
+<% if current_personnel.email == "ayush@thejaingroup.com"%>
+	<%= link_to "New Broker", broker_setup_broker_new_url, :class => 'btn btn-primary'%><br><br>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Name</th>
+		<th>Address</th>
+		<th>Landline</th>
+		<th>Firm</th>
+		<th>Premium</th>
+		<% if current_personnel.email == "ayush@thejaingroup.com"%>
+			<th></th>
+			<th></th>
+		<%end%>
+		<th></th>
+		<th></th>
+	</thead>
+	<tbody>
+		<% @brokers.each do |broker|%>
+			<tr>
+				<td><%= broker.name%></td>
+				<td><%= broker.try(:address)%></td>
+				<td><%= broker.try(:landline)%></td>
+				<td><%= broker.try(:firm)%></td>
+				<td><%= broker.try(:premium)%></td>
+				<% if current_personnel.email == "ayush@thejaingroup.com"%>
+					<td><%= link_to 'Edit', broker_setup_broker_edit_path(broker),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+	            	<td><%= link_to 'Destroy', broker_setup_broker_destroy_path(broker),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+	            <%end%>
+            	<td><%= link_to "Agreement", broker_setup_broker_agreement_index_path(broker), :class => 'btn btn-primary', :style => "text-decoration: none"%></td>
+            	<td><%= link_to "Agreement Link", broker_setup_broker_agreement_link_send_path(broker), :class => 'btn btn-primary', :style => "text-decoration: none"%></td>
+    		</tr>
+		<%end%>
+	</tbody>
+</table><br>

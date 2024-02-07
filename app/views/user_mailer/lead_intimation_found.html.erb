@@ -1,0 +1,33 @@
+<% if @type == "Lost Leads found" %>
+	System founded some previously <b>lost data</b> of the lead which is intimated by <%= @broker_contact.name%>, the details of the intimated lead and the leads found are given below:<br><br>
+<%elsif @type == "Live Leads found" %>
+	System founded some <b>live data</b> of the lead which is intimated by <%= @broker_contact.name%>, the details of the intimated lead and the leads found are given below:<br><br>
+<%elsif @type == "Intimation found" %>
+	System founded some <b>previously intimated data by broker</b> of the lead which is currently intimated by <%= @broker_contact.name%>, the details of the intimated lead and the leads found are given below:<br><br>
+<%end%>
+<b>Intimated lead</b><br><br>
+<b>Project:</b> <%= @business_unit.name%><br>
+<b>Name:</b> <%= @name%><br>
+<b>Email:</b> <%= @email%><br>
+<b>Mobile:</b> <%= @mobile%><br><br>
+<b>Data Found in CRM</b><br>
+<table border="2">
+	<thead>
+		<th>Project</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Mobile</th>
+		<th>Similarity</th>
+	</thead>
+	<tbody>
+		<%@leads.each do |lead_data|%>
+			<tr>
+				<td><%= lead_data[0].business_unit.name%></td>
+				<td><%= lead_data[0].name%></td>
+				<td><%= lead_data[0].try(:email)%></td>
+				<td><%= lead_data[0].mobile%></td>
+				<td><%= lead_data[1]%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

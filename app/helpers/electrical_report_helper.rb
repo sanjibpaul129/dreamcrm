@@ -1,0 +1,2 @@
+module ElectricalReportHelper
+end

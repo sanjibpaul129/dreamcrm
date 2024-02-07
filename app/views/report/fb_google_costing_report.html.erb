@@ -1,0 +1,179 @@
+<h1>Costing Graphical Report</h1>
+<%= form_tag 'fb_google_costing_report' do  %>
+    <div class="row">
+		<div class="col-lg-2">
+			Report Type:
+			<%= select_tag "report_type", options_for_select(@report_type, selected: @report_selected), :class => 'form-control', :prompt => 'Please Select', :onchange => 'populate_sources()' %>
+		</div>
+		<div class="col-lg-3">
+			Project:
+			<%= select_tag "business_unit_id", options_for_select(@projects, selected: @project_selected), :class => 'form-control', :prompt => 'Please Select' %>
+		</div>
+		<div class="col-lg-2">
+			Type:
+			<%= select_tag "calculation_type", options_for_select(@calculation_type, selected: @calculation_type_selected), :class => 'form-control', :prompt => 'Please Select' %>
+		</div>
+		<div class="col-lg-3" id="specific_sources">
+			Sources:
+			<%= select_tag "source_category", options_for_select(@all_sources, selected: @source_selected.heirarchy), :class => 'form-control', :prompt => 'Please Select' %>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'View Details', :class => 'btn btn-primary', :style => 'margin-top: 17%;' %>
+		</div>
+	</div>
+<%end%>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<div id="chart-container"></div>
+<script>
+	var chartOptions = {
+	  chart: {
+	    renderTo: 'chart-container'
+	  },
+	  title: {
+	  	<% if @report_type == "Facebook" %>
+	  		text: 'Facebook Costing Report'
+	  	<%elsif @report_type == "Google" %>
+	    	text: 'Google Costing Report'
+	    <%end%>
+	  },
+	  xAxis: {
+	    	<% if @report_selected == "Monthly"%>
+	    		categories: <%= @months %>,
+	    	<%else%>
+	      		categories: <%= @weeks %>,
+	      	<%end%>
+	    },
+	  yAxis: [{
+	    title: {
+	      text: 'LeadGen'
+	    }
+	  }, {
+	    title: {
+	      text: 'CPL'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'Qialified'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'CPQL'
+	    }
+	  }, {
+	    title: {
+	      text: 'QL%'
+	    }
+	  }, {
+	    title: {
+	      text: 'SiteVisited'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'CPSV'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'SV%'
+	    }
+	  }, {
+	    title: {
+	      text: 'Booking'
+	    }
+	  }, {
+	    title: {
+	      text: 'CPB'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'Booking%'
+	    },
+	    opposite: true
+	  }],
+	  series: []
+	};
+	var seriesData = [
+	  {
+	    name: 'Leads Generated',
+	    data: <%= @total_leads_data%>,
+	    visible: true
+	  },
+	  {
+	    name: 'CPL',
+	    data: <%= @cpl_data%>,
+	    visible: true
+	  },
+	  {
+	    name: 'Qualified',
+	    data: <%= @qualified_leads%>,
+	    visible: false
+	  },
+	  {
+	    name: 'CPQL',
+	    data: <%= @cpql_data%>,
+	    visible: false
+	  },
+	  {
+	    name: 'QL%',
+	    data: <%= @qualified_percentage%>,
+	    visible: false
+	  },
+	  {
+	    name: 'Site Visited',
+	    data: <%= @sv_leads%>,
+	    visible: false
+	  },
+	  {
+	    name: 'CPSV',
+	    data: <%= @cpsv_data%>,
+	    visible: false
+	  },
+	  {
+	    name: 'SV%',
+	    data: <%= @sv_percentage%>,
+	    visible: false
+	  },
+	  {
+	    name: 'Booking',
+	    data: <%= @booking_leads%>,
+	    visible: false
+	  },
+	  {
+	    name: 'CPB',
+	    data: <%= @cpbooking_data%>,
+	    visible: false
+	  },
+	  {
+	    name: 'Booking%',
+	    data: <%= @booking_percentage%>,
+	    visible: false
+	  }
+	];
+
+	for (var i = 0; i < seriesData.length; i++) {
+	  var series = {
+	    name: seriesData[i].name,
+	    data: seriesData[i].data,
+	    visible: seriesData[i].visible,
+	    yAxis: i // Assign each series to a separate y-axis
+	    // tooltip: {
+	    //   valueSuffix: ' ' + seriesData[i].unit // Display unit in tooltip
+	    // }
+	  };
+	  chartOptions.series.push(series);
+	}
+	// Create the chart
+	var chart = new Highcharts.Chart(chartOptions);
+</script>
+<script>
+	function populate_sources()
+  	{
+	    var report_type = event.target.value;
+	    console.log(report_type);
+	    $.getScript('/report/populate_sources.js?report_type='+report_type);
+	}
+</script>

@@ -1,0 +1,32 @@
+<%@header = 'Areas Edit'%>
+<%= form_tag 'area_update', :html => {:class => 'form-horizontal'} do %>  
+<%= hidden_field_tag 'area_id', @area.id%>
+  <div class="col-lg-5 col-lg-offset-4">
+    <div class="well bs-component">
+      <center><legend>&nbspEdit Area</legend></center>
+      <div class="row">
+        <div class="col-lg-2">
+          <%= label_tag :'Name:' %>
+        </div>
+        <div class="col-lg-10">
+          <%= text_field_tag 'name', @area.name, :class => 'form-control'%>
+        </div>
+      </div>
+      <br>   
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <%= submit_tag 'Update Area', :class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<style>
+  .well{
+    width: 500px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>

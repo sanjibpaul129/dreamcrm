@@ -1,0 +1,63 @@
+<%= form_for(@posession_charge) do |f| %>
+  <% if @posession_charge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@posession_charge.errors.count, "error") %> prohibited this posession_charge from being saved:</h2>
+
+      <ul>
+      <% @posession_charge.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Posession Charges</legend>
+
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Block', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+           <%= select(:posession_charge, :block_id, options_for_select(@blocks, selected: @posession_charge.block_id),{}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Extra Charge', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+           <%= select(:posession_charge, :extra_charge_id, options_for_select(@extra_charges, selected: @posession_charge.extra_charge_id),{}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="form-group">
+          <%= f.label :Amount, :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-4">
+            <%= f.number_field :amount, :class => 'form-control'%>
+          </div>
+          <%= f.label :Rate, :class => 'col-lg-2 control-label' %>
+          <div class="col-lg-3">
+            <%= f.number_field :rate, :class => 'form-control'%>
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="form-group">
+          <%= f.label :Gst, :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-4">
+           <%= f.number_field :gst, :class => 'form-control'%>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-3">
+          <br>
+          <%= f.submit :class => 'btn btn-primary btn-block btn_width'%>
+        </div>
+      </div>
+    </div>
+  </div>  
+<% end %>

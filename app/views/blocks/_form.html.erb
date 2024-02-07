@@ -1,0 +1,57 @@
+
+<div class="col-lg-4 col-lg-offset-4">
+    <div class="well bs-component">
+
+<legend>&nbspGenerate Block</legend>
+
+<%= form_for @block, :html => {:class => 'form-horizontal'} do |f| %>
+  <% if @block.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@block.errors.count, "error") %> prohibited this block from being saved:</h2>
+
+      <ul>
+      <% @block.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+   <div class="form-group">
+    <%= f.label :project, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= select(:block, :business_unit_id, options_for_select(@business_units, selected: @block.business_unit_id),{}, { :class => 'form-control'})   %>
+  </div>
+   </div>
+
+   <div class="form-group">
+    <%= f.label :name, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :name, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :number, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.number_field :number, :class => "form-control" %>
+  </div>
+  </div>
+
+<div class="form-group">
+    <%= f.label :floors, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.number_field :floors, :class => "form-control" %>
+  </div>
+  </div>
+ <div class="form-group">
+      <div class="col-lg-8 col-lg-offset-2">
+    <%= f.submit :class => 'btn btn-primary btn-block', data: { confirm: 'Please confirm' } %>
+  </div>
+  </div>
+
+  </div>
+  </div>
+<% end %>
+

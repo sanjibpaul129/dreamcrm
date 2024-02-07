@@ -1,0 +1,25 @@
+<%@header = 'Tv Channels'%>
+<h1>Listing channels</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @channels.each do |channel| %>
+      <tr>
+        <td><%= channel.description %></td>
+        <td><%= link_to 'Edit', edit_channel_path(channel), :class => 'edit_btn' %></td>
+        <td><%= link_to 'Destroy', channel, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'dlt_btn'  %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Channel', new_channel_path, :class => 'btn btn-primary' %>

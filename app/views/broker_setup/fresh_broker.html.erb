@@ -1,0 +1,94 @@
+<h1>Fresh Brokers</h1>
+<%= form_tag 'fresh_broker' do  %>
+    <% if current_personnel.email == "ayush@thejaingroup.com" %>
+      	<div class="row">
+        	<div class="col-lg-1">
+          		<i>Executive</i>
+        	</div>
+    		<div class="col-lg-3">
+          		<%= select_tag "personnel_id", options_for_select(@executives, selected: @executive), :class => 'form-control', :prompt => 'Please Select'%>
+        	</div>
+        	<div class="col-lg-2">
+          		<%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+        	</div>
+      	</div>
+    <% end %>
+<% end %><br>
+<%= form_tag 'fresh_broker_followup_entry' do  %>
+	<table class="customers" id="fresh_broker">
+		<thead>
+			<th>Brkr cntct Id</th>
+			<th>Broker</th>
+			<th>Name</th>
+			<th>Status</th>
+			<th>Reference</th>
+			<th>Invitation Read</th>
+			<th>Reply</th>
+			<th>Acceptance</th>
+			<th></th>
+			<th></th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</thead>
+		<tbody>
+			<%@broker_contacts.each do |broker_contact|%>
+				<tr>
+					<td><%= broker_contact.id%></td>
+					<td><%= broker_contact.broker.name%></td>
+					<td><%= broker_contact.name%></td>
+					<td>Fresh</td>
+					<td><%= broker_contact.reference%></td>
+					<td><%= broker_contact.try(:invitation_read)%></td>
+					<td><%= broker_contact.try(:invitation_reply)%></td>
+					<% if broker_contact.accept_invitation == nil %>
+						<td>Pending</td>
+					<%elsif broker_contact.accept_invitation == false %>
+						<td>Not Interested</td>
+					<%else%>
+						<td>Accepted</td>
+					<%end%>
+					<td><%= submit_tag "Call", :name => "call[#{broker_contact.id}]" %></td>
+					<% if broker_contact.mobile_two == "" || broker_contact.mobile_two == nil%>
+						<td></td>
+					<%else%>
+						<td><%= submit_tag "Call Other No.", :name => "call_other_number[#{broker_contact.id}]" %></td>
+					<%end%>
+					<td><%= link_to "Brochure", broker_setup_brochure_link_send_path(broker_contact), :class => 'btn btn-primary', :style => "text-decoration: none"%></td>
+					<td><%= link_to "Agreement Link", broker_setup_broker_agreement_link_send_path(broker_contact), :class => 'btn btn-primary', :style => "text-decoration: none"%></td>
+					<td><%= link_to "lead intimation", broker_setup_broker_lead_intimation_link_send_path(broker_contact), :class => 'btn btn-primary', :style => "text-decoration: none"%></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<%end%>
+<script>
+	$(document).ready(function(){
+	var FilterTable=$("#fresh_broker").DataTable({  
+	   "fixedHeader": true,   
+	   "dom": '<"wrapper"lit>',
+	   "bAutoWidth": false,
+	   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+	   "bDeferRender": true,
+	   "aoColumns": [
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true}
+	                             ]
+	});
+
+	$("#filterbox").keyup(function() {
+	        FilterTable.search(this.value).draw();
+	    });
+	});
+</script>

@@ -1,0 +1,68 @@
+<%  
+  @flats = Flat.where(individual_bill_generation: true)
+  @personnels=[]
+  @flats.each do |flat|
+    if flat.block.business_unit_id == @business_unit_id.to_i
+      @personnels+=[[flat.lead.name+'-'+flat.block.name+'-'+flat.full_name, flat.id]]
+    end
+  end
+  @personnels=@personnels.sort_by{|x,y| x}
+%>
+  <div class="row">   
+    <div class="form-group">
+      <div class="col-lg-2">
+        <%= label_tag :'Select Customer'%>
+      </div>
+      <div class="col-lg-8">
+        <%= select_tag 'flat_id', options_for_select(@personnels), :class => 'form-control selectpicker', data: { live_search: true },:prompt => 'Please Select', :required => true%>
+      </div>
+    </div>
+  </div><br>
+      <div class="row" >
+        <div class="form-group">    
+          <div class="col-lg-2">
+          	<%= label_tag :'Generated on'%>
+          </div>
+          <div class="col-lg-4">
+            <%= date_field_tag 'maintainence_bill[date]','', :class => 'form-control', :required => true%>
+          </div>
+          <div class="col-lg-2">
+          	<%= label_tag :Rate %>
+          </div>
+          <div class="col-lg-4">
+           <%= text_field_tag 'maintainence_bill[rate]',@rate, :class => 'form-control', :readonly => true%>
+          </div>
+        </div>
+      </div><br>
+      
+      <div class="row">
+        <div class="form-group">    
+          <div class="col-lg-2">
+          	<%= label_tag :From %>
+          </div>
+          <div class="col-lg-4">
+           <%= date_field_tag 'maintainence_bill[from]','', :class => 'form-control', :required => true%>
+          </div>
+          <div class="col-lg-2">
+            <%= label_tag :To%>
+          </div>
+          <div class="col-lg-4">
+           <%= date_field_tag 'maintainence_bill[to]','', :class => 'form-control', :required => true %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= submit_tag 'Generate Bill',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>
+<script>
+      $(document).ready(function() {
+        $('.selectpicker').selectpicker();
+      });
+    </script>

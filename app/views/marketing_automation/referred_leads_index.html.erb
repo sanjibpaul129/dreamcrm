@@ -1,0 +1,23 @@
+<%@header = 'Referred Leads'%>
+<h1>All Referred Leads</h1>
+<table id="customers" >
+	<thead>
+		<th>Subscriber Name</th>
+		<th>Referred Lead Id</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Mobile</th>
+	</thead>
+	<tbody>
+		<% @referred_leads.each do |referred_lead| %>
+			<tr>
+				<td><%= %></td>
+				<td><%= referred_lead.lead.id%></td>
+				<td><%= referred_lead.lead.name%></td>
+				<td><%= referred_lead.lead.email%></td>
+				<td><%= referred_lead.lead.mobile%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>
+<%= link_to 'send Link to customers', marketing_automation_referred_lead_form_url%>

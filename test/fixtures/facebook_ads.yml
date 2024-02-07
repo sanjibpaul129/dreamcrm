@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  campaign_id: MyString
+  adset_id: MyString
+  ad_id: MyString
+  form_id: MyString
+  source_category_id: 1
+
+two:
+  campaign_id: MyString
+  adset_id: MyString
+  ad_id: MyString
+  form_id: MyString
+  source_category_id: 1

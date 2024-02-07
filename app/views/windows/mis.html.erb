@@ -1,0 +1,347 @@
+<%@header = 'MIS Report'%>
+<h1>MIS Report <small>(Targets:&nbsp&nbspSiteVisit/Lead-10%&nbsp&nbsp&nbspBooking/SiteVisit-25%)</small></h1>
+
+<%= form_tag 'mis' do  %>
+  <div class="row">
+    <div class="col-lg-2">
+      <%= select_month((@month), {}, {:class => 'form-control'})%>
+    </div>
+    <div class="col-lg-2">
+      <%= select_year @year, {start_year: 2017, end_year: 2022}, :class => "form-control" %>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:site_executive, :picked, options_for_select(@site_executives, selected: @executive), {}, {:class => 'form-control'})   %>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+    </div>    
+  </div>
+  <% if @executive==-1 %>
+    <h2><%= ['','January','February','March','April','May','June','July','August','September','October','November','December'][@month] %> Report for All &nbsp&nbsp <small>(marked in green/red if above/below average)</small></h2>
+  <% else %>
+    <h2><%= ['','January','February','March','April','May','June','July','August','September','October','November','December'][@month] %> Report for: <%= Personnel.find(@executive).name %>&nbsp&nbsp<small>(marked in green/red if above/below average)</small></h2>
+  <% end %>
+<% end %>
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Prj</th>
+      <th>Leads</th>
+      <th>Avg</th>
+      <th>Ql</th>
+      <th>Avg</th>
+      <th>Ql %</th>
+      <th>Avg %</th>
+      <th>SV</th>
+      <th>Avg</th>
+      <th>SV %</th>
+      <th>Avg %</th>
+      <th>Booked</th>
+      <th>Bkd Avg</th>
+      <th>Booked%</th>
+      <th>Avg %</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <% @project_wise_this_months_count.each do |this_months_count| %>
+        <% if this_months_count[1]==0 && this_months_count[6]==0 %>
+        <% else %>
+          <tr>
+            <td><%= BusinessUnit.find(this_months_count[0]).name %></td>
+            <% past_lead_generation=(((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]).to_f/(6.to_f)).round
+            %>
+            <% if this_months_count[1] > past_lead_generation %> 
+              <td style="background: lightgreen !important; color:black !important;"><%= this_months_count[1] %></td>
+            <% else %>
+              <td style="background: red !important;"><%= this_months_count[1] %></td>
+            <% end %>
+            <td><%= past_lead_generation %></td>
+            <% 
+              past_lead_qualification = (((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[2]).to_f/(6.to_f)).round
+            %>
+            <% if this_months_count[2] > past_lead_qualification %> 
+              <td style="background: lightgreen !important; color:black !important;"><%= this_months_count[2] %></td>
+            <% else %>
+              <td style="background: red !important;"><%= this_months_count[2] %></td>
+            <% end %>
+            <td><%= past_lead_qualification%></td>
+            <% if this_months_count[1]==0 %>
+              <% current_qualification_percentage = 0 %>
+            <% else %>
+              <% current_qualification_percentage = (((this_months_count[2]).to_f/(this_months_count[1]).to_f)*100).round %>
+            <% end %>
+            <% if (@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]==0 %>
+              <% past_qualification_percentage = 0 %>
+            <% else %>
+              <% past_qualification_percentage = ((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[2]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]).to_f)*100).round %>
+            <% end %>
+            <% if current_qualification_percentage > past_qualification_percentage %>
+              <td style='background: linear-gradient(to right, lightgreen <%= current_qualification_percentage %>%, rgba(255, 255, 255, .4) 0%);color:black !important;'><%= current_qualification_percentage %></td>
+            <% else %>
+              <td style='background: linear-gradient(to right, red <%= current_qualification_percentage %>%, rgba(255, 255, 255, .4) 0%);'><%= current_qualification_percentage %></td>
+            <% end %>
+            <% if (@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]==0 %>
+              <td style='background: linear-gradient(to right, blue 0%, rgba(255, 255, 255, .4) 0%);'><%= past_qualification_percentage=0 %></td>
+            <% else %>
+              <td style='background: linear-gradient(to right, blue <%= past_qualification_percentage=((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[2]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]).to_f)*100).round %>%, rgba(255, 255, 255, .4) 0%);'>
+                <%= ((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[2]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]).to_f)*100).round %></td>
+            <% end %>
+            <% 
+              past_site_visit_avg = (((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3]).to_f/(6.to_f)).round
+            %>
+            <% if this_months_count[3] > past_site_visit_avg %> 
+              <td style="background: lightgreen !important; color:black !important;"><%= this_months_count[3] %></td>
+            <% else %>
+              <td style="background: red !important;"><%= this_months_count[3] %></td>
+            <% end %>
+            <td><%= past_site_visit_avg%></td>
+            <% if this_months_count[1]==0 %>
+              <% current_site_visit_percentage=0 %>
+            <% else %>
+              <% current_site_visit_percentage=(((this_months_count[3]).to_f/(this_months_count[1]).to_f)*100).round %>
+            <% end %>
+            <% if (@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]==0 %>
+              <% past_site_visit_percentage=0 %>
+            <% else %>
+              <% past_site_visit_percentage=((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]).to_f)*100).round %>
+            <% end %>
+            <% if current_site_visit_percentage>past_site_visit_percentage %>
+              <td style='background: linear-gradient(to right, lightgreen <%= current_site_visit_percentage %>%, rgba(255, 255, 255, .4) 0%);color:black !important;'><%= current_site_visit_percentage %></td>
+            <% else %>
+              <td style='background: linear-gradient(to right, red <%= current_site_visit_percentage %>%, rgba(255, 255, 255, .4) 0%);'><%= current_site_visit_percentage %></td>
+            <% end %>
+            <% if (@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]==0 %>
+              <td style='background: linear-gradient(to right, blue 0%, rgba(255, 255, 255, .4) 0%);'><%= past_site_visit_percentage=0 %></td>
+            <% else %>
+              <td style='background: linear-gradient(to right, blue <%= past_site_visit_percentage=((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]).to_f)*100).round %>%, rgba(255, 255, 255, .4) 0%);'><%= ((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[1]).to_f)*100).round %></td>
+            <% end %>
+            <% 
+              past_lead_booked = (((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[6]).to_f/(6.to_f)).round
+            %> 
+            <% if (this_months_count[3])==0 %>
+              <% current_booking_percentage=0 %>
+            <% else %>
+              <% current_booking_percentage=(((this_months_count[6]).to_f/(this_months_count[3]).to_f)*100).round %>
+            <% end %> 
+            <% if ((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3])==0 %>
+              <% past_booking_percentage=0 %>
+            <% else %>
+              <% past_booking_percentage=((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[6]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3]).to_f)*100).round %>
+            <% end %>
+            <% if this_months_count[6] > past_lead_booked %> 
+              <td style="background: lightgreen !important; color:black !important;"><%= this_months_count[6] %></td>
+            <% else %>
+              <td style="background: red !important;"><%= this_months_count[6] %></td>
+            <% end %>
+            <td><%= past_lead_booked%></td>
+            <% if current_booking_percentage>past_booking_percentage %>
+              <td style='background: linear-gradient(to right, lightgreen <%= current_booking_percentage %>%, rgba(255, 255, 255, .4) 0%);color:black !important;'><%= current_booking_percentage %></td>
+            <% else %>
+              <td style='background: linear-gradient(to right, red <%= current_booking_percentage %>%, rgba(255, 255, 255, .4) 0%);'><%= current_booking_percentage %></td>
+            <% end %>
+            <% if ((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3])==0 %>
+              <td style='background: linear-gradient(to right, orange 0%, rgba(255, 255, 255, .4) 0%);'><%= past_booking_percentage=0 %></td>
+            <% else %>
+              <td style='background: linear-gradient(to right, orange <%= ((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[6]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3]).to_f)*100).round %>%, rgba(255, 255, 255, .4) 0%);'><%= past_booking_percentage=((((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[6]).to_f/((@project_wise_last_6_months_count).detect{|(n, _, _, _, _, _, _)|(n==this_months_count[0])}[3]).to_f)*100).round %></td>
+            <% end %> 
+          </tr>
+        <% end %>
+      <% end %>  
+  </tbody>
+</table>
+
+<h2>Last 6 Month's Trend</h2>
+<table id="customers">
+  <thead>
+    <tr>
+      
+      <th>Project</th>
+      <% if Time.now.month-6 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-6]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-6]
+         end
+      %>
+      <th>Vst%(<%=month%>)</th>
+      <% if Time.now.month-5 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-5]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-5]
+         end
+      %>
+      <th>Vst%(<%=month%>)</th>
+      <% if Time.now.month-4 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-4]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-4]
+         end
+      %>
+      <th>Vst%(<%=month%>)</th>
+      <% if Time.now.month-3 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-3]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-3]
+         end
+      %>
+      <th>Vst%(<%=month%>)</th>
+      <% if Time.now.month-2 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-2]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-2]
+         end
+      %>
+      <th>Vst%(<%=month%>)</th>
+      <% if Time.now.month-1 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-1]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-1]
+         end
+      %>
+      <th>Vst%(<%=month%>)</th>
+      <% if Time.now.month-6 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-6]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-6]
+         end
+      %>
+      <th>Bkd%(<%=month%>)</th>
+      <% if Time.now.month-5 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-5]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-5]
+         end
+      %>
+      <th>Bkd%(<%=month%>)</th>
+      <% if Time.now.month-4 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-4]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-4]
+         end
+      %>
+      <th>Bkd%(<%=month%>)</th>
+      <% if Time.now.month-3 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-3]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-3]
+         end
+      %>
+      <th>Bkd%(<%=month%>)</th>
+      <% if Time.now.month-2 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-2]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-2]
+         end
+      %>
+      <th>Bkd%(<%=month%>)</th>
+      <% if Time.now.month-1 <= 0 
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][12+Time.now.month-1]
+         else
+         month=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Time.now.month-1]
+         end
+      %>
+      <th>Bkd%(<%=month%>)</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <% @projects_selected.each do |project| %>
+      <tr>
+       <td><%= project.name %></td> 
+       <td style='background: linear-gradient(to right, blue <%= @project_wise_six_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_six_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %></td>
+       <td style='background: linear-gradient(to right, blue <%= @project_wise_five_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_five_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %></td>
+       <td style='background: linear-gradient(to right, blue <%= @project_wise_four_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_four_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %></td>
+        <td style='background: linear-gradient(to right, blue <%= @project_wise_three_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_three_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %></td>
+       <td style='background: linear-gradient(to right, blue <%= @project_wise_two_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_two_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %></td>
+       <td style='background: linear-gradient(to right, blue <%= @project_wise_one_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_one_month_before_count.detect{ |(n, _, _)| n == project.id }[1] %></td>
+       <td style='background: linear-gradient(to right, orange <%= @project_wise_six_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_six_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %></td>
+       <td style='background: linear-gradient(to right, orange <%= @project_wise_five_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_five_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %></td>
+       <td style='background: linear-gradient(to right, orange <%= @project_wise_four_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_four_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %></td>
+        <td style='background: linear-gradient(to right, orange <%= @project_wise_three_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_three_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %></td>
+       <td style='background: linear-gradient(to right, orange <%= @project_wise_two_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_two_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %></td>
+       <td style='background: linear-gradient(to right, orange <%= @project_wise_one_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %>%, rgba(255, 255, 255, .4) 0%);'><%= @project_wise_one_month_before_count.detect{ |(n, _, _)| n == project.id }[2] %></td>
+      </tr>
+      <% end %>  
+  </tbody>
+</table>
+
+<h2>Last 6 Month's Report</h2>
+<table id="customers">
+  <thead>
+    <tr>      
+      <th>Project</th>
+      <th>Leads</th>
+      <th></th>
+      <th>QL</th>
+      <th>QL %</th>
+      <th>SV</th>
+      <th>SV %</th>
+      <th>Booked</th>
+      <th>Booked%</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <% @project_wise_last_6_months_count.each_with_index do |six_months_count, index| %>
+        <% if six_months_count[1]==0 %>
+        <% else %>
+          <tr>
+            <td><%= BusinessUnit.find(six_months_count[0]).name %></td>
+            <td><%= six_months_count[1] %></td>
+            <td><div id='<%= "sparkline_" + index.to_s %>'></div></td>
+            <td><%= six_months_count[2] %></td>
+            <% if six_months_count[1]==0 %>
+              <td style='background: linear-gradient(to right, blue 0%, rgba(255, 255, 255, .4) 0%);'>0</td>
+            <% else %>
+              <td style='background: linear-gradient(to right, blue <%= (((six_months_count[2]).to_f/(six_months_count[1]).to_f)*100).round %>%, rgba(255, 255, 255, .4) 0%);'><%= (((six_months_count[2]).to_f/(six_months_count[1]).to_f)*100).round %></td>
+            <% end %>
+            <td><%= six_months_count[3] %></td>
+            <% if six_months_count[1]==0 %>
+              <td style='background: linear-gradient(to right, blue 0%, rgba(255, 255, 255, .4) 0%);'>0</td>
+            <% else %>
+              <td style='background: linear-gradient(to right, blue <%= (((six_months_count[3]).to_f/(six_months_count[1]).to_f)*100).round %>%, rgba(255, 255, 255, .4) 0%);'><%= (((six_months_count[3]).to_f/(six_months_count[1]).to_f)*100).round %></td>
+            <% end %>
+            <td><%= six_months_count[6] %></td>
+            <% if (six_months_count[3])==0 %>
+              <td style='background: linear-gradient(to right, orange 0%, rgba(255, 255, 255, .4) 0%);'>0</td>
+            <% else %>
+              <td style='background: linear-gradient(to right, orange <%= (((six_months_count[6]).to_f/(six_months_count[2]).to_f)*100).round %>%, rgba(255, 255, 255, .4) 0%);'><%= (((six_months_count[6]).to_f/(six_months_count[2]).to_f)*100).round %></td>
+            <% end %> 
+          </tr>
+        <% end %>
+      <% end %>  
+  </tbody>
+</table>
+
+
+
+<script>
+  <% @project_wise_last_6_months_count.each_with_index do |six_months_count, index| %>
+  <% lead_generation_trend=[] %>
+  <% lead_generation_trend+=[@project_wise_six_month_before_count.detect{ |(n, _, _)| n == six_months_count[0]}[3]] %>
+  <% lead_generation_trend+=[@project_wise_five_month_before_count.detect{ |(n, _, _)| n == six_months_count[0]}[3]] %>
+  <% lead_generation_trend+=[@project_wise_four_month_before_count.detect{ |(n, _, _)| n == six_months_count[0]}[3]] %>
+  <% lead_generation_trend+=[@project_wise_three_month_before_count.detect{ |(n, _, _)| n == six_months_count[0]}[3]] %>
+  <% lead_generation_trend+=[@project_wise_two_month_before_count.detect{ |(n, _, _)| n == six_months_count[0]}[3]] %>
+  <% lead_generation_trend+=[@project_wise_one_month_before_count.detect{ |(n, _, _)| n == six_months_count[0]}[3]] %>
+  $("<%="#sparkline_"+index.to_s %>").sparkline(<%= lead_generation_trend %>, {
+    type: 'bar'});
+  <% end %>
+</script>  
+
+<style>
+  .progress-bar-animated {
+  -webkit-animation: progress-bar-stripes 1s linear infinite;
+          animation: progress-bar-stripes 1s linear infinite;
+}
+.progress-bar{
+  background-color: #51f7ff !important;
+}
+.progress-striped .progress-bar, .progress-bar-striped {
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgb(3, 233, 244) 50%, rgb(3, 233, 244) 75%, transparent 75%, transparent) !important;
+  background-size: 20px 20px !important;
+}
+</style>

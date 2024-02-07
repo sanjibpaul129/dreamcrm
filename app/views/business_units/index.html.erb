@@ -1,0 +1,75 @@
+<h1>Projects</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Organisation</th>
+      <th>Company</th>
+      <th>Base Rate</th>
+      <th>Open Covered Ratio</th>
+      <th>Address 1</th>
+      <th>Address 2</th>
+      <th>Address 3</th>
+      <th>Address 4</th>
+      <th>Email</th>
+      <th>Shortform</th>
+      <th>Logo</th>
+      <th>Hira Reg. No.</th>
+      <th>Bank</th>
+      <th>Branch</th>
+      <th>Account No.</th>
+      <th>IFSC Code</th>
+      <th>Locality</th>
+      <th>Area</th>
+      <th>City</th>
+      <th>Pincode</th>
+      <th>Walkthrough</th>
+      <th>Auto Allocate</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @business_units.each do |business_unit| %>
+      <tr>
+        <td><%= business_unit.name %></td>
+        <td><%= business_unit.organisation.name %></td>
+        <td><%= business_unit.company.name %></td>
+        <td><%= business_unit.base_rate %></td>
+        <td><%= business_unit.open_covered_ratio %></td>
+        <td><%= business_unit.address_1 %></td>
+        <td><%= business_unit.address_2 %></td>
+        <td><%= business_unit.address_3 %></td>
+        <td><%= business_unit.address_4 %></td>
+        <td><%= business_unit.email %></td>
+        <td><%= business_unit.shortform %></td>
+        <td><%= business_unit.logo %></td>
+        <td><%= business_unit.try(:hira_registration_number) %></td>
+        <td><%= business_unit.try(:bank_name)%></td>
+        <td><%= business_unit.try(:branch_address)%></td>
+        <td><%= business_unit.try(:account_number)%></td>
+        <td><%= business_unit.try(:ifsc_code)%></td>
+        <td><%= business_unit.try(:locality)%></td>
+        <td><%= business_unit.try(:area)%></td>
+        <td><%= business_unit.try(:city)%></td>
+        <td><%= business_unit.try(:pincode)%></td>
+        <%if business_unit.walkthrough.to_s != ''%>
+        <td><i class="glyphicon glyphicon-ok"></i></td>
+        <%else%>
+        <td></td>
+        <%end%>
+        <%if business_unit.auto_allocate == true %>
+        <td><i class="glyphicon glyphicon-ok"></i></td>
+        <%else%>
+        <td></td>
+        <%end%>
+       <td><%= link_to 'Edit', edit_business_unit_path(business_unit), :class => "edit_btn", :style => "text-decoration:none;"%></td> 
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Business unit', new_business_unit_path, :class => 'btn btn-primary' %>

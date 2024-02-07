@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  block_id: 1
+  description: MyString
+  business_unit_id: 1
+
+two:
+  block_id: 1
+  description: MyString
+  business_unit_id: 1

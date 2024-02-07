@@ -1,0 +1,25 @@
+<%@header = 'Magazines'%>
+<h1>Listing magazines</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @magazines.each do |magazine| %>
+      <tr>
+        <td><%= magazine.description %></td>
+        <td><%= link_to 'Edit', edit_magazine_path(magazine), :class => 'edit_btn' %></td>
+        <td><%= link_to 'Destroy', magazine, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'dlt_btn' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Magazine', new_magazine_path, :class => 'btn btn-primary' %>

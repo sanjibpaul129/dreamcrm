@@ -1,0 +1,134 @@
+<%@header = 'Lost Reason Wise Leads'%>
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+<center><h1>Lost Reason Wise Leads</h1></center>
+<%= form_tag 'lost_reason_wise_leads' do  %>
+  <div class="row">
+    <div class="col-lg-2">  
+      From:<%= date_field_tag 'date[from]', @from.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      To:<%= date_field_tag 'date[to]', @to.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      Source:<%= select(:lost, :source_category_id, options_for_select(@source_categories, selected: @source_category_selected),{}, {:class => 'form-control selectpicker', data: { live_search: true }}) %>
+    </div>
+    <div class="col-lg-2">
+      Lead Type:<%= select(:lost, :logic, options_for_select([['Absolute Basis','Absolute Basis'],['Based on Generation','Based on Generation']], selected: @lost_logic_selected),{}, {:class => 'form-control'}) %>
+    </div>
+    <div class="col-lg-2">
+      Site Visited
+      <% if @site_visited_lead == true  || @site_visited_lead == "true" %>
+        <%= check_box_tag "site_visited", true, nil, :checked => true %>
+      <%else%>
+        <%= check_box_tag "site_visited", true, nil%>
+      <%end%>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3">
+      Without testing and duplicate
+      <% if @without_testing_and_duplicate == true  || @without_testing_and_duplicate == "true" %>
+        <%= check_box_tag "without_test_duplicate", true, nil, :checked => true %>
+      <%else%>
+        <%= check_box_tag "without_test_duplicate", true, nil%>
+      <%end%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+    </div>
+  </div>
+  <table class="customers " id="orderedtasks">
+    <thead>
+      <tr>
+        <th>Reason</th>
+        <th>Leads</th>
+        <% @lost_reason_wise_project_wise_leads.keys.map{ |x| x[0] }.uniq.each do |project|  %>
+          <th><%= project %></th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% total_leads = 0 %>
+      <% @lost_reason_wise_leads.each do |key, value| %>
+        <tr>
+          <td><%= LostReason.find(key).description %></td>
+          <% if @lost_logic_selected == nil%>
+            <%if @site_visited_lead == nil%>
+              <td><% total_leads += value %><%= link_to value, windows_lost_leads_path("project"=>{"selected"=> "-1".to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "with_children" => "true"), method: :post%></td>
+            <%else%>
+              <td><% total_leads += value %><%= link_to value, windows_lost_leads_path("project"=>{"selected"=> "-1".to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "with_children" => "true", "lost" => {"type" => "Site Visited"}), method: :post%></td>
+            <%end%>
+          <%elsif @lost_logic_selected == 'Based on Generation'%>
+            <%if @site_visited_lead == nil%>
+              <td><% total_leads += value %><%= link_to value, windows_all_leads_path("project"=>{"selected"=> "-1".to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "lead_type" => "Lost", "with_children" => "true"), method: :post%></td>
+            <%else%>
+              <td><% total_leads += value %><%= link_to value, windows_all_leads_path("project"=>{"selected"=> "-1".to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "lead_type" => "Lost", "with_children" => "true", "lost" => {"type" => "Site Visited"}), method: :post%></td>
+            <%end%>
+          <%end%>
+          <% @lost_reason_wise_project_wise_leads.keys.map{ |x| x[0] }.uniq.each do |project|  %>
+            <% if @lost_reason_wise_project_wise_leads[[project,key]]==nil %>
+              <td></td>
+            <% else %>
+              <% if @lost_logic_selected == nil %> 
+                <%if @site_visited_lead == nil%>
+                  <td><%= link_to @lost_reason_wise_project_wise_leads[[project,key]], windows_lost_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}), "with_children" => "true", method: :post  %> (<%= link_to (((@lost_reason_wise_project_wise_leads[[project,key]].to_f)/(@project_wise_total[project].to_f))*100).round, windows_lost_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}), "with_children" => "true", method: :post %>)%</td>
+                <%else%>
+                  <td><%= link_to @lost_reason_wise_project_wise_leads[[project,key]], windows_lost_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "lost" => {"type" => "Site Visited"}), "with_children" => "true", method: :post  %> (<%= link_to (((@lost_reason_wise_project_wise_leads[[project,key]].to_f)/(@project_wise_total[project].to_f))*100).round, windows_lost_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "lost" => {"type" => "Site Visited"}), "with_children" => "true", method: :post %>)%</td>
+                <%end%>
+              <%elsif @lost_logic_selected == 'Based on Generation'%>
+                <%if @site_visited_lead == nil%>
+                  <td><%= link_to @lost_reason_wise_project_wise_leads[[project,key]], windows_all_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "lead_type" => "Lost", "with_children" => "true"), method: :post  %> (<%= link_to (((@lost_reason_wise_project_wise_leads[[project,key]].to_f)/(@project_wise_total[project].to_f))*100).round, windows_lost_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "lead_type" => "Lost"), "with_children" => "true", method: :post %>)%</td>
+                <%else%>
+                  <td><%= link_to @lost_reason_wise_project_wise_leads[[project,key]], windows_all_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "lead_type" => "Lost", "with_children" => "true", "lost" => {"type" => "Site Visited"}), method: :post  %> (<%= link_to (((@lost_reason_wise_project_wise_leads[[project,key]].to_f)/(@project_wise_total[project].to_f))*100).round, windows_lost_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => key}, "lead_type" => "Lost", "with_children" => "true", "lost" => {"type" => "Site Visited"}), method: :post %>)%</td>
+                <%end%>
+              <%end%>
+            <% end %>
+         <% end %>  
+        </tr>
+      <% end %> 
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>TOTAL</td>
+        <% if @lost_logic_selected == nil%>
+          <%if @site_visited_lead == nil%>
+            <td><%= link_to total_leads, windows_lost_leads_path("project"=>{"selected"=> "-1".to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => "-1"}, "with_children" => "true"), method: :post %></td>
+          <%else%>
+            <td><%= link_to total_leads, windows_lost_leads_path("project"=>{"selected"=> "-1".to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => "-1"}, "with_children" => "true", "lost" => {"type" => "Site Visited"}), method: :post%></td>
+          <%end%>
+          <% @lost_reason_wise_project_wise_leads.keys.map{ |x| x[0] }.uniq.each_with_index do |project, index| %>
+            <%if @site_visited_lead == nil%>
+              <td><%= link_to @project_wise_total[project], windows_lost_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => "-1"}, "with_children" => "true"), method: :post %></td>
+            <%else%>
+              <td><%= link_to @project_wise_total[project], windows_lost_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => "-1"}, "with_children" => "true", "lost" => {"type" => "Site Visited"}), method: :post %></td>
+            <% end %>  
+          <% end %>
+        <%elsif @lost_logic_selected == 'Based on Generation'%>
+          <%if @site_visited_lead == nil%>
+            <td><%= link_to total_leads, windows_all_leads_path("project"=>{"selected"=> "-1".to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => "-1"}, "lead_type" => "Lost", "with_children" => "true"), method: :post %></td>
+          <%else%>
+            <td><%= link_to total_leads, windows_all_leads_path("project"=>{"selected"=> "-1".to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => "-1"}, "lead_type" => "Lost", "with_children" => "true", "lost" => {"type" => "Site Visited"}), method: :post%></td>
+          <%end%>
+          <% @lost_reason_wise_project_wise_leads.keys.map{ |x| x[0] }.uniq.each_with_index do |project, index| %>
+            <%if @site_visited_lead == nil%>
+              <td><%= link_to @project_wise_total[project], windows_all_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => "-1"}, "lead_type" => "Lost", "with_children" => "true"), method: :post %></td>
+            <%else%>
+              <td><%= link_to @project_wise_total[project], windows_all_leads_path("project"=>{"selected"=>BusinessUnit.find_by_name(project).id.to_s}, "salesteam"=>{"personnel"=> "-1", "source_category_id"=> @source_category_selected.to_s}, "range"=>{"from"=>@from.to_date.to_s, "to"=>@to.to_date.to_s}, "lost_reason" => {"selected" => "-1"}, "lead_type" => "Lost", "with_children" => "true", "lost" => {"type" => "Site Visited"}), method: :post %></td>
+            <% end %>  
+          <% end %>
+        <%end%>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>
+
+</script>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

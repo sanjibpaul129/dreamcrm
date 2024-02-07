@@ -1,0 +1,120 @@
+<div align="center">
+	<h3><b>Broker Future Followups</b></h3>(<%= @day_1_count %>,<%= @day_2_count %>,<%= @day_3_count %>,<%= @day_4_count %>,<%= @day_5_count %>,<%= @day_6_count %>,<%= @day_7_count %>)
+</div><br>
+<%= form_tag 'future_followup_broker' do  %>
+    <% if current_personnel.email == "ayush@thejaingroup.com" %>
+      	<div class="row">
+        	<div class="col-lg-1">
+          		<i>Executive</i>
+        	</div>
+    		<div class="col-lg-3">
+          		<%= select_tag "personnel_id", options_for_select(@executives, selected: @executive), :class => 'form-control', :prompt => 'Please Select'%>
+        	</div>
+        	<div class="col-lg-2">
+          		<%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+        	</div>
+      	</div>
+    <% end %>
+<% end %><br>
+<%= form_tag 'broker_future_followup_reschedule' do  %>
+	<table class="customers" id="broker_followup">
+		<thead>
+			<th></th>
+			<th>Brkr cntct Id</th>
+			<th>Broker</th>
+			<th>Name</th>
+			<th>Status</th>
+			<th>Reference</th>
+			<th>To Followup On</th>
+			<th>Invitation Read</th>
+			<th>Reply</th>
+			<th>Acceptance</th>
+			<th>Head Count</th>
+			<th>Site Visited</th>
+			<th>Contract Signed</th>
+			<th>Attempted Calls</th>
+			<th>Connected Calls</th>
+			<th></th>
+		</thead>
+		<tbody>
+			<%@broker_contacts.each do |broker_contact|%>
+				<tr>
+					<td><%= check_box_tag "broker_contact_ids[]", broker_contact.id %></td>
+					<td><%= broker_contact.id%></td>
+					<td><%= broker_contact.broker.name%></td>
+					<td><%= broker_contact.name%></td>
+					<td><%= broker_contact.current_status%></td>
+					<td><%= broker_contact.reference%></td>
+					<td><%= broker_contact.follow_ups.last.follow_up_time.strftime("%d/%m/%Y")%></td>
+					<td><%= broker_contact.try(:invitation_read)%></td>
+					<td><%= broker_contact.try(:invitation_reply)%></td>
+					<td><%= broker_contact.accept_invitation %></td>
+					<td><b><%= broker_contact.head_count %></b></td>
+					<td><b><%= broker_contact.site_visited %></b></td>
+					<td><b><%= broker_contact.broker.broker_project_statuses.where(business_unit_id: 70)[0].contract_signed %></b></td>
+					<td><%= broker_contact.call_attempted %></td>
+					<td><%= broker_contact.call_connected %></td>
+					<td><%= submit_tag ">", :name => "call[#{broker_contact.id}]", :class => 'btn btn-primary btn-xs' %></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table><br>
+	<div class="container">
+	    <div class="form-group">
+	      <div class="row">
+	        <div class="col-md-6">
+	          <div ><b><i><font color="#004fff"> To Followup On</font></i></b></div>
+	          <%= date_field_tag "followup_date", Time.now.to_date, :class => 'form-control'%>
+	        </div>
+	        <div class="col-lg-6">
+	          <div ><b><i><font color="#004fff">Status</font></i></b></div>
+	          <%= select_tag "status", options_for_select(["Hardcopy Sent", "Site Visited"]), :class => 'form-control', :prompt => 'Please Select'%>
+	        </div>
+	      </div>
+	      <div class="row">
+	        <div class="col-lg-12">
+	          <div ><b><i><font color="#004fff">Follwoup Remarks</font></i></b></div>
+	          <%= text_area_tag "remarks", "", :class => 'form-control' %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-12">
+	          <%= submit_tag 'Update', :class => 'btn btn-primary' %>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+<%end%>
+<script>
+	$(document).ready(function(){
+	var FilterTable=$("#broker_followup").DataTable({  
+	   "fixedHeader": true,   
+	   "dom": '<"wrapper"lit>',
+	   "bAutoWidth": false,
+	   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+	   "bDeferRender": true,
+	   "aoColumns": [
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true}
+	                             ]
+	});
+
+	$("#filterbox").keyup(function() {
+	        FilterTable.search(this.value).draw();
+	    });
+	});
+</script>

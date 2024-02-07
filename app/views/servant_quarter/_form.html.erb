@@ -1,0 +1,43 @@
+<%= form_for @servant_quarter, url: {action: @servant_quarters_action} do |f| %>
+
+  
+<div class="col-lg-5 col-lg-offset-4">
+  <div class="well bs-component">
+    <legend>&nbspServant Quarter Charges</legend>
+      <div class="form-group row">
+          <div class="col-lg-3">
+          <%= f.label :'Business_Unit:', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-8">
+            <%= select(:servant_quarter, :business_unit_id, options_for_select(@business_units, selected: @servant_quarter.business_unit_id),{}, {:class => 'form-control'})%>    
+          </div>
+      </div>
+      
+      
+         <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Rate:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+           <%= f.text_field :rate, :class => 'form-control'%>
+          </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Date:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+            <%= f.date_field :date , :class => 'form-control'%>
+          </div>
+      </div>
+      <div class="form-group">
+        <div class="col-lg-7 col-lg-offset-3">
+          <%= f.submit :class => 'btn btn-primary btn-block' %>      
+        </div>   
+      </div>
+      <br><br>
+  </div>
+</div>
+
+<%= hidden_field_tag :servant_quarter_id, @servant_quarter.id %>
+<% end %>

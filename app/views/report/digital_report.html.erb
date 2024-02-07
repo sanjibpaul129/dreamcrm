@@ -1,0 +1,219 @@
+<%@header = 'Digital Report'%>
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+
+
+<h1>Digital Report</h1>
+
+<%= form_tag 'digital_report' do  %>
+  <div class="row">
+    <div class="col-lg-1">
+      From:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field(:lead, :from, :value => @from, :class => 'form-control') %>
+    </div>
+    <div class="col-lg-1">
+      to:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field(:lead, :to, :value => @to, :class => 'form-control') %>
+    </div>
+    <div class="col-lg-2">
+      <%= select(:project, :selected, options_for_select(@projects, @business_unit_id),{}, {:class => 'form-control'})  %>
+    </div>
+    <div class="col-lg-2">
+      <% if @with_details == nil%>
+        With Details: <%= check_box_tag "with_details", true, nil %>
+      <%else%>
+        With Details: <%= check_box_tag "with_details", true, nil, :checked => true %>      
+      <%end%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+    </div>
+  </div>
+<table class="customers">
+  <thead>
+    <tr>      
+      <th>Source</th>
+      <th>Budget</th>
+      <th>Actual</th>
+      <th>PlannedENQ</th>
+      <th>ActualENQ</th>
+      <th>TargetCPL</th>
+      <th>ActualCPL</th>
+      <th>PlannedQL</th>
+      <th>ActualQL</th>
+      <% if @with_details == nil%>
+      <%else%>
+        <th>Actual SV</th>
+        <th>Booked</th>
+      <%end%>
+      <th>TargetCPQL</th>
+      <th>ActualCPQL</th>
+      <% if @with_details == nil%>
+      <%else%>
+        <th>ActualCPSV</th>
+      <%end%>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>  
+      <% @facebook_report.each do |key,value| %>
+        <% if key=='Actual Amount' %>
+          <% if @facebook_report["Budget Amount"] > 0 %>
+            <td><%= value %> (<%= ((value.to_f/@facebook_report["Budget Amount"].to_f)*100).to_i%>%)</td>
+          <%else%>
+            <td></td>
+          <%end%>
+        <% elsif key=='Actual Enquiries' %>
+          <% if @facebook_report["Planned Enquiries"] > 0 %>
+            <td><%= value %> (<%= ((value.to_f/@facebook_report["Planned Enquiries"].to_f)*100).to_i%>%)</td>
+          <%else%>
+            <td></td>
+          <%end%>
+        <% elsif key=='Actual QL' %>
+          <% if @facebook_report["Actual Enquiries"] > 0 %>
+            <td><%= value %> (<%= ((value.to_f/@facebook_report["Actual Enquiries"].to_f)*100).to_i%>%)</td>
+          <%else%>
+            <td></td>
+          <%end%>
+        <% if @with_details == true %>
+          <% if key=='Site Visits' %>
+            <td><%= value %> (<%= ((value.to_f/@facebook_report["Actual Enquiries"].to_f)*100).to_i%>%)</td>
+          <% elsif key=='All Booking' %>
+            <td><%= value %> (<%= ((value.to_f/@facebook_report["Actual Enquiries"].to_f)*100).to_i%>%)</td>
+          <%end%>
+        <%end%>
+        <% else %>
+          <td><%= value %></td>
+        <% end %>
+      <% end %>
+    </tr>
+    <tr>  
+      <% @google_report.each do |key,value| %>
+        <% if key=='Actual Amount' %>
+          <td><%= value %> (<%= ((value.to_f/@google_report["Budget Amount"].to_f)*100).to_i%>%)</td>
+        <% elsif key=='Actual Enquiries' %>
+          <td><%= value %> (<%= ((value.to_f/@google_report["Planned Enquiries"].to_f)*100).to_i%>%)</td>
+        <% elsif key=='Actual QL' %>
+          <td><%= value %> (<%= ((value.to_f/@google_report["Actual Enquiries"].to_f)*100).to_i%>%)</td>
+        <% if @with_details == true %>
+          <% if key=='Site Visits' %>
+            <td><%= value %> (<%= ((value.to_f/@google_report["Actual Enquiries"].to_f)*100).to_i%>%)</td>
+          <% elsif key=='All Booking' %>
+            <td><%= value %> (<%= ((value.to_f/@google_report["Actual Enquiries"].to_f)*100).to_i%>%)</td>
+          <%end%>
+        <%end%>
+        <% else %>
+          <td><%= value %></td>
+        <% end %>  
+      <% end %>
+    </tr>
+    <tr>
+      <% @other_report.each do |key,value| %>
+        <% if @with_details == true %>
+          <% if key == "Site Visits" %>
+            <td><%= value %></td>
+          <% elsif key == "All Booking" %>
+            <td><%= value %></td>
+          <%else%>
+            <td><%= value %></td>
+          <%end%>
+        <%end%>
+      <% end %>
+    </tr>
+    <% if @with_details == nil %>
+      <tr>  
+        <% @facebook_report.each do |key,value| %>
+          <% if key=="source" %>
+            <td><b>TOTAL</b></td>
+          <% elsif key=="Target CPL" %>
+            <td><b>450</b></td>
+          <% elsif key=="Actual CPL" %>
+            <td><b><%= ((@facebook_report["Actual Amount"].to_f + @google_report["Actual Amount"].to_f)/(@facebook_report["Actual Enquiries"].to_f + @google_report["Actual Enquiries"].to_f)).to_i %></b></td>
+          <% elsif key=="Target CPQL" %>
+            <td><b>3000</b></td>
+          <% elsif key=="Actual CPQL" %>
+            <% if @facebook_report["Actual QL"].to_f + @google_report["Actual QL"].to_f == 0 %>
+              <td><b>0</b></td>
+            <% else %>    
+              <td><b><%= ((@facebook_report["Actual Amount"].to_f + @google_report["Actual Amount"].to_f)/(@facebook_report["Actual QL"].to_f + @google_report["Actual QL"].to_f)).to_i %></b></td>
+            <% end %>
+          <% elsif key=="Actual Amount"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i %> (<%= ((((value.to_i+ @google_report[key].to_i).to_f) / ((@facebook_report['Budget Amount'].to_i+ @google_report['Budget Amount'].to_i).to_f))*100).to_i %>%)</b></td>
+          <% elsif key=="Planned QL"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i%></b></td>
+          <% elsif key=="Actual QL"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i%> (<%= ((((value.to_i+ @google_report[key].to_i).to_f) / ((@facebook_report['Actual Enquiries'].to_i+ @google_report['Actual Enquiries'].to_i).to_f))*100).to_i %>%)</b></td>
+          <% elsif key=="Actual Enquiries"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i%> (<%= ((((value.to_i+ @google_report[key].to_i).to_f) / ((@facebook_report['Planned Enquiries'].to_i+ @google_report['Planned Enquiries'].to_i).to_f))*100).to_i %>%)</b></td>
+          <% else %>
+            <td><b><%= ((@facebook_report["Actual Amount"].to_f + @google_report["Actual Amount"].to_f)/(@facebook_report['Actual Enquiries'].to_f+ @google_report['Actual Enquiries'].to_f)).to_i %></b></td>
+          <% end %>
+        <% end %>
+      </tr>
+    <%else%>
+      <tr>  
+        <% @facebook_report.each do |key,value| %>
+          <% if key=="source" %>
+            <td><b>TOTAL</b></td>
+          <% elsif key=="Target CPL" %>
+            <td><b>450</b></td>
+          <% elsif key=="Actual CPL" %>
+            <td><b><%= ((@facebook_report["Actual Amount"].to_f + @google_report["Actual Amount"].to_f)/(@facebook_report["Actual Enquiries"].to_f + @google_report["Actual Enquiries"].to_f + @other_report["Actual Enquiries"].to_f)).to_i %></b></td>
+          <% elsif key=="Target CPQL" %>
+            <td><b>3000</b></td>
+          <% elsif key=="Actual CPQL" %>
+            <% if @facebook_report["Actual QL"].to_f + @google_report["Actual QL"].to_f + @other_report["Actual QL"].to_f == 0 %>
+              <td><b>0</b></td>
+            <% else %>    
+              <td><b><%= ((@facebook_report["Actual Amount"].to_f + @google_report["Actual Amount"].to_f)/(@facebook_report["Actual QL"].to_f + @google_report["Actual QL"].to_f + @other_report["Actual QL"].to_f)).to_i %></b></td>
+            <% end %>
+          <% elsif key=="Actual CPSV" %>
+            <% if @facebook_report["Site Visits"].to_f + @google_report["Site Visits"].to_f + @other_report["Site Visits"].to_f == 0 %>
+              <td><b>0</b></td>
+            <% else %>
+              <td><b><%= ((@facebook_report["Actual Amount"].to_f + @google_report["Actual Amount"].to_f)/(@facebook_report["Site Visits"].to_f + @google_report["Site Visits"].to_f + @other_report["Site Visits"].to_f)).to_i %></b></td>
+            <% end %>
+          <% elsif key=="Actual Amount"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i %> (<%= ((((value.to_i+ @google_report[key].to_i).to_f) / ((@facebook_report['Budget Amount'].to_i+ @google_report['Budget Amount'].to_i).to_f))*100).to_i %>%)</b></td>
+          <% elsif key=="Planned QL"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i%></b></td>
+          <% elsif key=="All Booking"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i+@other_report[key].to_i%></b></td>
+          <% elsif key=="Actual QL"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i + @other_report[key].to_i%> (<%= ((((value.to_i+ @google_report[key].to_i+ @other_report[key].to_i).to_f) / ((@facebook_report['Actual Enquiries'].to_i+ @google_report['Actual Enquiries'].to_i+ @other_report['Actual Enquiries'].to_i).to_f))*100).to_i %>%)</b></td>
+          <% elsif key=="Site Visits"%>
+            <td><b><%= value.to_i+ @google_report[key].to_i + @other_report[key].to_i%></b></td>
+          <% elsif key=="Actual Enquiries"%>
+            <% if @with_details == nil%>
+              <td><b><%= value.to_i+ @google_report[key].to_i%> (<%= ((((value.to_i+ @google_report[key].to_i).to_f) / ((@facebook_report['Planned Enquiries'].to_i+ @google_report['Planned Enquiries'].to_i).to_f))*100).to_i %>%)</b></td>
+            <%else%>
+              <td><b><%= value.to_i+ @google_report[key].to_i+ @other_report[key].to_i %> (<%= ((((value.to_i+ @google_report[key].to_i+ @other_report[key].to_i).to_f) / ((@facebook_report['Planned Enquiries'].to_i+ @google_report['Planned Enquiries'].to_i).to_f))*100).to_i %>%)</b></td>
+            <%end%>
+          <% else %>
+            <td><b><%= ((@facebook_report["Actual Amount"].to_f + @google_report["Actual Amount"].to_f)/(@facebook_report['Actual Enquiries'].to_f+ @google_report['Actual Enquiries'].to_f)).to_i %></b></td>
+          <% end %>
+        <% end %>
+      </tr>
+    <%end%>
+  </tbody>
+</table><br>
+<b>*Budget is taken proportionately as per the duration of the report wrt monthly budget</b><br>
+<b>*Actual Enquiries are unique enquiries wherein duplicate leads and test leads are not included</b><br>
+<b>*Facebook Web Conversion Ad Spend not considered in the above figures:</b>
+<% @facebook_conversions.each do |conversion_data| %>
+  <br><%= conversion_data %>
+<% end %>
+<% end %>
+<style>
+ .customers td,.customers th{
+    text-align: right!important;
+  }
+</style>

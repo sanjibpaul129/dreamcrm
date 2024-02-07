@@ -1,0 +1,70 @@
+<%@header = 'Future Demand Register'%>
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2">
+    <center><h1>Future Demand</h1></center>
+    <div class="row">
+      <%= form_tag 'future_demand_index', :html => {:class => 'form-horizontal'} do %>    
+        <div class="col-lg-1">
+          <h5>Project:</h5>
+        </div>
+        <div class="col-lg-3">
+          <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+        </div>
+        <div class="col-lg-2">
+          <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+        </div>
+      <%end%>
+    </div><br>
+    <%if request.post?%>
+      <table class="customers">
+        <thead>
+          <th>Milestone</th>
+          <th>Block</th>
+          <th>Floor</th>
+          <th style="text-align: right!important;">Amount</th>
+        </thead>
+        <tbody>
+          <%@payment_plans.each do |payment_plan|%>
+            <tr style="background: #0083ff52!important;">
+              <td colspan="4" style="text-align: center!important; font-size: 17px!important;"><%= payment_plan.description%></td>
+            </tr>
+            <% @blocks.sort_by{|x| x.name}.each do |block|%>
+              <% if block.block_level_pending_milestones(payment_plan.id) == []%>
+              <%else%>  
+                <% block.block_level_pending_milestones(payment_plan.id).each do |milestone| %>
+                  <tr>
+                    <td><%= milestone.payment_milestone.description%></td>
+                    <td><%= (block.name).titleize%></td>
+                    <td>NA</td>
+                    <td style="text-align: right!important;"><%= milestone.block_level_future_milestone_amount(block.id)%></td>
+                  </tr>
+                <%end%>
+              <%end%>
+              <% if block.floor_wise_pending_milestones(payment_plan.id) == [] %>
+              <%else%>
+                <% block.floor_wise_pending_milestones(payment_plan.id).each do |milestone|%>
+                  <% (block.floors).times do |floor|%>
+                    <% if milestone.floor_level_future_milestone_amount(block.id, (floor+1)) == 0 %>
+                    <%else%>
+                      <tr>
+                        <td><%= milestone.payment_milestone.description%></td>
+                        <td><%= (block.name).titleize%></td>
+                        <td>Floor <%= floor+1%> </td>
+                        <td style="text-align: right!important;"><%= milestone.floor_level_future_milestone_amount(block.id, (floor+1))%></td>
+                      </tr>
+                    <%end%>
+                  <%end%>
+                <%end%>
+              <%end%>
+            <%end%>
+          <%end%>
+        </tbody>
+      </table>
+    <%end%>
+  </div>
+</div><br>
+<style>
+ .col-lg-offset-1 {
+    margin-left: 16.333333% !important;
+}
+</style>

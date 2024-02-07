@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  personnel_id: 1
+  lead_id: 1
+  date: 2022-04-19 13:17:14
+  duration: 9.99
+  called_number: MyString
+
+two:
+  personnel_id: 1
+  lead_id: 1
+  date: 2022-04-19 13:17:14
+  duration: 9.99
+  called_number: MyString

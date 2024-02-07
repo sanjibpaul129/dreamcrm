@@ -1,0 +1,111 @@
+<%@header = 'Maintenance Bill Register'%>
+<h1>Maintenance Bill register</h1>
+<%= form_tag 'maintenance_bill_register', :html => {:class => 'form-horizontal'} do %>    
+  <div class="row">
+    <div class="col-lg-1">
+      <h5>Project:</h5>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{prompt: "Select Project"}, {:class => 'form-control'}) %>
+    </div>
+    <div class="col-lg-1">
+      <h5>From:</h5>
+    </div>
+    <% 
+    if request.get?
+      previous_from = DateTime.now.beginning_of_month-3.month
+      previous_to = (previous_from+2.month).end_of_month
+    else
+      previous_from = @from
+      previous_to = @to
+    end
+    %>
+    <div class="col-lg-2">
+      <%= date_field_tag 'maintenance_bill[from]',previous_from.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-1">
+      <h5>To:</h5>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag 'maintenance_bill[to]',previous_to.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+    </div>
+  </div><br>
+<%end%>
+<%= form_tag 'bulk_maintenance_bill_delete', :html => {:class => 'form-horizontal'} do %>    
+  <table id="customers" >
+    <thead>
+      <tr>
+        <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+          <th></th>
+        <%end%>
+        <th>Project</th>
+        <th>Customer</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Block</th>
+        <th>Flat</th>
+        <th>Generate On</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Area</th>
+        <th>Rate</th>
+        <th>Amount</th>
+        <th></th>
+        <th></th>
+        <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+          <th></th>
+        <%end%>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%grand_total=0%>
+      <% @maintainance_bills.each do |maintainance_bill|%>      
+        <tr>
+          <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+            <td><%= check_box_tag 'maintenance_bill_ids[]', maintainance_bill.id%></td>
+          <%end%>
+          <td><%= maintainance_bill.flat.block.business_unit.name%></td>
+          <td><%= maintainance_bill.lead.try(:name)%></td>
+          <td><%= maintainance_bill.lead.try(:email)%></td>
+          <td><%= maintainance_bill.lead.try(:mobile)%></td>
+          <td><%= maintainance_bill.flat.block.name%></td>
+          <td><%= maintainance_bill.flat.full_name%></td>
+          <td><%= maintainance_bill.date.to_date.strftime('%d/%m/%Y')%></td>       
+          <td><%= maintainance_bill.from.to_date.strftime('%d/%m/%Y')%></td>
+          <td><%= maintainance_bill.to.to_date.strftime('%d/%m/%Y')%></td>
+          <td><%= maintainance_bill.lead.try(:area)%></td>
+          <td><%= maintainance_bill.rate%></td>
+          <td><%= maintainance_bill.try(:amount)%></td>
+          <% grand_total += maintainance_bill.amount%>
+          <td><%= link_to 'Proforma Invoice', maintainance_bill_maintainance_bill_preview_index_path(maintainance_bill),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+          <td><%= link_to 'Tax Invoice', maintainance_bill_maintainance_bill_tax_invoice_index_path(maintainance_bill),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+          <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+          <td><%= link_to 'Delete', report_particular_maintenance_bill_destroy_path(maintainance_bill),:class => 'dlt_btn ', :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+          <%end%>
+        </tr>
+      <%end%>
+      <tr>
+        <td><b>Grand Total:</b></td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <%if current_personnel.email == 'ayush@thejaingroup.com'%>
+          <td></td>
+        <%end%>
+        <td><b><%= grand_total%></b></td>
+        <td></td><td></td><td></td>
+      </tr>
+    </tbody>
+  </table><br>
+  <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+    <div class="row">
+      <div class="col-lg-2">
+      <%= submit_tag 'Bulk Deletion', :class => 'btn btn-primary'%>
+      </div>
+    </div>
+  <%end%>
+<%end%>
+
+

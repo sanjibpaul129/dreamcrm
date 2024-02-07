@@ -1,0 +1,115 @@
+<h1>SR Live Leads</h1>
+<%= form_tag 'sr_fresh_lead_entry' do %>
+	<table class="customers" id="sr_live_leads">
+		<thead>
+			<th></th>
+			<th>Lead Id</th>
+			<th>Name</th>
+			<th>Start Time</th>
+			<th>Duration</th>
+			<th>Recording</th>
+		</thead>
+		<tbody>
+			<% @telephony_calls.each do |telephony_call| %>
+				<tr>
+					<td><%= radio_button_tag "telephony_call_id", telephony_call.id%></td>
+					<td><%= telephony_call.lead_id%></td>
+					<td><%= telephony_call.lead.try(:name)%></td>
+					<td><%= telephony_call.start_time.try{|x| x.strftime("%d/%m/%y - %H:%M")}%></td>
+					<td><%= telephony_call.duration%></td>
+					<td><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), telephony_call.recording_url%></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+	<br>
+    <div class="container">
+      	<div class="form-group">
+       		<div class="row">
+            	<div class="col-md-3 executive_div">
+              		<div ><b><i><font color="#004fff">  Executive </font></i></b></div>
+              		<%= select(:leading, :personnel, options_for_select(@executives, selected: current_personnel.id), {}, { :class => 'form-control chosen' })   %>
+        		</div> 
+	        	<div class="col-md-5">
+              		<div ><b><i><font color="#004fff">  Followed up/Site Visited/Booked/Lost Date </font></i></b></div>
+	              	<% min_date=Time.now %>
+              		<%= date_field(:leading, :flexible_date, max: Date.today, :class => "form-control", :value => min_date.strftime('%Y-%m-%d'), :required => true)%>
+            	</div>   
+            	<div class="col-md-4">
+              		<div ><b><i><font color="#004fff">To Followup On</font></i></b></div>
+		            <%= date_field(:leading, :followup_date, :class => "form-control", :value => ((min_date.to_date)+1.day)) %>
+		            <%= time_select :leading, :followup_time, {ampm: true, minute_step: 30, default: Time.now.beginning_of_day+19.hours} %>
+        		</div>    
+          	</div>
+          	<div class="row">
+              	<div class="col-md-2 list_design">
+	                <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot' %>Hot</p>
+	                <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+	                <p class="text-info"><%= radio_button_tag :anticipation , '', true %>Normal</p>
+            	</div>
+	            <div class="col-md-4">
+              		<div ><b><i><font color="#004fff"> Status </font></i></b></div>
+	              	<% if current_personnel.organisation.name=='Jain Group' && current_personnel.access_right==nil %>
+		                <%= select(:lead, :status, options_for_select([['Status to remain Same', -1],['Fresh Lead', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ],['Negotiation',3 ],['Lost', 5]]),{}, { :class => 'form-control', :id=>'lead_status_id' })   %>&nbsp
+            			<%= select(:lead, :lost_reason, options_for_select(@lost_reasons),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' }) %>
+	              	<% else %>
+        				<%= select(:lead, :status, options_for_select([['Status to remain Same', -1], ['Fresh Lead', 0], ['Qualified', 9], ['Interested in Site Visit', 10], ['OV', 1], ['Site Visited',2 ],['Negotiation',3 ],['Booked', 4],['Lost', 5]]),{}, { :class => 'form-control', :id=>'lead_status_id' })   %>&nbsp
+            			<%= select(:lead, :lost_reason, options_for_select(@lost_reasons),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' }) %>
+      				<% end %>
+		        </div>
+		        <div class="col-md-6 follow_up_status_div">
+        			<div>
+            			<b><i><font color="#004fff">Followup Remarks</font></i></b>
+          			</div>
+          			<%= select_tag 'remarks', options_for_select(@common_followup_remarks), :class => 'form-control', :id => 'dropdown_remarks', :prompt => 'Select Followup Remarks',:onchange => 'textarea_remarks_disable("textarea_remarks")'%><br>
+	              	<div class="row">
+	                	<div class="col-lg-9">
+	                  		<%= text_area_tag(:remarks, nil, placeholder: 'Enter Followup Remarks', class: "form-control", autocomplete: 'remarks', :id => 'textarea_remarks', :onchange => 'dropdown_remarks_disable("dropdown_remarks")') %>
+	                	</div>
+	                	<div class="col-lg-2">
+	                  		Feedback:
+	            		</div>
+	            		<div class="col-lg-1">
+	                  		<%= check_box_tag 'site_visit_feedback', true, nil%>
+	                	</div>
+	              	</div>
+	        	</div>
+		    </div>
+        </div>
+      	<div class="row">
+	        <div class="col-md-12">
+          		<div ><i>  &nbsp;</i></div>
+	          	<%= submit_tag 'Update Live Lead', :class => 'btn btn-primary' %>
+	        </div>
+	    </div><br>
+    </div>
+<%end%>
+<style>
+	.play_btn{
+      width: 30px!important;
+      height: auto;
+    }
+</style>
+<script>
+	$(document).ready(function(){
+    var FilterTable=$("#sr_live_leads").DataTable({  
+       "fixedHeader": true,   
+       "dom": '<"wrapper"lit>',
+       "bAutoWidth": false,
+       "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+       "bDeferRender": true,
+       "aoColumns": [
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true}
+                                 ],
+        "order": [[ 3, "desc" ]]
+  });
+  $("#filterbox").keyup(function() {
+          FilterTable.search(this.value).draw();
+      });
+  });
+</script>

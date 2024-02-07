@@ -1,0 +1,185 @@
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+
+
+<div class="col-lg-4 col-lg-offset-4">
+    <div class="well bs-component">
+
+<legend></legend>
+<!-- , url: { action: "create" } -->
+<!-- (@post, url: super_posts_path) -->
+<%= form_for(@lead, url: windows_site_visit_entry_path) do |f| %>
+  <% if @lead.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@lead.errors.count, "error") %> prohibited this lead from being saved:</h2>
+
+      <ul>
+      <% @lead.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<%= hidden_field_tag :lead_id, @lead.id %>
+
+    <div class="form-group">
+    <%= f.label :project, :class => "col-lg-2 control-label" %>
+      <div class="col-lg-8">
+      <%= select(:lead, :business_unit_id, options_for_select(@business_units, selected: @lead.business_unit_id),{}, { :class => 'form-control' })   %>
+      </div>
+    </div>
+
+   <div class="form-group">
+     <%= f.label :budget_in_lacs, :class => "col-lg-2 control-label" %>
+     <div class="col-lg-3">
+     <%= f.number_field :budget_from, :class => "form-control" %>
+     </div>
+     <div class="col-lg-1">
+     <%= 'to' %>
+     </div>
+     <div class="col-lg-3">
+     <%= f.number_field :budget_to, :class => "form-control" %>
+     </div>
+
+   
+   </div>
+
+   <div class="form-group">
+    <%= f.label 'BHK' , :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <% if @lead.flat_type==1 %>
+    1&nbsp<%= radio_button_tag :flat_type , 1, checked: true %>&nbsp&nbsp&nbsp&nbsp
+    <% else %>
+    1&nbsp<%= radio_button_tag :flat_type , 1 %>&nbsp&nbsp&nbsp&nbsp
+    <% end %>
+    <% if @lead.flat_type==2 %>
+    2&nbsp<%= radio_button_tag :flat_type , 2, checked: true %>&nbsp&nbsp&nbsp&nbsp
+    <% else %>
+    2&nbsp<%= radio_button_tag :flat_type , 2 %>&nbsp&nbsp&nbsp&nbsp
+    <% end %>
+    <% if @lead.flat_type==3 %>
+    3&nbsp<%= radio_button_tag :flat_type , 3, checked: true %>&nbsp&nbsp&nbsp&nbsp
+    <% else %>
+    3&nbsp<%= radio_button_tag :flat_type , 3 %>&nbsp&nbsp&nbsp&nbsp
+    <% end %>
+    <% if @lead.flat_type==4 %>
+    4&nbsp<%= radio_button_tag :flat_type , 4, checked: true %>&nbsp&nbsp&nbsp&nbsp
+    <% else %>
+    4&nbsp<%= radio_button_tag :flat_type , 4 %>&nbsp&nbsp&nbsp&nbsp
+    <% end %>
+    <% if @lead.flat_type==5 %>
+    Dplx&nbsp<%= radio_button_tag :flat_type , 5, checked: true %>&nbsp&nbsp&nbsp&nbsp
+    <% else %>
+    Dplx&nbsp<%= radio_button_tag :flat_type , 5 %>&nbsp&nbsp&nbsp&nbsp
+    <% end %>
+  </div>
+   </div>
+
+
+
+  <div class="form-group">
+    <%= f.label :name, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :name, placeholder: 'mandatory*', :class => "form-control", :id => 'lead_name' %>
+  </div>
+  </div>
+
+  
+  <% if @lead.mobile==nil || @lead.mobile=='' %>
+  <div class="form-group">
+    <%= f.label :mobile, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :mobile, placeholder: '10 digits only, avoid +91 or 0', :class => "form-control", :id => 'lead_mobile' %>
+    </div>
+  </div>
+
+  <% else %>
+
+  <div class="form-group">
+    <%= f.label :mobile, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :mobile, placeholder: '10 digits only, avoid +91 or 0', :class => "form-control", :id => 'lead_mobile' %>
+    </div>
+  </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :other_number, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :other_number, :class => "form-control", :id => 'lead_other_number' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :email, placeholder: 'optional*', :class => "form-control", :id => 'lead_email' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :address, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_area :address, placeholder: 'optional*', :class => "form-control" %>
+    </div>
+  </div>
+
+   <div class="form-group">
+    <%= f.label :source, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= text_field_tag :source, SourceCategory.find(@lead.source_category_id).heirarchy, placeholder: 'optional*', :class => "form-control", :id => 'lead_email' %>  
+    </div>
+   </div>
+
+    <div class="form-group">
+     <%= f.label :executive, :class => "col-lg-2 control-label" %>
+      <div class="col-lg-8">
+      <%= select(:lead, :personnel_id, options_for_select(@site_executives, selected: @lead.personnel_id),{}, { :class => 'form-control' })   %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :remarks, :class => "col-lg-2 control-label" %>
+      <div class="col-lg-8">
+      <%= f.text_area :customer_remarks, :class => "form-control" %>
+      </div>
+    </div>
+
+     <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+        <%= submit_tag 'Submit', :class => 'btn btn-primary btn-block', id: 'submitorder' %>
+        </div>
+     </div>
+
+      </div>
+      </div>
+<% end %>
+
+<script>
+  
+function updateFormEnabled() {
+    if (verifyAdSettings()) {
+        $('#submitorder').prop('disabled', false);
+    } else {
+        $('#submitorder').prop('disabled', true);
+    }
+}
+
+function verifyAdSettings() {
+    if ($('#lead_name').val() != "" && (($('#lead_mobile').val() != "" && $('#lead_mobile').val().length==10 && /^\d+$/.test($('#lead_mobile').val())) || ($('#lead_other_number').val() != "" ) || (($('#lead_email').val() != "" ) && ($('#lead_mobile').val() == "" ))) ) {
+        return true;
+    } else {
+        return false
+    }
+}
+
+$('#lead_name').change(updateFormEnabled);
+$('#lead_mobile').change(updateFormEnabled);
+$('#lead_other_number').change(updateFormEnabled);
+$('#lead_email').change(updateFormEnabled);
+</script>

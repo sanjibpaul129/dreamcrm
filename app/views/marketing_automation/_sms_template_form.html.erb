@@ -1,0 +1,72 @@
+    
+<%= form_for @sms_template, url: {action: @sms_template_action}, :html => {:multipart => true} do |f| %>
+  <% if @sms_template.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sms_template.errors.count, "error") %> prohibited this raw material from being saved:</h2>
+      <ul>
+      <% @sms_template.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <center><legend>&nbspSMS Template</legend></center>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Project:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= select_tag 'sms_template[business_unit_id]', options_for_select(@business_units, selected: @sms_template.business_unit_id), :class => 'form-control ', :required => true,:prompt => 'Select Project'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Send-after-days:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.number_field :send_after_days, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Title:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_field :title, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+    <div class="row">
+      <div class="col-lg-3">
+        <h5>Lead Type:</h5>
+      </div>
+      <div class="col-lg-9">
+        <%= select_tag 'sms_type', options_for_select(@sms_types), :class => 'form-control ', :required => true, :prompt => 'Select Lead Type'%>
+      </div>
+    </div><br>
+    <div class="row">
+        <div class="col-lg-3">
+          <h5>sms Body:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_area :body, :class => 'form-control'%>
+        </div>
+    </div>
+        <br>
+      <div class="row">
+        <div class="col-lg-5 col-lg-offset-3">
+          <%= f.submit :class => 'btn btn-primary btn-block'%>
+        </div>
+      </div><br>
+  </div>
+</div>
+  <%= hidden_field_tag :sms_template_id, @sms_template.id %>
+<%end%>
+<style type="text/css">
+  
+@media (min-width: 1200px){
+.col-lg-offset-3 {
+    margin-left: 31%!important;
+}
+</style>

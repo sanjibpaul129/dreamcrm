@@ -1,0 +1,109 @@
+<h1>Digital Graphical Report</h1>
+<%= form_tag 'facebook_graphical_report' do  %>
+    <div class="row">
+		<div class="col-lg-1">
+			Project:
+		</div>
+		<div class="col-lg-2">
+			<%= select_tag "business_unit_id", options_for_select(@projects, selected: @project_selected), :class => 'form-control' %>
+		</div>
+		<div class="col-lg-1">
+			Sources:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "source", options_for_select(@fb_sources, selected: @source), :class => 'form-control chosen' %>
+		</div>
+		<div class="col-lg-1">
+			Type:
+		</div>
+		<div class="col-lg-2">
+			<%= select_tag "report_type", options_for_select(@report_types, selected: @report_type), :class => 'form-control' %>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+		</div>
+    </div>
+<%end%>
+<script type="text/javascript" charset="utf-8">
+	Highcharts.setOptions({
+	  lang: {
+	    decimalPoint: '.',
+	    thousandsSep: ','
+	  }
+	});
+
+	$(function () {
+	    // Create the chart
+	   new Highcharts.Chart({
+	        chart: {
+	            type: 'line',
+	            <% if @report_type == "Daily"%>
+	            	renderTo: "consumption_chart"
+	            <%elsif @report_type == "Weekly"%>
+	            	renderTo: "consumption_chart_two"
+	            <%elsif @report_type == "Monthly"%>
+	        		renderTo: "consumption_chart_three"
+	        	<%end%>
+	        },
+	        title: {
+	            text: 'All Sources'
+	        },
+	        xAxis: {
+        		<% if @report_type == "Daily"%>
+        			categories: <%= @days %>,
+	        	<%elsif @report_type == "Weekly"%>
+	        		categories: <%= @weeks %>,
+	        	<%elsif @report_type == "Monthly"%>
+	        		categories: <%= @months %>,
+	        	<%end%>
+	            
+	            crosshair: true
+	            },
+	        yAxis: {
+	            title: {
+	                text: 'Count'
+	            }
+
+	        },
+	        legend: {
+	            enabled: true
+	        },
+	        plotOptions: {
+	          line: {
+	            dataLabels: {
+	              enabled: true
+	            },
+	            enableMouseTracking: false
+	          }
+	        },
+
+	        tooltip: {
+	        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+	        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+	            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+	        footerFormat: '</table>',
+	        shared: true,
+	        useHTML: true
+	        },
+
+	        series: <%= @series %>
+	       
+	    });
+	});
+</script>
+<% if @report_type == "Daily" %>
+	<div class="jumbotron">
+		<div id="consumption_chart"></div>
+	</div>
+<% elsif @report_type == "Weekly" %>
+	<div class="jumbotron">
+		<div id="consumption_chart_two"></div>
+	</div>
+<%elsif @report_type == "Monthly" %>
+	<div class="jumbotron">
+		<div id="consumption_chart_three"></div>
+	</div>
+<%end%>
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>

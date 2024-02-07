@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Block:</strong>
+  <%= @posession_charge.block_id %>
+</p>
+
+<p>
+  <strong>Extra charge:</strong>
+  <%= @posession_charge.extra_charge_id %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @posession_charge.amount %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @posession_charge.rate %>
+</p>
+<p>
+  <strong>Rate:</strong>
+  <%= @posession_charge.gst %>
+</p>
+
+<%= link_to 'Edit', edit_posession_charge_path(@posession_charge) %> |
+<%= link_to 'Back', posession_charges_path %>

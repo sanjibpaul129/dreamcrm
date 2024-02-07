@@ -1,0 +1,74 @@
+<h1>Unallocated Leads</h1>
+
+<table class="table table-striped table-hover " id="orderedtasks">
+  <thead>
+    <tr>
+      <th>Medium</th>
+      <th>Mobile</th>
+      <th>Email</th>
+      <th>Name</th>
+      
+      <th>Project</th>
+      <th>BHK</th>
+      <th>Area</th>
+      <th>Budget Frm</th>
+      <th>Budget To</th>
+      <th>Source</th>
+      <th>Ad</th>
+      <th>Remarks</th>
+      <th>Auto info</th>
+
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @leads.each do |lead| %>
+      <tr>
+        <% if lead.nature == 1 %>
+        <td>Super Receptionist </td>
+        <% elsif lead.nature == 2 %>
+        <td>Website</td>
+        <% else %>
+        <td>Others</td>
+        <% end %>
+        <td><%= lead.mobile %></td>
+        <td><%= lead.email %></td>
+        <td><%= lead.name %></td>
+        <% if lead.business_unit_id != nil %>
+        <td><%= lead.business_unit.name %></td>
+        <% else %>
+        <td></td>
+        <% end %>
+        <td><%= lead.requirement %></td>
+        <td><%= lead.area %></td>
+       
+        <td><%= lead.budget_from %></td>
+        <td><%= lead.budget_to %></td>
+        <% if lead.source_category_id != nil %>
+        <td><%= lead.source_category.description %></td>
+        <% else %>
+        <td></td>
+        <% end %>
+
+        <% if lead.marketing_instance_id != nil %>
+        <td><%= lead.marketing_instance.description %></td>
+        <% else %>
+        <td></td>
+        <% end %>
+       
+        <td><%= lead.customer_remarks %></td>
+
+        <td><%= lead.auto_info %></td>
+
+        <td><%= link_to edit_lead_path(lead), class: "btn btn-default btn-xs" do%>
+          <i class="glyphicon glyphicon-pencil"></i><%end%></td>        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Lead', new_lead_path, :class => 'btn btn-primary' %>
+<%= link_to 'Round Robin', :controller => "windows", :action => "round_robin", :class => 'btn btn-primary', method: :post %>

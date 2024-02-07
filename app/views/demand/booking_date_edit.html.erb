@@ -1,0 +1,59 @@
+<%= form_tag 'booking_date_update', :html => {:class => 'form-horizontal'} do %>
+  
+  <div class="col-lg-6 col-lg-offset-3">
+    <div class="well bs-component">
+      <center><legend>&nbspEdit Booking Date</legend></center>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Booking Date:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= date_field_tag 'booking[date]', @booking.date.to_date, :class => 'form-control'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Agreement Date:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= date_field_tag 'booking[agreement_date]', @booking.agreement_date.try{|x| x.to_date}, :class => 'form-control'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Mortgage Noc Date:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= date_field_tag 'booking[mortgage_noc_date]', @booking.mortgage_noc_date.try{|x| x.to_date}, :class => 'form-control'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Allotment Date:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= date_field_tag 'booking[allotment_date]', @booking.allotment_date.try{|x| x.to_date}, :class => 'form-control'%>
+        </div>
+      </div>
+      <br>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <%= submit_tag 'Update',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= hidden_field_tag :booking_id, @booking.id%>
+<% end %>
+<style>
+  .well{
+    width: 648px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

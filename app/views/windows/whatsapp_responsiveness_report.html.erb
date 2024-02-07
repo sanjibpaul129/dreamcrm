@@ -1,0 +1,100 @@
+<%@header = 'Whatsapp Response Report'%>
+<center><h1>Whatsapp Response report</h1></center>
+<%= form_tag 'whatsapp_responsiveness_report', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			<h4>Projects:</h4>
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag 'business_unit_id', options_for_select(@business_units, selected: @business_unit_id), :class => 'form-control', :prompt => 'Please Select', :required => true  %>
+		</div>
+		<div class="col-lg-1">
+			<h4>From</h4>
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag 'from', @from.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			<h4>To</h4>
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag 'to', @to.to_date, :class => 'form-control'%>
+		</div>
+	</div><br>
+	<div class="row">
+		<div class="col-lg-2">
+			<h4>Report Type:</h4>
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag 'report_type', options_for_select(@whatsapp_types, selected: @selected_whatsapp_report), :class => 'form-control', :prompt => 'Please select', :required => true %>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'View Details', :class => 'btn btn-primary'%>
+		</div>
+	</div>
+	<br>
+	<% if request.post?%>
+		<% if @selected_whatsapp_report == 'Summary Report'%>
+			<table class="customers" id="summary_report">
+				<thead>
+					<th>Watsapp messages</th>
+					<th>Count</th>
+				</thead>
+				<tbody>
+					<%if @all_whatsapps == {}%>
+					<%else%>
+						<% @all_whatsapps.each do |key, value| %>
+							<tr>
+								<td><%= key%></td>
+								<td><%= value%></td>
+							</tr>
+						<%end%>
+					<%end%>
+				</tbody>
+			</table>
+		<%elsif @selected_whatsapp_report == 'Day Wise Report' %>
+			<table class="customers" id="day_wise_report">
+				<thead>
+					<th>Date</th>
+					<th>Brochure</th>
+					<th>Photos</th>
+					<th>Location</th>
+					<th>Floor Plans</th>
+					<th>Expert Chat</th>
+					<th>Walkthrough</th>
+					<th>Price</th>
+					<th>Call</th>
+					<th>Site Visit</th>
+					<th>Company Profile</th>
+					<th>Thanks</th>
+					<th>Ok</th>
+					<th>Hi</th>
+					<th>Site Visit Confirmation</th>
+					<th>Availability</th>
+					<th>Possession</th>
+					<th>Loan</th>
+					<th>Payment</th>
+					<th>Failure</th>
+					<th>Introductory</th>
+				</thead>
+				<tbody>
+					<% @day_wise_reports.each do |day_report|%>
+						<tr>
+							<% day_report.each do |key, value|%>
+								<% if key.include?("date") == true%>
+									<td><%= value.to_date.strftime('%d/%m/%Y')%></td>
+								<%else%>
+									<% if value == ''%>
+										<td>0</td>
+									<%else%>
+										<td><b><%= value%></b></td>
+									<%end%>
+								<%end%>
+							<%end%>
+						</tr>
+					<%end%>			
+				</tbody>
+			</table>
+		<%end%>
+	<%end%>
+<%end%>

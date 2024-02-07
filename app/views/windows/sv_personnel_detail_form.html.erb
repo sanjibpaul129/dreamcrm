@@ -1,0 +1,321 @@
+<% if params[:format] == nil %>
+  <%= form_tag 'sv_personnel_details_submit', :html => {:class => 'form-horizontal'}    do %>
+    <% if @broker_lead_intimation == nil%>
+    <%else%>
+      <%= hidden_field_tag :broker_lead_intimation, params[:broker_lead_intimation] %>
+    <%end%>
+    <% if @source_category == ""%>
+    <%else%>
+      <%= hidden_field_tag :source_category_id, @source_category.id %>
+    <%end%>
+    <div class="col-xs-12">
+      <% if @source_category == ""%>
+      <%else%>
+        <div class="row">
+          <div class="col-xs-2">
+            Broker:
+          </div>
+          <div class="col-xs-10">
+            <%= @source_category.description%>
+          </div>
+        </div><br>
+      <%end%>
+      <div class="well bs-component">
+        <div class="row">
+          <div class="col-xs-4">
+              <% if current_personnel.business_unit.name == "Dream One"%>
+                <%= image_tag("Dream One - Rajarhat_Logo.png", alt: "" , class: "img-responsive form_logo") %>
+              <%elsif current_personnel.business_unit.name == "Dream Palazzo"%>
+                <%= image_tag("dream palazzo.jpeg", alt: "" , class: "img-responsive form_logo") %>
+              <%elsif current_personnel.business_unit.name == "Dream Gurukul"%>
+                <%= image_tag("deam_gurukul_logo.png", alt: "" , class: "img-responsive form_logo") %>
+              <%end%>
+          </div>
+          <div class="col-xs-7 form_heading_margin">
+            <p class ="form_heading">SITE VISIT FORM</p>
+          </div>
+        </div>
+        <div class="division"></div><br>
+        <center style="margin-top: 50px;">
+          <p class="form_sub_heading">Personal Details</p>
+          <!-- <font style="color: dimgray; letter-spacing: 2px; font-style: oblique; font-weight: 700;">Personal Details</font></center><br> -->
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Name:</font>
+          </div>
+          <div class="col-xs-8">
+            <% if @broker_lead_intimation == nil%>
+              <%= text_field_tag 'lead[name]', '', :class => "form-control", :required => true %>
+            <%else%>
+              <%= text_field_tag 'lead[name]', @broker_lead_intimation.name, :class => "form-control", :required => true %>
+            <%end%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Email:</font>
+          </div>
+          <div class="col-xs-8">
+            <% if @broker_lead_intimation == nil%>
+              <%= text_field_tag 'lead[email]', '', :class => "form-control", :id => "email_input" %>
+            <%else%>
+              <%= text_field_tag 'lead[email]', @broker_lead_intimation.try(:email), :class => "form-control", :id => "email_input" %>
+            <%end%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Mobile:</font>
+          </div>
+          <div class="col-xs-8">
+            <% if @broker_lead_intimation == nil%>
+              <%= text_field_tag 'lead[mobile]', '', :class => "form-control", :id => "mobile_input", :required => true%>
+            <%else%>
+              <%= text_field_tag 'lead[mobile]', @broker_lead_intimation.mobile, :class => "form-control", :id => "mobile_input", :required => true%>
+            <%end%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Age:</font>
+          </div>
+          <div class="col-xs-2 radio_button" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            Below 30 <%= radio_button_tag 'dob', 'below 30', required: true %>
+          </div>
+          <div class="col-xs-2 radio_button" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            30-40 <%= radio_button_tag 'dob', '30-40', required: true %>
+          </div>
+          <div class="col-xs-2 radio_button" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            41-50 <%= radio_button_tag 'dob', '41-50', required: true %>
+          </div>
+          <div class="col-xs-2 radio_button second_line" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            51-60 <%= radio_button_tag 'dob', '51-60', required: true %>
+          </div>
+          <div class="col-xs-2 radio_button" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            60+ <%= radio_button_tag 'dob', '60+', required: true %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 25px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Address:</font>
+          </div>
+          <div class="col-xs-8">
+            <%= text_area_tag 'lead[address]', '', :class => "form-control"%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Pincode:</font>
+          </div>
+          <div class="col-xs-8">
+            <%= number_field_tag 'lead[pincode]', '', :class => "form-control", :required => true, maxlength: 7, oninput: "this.value = this.value.slice(0, 7)" %>
+          </div>
+        </div><br>
+        <div class="row">
+          <center>
+            <%= submit_tag "Next", :class => 'btn', :style => 'background: #27303f; color: #fff; border-left: 11px solid #c8222c;' %>
+          </center>
+        </div>
+        <div class="row">
+          <div class="col-xs-offset-6 col-xs-6 footer_logo" style="margin-top: 30%;">
+            <%= image_tag("sv_form_logo.png", alt: "" , class: "img-responsive form_logo", style: "margin-left: 32%;") %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+<%else%>
+  <%= form_tag 'sv_personnel_details_submit', :html => {:class => 'form-horizontal'} do %>
+    <%= hidden_field_tag "existing_lead", @lead.id%>
+    <div class="col-xs-12">
+      <% if SourceCategory.find(@lead.source_category_id).heirarchy.include?("Agent") == true || SourceCategory.find(@lead.source_category_id).heirarchy.include?("Agent") == "true" %>
+        <div class="row">
+          <div class="col-xs-2">
+            Broker:
+          </div>
+          <div class="col-xs-10">
+            <%= @lead.source_category.description%>
+          </div>
+        </div><br>
+      <%end%>
+      <div class="well bs-component">
+        <div class="row">
+          <div class="col-xs-4">
+              <% if current_personnel.business_unit.name == "Dream One"%>
+                <%= image_tag("Dream One - Rajarhat_Logo.png", alt: "" , class: "img-responsive form_logo") %>
+              <%elsif current_personnel.business_unit.name == "Dream Palazzo"%>
+                <%= image_tag("dream palazzo.jpeg", alt: "" , class: "img-responsive form_logo") %>
+              <%end%>
+          </div>
+          <div class="col-xs-7 form_heading_margin">
+            <p class ="form_heading">SITE VISIT FORM</p>
+          </div>
+        </div>
+        <div class="division"></div><br>
+        <center style="margin-top: 50px;"><font style="color: dimgray; letter-spacing: 2px; font-style: oblique; font-weight: 700;">Personal Details</font></center><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Name:</font>
+          </div>
+          <div class="col-xs-8">
+            <%= text_field_tag 'lead[name]', @lead.name, :class => "form-control", :required => true %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Email:</font>
+          </div>
+          <div class="col-xs-8">
+            <%= text_field_tag 'lead[email]', @lead.try(:email), :class => "form-control", :id => "email_input" %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Mobile:</font>
+          </div>
+          <div class="col-xs-8">
+            <%= text_field_tag 'lead[mobile]', @lead.try(:mobile), :class => "form-control", :id => "mobile_input", :required => true%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Age:</font>
+          </div>
+          <div class="col-xs-2 radio_button" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            Below 30 <%= radio_button_tag 'dob', 'below 30', @lead.age_bracket == "below 30" %>
+          </div>
+          <div class="col-xs-2 radio_button" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            30-40 <%= radio_button_tag 'dob', '30-40', @lead.age_bracket == "30-40" %>
+          </div>
+          <div class="col-xs-2 radio_button" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            41-50 <%= radio_button_tag 'dob', '41-50', @lead.age_bracket == "41-50" %>
+          </div>
+          <div class="col-xs-2 radio_button second_line" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            51-60 <%= radio_button_tag 'dob', '51-60', @lead.age_bracket == "51-60" %>
+          </div>
+          <div class="col-xs-2 radio_button" style="margin-top: 11px;font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            60+ <%= radio_button_tag 'dob', '60+', @lead.age_bracket == "60" %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 25px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Address:</font>
+          </div>
+          <div class="col-xs-8">
+            <%= text_area_tag 'lead[address]', @lead.try(:address), :class => "form-control"%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Pincode:</font>
+          </div>
+          <div class="col-xs-8">
+            <%= number_field_tag 'lead[pincode]', @lead.try(:pincode), :class => "form-control", :required => true, maxlength: 7, oninput: "this.value = this.value.slice(0, 7)" %>
+          </div>
+        </div><br>
+        <div class="row">
+          <center>
+            <%= submit_tag "Next", :class => 'btn', :style => 'background: #27303f; color: #fff; border-left: 11px solid #c8222c;' %>
+          </center>
+        </div>
+        <div class="row">
+          <div class="col-xs-offset-6 col-xs-6 footer_logo" style="margin-top: 30%;">
+            <%= image_tag("sv_form_logo.png", alt: "" , class: "img-responsive form_logo", style: "margin-left: 32%;") %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+<%end%>
+<style>
+  body{
+    line-height: 1.82857143!important;
+  }
+  .well{
+    background-image: url(../assets/form_background.png);
+    border-radius: 0px !important;
+/*    border: 5px solid red;*/
+    height: 100vh!important;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .division{
+    border-bottom: 2px solid darkgrey;
+    margin-top: -22px;
+    margin-bottom: 5px;
+    width: 90%;
+  }
+  .form-control{
+    margin-top: 5px!important;
+  }
+  .form_logo{
+    width: 68%;
+  }
+  .form_heading{
+    color: #000!important;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
+  .form_sub_heading{
+      color: dimgray;
+      letter-spacing: 2px;
+      font-style: oblique;
+      font-weight: 700;
+      font-size: 18px;
+  }
+  .form_heading_margin{
+    margin-top: 50px!important;
+  }
+  #user_nav{
+    display: none!important;
+  }
+  @media (max-width: 500px){
+    .well{
+      padding: 10px!important;
+      background-image: url(../assets/form_background_mobile.PNG);
+      border-radius: 0px !important;
+      height: 100vh!important;
+      background-repeat: no-repeat;
+      background-size: cover;   
+    }
+    .division{
+      margin-top: 0px;
+    }
+    .col-xs-6{
+      width: 100%;
+      margin-bottom: 7px;
+    }
+    .form_logo{
+      width: 100%!important;
+    }
+    .form_heading{
+      font-size: 13px;
+      letter-spacing: 1px;   
+    }
+    .form_sub_heading{
+      font-size: 13px;
+    }
+    .form_heading_margin{
+      margin-top: 48px!important;
+    }
+    center{
+      margin-top: -25px!important;
+    }
+    .footer_logo{
+      display: none;
+    }
+    font{
+      margin-left: -25px;
+    }
+    .col-xs-8 {
+      width: 71.666667%;
+    }
+    .radio_button{
+      width: 30%;
+    }
+    .second_line{
+      margin-left: 92px;
+    }
+  }
+</style>

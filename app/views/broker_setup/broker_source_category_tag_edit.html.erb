@@ -1,0 +1,29 @@
+<%= form_tag 'broker_source_category_tag_update', :html => {:class => 'form-horizontal'} do %>
+  <%= hidden_field_tag "broker_source_category_tag_id", @broker_source_category_tag.id %>  
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspEdit Broker Source category</legend>
+       <div class="row">
+        <div class="col-lg-5">
+          Source category Name:
+        </div>
+        <div class="col-lg-7">
+          <%= select_tag "source_category_id", options_for_select(@source_categories, selected: @broker_source_category_tag.source_category_id), :prompt => 'Source category', :class => 'form-control selectpicker', data: { live_search: true } %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-5">
+          Broker Contact Name:
+        </div>
+        <div class="col-lg-7">
+         <%= select_tag "broker_contact_id", options_for_select(@broker_contacts, selected: @broker_source_category_tag.broker_contact_id), :class => 'form-control selectpicker', data: { live_search: true } %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2 col-lg-offset-4">
+          <%= submit_tag 'Update Broker Source category',:class => 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

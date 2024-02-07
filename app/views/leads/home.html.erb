@@ -1,0 +1,423 @@
+<%@header = 'Home'%>
+<% if current_personnel.status != 'Marketing' %>
+<div class="col-lg-4">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Transactions</h3>
+    </div>
+    <div class="panel-body">
+      
+        <ul class="list-group">
+          <li class="list-group-item">
+            <a>
+            <span class="glyphicon glyphicon-check"></span>
+            <%= link_to 'Create New Lead', {controller: 'leads', action: 'new'}, {method: :get} %></a>
+          </li>
+          <li class="list-group-item">
+          <span class="badge" style="color: black!important;">
+            (<%=@fresh_lead_count%>)</span>
+            <a>
+            <span class="glyphicon glyphicon-check"></span>
+            <%= link_to 'Fresh Leads', {controller: 'windows', action: 'fresh_leads'}, {method: :get} %></a>
+          </li>
+          <li class="list-group-item">
+          <span class="badge" style="color: black!important;">
+            (<%= @followup_due_count %>)</span>
+            <a>
+            <span class="glyphicon glyphicon-retweet"></span> 
+            <%= link_to 'Followup due', {controller: 'windows', action: 'followup_due'}, {method: :post} %></a>
+          </li>
+          <li class="list-group-item">
+          <span class="badge"><%= %></span>
+            <a>
+            <span class="glyphicon glyphicon-retweet"></span> 
+            <%= link_to 'Future Followup', {controller: 'windows', action: 'pending_followups'}, {method: :post} %></a>
+          </li>
+        </ul>
+      
+    </div>
+  </div>
+
+
+<h4>This Month's vs Last 3 months' ratio: </h4>
+
+<h5><u>Site Visit:</u> <span class="label label-success"><%= @this_months_site_visit_ratio %></span>&nbsp&nbsp&nbsp<small>(<%= @three_months_site_visit_ratio %>)</small></h5>
+
+<h5><u>Booking:</u>&nbsp <span class="label label-danger"><%= @this_months_booking_ratio %></span>&nbsp&nbsp&nbsp<small>(<%= @three_months_booking_ratio %>)</small></h5>
+
+<h5><u>Field Visit:</u>&nbsp 
+
+<% if @field_visit_percentage<10 %>
+<span class="label label-danger"><%= @field_visit_percentage %>%</span></h5>
+<% else %>
+<span class="label label-warning"><%= @field_visit_percentage %>%</span></h5>
+<% end %>
+
+<h5><u>Fresh Call Score:</u>&nbsp <span class="label label-success"><%= @fresh_lead_mis_score %></span></h5>
+<h5><u>Followup Score:</u>&nbsp <span class="label label-info"><%= @follow_up_mis_score %></span></h5>
+
+</div>
+<% end %>
+
+<%= form_tag 'home' do  %>
+    <% if current_personnel.status != 'Sales Executive' %>
+        <%= select(:project, :selected, options_for_select(@projects, selected: @project_selected),{}, {})  %>
+        <%= select(:executive, :selected, options_for_select(@executives, selected: @executive_selected),{}, {})  %>
+    <% end %>
+    <%= image_submit_tag("reload.png", :class => 'btn btn-default btn-xs refrash_button', name: 'refreshnow','title'=>"Refresh") %>
+    <% if current_personnel.status=='Back Office' || current_personnel.status=='Admin' %>
+       <% if current_personnel.organisation.holiday==true %>
+       Holiday <%= check_box_tag :holiday, 'holiday', checked: true %>
+       <% else %>
+       Holiday <%= check_box_tag :holiday, 'holiday' %>
+       <% end %>
+       <% if current_personnel.organisation.auto_allocate==true %>
+       Auto Allocate <%= check_box_tag :auto_allocate, 'auto_allocate', checked: true %>
+       <% else %>
+       Auto Allocate <%= check_box_tag :auto_allocate, 'auto_allocate' %>
+       <% end %>
+        
+    <% end %>
+  <% if current_personnel.absent==true %>
+  Absent <%= check_box_tag :absent, 'absent', checked: true %>
+  <% else %>
+  Absent <%= check_box_tag :absent, 'absent' %>
+  <% end %>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+
+Highcharts.setOptions({
+  lang: {
+    decimalPoint: '.',
+    thousandsSep: ','
+  }
+});
+
+$(function () {
+    // Create the chart
+   new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: "lead_stats"
+        },
+        title: {
+            text: 'Last 6 months Stats'
+        },
+        xAxis: {
+            categories: <%= @months %>,
+            crosshair: true
+            },
+        yAxis: {
+            title: {
+                text: 'Count'
+            }
+
+        },
+        legend: {
+            enabled: true
+        },
+        plotOptions: {
+        column: {
+            pointPadding: 0.3,
+            borderWidth: 0,
+            dataLabels: {
+                    align: "left",
+                    enabled: true,
+                    format: '{point.y:,.05f}',
+                    allowOverlap: true,
+                    padding: 0,
+                    rotation: -45                }
+        }
+        },
+
+        tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+        },
+
+        series: <%= @series %>
+       
+    });
+});
+
+
+</script>
+
+
+<div class="col-lg-8 col-lg-offset-0">
+<div class="jumbotron">
+<div id="lead_stats"></div>
+</div>
+</div>
+
+
+<% if current_personnel.status == 'Admin' || current_personnel.status == 'Team Lead' || current_personnel.status =='Back Office' || current_personnel.status=='Marketing'%>
+
+<script type="text/javascript" charset="utf-8">
+
+$(function () {
+  new Highcharts.Chart({
+
+      chart: {
+          type: 'variablepie',
+          renderTo: "lead_site_visited"
+      },
+      title: {
+          text: 'Source Wise Leads Site Visited'
+      },
+
+      plotOptions: {
+        variablepie: {
+            dataLabels: {
+                    
+                    enabled: false,
+                                    }
+        }
+        },
+      tooltip: {
+          headerFormat: '',
+          pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+              'Leads Generated: <b>{point.y}</b><br/>' +
+              'Site Visits: <b>{point.z}</b><br/>'
+      },
+      series: [{
+        minPointSize: 10,
+        innerSize: '20%',
+        zMin: 0,
+        name: 'sources',
+        data: <%= @site_visited_data %>
+    
+      }]
+  });
+});   
+
+</script>
+
+<div class="col-lg-6 col-lg-offset-0">
+<div class="jumbotron">
+<div id="lead_site_visited"></div>
+</div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+$(function () {
+  new Highcharts.Chart({
+
+      chart: {
+          type: 'variablepie',
+          renderTo: "lead_booked"
+      },
+      title: {
+          text: 'Source Wise Leads Booked'
+      },
+
+      plotOptions: {
+        variablepie: {
+            dataLabels: {
+                    
+                    enabled: false,
+                                    }
+        }
+        },
+      tooltip: {
+          headerFormat: '',
+          pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+              'Leads Generated: <b>{point.y}</b><br/>' +
+              'Booked: <b>{point.z}</b><br/>'
+      },
+      series: [{
+        minPointSize: 10,
+        innerSize: '20%',
+        zMin: 0,
+        name: 'sources',
+        data: <%= @booked_data %>
+    
+      }]
+  });
+});   
+
+</script>
+
+<div class="col-lg-6 col-lg-offset-0">
+<div class="jumbotron">
+<div id="lead_booked"></div>
+</div>
+</div>
+
+
+<% end %>
+
+<% if current_personnel.status == 'Admin' || current_personnel.status == 'Team Lead' || current_personnel.status =='Back Office' %>
+
+<script>
+
+$(function () {
+    // Create the chart
+   new Highcharts.Chart({
+
+    chart: {
+        height: '100%',
+        renderTo: "executive_sunburst"
+    },
+
+    title: {
+        text: 'Executive Wise Allocation'
+    },
+    subtitle: {
+        text: 'Current Month, Drill Down for Better Understanding'
+    },
+    series: [{
+        type: "sunburst",
+        data: <%= @executive_sunburst %>,
+        allowDrillToNode: true,
+        cursor: 'pointer',
+        dataLabels: {
+            format: '{point.name}',
+            filter: {
+                property: 'innerArcLength',
+                operator: '>',
+                value: 16
+            }
+        },
+        levels: [{
+            level: 1,
+            levelIsConstant: false,
+            dataLabels: {
+                rotationMode: 'parallel',
+                filter: {
+                    property: 'outerArcLength',
+                    operator: '>',
+                    value: 64
+                }
+            }
+        }, {
+            level: 2,
+            colorByPoint: true,
+            dataLabels: {
+                rotationMode: 'parallel'
+            }
+        },
+        {
+            level: 3,
+            colorVariation: {
+                key: 'brightness',
+                to: -0.5
+            }
+        }, {
+            level: 4,
+            colorVariation: {
+                key: 'brightness',
+                to: 0.5
+            }
+        }]
+
+    }],
+    tooltip: {
+        headerFormat: "",
+        pointFormat: 'Leads - <b>{point.name}</b> : <b>{point.value}</b>'
+    }
+});
+});
+
+</script>
+
+<div class="col-lg-6 col-lg-offset-0">
+<div class="jumbotron">
+<div id="executive_sunburst"></div>
+</div>
+</div>
+
+<% end %>
+
+
+<% if current_personnel.status == 'Admin' || current_personnel.status == 'Team Lead' || current_personnel.status =='Back Office' %>
+
+<script type="text/javascript" charset="utf-8">
+
+$(function () {
+    // Create the chart
+   new Highcharts.Chart({
+
+    chart: {
+        height: '100%',
+        renderTo: "source_sunburst"
+    },
+
+    title: {
+        text: 'Source Wise Allocation'
+    },
+    subtitle: {
+        text: 'Current Month, Drill Down for Better Understanding'
+    },
+    series: [{
+        type: "sunburst",
+        data: <%= @source_sunburst %>,
+        allowDrillToNode: true,
+        cursor: 'pointer',
+        dataLabels: {
+            format: '{point.name}',
+            filter: {
+                property: 'innerArcLength',
+                operator: '>',
+                value: 16
+            }
+        },
+        levels: [{
+            level: 1,
+            levelIsConstant: false,
+            dataLabels: {
+                rotationMode: 'parallel',
+                filter: {
+                    property: 'outerArcLength',
+                    operator: '>',
+                    value: 64
+                }
+            }
+        }, {
+            level: 2,
+            colorByPoint: true,
+            dataLabels: {
+                rotationMode: 'parallel'
+            }
+        },
+        {
+            level: 3,
+            colorVariation: {
+                key: 'brightness',
+                to: -0.5
+            }
+        }, {
+            level: 4,
+            colorVariation: {
+                key: 'brightness',
+                to: 0.5
+            }
+        }]
+
+    }],
+    tooltip: {
+        headerFormat: "",
+        pointFormat: 'Leads - <b>{point.name}</b> : <b>{point.value}</b>'
+    }
+});
+});
+
+</script>
+
+
+<div class="col-lg-6 col-lg-offset-0">
+<div class="jumbotron">
+<div id="source_sunburst"></div>
+</div>
+</div>
+
+<% end %>
+
+

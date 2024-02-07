@@ -1,0 +1,26 @@
+<%@header = 'Adhoc Charges'%>
+<h1>Adhoc Charges</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @adhoc_charges.each do |adhoc_charge| %>
+      <tr>
+        <td><%= adhoc_charge.description %></td>
+        <td><%= link_to 'Edit', adhoc_charge_adhoc_charge_edit_path(adhoc_charge), :class => "edit_btn", :style => "text-decoration: none;"%></td>
+        <td><%= link_to 'Destroy', adhoc_charge_adhoc_charge_destroy_path(adhoc_charge), :class => "dlt_btn", :style => "text-decoration: none;", data: { confirm: 'Are you sure ?'}%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Adhoc Charge', adhoc_charge_adhoc_charge_new_path, :class => 'btn btn-primary' %>

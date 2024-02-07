@@ -1,0 +1,30 @@
+<%@header = 'Import Call Logs'%>
+<div class="col-lg-6 col-lg-offset-3">
+  <div class="well bs-component">
+    <center><legend>Import Call Logs</legend></center>
+    <%= form_tag 'call_logs_import', multipart: true  do %>
+      <div class="row">
+        <div class="col-lg-2">
+          Executive:
+        </div>
+        <div class="col-lg-5">
+          <%= select_tag 'personnel_id', options_for_select(@executives), :class => 'form-control chosen' %>
+        </div>
+        <div class="col-lg-5">
+          <%= file_field_tag :file, class: 'filestyle', :'data-classButton' => 'btn btn-primary' %>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-2 col-lg-offset-5">
+          <%= submit_tag 'Import', :class => "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

@@ -1,0 +1,206 @@
+<%@header = 'Booked Leads Register'%>
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+<div align="center"><h3><b>Booked Leads</b></h3></div>
+<%= form_tag 'booked_leads' do  %>
+  <div class="row">
+    <div class="col-lg-2">
+      <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+    </div>
+    <div class="col-lg-2">
+      <% if current_personnel.access_right==nil %>
+        <% if current_personnel.status != 'Sales Executive' %>
+          <%= select(:salesteam, :personnel, options_for_select(@sales_team, selected: current_personnel.id),{}, {:class => 'form-control'})  %>
+        <%end%>
+      <% else %>
+        <%= select(:salesteam, :personnel, options_for_select(@sales_team, selected: @sales_person),{}, {:class => 'form-control'})  %>
+      <% end %>
+    </div>
+    <div class="col-lg-4">
+      <%= select(:salesteam, :source_category_id, options_for_select(@source_categories, selected: @source_category_selected),{}, {:class => 'form-control selectpicker', data: { live_search: true }})  %>
+    </div>    
+    <div class="col-lg-2">
+      <%= date_field(:range, :from, :value => @from,:class => 'form-control') %>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field(:range, :to, :value => @to,:class => 'form-control') %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-2">
+      with children
+      <% if @with_children == "true"%>
+        <%= check_box_tag 'with_children', true, nil, :checked => true%>
+      <%else%>
+        <%= check_box_tag 'with_children', true, nil%>
+      <%end%>
+    </div>
+    <div class="col-lg-2">
+      with cancellation
+      <% if @with_cancellation == "true"%>
+        <%= check_box_tag 'with_cancellation', true, nil, :checked => true%>
+      <%else%>
+        <%= check_box_tag 'with_cancellation', true, nil%>
+      <%end%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag "Refresh", name: "refresh", :class => 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
+<%= form_tag 'flat_rate_update' do  %>
+  <table class="customers " id="booked_leads" style="width: 100% height:100%">
+    <thead>
+      <tr>
+        <th></th>
+        <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Flat</th>
+        <th>Rate</th>
+        <th>Name</th>
+        <% if current_personnel.organisation_id == 6 || current_personnel.organisation_id == 7 %>
+          <th>Mobile</th>
+          <th>Other No.</th>
+          <th>Email</th>
+        <%end%>
+        <th>Budget From</th>
+        <th>Budget To</th>
+        <th>BHK</th>
+        <th>Source</th>
+        <th>Remarks</th>
+        <th>Status</th>
+        <th>Generated on</th>
+        <th>Generated on sort</th>
+        <th>Last Followup on</th>
+        <th>Last Followup on sort</th>
+        <th>Followup remarks</th>
+        <th>To Followup on</th>
+        <th>To Followup on sort</th>
+       <th>To Followup on search</th>
+        <th>Executive</th>
+        <th>Booked on</th>
+        <th>Booked on Sort</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <td><%= radio_button_tag :lead_id , lead.id %></td>
+          <% if lead.escalated==true %>
+            <td><span class="label label-danger">!</span></td>
+          <% elsif lead.escalated==false %>
+            <td><span class="label label-info">!</span></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td><%= lead.id %></td>
+          <% if lead.business_unit_id != nil %>
+            <td><%= lead.business_unit.name %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td><%= lead.flats[0].try{|x| x.block.name+','+x.name} %></td>
+          <td><%= lead.flats[0].try{|x| x.rate} %></td>
+          <td><%= lead.name %></td>
+          <% if current_personnel.organisation_id == 6 || current_personnel.organisation_id == 7%>
+            <td><%= lead.mobile %></td>
+            <td><%= lead.other_number %></td>
+            <td><%= lead.email %></td>
+          <%end%>
+          <td><%= lead.budget_from %></td>
+          <td><%= lead.budget_to %></td>
+          <td><%= lead.flat_type %></td>
+          <% if lead.source_category_id != nil %>
+            <td><%= lead.source_category.heirarchy %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td><%= lead.customer_remarks %></td>
+          <td>Booked</td>
+          <% if lead.generated_on!=nil %>
+            <td><%= lead.generated_on.strftime("%d/%m/%y") %></td>
+          <% else %>
+            <td>NA</td>
+          <% end %>
+          <% if lead.generated_on!=nil %>
+            <td><%= lead.generated_on.strftime("%m/%d/%y") %></td>
+          <% else %>
+            <td>NA</td>
+          <% end %>
+          <% @followups=FollowUp.where(lead_id: lead.id) %>
+          <% if @followups != [] %>
+            <% @followups=@followups.sort_by{|x| [x.follow_up_time, x.id] } %>
+            <td><%= (@followups.last.communication_time+19800).strftime("%d/%m/%y") %></td>
+            <td><%= (@followups.last.communication_time+19800).strftime("%m/%d/%y") %></td>
+            <td><%= @followups.last.remarks %></td>
+            <td><%= (@followups.last.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+            <td><%= (@followups.last.follow_up_time).strftime("%m/%d/%y") %></td>
+            <td>$<%= (@followups.last.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+          <% else %>
+            <td>Not done</td> 
+            <td><%= (Time.now - 365.days).strftime("%m/%d/%y") %></td>
+            <td>NA</td>
+            <td>NA</td>
+            <td><%= (Time.now - 365.days).strftime("%m/%d/%y") %></td>
+            <td></td>
+          <% end %>
+          <td><%= lead.personnel.name %></td>
+          <td><%= lead.booked_on.strftime("%d/%m/%y") %></td>
+          <td><%= lead.booked_on.strftime("%m/%d/%y") %></td>  
+          <% if current_personnel.email == "ayush@thejaingroup.com" || current_personnel.email == "kazi@thejaingroup.com" %>
+            <td><%= link_to "Date Edit", windows_booking_date_edit_path(lead), :class => 'edit_btn'%></td>
+          <%else%>
+            <td></td>
+          <%end%>
+          <td><%= submit_tag ">", name: lead.id, :class => 'btn btn-primary btn-xs' %></td>  
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+  <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Sales Executive' || current_personnel.status=='Team Lead' %>
+    <div class="row">
+      <div class="col-lg-1">
+        <b><i><font color="#df691a">Flat </font></i></b>
+      </div>
+      <div class="col-md-3 executive_div">
+        <%= select(:booked, :flat, options_for_select(@flats), {prompt: true}, { :class => 'form-control' })   %>
+      </div>
+      <div class="col-lg-1">
+        <b><i><font color="#df691a">Rate</font></i></b>
+      </div>
+      <div class="col-md-3 follow_up_status_div">
+        <%= text_field_tag(:remarks, nil, placeholder: 'per sft', class: "form-control") %>
+      </div>
+      <div class="col-lg-2">
+        <%= submit_tag 'Update',name: 'update', :class => 'btn btn-primary'%>
+      </div>
+    </div>   
+  <% end %>
+<% end %>
+<style >
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+  </style>
+
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

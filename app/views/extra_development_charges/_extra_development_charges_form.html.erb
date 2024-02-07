@@ -1,0 +1,73 @@
+<%= form_for @extra_development_charge, url: {action: @extra_development_charges_action} do |f| %>
+
+  
+<div class="col-lg-5 col-lg-offset-4">
+  <div class="well bs-component">
+    <legend>&nbspNew Extra Development Charge</legend>
+      <div class="form-group row">
+          <div class="col-lg-3">
+          <%= f.label :'Business_Unit:', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-8">
+            <%= select(:extra_development_charge, :business_unit_id, options_for_select(@business_units, selected: @extra_development_charge.business_unit_id),{}, {:class => 'form-control'})%>    
+          </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Extra_Charge:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+            <%= select(:extra_development_charge, :extra_charge_id, options_for_select(@extra_charges, selected: @extra_development_charge.extra_charge_id),{}, {:class => 'form-control'})%>    
+          </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Blocks:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+            <%= select(:extra_development_charge, :block_id, options_for_select(@blocks, selected: @extra_development_charge.block_id),{}, {:class => 'form-control'})%>    
+          </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'percentage:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+            <%= f.text_field :percentage, :class => 'form-control' %>
+          </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Amount:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+            <%= f.text_field :amount, :class => 'form-control' %>
+          </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Rate:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+           <%= f.text_field :rate, :class => 'form-control' %>
+          </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Flat-type:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+            <%= f.text_field :flat_type, :class => 'form-control' %>
+          </div>
+      </div>
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-3">
+          <%= f.submit :class => 'btn btn-primary btn-block' %>      
+        </div>   
+      </div>
+      <br><br>
+  </div>
+</div>
+
+<%= hidden_field_tag :extra_development_charge_id, @extra_development_charge.id %>
+<% end %>

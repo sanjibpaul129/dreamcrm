@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row style="background: yellow;">
+        <Cell><Data ss:Type="String">Lead Id</Data></Cell>    
+        <Cell><Data ss:Type="String">Name</Data></Cell>
+        <Cell><Data ss:Type="String">Mobile</Data></Cell>
+        <Cell><Data ss:Type="String">Other Number</Data></Cell>
+        <Cell><Data ss:Type="String">Status</Data></Cell>
+        <Cell><Data ss:Type="String">Last Followup Remarks</Data></Cell>
+        <Cell><Data ss:Type="String">Current Followup Remarks</Data></Cell>
+      </Row>
+      <% @leads.each do |lead| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= lead.id%></Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.name%></Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.mobile%></Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.try(:other_number)%></Data></Cell>
+          <Cell><Data ss:Type="String">
+            <% if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+              Qualified
+            <% elsif lead.osv == true && lead.status == false && lead.interested_in_site_visit_on != nil %>
+              Interested in Site Visit
+            <% elsif lead.osv == true %>
+              OV
+            <% elsif lead.osv== false && lead.status== nil %>
+              Negotiation
+            <% elsif lead.osv==nil  && lead.status==nil %>
+              In Follow Up
+            <% elsif lead.osv==nil && lead.status==false %>
+              Site Visited
+            <% elsif lead.osv== false && lead.status== false %>
+              Field Visited
+            <% end %>
+          </Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.follow_ups.last.remarks%></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

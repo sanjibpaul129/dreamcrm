@@ -1,0 +1,99 @@
+<%= form_tag 'broker_lead_intimation_remarks', :html => {:class => 'form-horizontal'} do %>
+<h1>Broker Lead Intimations</h1>
+<table class="customers">
+	<thead>
+		<th></th>
+		<th></th>
+		<th>Project</th>
+		<th>BrokerName</th>
+		<th>BrokerContact</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Mobile</th>
+		<th>DateTime</th>
+		<th>remarks</th>
+		<th></th>
+		<th></th>		
+	</thead>
+	<tbody>
+		<% @broker_lead_intmations_without_lead_id.each do |broker_lead_intimation|%>
+			<tr>
+				<td><%= link_to 'Remove', broker_setup_update_lead_id_path(broker_lead_intimation),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure you want to remove this intimation from list?'} %></td>
+		        <td><%= radio_button_tag 'lead_selection', broker_lead_intimation.id %></td>		        
+				<td><%= broker_lead_intimation.business_unit.try{|x| x.name}%></td>
+				<td><%= broker_lead_intimation.broker_contact.broker.name%></td>
+				<td><%= broker_lead_intimation.broker_contact.try{|x| x.name}%></td>
+				<td><%= broker_lead_intimation.name%></td>
+				<td><%= broker_lead_intimation.email%></td>
+				<td><%= broker_lead_intimation.mobile%></td>
+				<td><%= broker_lead_intimation.created_at.strftime("%Y-%m-%d %H:%M:%S")%></td>
+				<td><%= broker_lead_intimation.remarks%><td>
+				<td><%= link_to "SV Form", windows_sv_form_index_path(broker_lead_intimation: broker_lead_intimation, page_name: "broker_lead_intemation"), :class => 'edit_btn'%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>
+
+<div class="row"   id="additionalElements" style="display: none;">
+	<div class="col-lg-4" id="remarksTextarea">
+	  Remarks Add: <%= text_area_tag "remarks", "", :class => 'form-control' %>
+	</div><br>
+	 <div class="col-lg-2"  id="saveRemarksBtn">
+	 	<%= submit_tag 'submit',:class => 'btn btn-primary' %>
+	</div>
+</div><br>
+ <%end%>  
+
+
+ 	<h1>Site Visited Lead Intimations</h1>
+	<table class="customers">
+			<thead>
+				<th>Project</th>
+				<th>Lead Id</th>
+				<th>BrokerName</th>
+				<th>BrokerContact</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Mobile</th>
+				<th>DateTime</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<%@broker_lead_intmations_with_lead_id.each do |broker_lead_intimation|%>
+					 <tr>
+						<td><%= broker_lead_intimation.business_unit.try{|x| x.name}%></td>
+						<td><%= broker_lead_intimation.try(:lead_id)%></tb>
+						<td><%= broker_lead_intimation.broker_contact.broker.name%></tb>
+						<td><%= broker_lead_intimation.broker_contact.try{|x| x.name}%></tb>
+						<td><%= broker_lead_intimation.name%></tb>
+						<td><%= broker_lead_intimation.email%></tb>
+						<td><%= broker_lead_intimation.mobile%></tb>
+						<td><%= broker_lead_intimation.created_at.strftime("%Y-%m-%d %H:%M:%S")%></tb>
+						<td><%= link_to ">", windows_conversation_history_path(Lead.find(broker_lead_intimation.lead_id)), :class => 'btn btn-primary btn-xs' %></td>
+					 </tr>
+			    <%end%>	
+			</tbody>
+	</table>    
+
+<script>
+	function update_lead_id(broker_lead_intimation_id)
+	{
+		var data = broker_lead_intimation_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/update_lead_id.js?id='+data.toString());		
+	}
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('input[type="radio"]').on('click', function() {
+      $('#additionalElements').show();
+    });
+    $('#saveRemarksBtn').on('click', function() {
+      var remarksContent = $('#remarksTextarea').val();
+      var selectedRow = $('input[type="radio"]:checked').closest('tr');
+      selectedRow.find('td:nth-child(10)').text(remarksContent);
+      $('#additionalElements').hide();
+    });
+  });
+</script>

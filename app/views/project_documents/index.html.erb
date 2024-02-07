@@ -1,0 +1,29 @@
+<h1>Listing project_documents</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Document</th>
+      <th>Link</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @project_documents.each do |project_document| %>
+      <tr>
+        <td><%= project_document.project_id %></td>
+        <td><%= project_document.document_id %></td>
+        <td><%= project_document.link %></td>
+        <td><%= link_to 'Show', project_document %></td>
+        <td><%= link_to 'Edit', edit_project_document_path(project_document) %></td>
+        <td><%= link_to 'Destroy', project_document, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Project document', new_project_document_path %>

@@ -1,0 +1,29 @@
+<table class="table table-striped table-hover " id="maintainance_ledger_entries" style="width: 100% height:100%">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Lead_id</th>
+      <th>Amount</th>
+      <th>Maintainance_Bill_Id</th>
+      <th>Money_receipt_id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @maintainance_ledger_entries.each do |maintainance_ledger|%>
+  		<tr>
+  			<td><%= maintainance_ledger.date.to_date%></td>
+  			<td><%= maintainance_ledger.lead_id%></td>
+  			<td><%= maintainance_ledger.amount%></td>
+  			<td><%= maintainance_ledger.maintainence_bill_id%></td>
+  			<td><%= maintainance_ledger.money_receipt_id%></td>
+  			
+  			<td><%= link_to 'Edit', maintainance_ledger_maintainance_ledger_edit_path(maintainance_ledger)%></td>
+  			<td><%= link_to 'Destroy', maintainance_ledger_maintainance_ledger_destroy_path(maintainance_ledger), data: { confirm: 'Are you sure ?'}%></td>
+  		</tr>
+  	<%end%>
+  </tbody>
+</table>
+<%= link_to 'New Entry', maintainance_ledger_maintainance_ledger_new_path, :class => 'btn btn-primary' %>

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  business_unit_id: 1
+  campaign_id: MyString
+  adgroup_id: MyString
+  campaign_name: MyString
+  adgroup_name: MyString
+
+two:
+  business_unit_id: 1
+  campaign_id: MyString
+  adgroup_id: MyString
+  campaign_name: MyString
+  adgroup_name: MyString

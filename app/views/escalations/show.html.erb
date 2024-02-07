@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @escalation.level %>
+</p>
+
+<p>
+  <strong>Personnel:</strong>
+  <%= @escalation.personnel_id %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @escalation.year %>
+</p>
+
+<p>
+  <strong>Month:</strong>
+  <%= @escalation.month %>
+</p>
+
+<p>
+  <strong>Count:</strong>
+  <%= @escalation.count %>
+</p>
+
+<%= link_to 'Edit', edit_escalation_path(@escalation) %> |
+<%= link_to 'Back', escalations_path %>

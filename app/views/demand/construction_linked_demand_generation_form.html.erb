@@ -1,0 +1,97 @@
+<%= form_tag 'construction_linked_demand_generation_form', :html => {:class => 'form-horizontal'} do %>
+  <div class="row col-lg-offset-3">
+    <div class="col-lg-2">
+      <h4>Projects:</h4>
+    </div>
+    <div class="col-lg-3">
+      <%= select_tag 'business_unit_id', options_for_select(@business_units, selected: @selected_business_unit_id), :class => 'form-control', :prompt => 'Select Porject' %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details', :class => 'btn btn-primary' %>
+    </div>
+  </div>
+<%end%>
+<br>
+<%= form_tag 'generate_construction_linked_demand', :html => {:class => 'form-horizontal'} do %>
+  <%= hidden_field_tag :selected_business_unit_id, @selected_business_unit_id%>
+  <% @blocks.each do |block| %>
+    <table id="customers">
+      <thead>
+        <tr>
+          <th colspan="4" style="background-color: #1f3650!important; text-align: center!important; font-size: 20px!important;">Block Wise Milestone</th>
+        </tr>
+      </thead>
+      <tr>
+        <th colspan="4" style="text-align: center!important; font-size: 15px!important; background-color: #0052a0!important;"><i>Block Wise Data</i></th>
+      </tr>
+      <tr>
+        <th  style="background-color: #0052a0!important;"></th>
+        <th  style="background-color: #0052a0!important;">Block</th>
+        <th  style="background-color: #0052a0!important;">Milestone</th>
+        <th  style="background-color: #0052a0!important;">Date Achieved</th>
+      </tr>
+      <tbody>
+        <% @payment_milestones.each do |payment_milestone| %>
+          <% if payment_milestone.block_level==true%>
+            <tr>
+              <% if AchievedMilestone.find_by_payment_milestone_id(payment_milestone.id) == nil %>
+                <td><%= radio_button_tag 'block_wise_demand_details' , block.id.to_s+'*'+payment_milestone.id.to_s+'$' %></td>
+              <%else%>
+                <td></td>
+              <%end%>
+              <td><%= block.name %></td>
+              <td><%= payment_milestone.description %></td>
+              <% achieved_milestone=AchievedMilestone.find_by(payment_milestone_id: payment_milestone.id, block_id: block.id) %>
+              <% if achieved_milestone==nil %>
+              <td></td>
+              <% else %>
+              <td><%= achieved_milestone.date %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% @payment_milestones.each do |payment_milestone| %>
+      <% if payment_milestone.floor_level==true%>
+        <table id="customers">
+          <thead>
+            <tr>
+              <th colspan="5" style="text-align: center!important; font-size: 15px!important;"><i>Floor Wise Data</i></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Block</th>
+              <th>Floor</th>
+              <th>Milestone</th>
+              <th>Date Achieved</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% block.floors.times do |index| %>
+              <tr>
+                  <%floor = index+1%>
+                  <td><%= radio_button_tag 'floor_wise_demand_details' , (block.id.to_s+'*'+floor.to_s+'%'+payment_milestone.id.to_s+'$') %></td>
+                  <td><%= block.name %></td>
+                  <td><%= floor %></td>
+                  <td><%= payment_milestone.description %></td>
+                  <% achieved_milestone=AchievedMilestone.find_by(payment_milestone_id: payment_milestone.id, block_id: block.id, floor: floor) %>
+                  <% if achieved_milestone==nil %>
+                  <td></td>
+                  <% else %>
+                  <td><%= achieved_milestone.date %></td>
+                  <% end %>
+                </tr>
+            <% end %>    
+          </tbody>
+        </table>
+      <% end %>
+    <% end %>  
+  <% end %><br>
+  <div class="row">
+    <div class="col-lg-2">
+      <%=submit_tag 'Raise Demand', :class => 'btn btn-primary'%>
+    </div>
+  </div>
+  <% end %>

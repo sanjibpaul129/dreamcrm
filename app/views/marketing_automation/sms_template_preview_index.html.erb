@@ -1,0 +1,41 @@
+<div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+    	<center><b><u><%= @sms_template.title%></u></b></center>
+		<%= @final_string.html_safe%>
+	</div>
+<%= form_tag 'testing_sms_template_send', :html => {:class => 'form-horizontal'} do %>
+	<div class= "row">
+		<div class="col-lg-3">
+			<h5>Testing Number:</h5>
+		</div>
+		<div class="col-lg-9">
+			<%= text_field_tag 'sms_number','', :class => 'form-control'%>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-lg-2">
+			<%= submit_tag 'send', :class => 'btn btn-primary'%>	
+		</div>
+		<div class="col-lg-4">
+			<%= submit_tag 'Bulk Recipient Send', :class => 'btn btn-primary'%>
+		</div>
+		<div class="col-lg-2">
+			<%= link_to 'Back', marketing_automation_sms_template_index_path, :class => 'btn btn-primary' %>
+		</div>
+	</div>
+<%= hidden_field_tag :sms_template_id, @sms_template.id %>
+<%end%>
+</div>
+<style>
+body{
+	color: #000;
+}
+@media (min-width: 1200px){
+.col-lg-offset-3 {
+    margin-left: 31%!important;
+}
+.well{
+	background-color: #fff!important;
+}
+</style>

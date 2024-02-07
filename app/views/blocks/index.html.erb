@@ -1,0 +1,32 @@
+<%@header = 'Blocks'%>
+<h1>Blocks</h1>
+
+<table  id="customers">
+  <thead>
+    <tr>
+      <th>Business unit</th>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Floors</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @blocks.each do |block| %>
+      <tr>
+        <td><%= block.business_unit.name %></td>
+        <td><%= block.name %></td>
+        <td><%= block.number %></td>
+        <td><%= block.floors %></td>
+        
+        <td><%= link_to 'Edit', edit_block_path(block), class: "edit_btn", :style => "text-decoration:none;" %>
+          
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+<%= link_to 'New Block', new_block_path, :class => 'btn btn-primary' %>

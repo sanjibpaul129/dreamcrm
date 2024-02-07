@@ -1,0 +1,44 @@
+<%= form_for @electrical_bill, url: {action: @electrical_bill_action} do |f| %>
+  <% if @electrical_bill.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@electrical_bill.errors.count, "error") %> prohibited this raw material from being saved:</h2>
+      <ul>
+      <% @electrical_bill.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <center><legend>&nbspGenerate Electric Bill</legend></center>
+      <div class="row">
+        <%= f.label :'Projects:', :class => 'col-lg-2 control-label' %>
+        <div class="col-lg-10">
+          <%= select_tag 'business_unit_id', options_for_select(@business_units), :class => 'form-control all_business_units', :id => 'business_unit_id', :prompt => 'Select Project', :onchange => 'populate_electric_rate()' %>
+        </div>
+      </div><br>
+      <div id="electric_rate">
+      </div>
+    </div>
+  </div>
+  <%= hidden_field_tag :electrical_bill_id, @electrical_bill.id %>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script>
+  function populate_electric_rate()
+  {
+    var business_unit_id=event.target.value;
+    // console.log(business_unit_id)
+    $.getScript('/electrical_bill/populate_electric_rate.js?id='+business_unit_id);
+
+  }
+</script>

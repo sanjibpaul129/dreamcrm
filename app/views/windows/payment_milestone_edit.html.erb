@@ -1,0 +1,103 @@
+<%@header = 'Payment Milestone Edit'%>
+<%= form_for @payment_milestone, url: {action: @payment_milestone_action} do |f| %>
+
+  <% if @payment_milestone.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@payment_milestone.errors.count, "error") %> prohibited this payment_milestone from being saved:</h2>
+
+      <ul>
+      <% @payment_milestone.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="col-lg-5 col-lg-offset-4">
+  <div class="well bs-component">
+    <legend>&nbspEdit Payment Milestone</legend>
+      	<div class="form-group row">
+	      	<div class="col-lg-3">
+		      <%= f.label :'Description', :class => 'control-label'%>
+		  	</div>
+		    <div class="col-lg-8">
+		      <%= f.text_field :description, :class => 'form-control' %>        
+		    </div>
+		</div>
+	    <div class="form-group row">
+	    	<div class="col-lg-3">
+	      		<%= f.label :'block_level', :class => 'control-label'%>
+	      	</div>
+	      	<div class="col-lg-3">
+	      		<% if @payment_milestone.block_level ==true %>
+	        		<%= check_box_tag 'payment_milestone[block_level]', true, nil, :checked => true%>        
+	        	<%else%>
+	        		<%= check_box_tag 'payment_milestone[block_level]', true, nil%>
+	        	<%end%>
+	      	</div>
+	      	<div class="col-lg-3">
+	      		<%= f.label :'floor_level', :class => 'control-label'%>
+	      	</div>
+	      	<div class="col-lg-3">
+	        	<% if @payment_milestone.floor_level ==true %>
+	        		<%= check_box_tag 'payment_milestone[floor_level]', true, nil, :checked => true%>        
+	        	<%else%>
+	        		<%= check_box_tag 'payment_milestone[floor_level]', true, nil%>
+	        	<%end%>
+	      	</div>
+	    </div>
+	    <div class="row">
+	        <table class="customers">
+	          <thead>
+	            <th>Payment Milestones</th>
+	            <th>Days After</th>
+	            <th></th>
+	            <th></th>
+	          </thead>
+	          <tbody>
+	          	<% if TimeBasedMilestone.where(previous_payment_milestone_id: @payment_milestone.id) == []%>
+	          		<tr class="tr_clone">
+		              <td><%= select_tag 'payment_milestone_ids[]', options_for_select(@payment_milestones), :class => 'form-control' %></td>
+		              <td><%= text_field_tag 'days_after[]', '', :class => 'form-control ' %></td>
+		              <td><input type="button" name="add" value="Remove" class="tr_clone_remove btn btn-danger btn-xs"></td>
+		              <td><input type="button" name="add" value="Duplicate" class="tr_clone_duplicate btn btn-info btn-xs"></td>
+		            </tr>
+	          	<%else%>
+		            <% TimeBasedMilestone.where(previous_payment_milestone_id: @payment_milestone.id).each do |time_based_milestone|%>
+		              <tr class="tr_clone">
+		                <td><%= select_tag 'payment_milestone_ids[]', options_for_select(@payment_milestones, selected: time_based_milestone.subsequent_payment_milestone_id), :class => 'form-control' %></td>
+		                <td><%= text_field_tag 'days_after[]', time_based_milestone.days_after, :class => 'form-control ' %></td>
+		                <td><input type="button" name="add" value="Remove" class="tr_clone_remove btn btn-danger btn-xs"></td>
+		                <td><input type="button" name="add" value="Duplicate" class="tr_clone_duplicate btn btn-info btn-xs"></td>
+		              </tr>
+		            <%end%>
+		        <%end%>
+	          </tbody>
+	        </table>
+      	</div>
+      </div>
+      <br>
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <br>
+          <%= f.submit :class => 'btn btn-primary btn-block' %>      
+        </div>   
+      </div>
+      <br><br>
+  </div>
+</div>
+
+<%= hidden_field_tag :payment_milestone_id, @payment_milestone.id %>
+<% end %>
+
+
+<script>
+  $("table").on('click',"input.tr_clone_duplicate" , function() {
+      var tr    = $(this).closest('.tr_clone');
+      var clone = tr.clone();
+      tr.after(clone);
+  });  
+
+  $("table").on('click',"input.tr_clone_remove" , function() {
+      $(this).closest('tr').remove();
+  });
+</script>

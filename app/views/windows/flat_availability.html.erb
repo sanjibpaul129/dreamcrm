@@ -1,0 +1,109 @@
+<%@header = 'Flat Availablity'%>
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+
+
+<div align="center"><h3><b>Flat Availablity Update</b></h3></div>
+
+<%= form_tag 'flat_availability' do %>
+<div class="row">  
+   <div class="col-lg-1">
+      <i>  Project </i>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+    </div>
+    <div class="col-lg-1">
+      <i>  Blocks </i>
+    </div>
+    <div class="col-lg-2">
+      <%= select(:project, :block_id, options_for_select(@blocks),{},{:class => 'form-control'})%>
+    </div>
+    <div class="col-lg-1">
+      <i>  Status </i>
+    </div>
+    <div class="col-lg-2">
+      <%= select(:flat_status, :filter, options_for_select([['all', -1],['available', nil], ['Booked', true], ['blocked',false ]]),{}, {:class => 'form-control'})   %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Refresh', name: 'refresh', :class => 'btn btn-primary' %>
+    </div>
+  </div>
+  <br>
+<table class="customers" id="flat_availability" style="width: 100% height:100%">
+  <thead>
+    <tr>
+      
+      <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+     <th>Block</th>
+     <th>Name</th>
+     <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @flats==nil%>
+    <%else%>
+    <% @flats.each do |flat| %>
+    <tr>
+      
+      <td><%= check_box_tag 'flat_id[]', flat.id  %></td>
+      <td><%= flat.block.name %></td>
+      <td><%= flat.try(:floor).to_s+flat.name %></td>
+      <%
+        if flat.status==nil
+          current_status='Available' 
+        elsif flat.status==true
+          current_status='Booked'
+        elsif flat.status==false
+          current_status='Blocked'
+        else
+          current_status='nil'
+        end  
+      %>
+      <td><%= current_status %></td>
+
+    </tr>
+    <% end %> 
+    <%end%>
+  </tbody>
+</table>
+<% if current_personnel.status!='Marketing' %>
+<br>
+  <div class="row">
+    <div class="col-lg-1">
+      <b><i><font color="#df691a">  Status </font></i></b>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:flat, :status, options_for_select([['available', nil], ['Booked', true], ['blocked',false ]]),{}, { :class => 'form-control' })   %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Update', name: 'update', :class => 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
+<%end%>
+
+
+
+<style >
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+  </style>
+  
+
+  

@@ -1,0 +1,39 @@
+<%= form_tag 'generate_adhoc_demand' do  %>
+<h1>Generate Adhoc Demand</h1>
+
+<%= @booking.cost_sheet.lead.name %> having Flat <%= @booking.cost_sheet.flat.full_name %>
+
+<%= hidden_field_tag :booking_id, @booking.id %>
+<div class="row">
+  <div class="col-lg-3">
+    <%= date_field(:demand, :date, :class => "form-control", :value => ((Time.now)+86400).strftime('%Y-%m-%d')) %> 
+  </div>
+</div>
+<br>
+<table class="customers">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Milestone</th>      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @booking.cost_sheet.payment_plan.milestones.sort_by{|x| x.order}.each do |milestone|%>   
+      <tr>
+        <% ledger_entry_item=LedgerEntryItem.includes(:ledger_entry_header).where(milestone_id: milestone.id).where(:ledger_entry_headers => {booking_id: @booking.id}) %>
+        <% if ledger_entry_item == [] %>
+          <td><%= check_box_tag 'milestone_ids[]', milestone.id %></td>
+        <%else%>
+          <td></td>
+        <% end %>
+        <!-- <td><%= check_box_tag 'milestone_ids[]', milestone.id %></td> -->
+        <td><%= milestone.payment_milestone.description %></td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+<br>
+<%= submit_tag 'Generate', name: 'generate', :class => 'btn btn-primary' %>
+<br>
+<% end %>

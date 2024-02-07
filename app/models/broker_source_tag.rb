@@ -1,0 +1,2 @@
+class BrokerSourceTag < ApplicationRecord
+end

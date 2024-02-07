@@ -1,0 +1,37 @@
+<h1>Listing marketing_instances</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Business unit</th>
+      <th>Source category</th>
+      <th>Work order</th>
+      <th>Rate</th>
+      <th>Quantity</th>
+      <th>Tax</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @marketing_instances.each do |marketing_instance| %>
+      <tr>
+        <td><%= marketing_instance.description %></td>
+        <td><%= marketing_instance.business_unit_id %></td>
+        <td><%= marketing_instance.source_category_id %></td>
+        <td><%= marketing_instance.work_order_id %></td>
+        <td><%= marketing_instance.rate %></td>
+        <td><%= marketing_instance.quantity %></td>
+        <td><%= marketing_instance.tax %></td>
+        <td><%= link_to 'Show', marketing_instance %></td>
+        <td><%= link_to 'Edit', edit_marketing_instance_path(marketing_instance) %></td>
+        <td><%= link_to 'Destroy', marketing_instance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Marketing instance', new_marketing_instance_path %>

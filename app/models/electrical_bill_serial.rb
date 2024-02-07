@@ -1,0 +1,2 @@
+class ElectricalBillSerial < ApplicationRecord
+end

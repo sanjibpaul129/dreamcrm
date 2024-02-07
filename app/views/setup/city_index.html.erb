@@ -1,0 +1,22 @@
+<%@header = 'Cities'%>
+<h1>Cities</h1>
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @cities.each do |city|%>
+  		<tr>
+  			<td><%= city.name%></td>
+  			<td><%= link_to 'Edit', setup_city_edit_path(city), :class => 'edit_btn'%></td>
+  			<td><%= link_to 'Destroy', setup_city_destroy_path(city), data: { confirm: 'Are you sure ?'}, :class => 'dlt_btn'%></td>
+  		</tr>
+  	<%end%>
+  </tbody>
+</table><br>
+<%= link_to 'New Entry', setup_city_new_path, :class => 'btn btn-primary' %>

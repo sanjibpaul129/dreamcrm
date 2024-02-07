@@ -1,0 +1,45 @@
+<%= form_for @maintainance_bill, url: {action: @maintainance_bill_action} do |f| %>
+  <% if @maintainance_bill.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@maintainance_bill.errors.count, "error") %> prohibited this raw material from being saved:</h2>
+      <ul>
+      <% @maintainance_bill.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Maintenance Bill</legend>
+      <div class="row">
+        <%= f.label :'Projects:', :class => 'col-lg-2 control-label' %>
+        <div class="col-lg-8">
+          <%= select_tag 'business_unit_id', options_for_select(@business_units), :class => 'form-control all_business_units', :id => 'business_unit_id', :prompt => 'Select Project', :onchange => 'populate_rate()' %>
+        </div>
+      </div><br>
+      <div id="rate">
+      </div>
+    </div>
+  </div>
+  <%= hidden_field_tag :maintainance_bill_id, @maintainance_bill.id %>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script>
+  function populate_rate()
+  {
+    var business_unit_id=event.target.value;
+    // console.log(business_unit_id)
+    $.getScript('/maintainance_bill/populate_rate.js?id='+business_unit_id);
+
+  }
+
+</script>

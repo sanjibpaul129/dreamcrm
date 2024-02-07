@@ -1,0 +1,27 @@
+Please check the details of deleted leads by <b><%= @personnel.name%></b><br><br>
+<table border="5">
+	<thead>
+		<th>Project</th>
+		<th>name</th>
+		<th>Email</th>
+		<th>Mobile</th>
+		<th>Other Number</th>
+	</thead>
+	<tbody>
+		<% @all_deleted_leads.each_with_index do |lead| %>
+			<tr>
+				<td><%= BusinessUnit.find(lead.business_unit_id).name%></td>
+				<td><%= lead.name%></td>
+				<% if lead.business_unit.organisation_id == 1%>
+					<td></td>
+					<td></td>
+					<td></td>
+				<%else%>
+					<td><%= lead.try(:email)%></td>
+					<td><%= lead.try(:mobile)%></td>
+					<td><%= lead.try(:other_number)%></td>
+				<%end%>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

@@ -1,0 +1,76 @@
+<p>Dear Sir,</p>
+<h1>Leads</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+       <th>name</th>
+       <th>email</th>
+        <th>mobile</th>
+        <th>other_number</th>
+        <th>project</th>
+        <th>source</th>
+        <th>status</th>
+        <th>lost reason</th>
+        <th>generated on</th>
+        <th>Site Executive</th>
+        <th>LastFlwpDt</th>
+        <th>LastFlwpRmks</th>
+        <th>SiteVisitDt</th>
+        <th>W#</th>
+        <th>Classification</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @leads.each do |lead| %>
+      <tr>
+        <td><%= lead.name %></td>
+        <% if lead.business_unit.organisation_id == 1%>
+          <td></td>
+          <td></td>
+          <td></td>
+        <%else%>
+          <td><%= lead.email %></td>
+          <td><%= lead.mobile %></td>
+          <td><%= lead.other_number %></td>
+        <%end%>
+        <td><%= lead.business_unit.name %></td>
+        <td><%= lead.source_category.heirarchy %></td>
+        <% if lead.status == nil && lead.osv == nil%>
+         <td>Fresh</td>
+         <td></td>
+         <% elsif lead.status == nil && lead.osv == true%>
+         <td>OV</td>
+         <td></td>
+         <% elsif lead.status == nil && lead.osv == false %>
+         <td>Negotiation</td>
+         <td></td>
+         <% elsif lead.status== false %>
+         <td>Site Visited</td>
+         <td></td>
+         <% elsif lead.status== true && lead.lost_reason_id==nil %>
+         <td>Booked</td>
+         <td></td>
+         <% else %>
+         <td>Lost</td>
+         <td><%= lead.lost_reason.description %></td>
+         <% end %>
+        <td><%= lead.generated_on.strftime("%d/%m/%y-%H:%M") %></td>
+        <td><%= lead.personnel.name %></td>
+        <% if lead.follow_ups != [] %>
+        <% last_follow_up=lead.follow_ups.where(last: true)[0] %>
+        <td><%= last_follow_up.communication_time.strftime("%m/%d/%y") %></td>
+        <td><%= last_follow_up.remarks %></td>
+        <% else %>
+        <td></td>
+        <td></td>
+        <% end %>
+        <td><%= lead.site_visited_on.try{|x| x.strftime("%m/%d/%y")} %></td>
+        <td><%= lead.whatsapps.count %></td>
+        <td><%= lead.anticipation %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+

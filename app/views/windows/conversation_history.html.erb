@@ -1,0 +1,243 @@
+<h1>Customer's Conversations</h1>
+<br>
+<table class="customers">
+	<thead>
+		<th>Updated on</th>
+    <th>Updated on sort</th>
+    <th>Status</th>
+    <th>Remarks</th>
+    <th>Followup Date</th>
+    <th>Followup Date sort</th>
+    <th>Executive</th>
+    <% if current_personnel.organisation_id == 6%>
+      <th>Score</th>
+    <%else%>
+      <th>Call Recording File</th>
+    <%end%>
+    <th>EntryTime</th>
+	</thead>
+	<tbody>
+		<% all_followups = [] %>
+        <% lead_follow_ups = @lead.follow_ups %>
+        <% lead_follow_ups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.sms_followups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.email_followups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.whatsapp_followups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.call_records.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.sent_cost_sheets.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.whatsapps.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.template_sends.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% all_followups = all_followups.sort_by{|x| [x.created_at, x.id]} %>
+        <% if lead_follow_ups != [] %>
+        <% last_follow_up_status=lead_follow_ups.last.current_status %>
+        <% else %>
+        <% last_follow_up_status='Fresh' %>
+        <% end %>
+        <% all_followups.reverse.each do |followup| %>
+			<% if followup.class.table_name == 'sms_followups' %>
+				<tr>
+					<td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+					<td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+					<td><%= last_follow_up_status %></td>
+					<td>SMS Sent</td>
+					<td></td>
+					<td></td>
+					<td>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+					<%= Lead.find(followup.lead_id).personnel.name %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+					<% end %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+					<% end %>
+					</td>
+					<td></td>
+					<td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+				</tr>
+			<% elsif followup.class.table_name == 'email_followups' %>
+				<tr>
+					<td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+					<td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+					<td><%= last_follow_up_status %></td>
+					<td>Email Sent</td>
+					<td></td>
+					<td></td>
+					<td>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+					<%= Lead.find(followup.lead_id).personnel.name %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+					<% end %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+					<% end %>
+					</td>
+					<td></td>
+					<td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+				</tr>
+			<% elsif followup.class.table_name == 'whatsapp_followups' %>
+				<tr>
+					<td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+					<td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+					<td><%= last_follow_up_status %></td>
+					<td><%= followup.remarks%></td>
+					<td></td>
+					<td></td>
+					<td>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+					<%= Lead.find(followup.lead_id).personnel.name %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+					<% end %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+					<% end %>
+					</td>
+					<td></td>
+					<td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+				</tr>
+			<% elsif followup.class.table_name == 'whatsapps' %>
+				<tr>
+					<td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+					<td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+					<td><%= last_follow_up_status %></td>
+					<td><% if followup.by_lead==true %>
+					Lead Whatsapp: <%= followup.message %>
+					<% elsif followup.by_lead==false %>
+					<%= followup.message %>
+					<% else followup.by_lead==false %>
+					Executive Whatsapp: <%= followup.message %>  
+					<% end %> 
+					</td>
+					<td></td>
+					<td></td>
+					<td>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+					<%= Lead.find(followup.lead_id).personnel.name %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+					<% end %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+					<% end %>
+					</td>
+					<td></td>
+					<td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+				</tr>  
+			<% elsif followup.class.table_name == 'sent_cost_sheets' %>
+				<tr>
+			 		<td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+					<td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+					<td><%= last_follow_up_status %></td>
+					<td>Cost Sheet Sent</td>
+					<td></td>
+					<td></td>
+					<td>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+					<%= Lead.find(followup.lead_id).personnel.name %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+					<% end %>
+					<% else %>
+					<%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+					<% end %>
+					</td>
+					<td><%= link_to 'Cost Sheet', 'cost_sheet_send?sent_cost_sheet_id='+(SentCostSheet.find(followup.id).cost_sheet_id).to_s, method: :post %></td>
+					<td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+				</tr>  
+			<% elsif followup.class.table_name == 'call_records' %>
+				<tr>
+					<td><%= (followup.occurred_at+19800).strftime("%d/%m/%y") %></td>
+					<td><%= (followup.occurred_at+19800).strftime("%m/%d/%y") %></td>
+					<td><%= last_follow_up_status %></td>
+					<td>Call at : <%= (followup.occurred_at).strftime("%d/%m/%y-%H:%M") %>, <% if followup.url == "None"%><%else%><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), followup.url%><%end%>
+					</td>
+					<td></td>
+					<td></td>
+					<td><%= Personnel.find(followup.personnel_id).name%></td>
+					<td></td>
+					<td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+				</tr>  
+			<% elsif followup.class.table_name == "template_sends" %>
+				<tr>
+					<td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+					<td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+					<td><%= last_follow_up_status %></td>
+					<td><%= followup.template%></td>
+					<td></td>
+					<td></td>
+					<td>
+					<% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+					  <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+					    <%= Lead.find(followup.lead_id).personnel.name %>
+					  <% else %>
+					    <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+					  <% end %>
+					<% else %>
+					  <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+					<% end %>
+					</td>
+					<td></td>
+					<td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+				</tr>
+			<% else %>
+				<tr>
+					<td><%= (followup.communication_time+19800).strftime("%d/%m/%y") %></td>
+					<td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+					<td><%= followup.current_status %></td>
+					<% if followup.hot==true %>
+					<td><b><%= followup.remarks %></b></td>
+					<% else %>
+					<td><%= followup.remarks %></td>
+					<% end %>
+					<td><%= (followup.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+					<td><%= (followup.follow_up_time).strftime("%m/%d/%y") %></td>
+					<td><%= followup.personnel.name %></td>
+					<% if current_personnel.organisation_id == 6 %>
+					<td><%= followup.score %></td>
+					<%else%>
+					<% if followup.telephony_call_id == nil || followup.telephony_call == nil%>
+					<td></td>
+					<%else%>
+					<% if followup.telephony_call.recording_url == nil || followup.telephony_call.recording_url == "" || followup.telephony_call.recording_url == "None"%>
+					    <td></td>
+					<%else%>
+					    <td><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), followup.telephony_call.recording_url%></td>
+					<%end%>
+					<%end%>
+					<%end%>
+					<td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>
+				</tr>
+				<% last_follow_up_status=followup.current_status %>  
+			<% end %>
+        <% end %>
+	</tbody>
+</table>
+<style>
+	.play_btn{
+      width: 30px!important;
+      height: auto;
+    }
+</style>

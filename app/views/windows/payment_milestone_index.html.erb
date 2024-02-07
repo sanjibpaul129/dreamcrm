@@ -1,0 +1,36 @@
+<%@header = 'Payment Milestone'%>
+<h1>Payment Milestone List</h1>
+  <table id="customers">
+    <thead>
+      <tr>
+        <th>descriptions</th>
+        <th>Connected Milestones</th>
+        <th>Block Level</th>
+        <th>Floor Level</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @payment_milestones.each do |payment_milestone| %>
+        <tr>
+          <td><%= payment_milestone.description %></td>
+          <td>
+            <% if TimeBasedMilestone.where(previous_payment_milestone_id: payment_milestone.id) == [] %>
+            <%else%>
+              <%TimeBasedMilestone.where(previous_payment_milestone_id: payment_milestone.id).each do |time_based_milestone|%>
+                <%= PaymentMilestone.find(time_based_milestone.subsequent_payment_milestone_id).description+"-days_after: "+time_based_milestone.days_after.to_s+","%>
+              <%end%>
+            <%end%>
+          </td>
+          <td><%= payment_milestone.try(:block_level)%></td>
+          <td><%= payment_milestone.try(:floor_level)%></td>
+          <td><%= link_to 'Edit', windows_payment_milestone_edit_path(payment_milestone),:class => "edit_btn", :style => "text-decoration:none;" %></td>
+          <td><%= link_to 'Destroy', windows_payment_milestone_destroy_path(payment_milestone),:class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+  <%= link_to 'New payment_milestone', windows_payment_milestone_new_path, :class => 'btn btn-primary' %>

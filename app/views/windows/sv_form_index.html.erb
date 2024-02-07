@@ -1,0 +1,103 @@
+<%= form_tag 'sv_form_index', :html => {:class => 'form-horizontal'} do %>
+	<% if params[:page_name] == nil %>
+	<%else%>
+		<%= hidden_field_tag "broker_lead_intemation", @broker_lead_intimation.id%>
+		<%= hidden_field_tag "page_name", params[:page_name]%>
+	<%end%>
+	<div class="col-lg-12">
+		<div class="row">
+			<div class="col-xs-1">
+				Name:
+			</div>
+			<div class="col-xs-5">
+				<%= text_field_tag "lead_name", '', :class => 'form-control'%>
+			</div>
+			<div class="col-xs-2">
+				<%= submit_tag "Search", :class => 'btn btn-primary'%>
+			</div>
+			<div class="col-xs-2 col-xs-offset-2">
+				<%= submit_tag "Walk In", :class => 'btn btn-primary'%>
+			</div>
+		</div><br>
+		<div class="row">
+			<div class="col-xs-1">
+				Broker:
+			</div>
+			<div class="col-xs-5">
+				<%= select_tag "broker_source_category_id", options_for_select(@sources), :class => 'form-control selectpicker', data: { live_search: true }, :onchange => 'populate_other_broker()'%>
+			</div>
+			<div class="col-xs-2">
+				<%= submit_tag "Broker Visit", :class => 'btn btn-primary'%>
+			</div>
+		</div>
+		<div class="row">
+			<div id="other_broker">
+			</div>
+		</div>
+    </div>
+<%end%><br><br><br>
+<% if request.post?%>
+	<table class="customers">
+		<thead>
+			<th>Project</th>
+			<th>Lead Id</th>
+			<th>Name</th>
+			<th>Mobile</th>
+			<th>Executive</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</thead>
+		<tbody>
+			<%@found_leads.each do |lead|%>
+				<tr>
+					<td><%= lead.business_unit.name%></td>
+					<td><%= lead.id%></td>
+					<td><%= lead.name%></td>
+					<td><%= lead.mobile[-4..-1]%></td>
+					<td><%= lead.personnel.name%></td>
+					<td><%= link_to "SV Form", windows_sv_personnel_detail_form_path(lead), :class => 'edit_btn'%></td>
+					<td><%= link_to "Feedback", windows_customer_feedback_form_path(lead), :class => 'edit_btn'%></td>
+					<td><%= link_to "Link Send", windows_sv_feedback_link_send_path(lead), :class => 'edit_btn'%></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<% elsif params[:broker_lead_intimation] != nil %>
+	<table class="customers">
+		<thead>
+			<th>Project</th>
+			<th>Lead Id</th>
+			<th>Name</th>
+			<th>Mobile</th>
+			<th>Executive</th>
+			<th></th>
+			<th></th>
+		</thead>
+		<tbody>
+			<%@found_leads.each do |lead|%>
+				<tr>
+					<td><%= lead.business_unit.name%></td>
+					<td><%= lead.id%></td>
+					<td><%= lead.name%></td>
+					<td><%= lead.mobile[-4..-1]%></td>
+					<td><%= lead.personnel.name%></td>
+					<td><%= link_to "SV Form", windows_sv_personnel_detail_form_path(lead), :class => 'edit_btn'%></td>
+					<td><%= link_to "Feedback", windows_customer_feedback_form_path(lead), :class => 'edit_btn'%></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<%end%>
+<script>
+	function populate_other_broker()
+	{
+	    var broker_name = event.target.innerHTML;
+	    console.log(broker_name);
+	    console.log("================================");
+	    $.getScript('https://www.realtybucket.com/windows/populate_other_broker.js?broker_name='+broker_name);
+	}
+</script>
+<script type="text/javascript">
+	$(".chosen").chosen();
+</script>

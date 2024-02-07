@@ -1,0 +1,56 @@
+<%@header = 'Access Rights'%>
+<h1>Access Points</h1>
+<%= form_tag 'access_point_index', :html => {:class => 'form-horizontal'} do %>
+  <div class="row">
+    <div class="col-lg-1">
+      Menues:
+    </div>
+    <div class="col-lg-3">
+      <%= select_tag 'menu', options_for_select(@menues, selected: @menu), :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      Sub-Menues:
+    </div>
+    <div class="col-lg-3">
+      <%= select_tag 'submenu', options_for_select(@submenues, selected: @submenu), :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details', :class => 'btn btn-primary'%>
+    </div>
+  </div>
+<%end%>
+<table class="customers" id="access_point_index">
+  <thead>
+    <tr>
+      <th>Menu</th>
+      <th>Sub Menu</th>
+      <th>Name</th>
+      <th>Controller</th>
+      <th>Action</th>
+      <th>Order</th>
+      <th>Method</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @access_points.each do |access_point| %>
+      <tr>
+        <td><%= access_point.menu %></td>
+        <td><%= access_point.submenu %></td>
+        <td><%= access_point.name %></td>
+        <td><%= access_point.controller %></td>
+        <td><%= access_point.action %></td>
+        <td><%= access_point.order %></td>
+        <td><%= access_point.method %></td>
+        <td><%= link_to 'Edit', access_point_access_point_edit_path(access_point), :class => 'edit_btn' %></td>
+        <td><%= link_to 'Destroy', access_point_access_point_destroy_path(access_point), data: { confirm: 'Are you sure?' }, :class => 'dlt_btn' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New access_point', access_point_access_point_new_path, :class => 'btn btn-primary' %>

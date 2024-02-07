@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Block:</strong>
+  <%= @block_extra_charge.block_id %>
+</p>
+
+<p>
+  <strong>Extra charge:</strong>
+  <%= @block_extra_charge.extra_charge_id %>
+</p>
+
+<p>
+  <strong>Percentage:</strong>
+  <%= @block_extra_charge.percentage %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @block_extra_charge.amount %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @block_extra_charge.rate %>
+</p>
+
+<p>
+  <strong>Flat type:</strong>
+  <%= @block_extra_charge.flat_type %>
+</p>
+
+<%= link_to 'Edit', edit_block_extra_charge_path(@block_extra_charge) %> |
+<%= link_to 'Back', block_extra_charges_path %>

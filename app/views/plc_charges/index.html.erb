@@ -1,0 +1,36 @@
+<%@header = 'PLC Charges'%>
+<h1>Listing Plc Charges</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Block</th>
+      <th>Plc</th>
+      <th>Rate</th>
+      <th>Floor</th>
+      <th>Flat Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @plc_charges.each do |plc_charge| %>
+      <tr>
+        <td><%= plc_charge.block.business_unit.name %></td>
+        <td><%= plc_charge.block.try(:name) %></td>
+        <td><%= plc_charge.plc.try(:name) %></td>
+        <td><%= plc_charge.rate %></td>
+        <td><%= plc_charge.floor %></td>
+        <td><%= plc_charge.flat_name %></td>
+        <td><%= link_to 'Show', plc_charge, :class => "link_btn" %></td>
+        <td><%= link_to 'Edit', edit_plc_charge_path(plc_charge), :class => "edit_btn", :style => "text-decoration:none;"%></td>
+        <td><%= link_to 'Destroy', plc_charge, method: :delete, :class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Plc charge', new_plc_charge_path, :class => "btn btn-primary" %>

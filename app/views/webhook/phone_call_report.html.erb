@@ -1,0 +1,44 @@
+<h1>Daily Phone Calls</h1>
+<%= form_tag 'phone_call_report', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-3">
+			<%= date_field_tag 'from', @from.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-3">
+			<%= date_field_tag 'to', @to.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'View Details', :class => 'btn btn-primary' %>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Personnel</th>
+		<th>Calls</th>
+		<th>Connected</th>
+	</thead>
+	<tbody>
+		<%@daily_callings.each do |key, value|%>
+			<tr>
+				<td><%= Personnel.find(key).name%></td>
+				<td><%= value.count%></td>
+				<%
+					calls_connected = 0
+					value.each do |call|
+						if call.duration > 0
+							calls_connected += 1
+						end
+					end
+				%>
+				<td><%= calls_connected%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

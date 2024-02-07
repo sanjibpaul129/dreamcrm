@@ -1,0 +1,96 @@
+<%@header = 'Maintenance Money Receipt Register'%>
+<h1>Money Receipt Register</h1>
+<%= form_tag 'money_receipt_submit', :html => {:class => 'form-horizontal'} do %>    
+  <div class="row">
+    <div class="col-lg-1">
+      <h5>Project:</h5>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{prompt: "Select Project"}, {:class => 'form-control'}) %>
+    </div>
+    <div class="col-lg-1">
+      <h5>From:</h5>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag 'money_receipt[from]',@from, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-1">
+      <h5>To:</h5>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag 'money_receipt[to]',@to, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+    </div>
+  </div><br>
+  <div class="row">
+    <div class="col-lg-2">
+<!--           <%= submit_tag 'Last 6 month status',:class => 'btn btn-primary btn-block' %> -->
+      <%= link_to 'Last 6 month status', report_maintenance_collection_graph_url, :class => 'btn btn-primary' %>
+    </div>
+  </div><br>
+<%end%>
+<%= form_tag 'money_receipt_bulk_deletion', :html => {:class => 'form-horizontal'} do %>
+  <table id="customers">
+    <thead>
+      <tr>
+        <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+          <th></th>
+        <%end%>
+        <th>Project</th>
+        <th>Customer</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Block</th>
+        <th>Flat</th>
+        <th>Payment Date</th>
+        <th>Cheque No.</th>
+        <th>Bank</th>
+        <th>Amount</th>
+        <th>Remarks</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%grand_total=0%>
+    	<% @money_receipts.each do |money_receipt|%>
+    		<tr>
+          <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+            <td><%= check_box_tag 'money_receipt_ids[]', money_receipt.id%></td>
+          <%end%>
+          <td><%= money_receipt.flat.block.business_unit.name%></td>
+    			<td><%= money_receipt.lead.try(:name)%></td>
+          <td><%= money_receipt.lead.try(:email)%></td>
+          <td><%= money_receipt.lead.try(:mobile)%></td>
+          <td><%= money_receipt.flat.block.name%></td>
+    			<td><%= money_receipt.flat.full_name%></td>
+    			<td><%= money_receipt.date.to_date.strftime('%d/%m/%y')%></td>
+          <td><%= money_receipt.try(:cheque_number)%></td>
+          <td><%= money_receipt.try(:bank_name)%></td>
+          <td><%= money_receipt.amount%></td>
+          <%grand_total += money_receipt.amount%>
+          <td><%= money_receipt.try(:remarks)%></td>
+          <td><%= link_to 'Delete', report_particular_money_receipt_destroy_path(money_receipt),:class => 'dlt_btn ', :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+    		</tr>
+    	<%end%>
+      <tr>
+        <td>Grand Total:</td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <%if current_personnel.email == 'ayush@thejaingroup.com'%>
+          <td></td>
+        <%end%>
+        <td><b><%= grand_total%></b></td>
+        <td></td><td></td>
+      </tr>
+    </tbody>
+  </table><br>
+  <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+    <div class="row">
+      <div class="col-lg-2">
+        <%= submit_tag 'Bulk Deletion', :class => 'btn btn-primary'%>
+      </div>
+    </div>
+  <%end%>
+<%end%>

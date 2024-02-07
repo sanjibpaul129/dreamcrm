@@ -1,0 +1,59 @@
+<%= form_for @maintainance, url: {action: @maintainance_action} do |f| %>
+
+          <% if @maintainance.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@maintainance.errors.count, "error") %> prohibited this raw material from being saved:</h2>
+
+              <ul>
+              <% @maintainance.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div class="col-lg-5 col-lg-offset-3">
+              <div class="well bs-component">
+                <legend>&nbspNEW MAINTAINANCE ENTRY</legend>
+                  <div class="row">
+                    <div class="form-group">    
+                      <%= f.label :Company, :class => 'col-lg-2 control-label' %>
+                       <div class="col-lg-4">
+                          <%= select(:maintainence_charge, :company_id, options_for_select(@companies,selected: @maintainance.company_id),{:prompt => 'Select Company'}, {:class => 'form-control'}) %>
+                       </div>
+                       <%= f.label :Business_unit, :class => 'col-lg-2 control-label' %>
+                       <div class="col-lg-4">
+                          <%= select(:maintainence_charge, :business_unit_id, options_for_select(@business_units,selected: @maintainance.business_unit_id),{:prompt => 'Select Business Unit'}, {:class => 'form-control'}) %>
+       
+                       </div>
+                    </div>
+                  </div>
+<br>
+                  <div class="row">
+                    <div class="form-group">    
+                      <%= f.label :Applicable_from, :class => 'col-lg-2 control-label' %>
+                       <div class="col-lg-4">
+                         <%= f.date_field :applicable_from, :class => 'form-control'%>
+                       </div>
+                       <%= f.label :Rate, :class => 'col-lg-2 control-label' %>
+                       <div class="col-lg-4">
+                         <%= f.number_field :rate, :class => 'form-control', step: "any" %>
+                       </div>
+                    </div>
+                  </div>
+    <br>
+                    <div class="form-group row">
+                      <div class="col-lg-8 col-lg-offset-2">
+                        <%= f.submit :class => 'btn btn-primary btn-block'%>
+                      </div>
+                    </div>
+              </div>
+
+          </div>
+  <%= hidden_field_tag :maintainance_id, @maintainance.id %>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+</style>

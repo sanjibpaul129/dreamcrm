@@ -1,0 +1,66 @@
+
+
+<div class="col-lg-8 col-lg-offset-1">
+<h1>Customer Electrical Ledger</h1>
+	<b>Customer: <%= @flat.lead.name%></b>
+	<table class="customers" id="electrical_bill_report_index" >
+	  <thead>
+	    <th>Date</th>
+	    <th>Description</th>
+	    <th style="text-align: right!important;">Amount</th>
+	    <th style="text-align: right!important;">Balance</th>
+	    <th></th>
+	  </thead>
+
+	  <tbody>
+		<%balance=0%>	  	
+	  	<% @both_documents.each do |both_document|%>
+	  		<%if both_document.class == ElectricalBill%>
+	  			<tr>
+	  				<td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+	  				<td>Electrical Bill-Period: <%= both_document.try(:from)%>to <%= both_document.try(:to)%>-Rate: <%= both_document.rate%></td>
+	  				<td style="text-align: right!important;"><%= both_document.amount%></td>
+	  				<% balance += both_document.amount %>
+	  				<td style="text-align: right!important;"><%= balance %></td>
+	  				<td><%= link_to 'Preview', electrical_bill_electrical_bill_preview_index_path(both_document),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+	  			</tr>
+	  		<%elsif both_document.class == ElectricalMoneyReceipt%>
+	  			<tr>
+	  				<td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+	  				<td>Money Receipt-Customer: <%= both_document.lead.name%>-Flat: <%= both_document.flat.full_name%></td>
+	  				<td style="text-align: right!important;">-<%= both_document.amount%></td>
+	  				<% balance = balance-both_document.amount %>
+	  				<td style="text-align: right!important;"><%= balance %></td>
+	  				<td><%= link_to 'Preview', electrical_bill_electrical_money_receipt_preview_index_path(both_document),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+	  			</tr>
+	  		<%end%>
+	  	<%end%>
+	  	
+	  </tbody>
+	</table>
+
+<div class="row">
+  <div class="col-lg-offset-5">
+    <%= link_to 'Home', electrical_report_outstanding_electric_bill_index_path,:class => 'link_btn ', :style => "text-decoration: none"%>
+  </div>
+</div>
+	
+</div>
+
+<style>
+  .link_btn{
+    color: #ffffff;
+    padding:3px;
+    border-radius: 10%;
+      background-color: #ff8c00;
+      border-color: #ff8c00;
+      
+    width: 40px!important;
+    height:auto!important;
+  }
+</style>
+<style>
+ .col-lg-offset-1 {
+    margin-left: 16.333333% !important;
+}
+</style>

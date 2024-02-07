@@ -1,0 +1,105 @@
+<% 
+  @customer_with_flats=[]
+  Flat.includes(:block => [:business_unit]).where(:business_units => {organisation_id: current_personnel.organisation_id}).each do |flat|
+    if flat.lead_id != nil
+      @customer_with_flats+=[[flat.lead.name+'-'+flat.full_name, flat.id]]
+    end
+  end
+  @customer_with_flats=@customer_with_flats.sort_by{|x,y| x}
+%>
+
+  <div class="row">   
+    <div class="form-group">
+      <div class="col-lg-2">
+        <%= label_tag :'Select Customer'%>
+      </div>
+      <div class="col-lg-10">
+        <%= select_tag 'flat_id', options_for_select(@customer_with_flats), :class => 'form-control selectpicker', data: { live_search: true },:prompt => 'Please Select'%>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <div class="col-lg-2">
+        <%= label_tag :'Generated on'%>
+      </div>
+      <div class="col-lg-4">
+        <%= date_field_tag 'electrical_bill[date]','', :class => 'form-control', :required => true%>
+      </div>
+    </div>
+  </div><br>
+      <div class="row" >
+        <div class="form-group">
+          <div class="col-lg-2">
+            <%= label_tag :'Unit'%>
+          </div>
+          <div class="col-lg-4">
+            <%= number_field_tag 'electrical_bill[unit]','', :id => 'unit', :class => 'form-control', :onchange => 'opening_closing_reading_disable("opening_reading", "closing_reading")'%>
+          </div>    
+          <div class="col-lg-2">
+            <%= label_tag :Rate %>
+          </div>
+          <div class="col-lg-4">
+           <%= text_field_tag 'electrical_bill[rate]',@rate, :class => 'form-control', :readonly => true%>
+          </div>
+        </div>
+      </div><br>
+      
+      <div class="row">
+        <div class="form-group">    
+          <div class="col-lg-2">
+            <%= label_tag :From %>
+          </div>
+          <div class="col-lg-4">
+           <%= date_field_tag 'electrical_bill[from]','', :class => 'form-control', :required => true %>
+          </div>
+          <div class="col-lg-2">
+            <%= label_tag :To%>
+          </div>
+          <div class="col-lg-4">
+           <%= date_field_tag 'electrical_bill[to]','', :class => 'form-control', :required => true %>
+          </div>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="form-group">    
+          <div class="col-lg-2">
+            <%= label_tag :'Opening-Reading' %>
+          </div>
+          <div class="col-lg-4">
+           <%= number_field_tag 'electrical_bill[opening_reading]','', :class => 'form-control opening_reading', :id => 'opening_reading', :onchange => 'unit_disable("unit")'%>
+          </div>
+          <div class="col-lg-2">
+            <%= label_tag :'Closing-Reading'%>
+          </div>
+          <div class="col-lg-4">
+           <%= number_field_tag 'electrical_bill[closing_reading]','', :class => 'form-control closing_reading',:id => 'closing_reading', :onchange => 'unit_disable("unit")' %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= submit_tag 'Generate Bill',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+      <script type="text/javascript">
+        function opening_closing_reading_disable(opening_reading, closing_reading)
+        {
+           document.getElementById(opening_reading).disabled = true;
+           document.getElementById(closing_reading).disabled = true;
+        }
+        function unit_disable(unit)
+        {
+           document.getElementById(unit).disabled = true;
+        }
+      </script>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>
+<script>
+      $(document).ready(function() {
+        $('.selectpicker').selectpicker();
+      });
+    </script>

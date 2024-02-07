@@ -1,0 +1,204 @@
+<div class="col-lg-6 col-lg-offset-2">
+    <div class="well bs-component">
+
+<legend></legend>
+
+
+<%= form_for @flat, :html => {:class => 'form-horizontal'} do |f| %>
+  <% if @flat.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@flat.errors.count, "error") %> prohibited this flat from being saved:</h2>
+
+      <ul>
+      <% @flat.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  
+   <div class="form-group">
+    <%= f.label :block, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= select(:flat, :block_id, options_for_select(@blocks, selected: @flat.block_id),{}, { :class => 'form-control chosen' })   %>
+  </div>
+   </div>
+
+<div class="form-group">
+    <%= f.label :floor, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :floor, :class => "form-control" %>
+  </div>
+  </div>
+
+   <div class="form-group">
+    <%= f.label :name, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :name, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :bhk, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :BHK, :class => "form-control" %>
+  </div>
+  </div>
+
+<div class="form-group">
+    <%= f.label :CarpetArea, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :carpet_area, :class => "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+    <%= f.label :SBA, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :SBA, :class => "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+    <%= f.label :OTA, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :OTA, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :flat_bua, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :flat_bua, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :ot_carpet, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :ot_carpet, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :ot_bua, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :ot_bua, :class => "form-control" %>
+  </div>
+  </div>
+
+<div class="form-group">
+    <%= f.label :flat_bua_markup, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :flat_bua_markup, :class => "form-control" %>
+  </div>
+  </div>
+
+
+  <div class="form-group">
+    <%= f.label :ot_bua_markdown, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :ot_bua_markdown, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :ground_floor_carpet_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :ground_floor_carpet, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :first_floor_carpet_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :first_floor_carpet, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :first_floor_balcony_carpet_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :first_floor_balcony_carpet, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :second_floor_carpet_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :second_floor_carpet, :class => "form-control" %>
+  </div>
+  </div>
+
+    <div class="form-group">
+    <%= f.label :ground_floor_built_up_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :ground_floor_built_up, :class => "form-control" %>
+  </div>
+  </div>
+
+    <div class="form-group">
+    <%= f.label :first_floor_built_up_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :first_floor_built_up, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :first_floor_balcony_built_up_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :first_floor_balcony_built_up, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :second_floor_built_up_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :second_floor_built_up, :class => "form-control" %>
+  </div>
+  </div>
+
+
+<div class="form-group">
+    <%= f.label :bathrooms, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.number_field :bathrooms, :class => "form-control" %>
+  </div>
+  </div>
+
+
+  <div class="form-group">
+    <%= f.label :balconies, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.number_field :balconies, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :price, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.number_field :price, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :land_area, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :land_area, :class => "form-control" %>
+  </div>
+  </div>
+
+ <div class="form-group">
+      <div class="col-lg-8 col-lg-offset-2">
+    <%= f.submit :class => 'btn btn-primary btn-block'%>
+  </div>
+  </div>
+
+  </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

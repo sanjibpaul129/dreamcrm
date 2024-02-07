@@ -1,0 +1,52 @@
+<div class="col-lg-5 col-lg-offset-3">
+  <div class="well bs-component">
+
+      <%= form_for(@milestone) do |f| %>
+        <% if @milestone.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@milestone.errors.count, "error") %> prohibited this milestone from being saved:</h2>
+
+            <ul>
+            <% @milestone.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= select(:milestone, :payment_milestone_id, options_for_select(@payment_milestone, selected: @milestone.payment_milestone_id),{},{:class => 'form-control'})%>
+  </div>
+  <div class="field">
+    <%= f.label :flat_value_percentage %><br>
+    <%= f.text_field :flat_value_percentage, :class => 'form-control' %>
+  </div>
+  <div class="field">
+    <%= f.label :extra_charge_percentage %><br>
+    <%= f.text_field :extra_development_charge_percentage, :class => 'form-control' %>
+  </div>
+  <div class="field">
+    <%= f.label :amount %><br>
+    <%= f.text_field :amount, :class => 'form-control' %>
+  </div>
+  <div class="field">
+    <%= f.label :order %><br>
+    <%= f.text_field :order, :class => 'form-control' %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :nature %><br>
+    <%= f.check_box :nature %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_plan_id %><br>
+    <%= select(:milestone, :payment_plan_id, options_for_select(@payment_plans, selected: @milestone.payment_plan_id),{},{:class => 'form-control'})%>
+  </div>
+  <br>
+  <div class="actions col-lg-offset-4">
+    <%= f.submit :class => 'btn btn-primary' %>
+  </div>
+<% end %>
+</div>
+</div>

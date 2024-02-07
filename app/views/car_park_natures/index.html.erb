@@ -1,0 +1,28 @@
+<%@header = 'Car Park Natures'%>
+<h1>Listing Car Park Natures</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Wheels</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @car_park_natures.each do |car_park_nature| %>
+      <tr>
+        <td><%= car_park_nature.wheels %></td>
+        <td><%= car_park_nature.description %></td>
+        <td><%= link_to 'Show', car_park_nature, :class => "link_btn" %></td>
+        <td><%= link_to 'Edit', edit_car_park_nature_path(car_park_nature), :class => "edit_btn", :style => "text-decoration:none;" %></td>
+        <td><%= link_to 'Destroy', car_park_nature, method: :delete,  :class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Car park nature', new_car_park_nature_path, :class => "btn btn-primary" %>

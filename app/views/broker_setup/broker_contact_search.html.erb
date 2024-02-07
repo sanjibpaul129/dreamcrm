@@ -1,0 +1,67 @@
+<div align="center"><h3><b>Broker Contacts</b></h3></div>
+<%= form_tag 'broker_contact_search' do  %>
+	<div class="row">
+		<div class="col-lg-3">
+			Id: <%= number_field_tag "broker_contact_id", "", :class => 'form-control' %>
+			<%= submit_tag 'Search', name: 'id_search', :class => 'btn btn-primary btn-xs' %>
+		</div>
+		<div class="col-lg-3">
+			Name: <%= text_field_tag "broker_contact_name", "", :class => 'form-control' %>
+			<%= submit_tag 'Search', name: 'name_search', :class => 'btn btn-primary btn-xs' %>
+		</div>
+		<!-- <div class="col-lg-3">
+			Email: <%= text_field_tag "broker_contact_email", "", :class => 'form-control' %>
+			<%= submit_tag 'Search', name: 'email_search', :class => 'btn btn-primary btn-xs' %>
+		</div> -->
+		<div class="col-lg-3">
+			Mobile: <%= text_field_tag "broker_contact_mobile", "", :class => 'form-control' %>
+			<%= submit_tag 'Search', name: 'mobile_search', :class => 'btn btn-primary btn-xs' %>
+		</div>
+	</div>
+	<table class="customers">
+		<thead>
+			<th>Id</th>
+			<th>Broker</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Mobile</th>
+			<th>Other Number</th>
+			<th>Status</th>
+			<th>Inactive</th>
+			<th>Executive</th>
+			<th></th>
+			<th></th>
+		</thead>
+		<tbody>
+			<% @broker_contacts.each do |broker_contact| %>
+				<tr>
+					<td><%= broker_contact.id%></td>
+					<td><%= broker_contact.broker.name%></td>
+					<td><%= broker_contact.name%></td>
+					<td><%= broker_contact.try(:email)%></td>
+					<td><%= broker_contact.try(:mobile_one)%></td>
+					<td><%= broker_contact.try(:mobile_two)%></td>
+					<td><%= broker_contact.current_status%></td>
+					<td><%= broker_contact.inactive%></td>
+					<% if broker_contact.personnel_id == nil %>
+						<td></td>
+					<%else%>
+						<td><%= broker_contact.personnel.name%></td>
+					<%end%>
+					<td><%= submit_tag ">", name: "call[#{broker_contact.id}]", :class => 'btn btn-primary btn-xs' %></td>
+					<td><%= check_box_tag "site_visited", true, nil, :onchange => 'site_visited_update('+broker_contact.id.to_s+')' %></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<%end%>
+<script>
+	function site_visited_update(broker_contact_id)
+	{
+		console.log("coming here");
+		var data = broker_contact_id;
+		console.log(data);
+		console.log("============");
+		$.getScript('https://www.realtybucket.com/broker_setup/site_visited_update.js?id='+data.toString());
+	}
+</script>

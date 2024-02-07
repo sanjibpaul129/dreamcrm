@@ -1,0 +1,32 @@
+
+<% if @current_personnel.organisation_id == 6 %>
+	Dear  <%= @cost_sheet.lead.name%>,<br><br>
+    <b><i>Greeting from The JSB Infrastructures</i></b><br><br>
+    Whilst expressing our deep appreciation towards your investment in <b><%= @cost_sheet.flat.block.business_unit.name%></b>, we further feel privileged for having placed your trust on us in selecting your dream home.
+    By way of this mail, please be intimated that we have received the application for <b>Flat No. <%= @cost_sheet.flat.full_name%>, <%= @cost_sheet.flat.floor%> Floor, <%= @cost_sheet.flat.block.name%> of <%= @cost_sheet.flat.block.business_unit.name%><br><br></b>
+    Please feel free to get in touch with the undersigned with any queries/ feedback or for assistance. It is always our pleasure to be of service to you today and in the future.<br><br>
+    Once again we warmly welcome you to the growing <b>JSB Infrastructures family.</b><br><br><br>
+    <b><i>Warm Regards,</i></b><br><br>
+    <b><i><%= @current_personnel.name%></i></b><br><br>
+    <b><i>JSB Infrastructures</i></b><br><br>
+    <b><i><%= @current_personnel.mobile%></i></b><br><br>
+
+<%else%>
+	<font size= "4"; >Dear  <%= @cost_sheet.lead.name%>,<br><br>
+	<i><b>Greeting from The Jain Group!</b></i><br><br>
+	Whilst expressing our deep appreciation towards your investment in <i><b><%= @cost_sheet.flat.block.business_unit.name %></b></i> - <i>Kolkata’s most technologically advanced home</i> , we further feel privileged for having placed your trust on us in selecting your Dream Home.<br>
+	By way of this mail, please be intimated that we have received the application for <b><i>Flat No. <%= @cost_sheet.flat.floor%><%= @cost_sheet.flat.name%>, <%= @cost_sheet.flat.floor%> Floor, <%= @cost_sheet.flat.block.name%> of <%= @cost_sheet.flat.block.business_unit.name%></i></b><br><br> 
+	Please feel free to get in touch with the undersigned with any queries/ feedback or for assistance. It is always our pleasure to be of service to you today and in the future.<br><br>
+	Once again we warmly welcome you to the growing Jain Group family.</font>
+	<br><br>
+	--<br>
+	<b><i><font color="#134f5c">Warm Regards,<br><br>
+
+	Pallabita S Ghosh<br><br>
+
+	Manager- Post Sales <br><br>
+
+	The Jain Group<br><br>
+
+ 	8420541541</font></i></b>
+<%end%>

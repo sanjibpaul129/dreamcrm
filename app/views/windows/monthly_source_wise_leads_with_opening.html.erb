@@ -1,0 +1,106 @@
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+
+<div class="col-lg-8 col-lg-offset-2">
+
+<h1>Monthly Source Wise Leads with Opening</h1>
+
+<%= form_tag 'monthly_source_wise_leads_with_opening' do  %>
+
+<%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {})  %>
+
+<%= select(:site_executive, :picked, options_for_select(@site_executives, selected: @executive), {}, {})   %>
+
+<%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary btn-xs' %>
+
+<% 6.times do |count| %>
+<%
+
+@from=((Time.now-(count.months)).beginning_of_month)
+@to=((Time.now-(count.months)).end_of_month)
+
+if @executive==-1 
+@leads_generated=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date, @to.to_date+1.day).group("leads.source_category_id").count
+@site_visited=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected).where.not(site_visited_on: nil).where('leads.site_visited_on >= ? AND leads.site_visited_on < ?',@from, @to.to_date+1.day).group("leads.source_category_id").count
+@booked=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected, lost_reason_id: nil, status: true).where('leads.booked_on >= ? AND leads.booked_on < ?',@from, @to.to_date+1.day).group("leads.source_category_id").count
+@leads_lost=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected, status: true).where.not(lost_reason_id: nil).where('leads.booked_on >= ? AND leads.booked_on < ?',@from, @to.to_date+1.day).group("leads.source_category_id").count
+else
+@leads_generated=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date, @to.to_date+1.day).group("leads.source_category_id").count
+@site_visited=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected).where.not(site_visited_on: nil).where('leads.site_visited_on >= ? AND leads.site_visited_on < ?',@from, @to.to_date+1.day).group("leads.source_category_id").count
+@booked=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected, lost_reason_id: nil, status: true).where('leads.booked_on >= ? AND leads.booked_on < ?',@from, @to.to_date+1.day).group("leads.source_category_id").count
+@leads_lost=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected, status: true).where.not(lost_reason_id: nil).where('leads.booked_on >= ? AND leads.booked_on < ?',@from, @to.to_date+1.day).group("leads.source_category_id").count
+end
+%>
+
+<h1><%= (Time.now-(count.months)).strftime("%B") %></h1>
+
+<table class="table table-striped table-hover " id="orderedtasks">
+  <thead>
+    <tr>
+      <th>Source</th>
+      <th>Leads Generated</th>
+      <th>Leads Open</th>
+      <th>Leads Lost</th>
+      <th>Site Visits</th>
+      <th>Bookings</th>
+      <th>Open(%)</th>
+      <th>Lost(%)</th>
+      <th>Site Visit(%)</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <% @sources.each do |source| %>
+        <% if @leads_generated[source.id]==nil && @site_visited[source.id]==nil && @booked[source.id]==nil %>
+        <% else %>
+        <tr>
+         <td><%= source.heirarchy %></td>
+         <td><%= @leads_generated[source.id] %></td>
+         <% if @leads_lost[source.id]==nil 
+          leads_lost=0
+          else
+          leads_lost=@leads_lost[source.id]
+          end
+         %>
+         <% if @booked[source.id]==nil 
+          booked=0
+          else
+          booked=@booked[source.id]
+          end
+         %>   
+         <td><%= (@leads_generated[source.id])-(leads_lost)-(booked) %></td>
+         <td><%= @leads_lost[source.id] %></td>
+         <td><%= @site_visited[source.id] %></td>
+         <td><%= @booked[source.id] %></td>
+         <td><%= ((((@leads_generated[source.id].to_f)-(leads_lost.to_f)-(booked.to_f))/@leads_generated[source.id].to_f)*100).round %></td>
+         <td><%= ((leads_lost.to_f/@leads_generated[source.id].to_f)*100).round %></td>
+         <% if @site_visited[source.id]==nil %>
+         <td>0</td>
+         <% else %>
+         <td><%= (((@site_visited[source.id].to_f)/(@leads_generated[source.id].to_f))*100).round %></td> 
+         <% end %> 
+        </tr>
+        <% end %>  
+      <% end %>
+      <tfoot>
+      <tr>
+        <td><b>TOTAL</b></td>
+        <td><b><%= @leads_generated.sum{|key,value| value} %></b></td>
+        <td><b><%= (@leads_generated.sum{|key,value| value})-(@leads_lost.sum{|key,value| value})-(@booked.sum{|key,value| value})%></b></td> 
+        <td><b><%= @leads_lost.sum{|key,value| value} %></b></td>
+        <td><b><%= @site_visited.sum{|key,value| value} %></b></td>
+        <td><b><%= @booked.sum{|key,value| value} %></b></td>
+        <td></td>
+        <td></td>
+        <td></td> 
+      </tr>
+      </tfoot>
+      </tbody>
+</table>
+<% end %>
+<% end %>
+</div>

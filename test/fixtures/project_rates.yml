@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  business_unit_id: 1
+  base_rate: 1
+  date: 2016-03-27 12:45:57
+
+two:
+  business_unit_id: 1
+  base_rate: 1
+  date: 2016-03-27 12:45:57

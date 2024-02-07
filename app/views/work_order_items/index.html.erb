@@ -1,0 +1,35 @@
+<h1>Listing work_order_items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Marketing instance</th>
+      <th>Work order</th>
+      <th>Rate</th>
+      <th>Quantity</th>
+      <th>Tax</th>
+      <th>Remarks</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @work_order_items.each do |work_order_item| %>
+      <tr>
+        <td><%= work_order_item.marketing_instance_id %></td>
+        <td><%= work_order_item.work_order_id %></td>
+        <td><%= work_order_item.rate %></td>
+        <td><%= work_order_item.quantity %></td>
+        <td><%= work_order_item.tax %></td>
+        <td><%= work_order_item.remarks %></td>
+        <td><%= link_to 'Show', work_order_item %></td>
+        <td><%= link_to 'Edit', edit_work_order_item_path(work_order_item) %></td>
+        <td><%= link_to 'Destroy', work_order_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Work order item', new_work_order_item_path %>

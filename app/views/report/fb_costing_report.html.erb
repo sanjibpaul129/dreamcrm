@@ -1,0 +1,122 @@
+<h1>Facebook Costing Graphical Report</h1>
+<%= form_tag 'fb_costing_report' do  %>
+    <div class="row">
+		<div class="col-lg-1">
+			Project:
+		</div>
+		<div class="col-lg-2">
+			<%= select_tag "business_unit_id", options_for_select(@projects, selected: @project_selected), :class => 'form-control', :prompt => 'Please Select' %>
+		</div>
+		<div class="col-lg-1">
+			Sources:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "source", options_for_select(@all_fb_sources, selected: @picked_source), :class => 'form-control chosen' %>
+		</div>
+		<div class="col-lg-1">
+			Type:
+		</div>
+		<div class="col-lg-2">
+			<%= select_tag "report_type", options_for_select(["Weekly", "Monthly"], selected: @report_type), :class => 'form-control' %>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+		</div>
+    </div>
+<%end%>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<div id="fb-grpgh"></div>
+<script>
+	$(function() {
+	  $('#fb-grpgh').highcharts({
+	    chart: {
+	      type: 'line'
+	    },
+	    title: 
+        {
+            text: 'FB Costing Report'
+        },
+	    xAxis: {
+	    	<% if @report_type == "Monthly"%>
+	    		categories: <%= @months %>,
+	    	<%else%>
+	      		categories: <%= @weeks %>,
+	      	<%end%>
+	      crosshair: true
+	    },
+	    yAxis: [{
+	      // default options
+	    }, {
+	      opposite: true
+	    }],
+
+	    series: 
+	    [
+		    {
+		    	name: 'Leads Generated',
+		      	data: <%= @total_leads_data%>	
+		    },
+		    {
+		    	name: 'CPL',
+	      		yAxis: 1,
+	      		data: <%= @cpl_data%>
+		    },
+		    {
+		      name: 'Qualified',
+		      visible: false,
+		      data: <%= @qualified_leads%>
+		    }, 
+		    {
+		      name: 'CPQL',
+		      visible: false, 
+		      yAxis: 1,
+		      data: <%= @cpql_data%>
+		    },
+		    {
+		      name: 'QL%',
+		      visible: false,
+		      data: <%= @qualified_percentage%>
+		    },
+		    {
+		      name: 'Site Visited',
+		      visible: false, 
+		      data: <%= @sv_leads%>
+		    }, 
+		    {
+		      name: 'CPSV',
+		      visible: false, 
+		      yAxis: 1,
+		      data: <%= @cpsv_data%>
+		    },
+		    {
+		      name: 'SV%',
+		      visible: false, 
+		      data: <%= @sv_percentage%>
+		    }
+		    <%if @report_type == "Monthly"%>
+		    ,
+		    {
+		      name: 'Booked',
+		      visible: false, 
+		      data: <%= @booking_leads%>
+		    }, 
+		    {
+		      name: 'CPB',
+		      visible: false, 
+		      yAxis: 1,
+		      data: <%= @cpbooking_data%>
+		    },
+		    {
+		      name: 'Booking%',
+		      visible: false, 
+		      data: <%= @booking_percentage%>
+		    }
+		    <%end%>
+		]
+	  });
+	});
+</script>
+
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>

@@ -1,0 +1,108 @@
+<div>
+<table cellpadding="0" cellspacing="0" border="0"  align="center" style="border-collapse:collapse;line-height:100%!important;margin:0;padding:0;width:100%!important">
+        <tbody><tr>
+            <td>
+                <table style="border-collapse:collapse;margin:auto;max-width:700px;min-width:320px;background:#f5f5f5;width:100%">
+                    <tbody><tr>
+                        <td valign="top"  style="padding:0px 20px">
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:collapse;color:#545454;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:20px;margin:0 auto;max-width:100%;width:100%">
+                          <tbody>
+                            <tr>
+                              <td style="padding:0 20px;text-align:center;height:100px">
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>                           
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="background-clip:padding-box;border-collapse:collapse;color:#545454;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:20px;margin:0 auto;width:100%">
+                                <tbody><tr>
+                                    <td valign="top" >
+                                        <table cellpadding="0" cellspacing="0" border="0" class="" style="background-clip:padding-box;border-collapse:separate;width:100%;background:#fff;border-radius:3px">
+                                            <tbody><tr>
+                                                <td class="" style="background-clip:padding-box;color:#545454;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:20px;overflow:hidden;padding:15px 20px">
+                                                <!--  -->
+<p>Dear <%= @lead.name %>, </p>
+<p>Thank you for choosing to buy your Dream Home from us.</p>
+<br>
+<p>We would like to remind your kind self that currently there is an outstanding amount of Rs.<b><%= @booking.demand_outstanding%></b> towards payment of your flat in <b><%= @booking.cost_sheet.flat.block.business_unit.name %>, <%= @booking.cost_sheet.flat.block.name %>,  Flat - <%= @booking.cost_sheet.flat.full_name %>. </b> We earnestly request you to clear the above amount at the earliest to avoid unnecessary or unpleasant complications like delayed payment charges.
+
+We hope that you will be able to do so at the earliest as it would contribute to a further healthy relationship between us. Timely payments are good for a healthy credit score.
+
+We value our relationship greatly and would request you to call us for any clarifications/doubts.  Assuring you of the best of services at all times.</p>
+
+<p>Thanking you,</p>
+
+<% if @booking.cost_sheet.flat.block.name=='Block-1' || @booking.cost_sheet.flat.block.name=='Block-2' %>
+<p>For Jain Group Projects Pvt. Ltd.</p>
+<% elsif  @booking.cost_sheet.flat.block.name=='Block-3' || @booking.cost_sheet.flat.block.name=='Block-4'%>
+<p>For Dream Gateway Hotels Ltd.</p>
+<% end %> 
+ 
+ 
+<p>Regards,</p>
+<%= @current_personnel.name %><br>
+<% if @current_personnel.organisation.name=='JSB Infrastructures' %>
++91 <%= @current_personnel.mobile %>
+<% else %>
+<p>(Co-ordinator  Post sales)</p>
+<p>Contact no. 033 40319999 / <%= @current_personnel.mobile %>
+<br>
+
+<p>Please feel free to contact us. 
+<% end %>
+                                                <!--  -->
+                                               
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                            <table cellpadding="0" cellspacing="0" border="0"  align="center" style="border-collapse:collapse;color:#545454;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:20px;margin:0 auto;max-width:100%;width:100%">
+                                <tbody><tr>
+                                    <td style="padding:20px;color:#8b8b8b;text-align:center">
+                                        <p style="margin:6px 0"></p>
+                                       
+                                    </td>
+                                </tr>                      
+                            </tbody></table>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+
+</div>
+
+
+<style type="text/css">
+
+p {
+    font-family: "Times New Roman";
+    font-color: #000000;
+}
+
+.zui-table {
+    border: solid 1px #DDEEEE;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #DDEFEF;
+    border: solid 1px #DDEEEE;
+    color: #336B6B;
+    padding: 10px;
+    text-align: left;
+    text-shadow: 1px 1px 1px #fff;
+}
+.zui-table tbody td {
+    border: solid 1px #DDEEEE;
+    color: #333;
+    padding: 10px;
+    text-shadow: 1px 1px 1px #fff;
+}
+
+<style>

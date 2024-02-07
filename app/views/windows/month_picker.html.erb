@@ -1,0 +1,43 @@
+<%= form_tag 'expenditure_entry_form', :authenticity_token => true do %>
+
+ 
+    <div class="row">
+      <div class="col-lg-offset-4">
+        <div class="col-lg-1">
+          <%= label_tag 'Project:'  %>
+        </div>
+        <div class="col-lg-4">
+          <%= select(:project, :selected, options_for_select(@projects),{}, {:class => 'form-control'}) %>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-offset-4">
+        <div class="col-lg-1">
+          <%= label_tag 'Month:'  %>
+        </div>
+        <div class="col-lg-4">
+          <%= select_month((Date.today-1.month), {},{:class => "form-control"}) %>
+        </div>
+      </div>
+    </div>
+    <br>
+    
+    <div class="row">
+      <div class="col-lg-offset-4">
+        <div class="col-lg-1">
+          <%= label_tag 'Year:'  %>
+        </div>
+        <div class="col-lg-4">
+          <%= select_year Date.today, {:start_year => (Date.today+1.year).year, :end_year => -3.year.from_now.year}, :class => "form-control" %>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class=" col-lg-2 col-lg-offset-5">
+        <%= submit_tag 'Pick', :class => 'btn btn-primary', :style => 'width: 140px!important;' %> 
+      </div>
+    </div>
+<% end %>

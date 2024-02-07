@@ -1,0 +1,2 @@
+class MonthlyGoogleExpense < ApplicationRecord
+end

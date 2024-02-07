@@ -1,0 +1,152 @@
+<%@header = 'Qualified Leads Register'%>
+<% flash.each do |key, value| %>
+  <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+  </div>
+<% end %>
+<div align="center"><h3><b>Qualified Leads</b></h3></div>
+<%= form_tag 'qualified_leads_register' do  %>
+  <div class="row">
+    <div class="col-lg-2">
+      <%= select_tag "business_unit_id", options_for_select(@projects, selected: @project_selected), :class => 'form-control' %>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "from", @from.to_date, :class => 'form-control' %>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "to", @to.to_date, :class => 'form-control' %>
+    </div>
+    <div class="col-lg-2">
+      <%= select_tag "lead_type", options_for_select(@lead_types, selected: @lead_type), :class => 'form-control' %>
+    </div>
+    <div class="col-lg-2">
+      <% if @absolute == nil %>
+        Absolute <%= check_box_tag "absolute", true, nil %>
+      <%else%>
+        Absolute <%= check_box_tag "absolute", true, nil, :checked => true %>
+      <%end%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag "Refresh", name: "refresh", :class => 'btn btn-primary' %>
+    </div>
+  </div>
+  <table class="customers " id="qualified_leads_register">
+    <thead>
+      <tr>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Name</th>
+        <% if current_personnel.organisation_id == 6 || current_personnel.organisation_id == 7 || current_personnel.email=='ayush@thejaingroup.com' %>
+          <th>Mobile</th>
+          <th>Other No.</th>
+        <%end%>
+        <th>Pincode</th>
+        <th>Source</th>
+        <th>Status</th>
+        <th>Generated on</th>
+        <th>Qualified on</th>
+        <th>Site Visited on</th>
+        <th>Followup remarks</th>
+        <th>Executive</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <td><%= lead.id %></td>
+          <td><%= lead.business_unit.name %></td>
+          <td><%= lead.name %></td>
+          <% if current_personnel.organisation_id == 6 || current_personnel.organisation_id == 7 || current_personnel.email=='ayush@thejaingroup.com' %>
+            <td><%= lead.mobile %></td>
+            <td><%= lead.other_number %></td>
+          <%end%>
+          <td><%= lead.try(:pincode) %></td>
+          <td><%= lead.source_category.heirarchy %></td>
+          <% if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+            <td>Qualified</td>
+          <% elsif lead.osv == true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+            <td>Interested In Site Visit</td>
+          <% elsif lead.status == nil %>
+            <td>Fresh</td>
+          <% elsif lead.status== false %>
+           <td>Site Visited</td>
+          <% elsif lead.status== true && lead.lost_reason_id==nil %>
+            <td>Booked</td>
+          <% else %>
+            <td>Lost:<%= lead.lost_reason.description %></td>
+          <% end %>
+          <td><%= (lead.generated_on+5.hours+30.minutes).strftime("%d/%m/%y") %></td>
+          <td><%= lead.qualified_on.try{|x| x.strftime("%d/%m/%y")} %></td>
+          <td><%= lead.site_visited_on.try{|x| x.strftime("%d/%m/%y")} %></td>
+          <% if lead.follow_ups != [] %>
+            <td>
+              <% last_follow_up=lead.follow_ups.sort_by{|x| x.created_at}.last %>
+              <% if last_follow_up.remarks == nil || last_follow_up.remarks == '' %>
+              <%else%>
+                <%= last_follow_up.remarks%>
+              <%end%>
+            </td>
+          <% else %>
+            <td>Not done</td> 
+          <% end %>
+          <td><%= lead.personnel.name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+<% end %>
+<style >
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+  </style>
+
+<script>
+  $(document).ready(function(){
+  var FilterTable=$("#site_visit_register").DataTable({  
+     "fixedHeader": true,   
+     "dom": '<"wrapper"lit>',
+     "bAutoWidth": false,
+     "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+     "bDeferRender": true,
+     "aoColumns": [
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                <% if current_personnel.organisation_id == 6 || current_personnel.organisation_id == 7 || current_personnel.email=='ayush@thejaingroup.com' %>
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                <%end%>
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true}
+                               ],
+      "order": [[ 18, "desc" ]]
+  });
+
+  $("#filterbox").keyup(function() {
+          FilterTable.search(this.value).draw();
+      });
+  });
+  $('.popoverData').popover();
+</script> 
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

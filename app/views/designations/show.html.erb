@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @designation.description %>
+</p>
+
+<p>
+  <strong>Organisation:</strong>
+  <%= @designation.organisation_id %>
+</p>
+
+<%= link_to 'Edit', edit_designation_path(@designation) %> |
+<%= link_to 'Back', designations_path %>

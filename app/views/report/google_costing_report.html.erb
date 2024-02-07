@@ -1,0 +1,176 @@
+<h1>Google Costing Graphical Report</h1>
+<%= form_tag 'google_costing_report' do  %>
+    <div class="row">
+		<div class="col-lg-1">
+			Project:
+		</div>
+		<div class="col-lg-2">
+			<%= select_tag "business_unit_id", options_for_select(@projects, selected: @project_selected), :class => 'form-control', :prompt => 'Please Select' %>
+		</div>
+		<div class="col-lg-1">
+			Sources:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "source", options_for_select(@all_google_sources, selected: @source), :class => 'form-control chosen' %>
+		</div>
+		<div class="col-lg-1">
+			Type:
+		</div>
+		<div class="col-lg-2">
+			<%= select_tag "report_type", options_for_select(["Weekly", "Monthly"], selected: @report_type), :class => 'form-control' %>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+		</div>
+    </div>
+<%end%>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+	<!-- <div id="fb-grpgh"></div> -->
+	<div id="chart-container"></div>
+<script>
+	var chartOptions = {
+	  chart: {
+	    renderTo: 'chart-container'
+	  },
+	  title: {
+	    text: 'Google Costing Report'
+	  },
+	  xAxis: {
+	    	<% if @report_type == "Monthly"%>
+	    		categories: <%= @months %>,
+	    	<%else%>
+	      		categories: <%= @weeks %>,
+	      	<%end%>
+	    },
+	  yAxis: [{
+	    title: {
+	      text: 'LeadGen'
+	    }
+	  }, {
+	    title: {
+	      text: 'CPL'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'Qialified'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'CPQL'
+	    }
+	  }, {
+	    title: {
+	      text: 'QL%'
+	    }
+	  }, {
+	    title: {
+	      text: 'SiteVisited'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'CPSV'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'SV%'
+	    }
+	  }, {
+	    title: {
+	      text: 'Booking'
+	    }
+	  }, {
+	    title: {
+	      text: 'CPB'
+	    },
+	    opposite: true
+	  }, {
+	    title: {
+	      text: 'Booking%'
+	    },
+	    opposite: true
+	  }],
+	  series: []
+	};
+	var seriesData = [
+	  {
+	    name: 'Leads Generated',
+	    data: <%= @total_leads_data%>,
+	    visible: true
+	  },
+	  {
+	    name: 'CPL',
+	    data: <%= @cpl_data%>,
+	    visible: true
+	  },
+	  {
+	    name: 'Qualified',
+	    data: <%= @qualified_leads%>,
+	    visible: false
+	  },
+	  {
+	    name: 'CPQL',
+	    data: <%= @cpql_data%>,
+	    visible: false
+	  },
+	  {
+	    name: 'QL%',
+	    data: <%= @qualified_percentage%>,
+	    visible: false
+	  },
+	  {
+	    name: 'Site Visited',
+	    data: <%= @sv_leads%>,
+	    visible: false
+	  },
+	  {
+	    name: 'CPSV',
+	    data: <%= @cpsv_data%>,
+	    visible: false
+	  },
+	  {
+	    name: 'SV%',
+	    data: <%= @sv_percentage%>,
+	    visible: false
+	  },
+	  {
+	    name: 'Booking',
+	    data: <%= @booking_leads%>,
+	    visible: false
+	  },
+	  {
+	    name: 'CPB',
+	    data: <%= @cpbooking_data%>,
+	    visible: false
+	  },
+	  {
+	    name: 'Booking%',
+	    data: <%= @booking_percentage%>,
+	    visible: false
+	  }
+	];
+
+	for (var i = 0; i < seriesData.length; i++) {
+	  var series = {
+	    name: seriesData[i].name,
+	    data: seriesData[i].data,
+	    visible: seriesData[i].visible,
+	    yAxis: i // Assign each series to a separate y-axis
+	    // tooltip: {
+	    //   valueSuffix: ' ' + seriesData[i].unit // Display unit in tooltip
+	    // }
+	  };
+	  chartOptions.series.push(series);
+	}
+
+// Create the chart
+var chart = new Highcharts.Chart(chartOptions);
+
+</script>
+
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>

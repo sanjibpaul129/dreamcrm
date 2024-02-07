@@ -1,0 +1,25 @@
+<%@header = 'Nationalities'%>
+<h1>Listing nationalities</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @nationalities.each do |nationality| %>
+      <tr>
+        <td><%= nationality.description %></td>
+        <td><%= link_to 'Edit', edit_nationality_path(nationality), :class => 'edit_btn' %></td>
+        <td><%= link_to 'Destroy', nationality, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'dlt_btn' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Nationality', new_nationality_path, :class => 'btn btn-primary' %>

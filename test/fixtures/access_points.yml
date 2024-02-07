@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  action: MyString
+  controller: MyString
+  menu: MyString
+  submenu: MyString
+  order: MyString
+  name: MyString
+  method: MyString
+
+two:
+  action: MyString
+  controller: MyString
+  menu: MyString
+  submenu: MyString
+  order: MyString
+  name: MyString
+  method: MyString

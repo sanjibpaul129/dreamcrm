@@ -1,0 +1,5 @@
+<p>Dear <%= @booking.cost_sheet.lead.name %>,</p>
+<p>Please find demand ledger of your flat <%= @booking.cost_sheet.flat.full_name %> in <%= @booking.cost_sheet.flat.block.name %> in our project <%= @booking.cost_sheet.flat.block.business_unit.name %> attached herewith.</p>
+<p>Regards,</p>
+<p><%= @current_personnel.name %></p>
+<p>+91 <%= @current_personnel.mobile %></p>

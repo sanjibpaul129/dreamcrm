@@ -1,0 +1,18 @@
+<h1>Followup Frequency Report</h1>
+<table border="2">
+	<thead>
+		<th>Executives</th>
+		<th>Average Time</th>
+		<th>Calls</th>
+	</thead>
+	<tbody>
+		<% @telecaller_wise_data.each do |key, value|%>
+			<tr>
+				<td><%= key%></td>
+				<% value.each do |data|%>
+					<td><%= data%></td>
+				<%end%>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

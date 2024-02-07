@@ -1,0 +1,30 @@
+<%@header ='FLC Charges'%>
+<h1>Listing Flc Charges</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Block</th>
+      <th>Rate</th>
+      <th>From floor</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @flc_charges.each do |flc_charge| %>
+      <tr>
+        <td><%= flc_charge.block.try(:name) %></td>
+        <td><%= flc_charge.rate %></td>
+        <td><%= flc_charge.from_floor %></td>
+        <td><%= link_to 'Show', flc_charge, :class => "link_btn" %></td>
+        <td><%= link_to 'Edit', edit_flc_charge_path(flc_charge), :class => "edit_btn", :style => "text-decoration:none;" %></td>
+        <td><%= link_to 'Destroy', flc_charge, method: :delete, :class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Flc charge', new_flc_charge_path, :class => "btn btn-primary" %>

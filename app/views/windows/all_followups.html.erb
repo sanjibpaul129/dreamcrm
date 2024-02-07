@@ -1,0 +1,57 @@
+<%@header = 'All Followup Register'%>
+<%= form_tag 'all_followups', :authenticity_token => true do %>
+<div class="row">
+  <div class="col-lg-2">
+    <%= date_field(:follow_up, :from, :value => @from, :class => 'form-control') %>
+  </div>
+  <div class="col-lg-2">
+    <%= date_field(:follow_up, :to, :value => @to, :class => 'form-control') %>
+  </div>
+  <div class="col-lg-2">
+    <%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+  </div>
+</div>
+<table class="customers " id="orderedtasks">
+  <thead>
+    <tr>
+      <th>Lead id</th>
+      <th>Updated on</th>
+      
+     <th>Status</th>
+     <th>Remarks</th>
+      <th>Followup Date</th>
+      
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @followups.each do |followup| %>
+      <tr>
+
+        <td><%= followup.lead.id %></td>
+
+       <td><%= (followup.communication_time+19800).strftime("%d/%m/%y") %></td>
+       <% if followup.osv == true && followup.status == false && followup.lead.interested_in_site_visit_on != nil && followup.lead.qualified_on == nil%>
+        <td>Interested In Site Visit</td>
+       <% elsif followup.osv == true && followup.status == false%>
+        <td>Qualified</td>
+       <% elsif followup.status == nil %>
+       <td>Fresh</td>
+       <% elsif followup.status== false %>
+       <td>Site Visited</td>
+       <% elsif followup.status== true && followup.lead.lost_reason_id==nil %>
+       <td>Booked</td>
+       <% else %>
+       <td>Lost:<%= followup.lead.lost_reason.description %></td>
+       <% end %>
+
+       <td><%= followup.remarks %></td>
+        <td><%= (followup.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% end %>

@@ -1,0 +1,2 @@
+class MarketingInstance < ApplicationRecord
+end

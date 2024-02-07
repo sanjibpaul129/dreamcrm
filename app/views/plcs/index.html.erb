@@ -1,0 +1,28 @@
+<%@header = 'PLCs'%>
+<h1>Listing Plcs</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Organisation</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @plcs.each do |plc| %>
+      <tr>
+        <td><%= plc.name %></td>
+        <td><%= plc.organisation.name %></td>
+        <td><%= link_to 'Show', plc, :class => "link_btn" %></td>
+        <td><%= link_to 'Edit', edit_plc_path(plc), :class => "edit_btn", :style => "text-decoration:none;" %></td>
+        <td><%= link_to 'Destroy', plc, method: :delete,  :class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Plc', new_plc_path, :class => "btn btn-primary" %>

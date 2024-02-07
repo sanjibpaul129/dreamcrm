@@ -1,0 +1,163 @@
+<%@header = 'Flats'%>
+<%= form_tag 'flat_index', :html => {:class => 'form-horizontal'} do %>
+<h1>Flats</h1>
+<div class="row">
+  <div class="form-group">
+     <div class="col-lg-1">
+      <%= label_tag 'Blocks:' %>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:flat_index, :block_id, options_for_select(@blocks, selected: @selected_block_id),{}, {:class => 'form-control selectpicker', data: { live_search: true }}) %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>          
+    </div>
+  </div>
+</div>
+<%end%><br>
+<table class="customers" id="flat_index">
+
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Project</th>
+      <th>Block</th>
+      
+      <% if current_personnel.organisation.name=='Rajat Group' %>
+        <th>Bungalow No</th>
+      <% else %>
+        <th>Floor</th>
+      <% end %>
+      
+      <% if current_personnel.organisation.name=='Rajat Group' %>
+        <th>Type</th>
+      <% else %>
+        <th>Name</th>
+      <% end %>
+      
+      <th>BHK</th>
+      <th>Status</th>
+      <th>Carpet</th>
+      <th>Sba</th>
+      <th>BUA</th>
+      <th>Ota</th>
+      <th>Chargeable Terrace</th>
+      <th>Base Rate</th>
+      <th>Flc</th>
+      <th>Plc</th>
+      <th>Net Rate</th>
+      <th>Flat Value</th>
+      <th>Plc Details</th>
+      <th>Ground Floor</th>
+      <th>First Floor</th>
+      <th>First Floor Balcony</th>
+      <th>Second Floor</th>
+      <th>Open Terrace</th>
+      <th>Land Area</th>
+      <th>Price</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <% @flats.each do |flat| %>
+    <% plc_charge_rate=0
+       flc_rate=0
+       plc_charge_rate=flat.plc_charge_rate[1].to_i
+       flc_rate=flat.flc_charge_rate.to_i
+       %>
+      <tr>
+        <td><%= flat.id %></td>
+        <td><%= flat.block.business_unit.name %></td>
+        <td><%= flat.block.try(:name) %></td>
+        <td><%= flat.floor %></td>
+        <td><%= flat.name %></td>
+        <td><%= flat.BHK %></td>
+        <% if Booking.includes(:cost_sheet).where(:cost_sheets => {flat_id: flat.id}).where(cancelled: true) != [] || Booking.includes(:cost_sheet).where(:cost_sheets => {flat_id: flat.id}).where(cancelled: nil) == []%>
+          <td>Available</td>
+        <%else%>
+          <td>Booked</td>
+        <%end%>
+        <td><%= flat.carpet_area %></td>
+        <td><%= flat.SBA %></td>
+        <td><%= flat.flat_bua %></td>
+        <td><%= flat.OTA %></td>
+        <td><%= flat.chargeable_terrace%></td>
+        <td><%= flat.try(:rate) %></td>
+        <td><%= flc_rate %></td>
+        <td><%= plc_charge_rate%></td>
+        <% net_rate=(flat.try(:rate).to_i)+flc_rate+plc_charge_rate %>
+        <td><%= net_rate%></td>
+        <td><%= (flat.SBA).try{|x| x*net_rate} %></td>
+        <td><%= flat.plc_charge_rate[0]%></td>
+        <td><%= flat.ground_floor_carpet%>-<%= flat.ground_floor_built_up %></td>
+        <td><%= flat.first_floor_carpet%>-<%= flat.first_floor_built_up %></td>
+        <td><%= flat.first_floor_balcony_carpet %>-<%= flat.first_floor_balcony_built_up %></td>
+        <td><%= flat.second_floor_carpet%>-<%= flat.second_floor_built_up %></td>
+        <td><%= flat.ot_carpet%>-<%= flat.ot_bua%></td>
+        <td><%= flat.land_area %></td>
+        <td><%= flat.price %></td>
+
+        <td><%= link_to 'Edit', edit_flat_path(flat), :class => "edit_btn", :style => "text-decoration:none;"%></td>       
+        <td><%= link_to 'Destroy', flat, method: :delete,  :class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>       
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Flat', new_flat_path, :class => 'btn btn-primary' %>
+
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>
+<script>
+  
+$(document).ready(function(){
+var FilterTable=$("#flat_index").DataTable({  
+   "fixedHeader": true,   
+   "dom": '<"wrapper"lit>',
+   "bAutoWidth": false,
+   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+   "bDeferRender": true,
+   "aoColumns": [
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true}
+                             ]
+});
+
+$("#filterbox").keyup(function() {
+        FilterTable.search(this.value).draw();
+    });
+});
+
+</script>

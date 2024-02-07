@@ -1,0 +1,41 @@
+<%= form_for(@block_extra_charge) do |f| %>
+  <% if @block_extra_charge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@block_extra_charge.errors.count, "error") %> prohibited this block_extra_charge from being saved:</h2>
+
+      <ul>
+      <% @block_extra_charge.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :block_id %><br>
+    <%= select(:block_extra_charge, :block_id, options_for_select(@blocks))%>
+  </div>
+  <div class="field">
+    <%= f.label :extra_charge_id %><br>
+    <%= select(:block_extra_charge, :extra_charge_id, options_for_select(@extra_charges))%>
+  </div>
+  <div class="field">
+    <%= f.label :percentage %><br>
+    <%= f.text_field :percentage %>
+  </div>
+  <div class="field">
+    <%= f.label :amount %><br>
+    <%= f.number_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :rate %><br>
+    <%= f.text_field :rate %>
+  </div>
+  <div class="field">
+    <%= f.label :flat_type %><br>
+    <%= f.number_field :flat_type %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

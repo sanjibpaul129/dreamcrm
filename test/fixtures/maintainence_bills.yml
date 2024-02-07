@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  serial: 1
+  lead_id: 1
+  from: 2020-02-14 14:49:49
+  to: 2020-02-14 14:49:49
+  date: 2020-02-14 14:49:49
+
+two:
+  serial: 1
+  lead_id: 1
+  from: 2020-02-14 14:49:49
+  to: 2020-02-14 14:49:49
+  date: 2020-02-14 14:49:49

@@ -1,0 +1,84 @@
+<%= form_for @facebook_ad, url: {action: @facebook_ad_action} do |f| %>
+
+          <% if @facebook_ad.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@facebook_ad.errors.count, "error") %> prohibited this raw material from being saved:</h2>
+
+              <ul>
+              <% @facebook_ad.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div class="col-lg-5 col-lg-offset-3">
+              <div class="well bs-component">
+                <legend>&nbspSource Tagging With Facebook</legend>
+                  <div class="row">
+                    <div class="form-group">    
+                       <%= f.label :Business_unit, :class => 'col-lg-3 control-label' %>
+                       <div class="col-lg-9">
+                          <%= select(:facebook_ad, :business_unit_id, options_for_select(@business_units, selected: @facebook_ad.business_unit_id),{:prompt => 'Select Business Unit'}, {:class => 'form-control'}) %>
+                       </div>
+                    </div>
+                  </div><br>
+                  <div class="row">
+                    <div class="form-group">    
+                      <%= f.label :'Source Categories', :class => 'col-lg-3 control-label' %>
+                       <div class="col-lg-9">
+                          <%= select(:facebook_ad, :source_category_id, options_for_select(@all_leaf_nodes),{:prompt => 'Select Source Categories'}, {:class => 'form-control chosen'}) %>
+                       </div>
+                    </div>
+                  </div>
+<br>
+                  <div class="row">
+                    <div class="form-group">    
+                       <%= f.label :'Campaign-id:', :class => 'col-lg-3 control-label' %>
+                       <div class="col-lg-9">
+                         <%= f.text_field :campaign_id, :class => 'form-control'%>
+                       </div>
+                   </div>
+                 </div><br>
+                 <div class="row">
+                    <div class="form-group">    
+                       <%= f.label :'Adset-id:', :class => 'col-lg-3 control-label' %>
+                       <div class="col-lg-9">
+                         <%= f.text_field :adset_id, :class => 'form-control'%>
+                       </div>
+                   </div>
+                 </div><br>
+                 <div class="row">
+                    <div class="form-group">    
+                       <%= f.label :'Ad-id:', :class => 'col-lg-3 control-label' %>
+                       <div class="col-lg-9">
+                         <%= f.text_field :ad_id, :class => 'form-control'%>
+                       </div>
+                   </div>
+                 </div><br>
+                 <div class="row">
+                    <div class="form-group">    
+                        <%= f.label :'Form-id:', :class => 'col-lg-3 control-label' %>
+                       <div class="col-lg-9">
+                         <%= f.text_field :form_id, :class => 'form-control'%>
+                       </div>
+                    </div>
+                  </div>
+    <br>
+                    <div class="form-group row">
+                      <div class="col-lg-8 col-lg-offset-2">
+                        <%= f.submit :class => 'btn btn-primary btn-block'%>
+                      </div>
+                    </div>
+              </div>
+          </div>
+<%= hidden_field_tag :facebook_ad_id, @facebook_ad.id %>|
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+</style>
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>

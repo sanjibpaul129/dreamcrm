@@ -1,0 +1,137 @@
+<%@header = 'Daily Stats for a month'%>
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+<center><h1>Daily Entries in a Month</h1></center>
+
+<%= form_tag 'daily_entries_in_a_month' do  %>
+<div class="row">
+  <div class="col-lg-2">
+    <%= select_month(Time.now.change(month: @month), {}, {:class => 'form-control'}) %>
+  </div>
+  <div class="col-lg-2">
+    <%= select_year Date.today, {start_year: 2017, end_year: 2022}, class: "form-control" %>
+  </div>
+  <div class="col-lg-2">
+    <%= select(:site_executive, :picked, options_for_select(@site_executives, selected: @executive), {}, {:class => 'form-control'})   %>
+  </div>
+  <div class="col-lg-2">
+    <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+  </div>
+  <div class="col-lg-2">
+    <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+  </div>
+</div>
+
+<table class="customers " id="orderedtasks">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Leads</th>
+      <th>First Calls</th>
+      <th>Followups</th>
+      <th>Qualified</th>
+      <th>Interested In Site Visit</th>
+      <th>Lost</th>
+      <th>Site Visited</th>
+      <th>Repeat Site Visits</th>
+      <th>Field Visits</th>
+      <th>Booked</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% start_date=Time.now.change(month: @month, year: @year).beginning_of_month %>
+    <% date=start_date %>
+    <% while date <= start_date.end_of_month do %>
+      <tr>
+      
+       <td><%= date.strftime("%d/%m/%y")  %></td>
+       <% if @lead_entries[date.to_date] != nil %>
+       <td><%= @lead_entries[date.to_date].count %></td>
+       <% else %>
+       <td></td>
+       <% end %>
+       
+       <% if @first_call_entries[date.to_date] != nil %>
+       <td><%= @first_call_entries[date.to_date].count %></td>
+       <% else %>
+       <td></td>
+       <% end %>
+
+       <% if @followup_entries[date.to_date] != nil %>
+       <td><%= @followup_entries[date.to_date].count %></td>
+       <% else %>
+       <td></td>
+       <% end %>
+
+       <%if @qualified_entries[date.to_date] == nil%>
+       <td></td>
+       <%else%>
+       <td><%= @qualified_entries[date.to_date].count%></td>
+       <%end%>
+
+       <%if @isv_entries[date.to_date] == nil%>
+       <td></td>
+       <%else%>
+       <td><%= @isv_entries[date.to_date].count%></td>
+       <%end%>
+
+      <% if @lost_entries[date.to_date] != nil %>
+       <td><%= @lost_entries[date.to_date].count %></td>
+       <% else %>
+       <td></td>
+       <% end %>
+
+       <% if @site_visited_entries[date.to_date] != nil %>
+       <td><%= @site_visited_entries[date.to_date].count %></td>
+       <% else %>
+       <td></td>
+       <% end %>
+
+       <% if @repeat_site_visit_entries[date.to_date] != nil %>
+       <td><%= @repeat_site_visit_entries[date.to_date].count %></td>
+       <% else %>
+       <td></td>
+       <% end %>
+
+       <% if @field_visit_entries[date.to_date] != nil %>
+       <td><%= @field_visit_entries[date.to_date].count %></td>
+       <% else %>
+       <td></td>
+       <% end %>
+
+
+       <% if @booked_entries[date.to_date] != nil %>
+       <td><%= @booked_entries[date.to_date].count %></td>
+       <% else %>
+       <td></td>
+       <% end %>
+
+
+      </tr>
+   <% date +=1.day %>
+   <% end %>
+   <tfoot>
+   <tr>
+     <td><b>TOTAL</b></td>
+     <td><b><%= @lead_entries.sum{|key,value| value.count} %></b></td> 
+     <td><b><%= @first_call_entries.sum{|key,value| value.count} %> </b></td>
+     <td><b><%= @followup_entries.sum{|key,value| value.count} %></b></td>
+     <td><b><%= @qualified_entries.sum{|key,value| value.count}%></b></td> 
+     <td><b><%= @isv_entries.sum{|key,value| value.count}%></b></td> 
+     <td><b><%= @lost_entries.sum{|key,value| value.count}%></b></td>
+     <td><b><%= @site_visited_entries.sum{|key,value| value.count}%></b></td>
+     <td><b><%= @repeat_site_visit_entries.sum{|key,value| value.count}%></b></td>
+     <td><b><%= @field_visit_entries.sum{|key,value| value.count}%></b></td> 
+     <td><b><%= @booked_entries.sum{|key,value| value.count} %></b></td> 
+     
+   </tr>
+   </tfoot>
+  </tbody>
+</table>
+
+<% end %>

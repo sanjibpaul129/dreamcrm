@@ -1,0 +1,55 @@
+<%@header = 'Bulk Maintenance Bill'%>
+<%= form_tag 'maintainance_bill_pdf_converter', :html => {:class => 'form-horizontal'} do %>
+<h1>Maintenance Bills</h1>
+<table class= "customers" id="maintainance_bill_index">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Project</th>
+      <th>Customer</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th>Block</th>
+      <th>Flat</th>
+      <th>Generate On</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Area</th>
+      <th>Rate</th>
+      <th>Amount</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @maintainance_bills.each do |maintainance_bill|%>      
+      		<tr>
+            <td><%= check_box_tag 'maintainance_bill_ids[]',maintainance_bill.id%></td>
+            <td><%= maintainance_bill.flat.block.business_unit.name%></td>
+            <td><%= maintainance_bill.lead.name%></td>
+            <td><%= maintainance_bill.lead.email%></td>
+            <td><%= maintainance_bill.lead.mobile%></td>
+            <td><%= maintainance_bill.flat.block.name%></td>
+            <td><%= maintainance_bill.flat.full_name%></td>
+      			<td><%= maintainance_bill.date.to_date.strftime('%d/%m/%Y')%></td>       
+            <td><%= maintainance_bill.from.to_date.strftime('%d/%m/%Y')%></td>
+      			<td><%= maintainance_bill.to.to_date.strftime('%d/%m/%Y')%></td>
+            <td><%= maintainance_bill.lead.area%></td>
+            <td><%= maintainance_bill.rate%></td>
+            <td><%= maintainance_bill.try(:amount)%></td>
+      			<td><%= link_to 'Edit', maintainance_bill_maintainance_bill_edit_path(maintainance_bill),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+            <% if current_personnel.email != 'ayush@thejaingroup.com' %>
+            <td></td>
+            <% else %>
+      			<td><%= link_to 'Destroy', maintainance_bill_maintainance_bill_destroy_path(maintainance_bill),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+            <%end%>
+            <td><%= link_to 'Preview', maintainance_bill_maintainance_bill_preview_index_path(maintainance_bill),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+      		</tr>
+  	<%end%>
+  </tbody>
+</table><br>
+<%= link_to 'New Entry', maintainance_bill_maintainance_bill_new_path, :class => 'btn btn-primary' %>
+<%= submit_tag 'Send Mail',:class => 'btn btn-primary' %>
+<%end%> 

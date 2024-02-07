@@ -1,0 +1,49 @@
+<%= form_for @preferred_location_tag, url: {action: @preferred_location_tag_action} do |f| %>
+  <% if @preferred_location_tag.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@preferred_location_tag.errors.count, "error") %> prohibited this raw material from being saved:</h2>
+      <ul>
+      <% @preferred_location_tag.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspLeads Tagging with Preferred Locations</legend>
+      <div class="row">
+        <%= f.label :'Preferred Locations:', :class => 'col-lg-3 control-label' %>
+        <div class="col-lg-8">
+          <%= select_tag 'preferred_location_id', options_for_select(@preferred_locations), :class => 'form-control', :prompt => 'Select Preferred Location'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <%= f.label :'Customers:', :class => 'col-lg-3 control-label' %>
+        <div class="col-lg-8">
+          <%= select_tag 'lead_id', options_for_select(@all_customers), :class => 'form-control', :prompt => 'Select Customers'%>
+        </div>
+      </div><br>
+    </div>
+  </div>
+  <%= hidden_field_tag :preferred_location_tag_id, @preferred_location_tag.id %>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script>
+  function populate_rate()
+  {
+    var business_unit_id=event.target.value;
+    // console.log(business_unit_id)
+    $.getScript('/preferred_location_tag/populate_rate.js?id='+business_unit_id);
+
+  }
+
+</script>

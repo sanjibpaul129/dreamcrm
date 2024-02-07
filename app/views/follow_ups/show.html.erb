@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Lead:</strong>
+  <%= @follow_up.lead_id %>
+</p>
+
+<p>
+  <strong>Remarks:</strong>
+  <%= @follow_up.remarks %>
+</p>
+
+<p>
+  <strong>Communication time:</strong>
+  <%= @follow_up.communication_time %>
+</p>
+
+<p>
+  <strong>Follow up time:</strong>
+  <%= @follow_up.follow_up_time %>
+</p>
+
+<p>
+  <strong>Personnel:</strong>
+  <%= @follow_up.personnel_id %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @follow_up.status %>
+</p>
+
+<p>
+  <strong>Business unit:</strong>
+  <%= @follow_up.business_unit_id %>
+</p>
+
+<p>
+  <strong>Escalated:</strong>
+  <%= @follow_up.escalated %>
+</p>
+
+<p>
+  <strong>Hot:</strong>
+  <%= @follow_up.hot %>
+</p>
+
+<%= link_to 'Edit', edit_follow_up_path(@follow_up) %> |
+<%= link_to 'Back', follow_ups_path %>

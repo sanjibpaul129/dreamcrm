@@ -1,0 +1,60 @@
+<%@header = 'Electric Bill'%>
+<%= form_tag 'electrical_bill_pdf_converter', :html => {:class => 'form-horizontal'} do %>
+<h1>Electric Bills</h1>
+<table id="customers" >
+  <thead>
+    <tr>
+      <th></th>
+      <th>Project</th>
+      <th>Customer</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th>Block</th>
+      <th>Flat</th>
+      <th>Generate On</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Unit</th>
+      <th>Rate</th>
+      <th>OpeningReading</th>
+      <th>ClosingReading</th>
+      <th>Amount</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @electrical_bills.each do |electrical_bill| %>
+      <tr>
+        <td><%= check_box_tag 'electrical_bill_ids[]',electrical_bill.id%></td>
+        <td><%= electrical_bill.flat.block.business_unit.name%></td>
+        <td><%= electrical_bill.lead.name%></td>
+        <td><%= electrical_bill.lead.email%></td>
+        <td><%= electrical_bill.lead.mobile%></td>
+        <td><%= electrical_bill.flat.block.name%></td>
+        <td><%= electrical_bill.flat.full_name%></td>
+        <td><%= electrical_bill.date.try{|x| x.strftime('%d/%m/%Y')}%></td>
+        <td><%= electrical_bill.from.try{|x| x.strftime('%d/%m/%Y')}%></td>
+        <td><%= electrical_bill.to.try{|x| x.strftime('%d/%m/%Y')}%></td>
+        <td><%= electrical_bill.unit%></td>
+        <td><%= electrical_bill.rate%></td>
+        <td><%= electrical_bill.try(:opening_reading)%></td>
+        <td><%= electrical_bill.try(:closing_reading)%></td>
+        <td><%= electrical_bill.amount%></td>
+        <td><%= link_to 'Edit', electrical_bill_electrical_bill_edit_path(electrical_bill),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+        <% if current_personnel.email != 'ayush@thejaingroup.com' %>
+          <td></td>
+        <% else %>
+          <td><%= link_to 'Destroy', electrical_bill_electrical_bill_destroy_path(electrical_bill),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+        <%end%>
+        <td><%= link_to 'Preview', electrical_bill_electrical_bill_preview_index_path(electrical_bill),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+      </tr>
+    <%end%>
+  </tbody>
+</table><br>
+<%= link_to 'New Entry', electrical_bill_electrical_bill_new_path, :class => 'btn btn-primary' %>
+<%= submit_tag 'Send Mail',:class => 'btn btn-primary' %>
+<%end%>
+<style>

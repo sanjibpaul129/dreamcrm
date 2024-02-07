@@ -1,0 +1,310 @@
+<% if current_personnel.organisation_id == 1%>
+  <div class="form-group">
+    <div class="row"> 
+      <div ><i>  &nbsp;</i></div>
+      <% if current_personnel.organisation_id == 1%>
+        <% if current_personnel.email=='ayush@thejaingroup.com'%>
+          <div class="col-md-2">
+            <div ><i>  &nbsp;</i></div>
+              <%= submit_tag 'Delete', name: 'delete', :class => 'btn btn-primary' %>
+          </div>
+        <% end %>
+      <%else%>
+        <% if current_personnel.status=='Admin'%>
+          <div class="col-md-2">
+            <div ><i>  &nbsp;</i></div>
+              <%= submit_tag 'Delete', name: 'delete', :class => 'btn btn-primary' %>
+          </div>
+        <% end %>
+      <%end%>
+      <div class="col-md-3 executive_div">
+        <div ><b><i> <font color="#004fff"> Executive </font></i></b></div>
+        <%= select(:lead, :personnel, options_for_select(@executives, selected: current_personnel.id), {}, { :class => 'form-control selectpicker', data: { live_search: true } })   %>
+      </div>  
+      <div class="col-md-5 follow_up_div">
+        <div ><b><i> <font color="#004fff">  Followed up/Site Visited/Booked/Lost Date</font> </i></b></div>
+        <%= date_field(:lead, :flexible_date, max: Date.today, :class => "form-control", :value => ((Time.now)).strftime('%Y-%m-%d'), :required => true) %>
+      </div>
+      <div class="col-md-4">
+        <div ><b><i><font color="#004fff"> To Followup On</font></i></b></div>
+        <% if current_personnel.email == "ayush@thejaingroup.com"%>
+          <% if (Time.now+5.hours+30.minutes)>(Time.now.beginning_of_day+16.hours) %>
+            <%= date_field(:lead, :followup_date, :class => "form-control", value: Time.now.strftime('%Y-%m-%d')) %>
+          <% else %>
+            <%= date_field(:lead, :followup_date, :class => "form-control", value: Time.now.strftime('%Y-%m-%d')) %>
+          <% end %>
+        <%else%>
+          <% if (Time.now+5.hours+30.minutes)>(Time.now.beginning_of_day+16.hours) %>
+            <%= date_field(:lead, :followup_date, :class => "form-control", max: Time.now.strftime('%Y-%m-%d')) %>
+          <% else %>
+            <%= date_field(:lead, :followup_date, :class => "form-control", max: Time.now.strftime('%Y-%m-%d')) %>
+          <% end %>
+        <% end %>
+        <%= time_select :lead, :followup_time, {ampm: true, minute_step: 30, default: Time.now.beginning_of_day+19.hours} %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-2">
+        <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot', true %>Hot</p>
+        <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+        <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+      </div>
+      <div class="col-md-4">
+        <div ><b><i><font color="#004fff">  Status </font></i></b></div>
+        <% if current_personnel.organisation.name=='Jain Group' && current_personnel.access_right==nil %>
+          <%= select(:lead, :status, options_for_select([['Status to remain Same', -1],['Fresh Lead', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ],['Negotiation',3 ],['Lost', 5]]),{}, { :class => 'form-control', :id=>'lead_status_id' })   %>&nbsp
+              <%= select(:lead, :lost_reason, options_for_select(@lost_reasons),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' }) %>
+        <% else %>
+          <%= select(:lead, :status, options_for_select([['Status to remain Same', -1], ['Fresh Lead', 0], ['Qualified', 9], ['Interested in Site Visit', 10], ['OV', 1], ['Site Visited',2 ],['Negotiation',3 ],['Booked', 4],['Lost', 5]]),{}, { :class => 'form-control', :id=>'lead_status_id' })   %>&nbsp
+              <%= select(:lead, :lost_reason, options_for_select(@lost_reasons),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' }) %>
+        <% end %>    
+      </div>
+      <div class="col-md-6 follow_up_status_div">
+        <div ><b><i><font color="#004fff"> Followup Remarks</font></i></b></div>
+        <%= select_tag 'remarks', options_for_select(@common_followup_remarks), :class => 'form-control', :id => 'dropdown_remarks', :prompt => 'Select Followup Remarks',:onchange => 'textarea_remarks_disable("textarea_remarks")'%><br>
+        <%= text_area_tag(:remarks, nil, placeholder: 'Enter Followup Remarks', class: "form-control", autocomplete: 'remarks', :id => 'textarea_remarks', :onchange => 'dropdown_remarks_disable("dropdown_remarks")') %>
+      </div>
+    </div>
+    <br><div class="small_dividor"></div><br>
+    <div class="row">
+      <div class="col-md-3">
+        Place of Residence:
+        <%= select_tag 'leading[area_id]', options_for_select(@areas), :prompt => 'Select Area', :class => 'form-control selectpicker', data: { live_search: true },  :onchange => 'populate_area_other()' %>
+        <div id="area_other">
+        </div>
+      </div>
+      <div class="col-md-3">
+        Age Bracket:
+        <%= select_tag 'leading[age_bracket]', options_for_select(@age_brackets), :class => 'form-control', :prompt => 'Select Age Bracket' %>
+      </div>
+      <div class="col-md-3">
+        Occupation:
+        <%= select_tag 'leading[occupation_id]', options_for_select(@occupations), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select Occupation', :onchange => 'populate_occupation_other()' %>
+        <div id="occupation_other">
+        </div>
+      </div>
+      <div class="col-md-3">
+        Company Area:
+        <%= select_tag 'leading[work_area_id]', options_for_select(@areas), :prompt => 'Select Area', :class => 'form-control selectpicker', data: { live_search: true }, :onchange => 'populate_work_area_other()' %>
+        <div id="work_area_other">
+        </div>
+      </div>
+    </div>
+    <br><div class="small_dividor"></div><br>
+    <div class="row">
+      <div class="col-lg-12">
+        <%= submit_tag 'Update', name: 'update', :class => 'btn btn-primary', id: 'follow_up_update' %>   
+        <%= submit_tag 'SMS Followup', name: 'sms_followup', :class => 'btn btn-info' %>
+        <%= submit_tag 'Email Followup', name: 'email_followup', :class => 'btn btn-info' %>
+      </div>
+    </div>
+  </div>
+<%else%>
+  <div class="form-group">
+    <div class="row"> 
+      <div ><i>  &nbsp;</i></div>
+      <% if current_personnel.organisation_id == 1%>
+        <% if current_personnel.email=='ayush@thejaingroup.com'%>
+          <div class="col-md-2">
+            <div ><i>  &nbsp;</i></div>
+              <%= submit_tag 'Delete', name: 'delete', :class => 'btn btn-primary' %>
+          </div>
+        <% end %>
+      <%else%>
+        <% if current_personnel.status=='Admin'%>
+          <div class="col-md-2">
+            <div ><i>  &nbsp;</i></div>
+              <%= submit_tag 'Delete', name: 'delete', :class => 'btn btn-primary' %>
+          </div>
+        <% end %>
+      <%end%>
+      <div class="col-md-3 executive_div">
+        <div ><b><i> <font color="#004fff"> Executive </font></i></b></div>
+        <%= select(:lead, :personnel, options_for_select(@executives, selected: current_personnel.id), {}, { :class => 'form-control selectpicker', data: { live_search: true } })   %>
+      </div>  
+      <div class="col-md-5 follow_up_div">
+        <div ><b><i> <font color="#004fff">  Followed up/Site Visited/Booked/Lost Date</font> </i></b></div>
+        <%= date_field(:lead, :flexible_date, max: Date.today, :class => "form-control", :value => ((Time.now)).strftime('%Y-%m-%d'), :required => true) %>
+      </div>
+      <div class="col-md-4">
+        <div ><b><i><font color="#004fff"> To Followup On</font></i></b></div>
+        <% if (Time.now+5.hours+30.minutes)>(Time.now.beginning_of_day+16.hours) %>
+          <%= date_field(:lead, :followup_date, :class => "form-control", :value => ((Time.now)+86400).strftime('%Y-%m-%d')) %>
+        <% else %>
+          <%= date_field(:lead, :followup_date, :class => "form-control", :value => Time.now.strftime('%Y-%m-%d')) %>
+        <% end %> 
+        <%= time_select :lead, :followup_time, {ampm: true, minute_step: 30, default: Time.now.beginning_of_day+19.hours} %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-2">
+        <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot', true %>Hot</p>
+        <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+        <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+      </div>
+      <div class="col-md-4">
+        <div ><b><i><font color="#004fff">  Status </font></i></b></div>
+        <% if current_personnel.organisation.name=='Jain Group' && current_personnel.access_right==nil %>
+          <%= select(:lead, :status, options_for_select([['Status to remain Same', -1],['Fresh Lead', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ],['Negotiation',3 ],['Lost', 5]]),{}, { :class => 'form-control', :id=>'lead_status_id' })   %>&nbsp
+              <%= select(:lead, :lost_reason, options_for_select(@lost_reasons),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' }) %>
+        <% else %>
+          <%= select(:lead, :status, options_for_select([['Status to remain Same', -1], ['Fresh Lead', 0], ['Qualified', 9], ['Interested in Site Visit', 10], ['OV', 1], ['Site Visited',2 ],['Negotiation',3 ],['Booked', 4],['Lost', 5]]),{}, { :class => 'form-control', :id=>'lead_status_id' })   %>&nbsp
+              <%= select(:lead, :lost_reason, options_for_select(@lost_reasons),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' }) %>
+        <% end %>    
+      </div>
+      <div class="col-md-6 follow_up_status_div">
+        <div ><b><i><font color="#004fff"> Followup Remarks</font></i></b></div>
+        <%= select_tag 'remarks', options_for_select(@common_followup_remarks), :class => 'form-control', :id => 'dropdown_remarks', :prompt => 'Select Followup Remarks',:onchange => 'textarea_remarks_disable("textarea_remarks")'%><br>
+        <%= text_area_tag(:remarks, nil, placeholder: 'Enter Followup Remarks', class: "form-control", autocomplete: 'remarks', :id => 'textarea_remarks', :onchange => 'dropdown_remarks_disable("dropdown_remarks")') %>
+      </div>
+    </div>
+    <br><div class="small_dividor"></div><br>
+    <div class="row">
+      <div class="col-md-3">
+        Place of Residence:
+        <%= select_tag 'leading[area_id]', options_for_select(@areas), :prompt => 'Select Area', :class => 'form-control selectpicker', data: { live_search: true },  :onchange => 'populate_area_other()' %>
+        <div id="area_other">
+        </div>
+      </div>
+      <div class="col-md-3">
+        Age Bracket:
+        <%= select_tag 'leading[age_bracket]', options_for_select(@age_brackets), :class => 'form-control', :prompt => 'Select Age Bracket' %>
+      </div>
+      <div class="col-md-3">
+        Occupation:
+        <%= select_tag 'leading[occupation_id]', options_for_select(@occupations), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select Occupation', :onchange => 'populate_occupation_other()' %>
+        <div id="occupation_other">
+        </div>
+      </div>
+      <div class="col-md-3">
+        Company Area:
+        <%= select_tag 'leading[work_area_id]', options_for_select(@areas), :prompt => 'Select Area', :class => 'form-control selectpicker', data: { live_search: true }, :onchange => 'populate_work_area_other()' %>
+        <div id="work_area_other">
+        </div>
+      </div>
+    </div>
+    <br><div class="small_dividor"></div><br>
+    <div class="row">
+      <div class="col-lg-12">
+        <%= submit_tag 'Update', name: 'update', :class => 'btn btn-primary', id: 'follow_up_update' %>   
+        <%= submit_tag 'SMS Followup', name: 'sms_followup', :class => 'btn btn-info' %>
+        <%= submit_tag 'Email Followup', name: 'email_followup', :class => 'btn btn-info' %>
+      </div>
+    </div>
+  </div>
+<%end%>
+<style >
+  .anticipation_div{
+    width: 10%;
+  }
+  .row {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  .small_dividor{
+    border-bottom: 1px solid #c3c3c3!important;
+  }
+</style>
+<script>
+  function updateFormEnabled() {
+    if (verifyAdSettings()) {
+        $('#follow_up_update').prop('disabled', false);
+        $('#follow_up_update').prop('value', 'Update');
+        document.getElementById('follow_up_update').removeAttribute('data-confirm');
+    } else {
+        $('#follow_up_update').prop('disabled', true);
+        $('#follow_up_update').prop('value', 'Pick Lost Reason');
+    }
+    if (BookingPicked()) {
+    } else {
+        document.getElementById('follow_up_update').setAttribute('data-confirm', "Are you sure this is a booking?");
+    }
+  }
+  function verifyAdSettings() {
+    if ($('#lead_lost_reason').val() == "" && $('#lead_status_id').val() == 5) {
+        return false;
+    } else {
+        return true
+    }
+  }
+  function BookingPicked() {
+    if ($('#lead_status_id').val() == 4) {
+        return false;
+    } else {
+        return true
+    }
+  }
+  $('#lead_status_id').change(updateFormEnabled);
+  $('#lead_lost_reason').change(updateFormEnabled); 
+  function change_anticipation(){
+    var ant=event.target.attributes[0].value;
+    if (ant == 'Hot'){
+      $("#anticipation_Hot").prop("checked", true);     
+    }
+    else if (ant == 'Good'){
+      $("#anticipation_Good").prop("checked", true);           
+    }
+    else{
+      $("#anticipation_").prop("checked", true);                 
+    }
+    var osv=event.target.attributes[1].value;
+    var status=event.target.attributes[2].value;
+    if (osv == 'true'){
+      $("#lead_status_id").val(1);
+    }
+    else if (osv == 'null'){
+      if (status == 'false'){
+         $("#lead_status_id").val(2);
+      }
+      else{
+         $("#lead_status_id").val(0);
+      }
+    }
+    else{
+      $("#lead_status_id").val(3);
+    }
+    // else if (osv == null) && (status == null){
+    //   $("#lead_status_id").val(0);
+    // }
+    // else if (osv == null) && (status == false){
+    //   $("#lead_status_id").val(2);
+    // }
+  } 
+  function disable_link(link_disable){
+    document.getElementById(link_disable).disabled = true;
+  }
+  function textarea_remarks_disable(textarea_remarks)
+  {
+    var remarks = event.target.value;
+    if (remarks == "") {
+      document.getElementById(textarea_remarks).disabled = false;  
+    } else {
+      document.getElementById(textarea_remarks).disabled = true;
+    }
+  }
+  function dropdown_remarks_disable(dropdown_remarks)
+  {
+     document.getElementById(dropdown_remarks).disabled = true;
+  }
+  function populate_area_other()
+  {
+    var area_type=event.target.innerHTML;
+    $.getScript('https://www.realtybucket.com/windows/populate_area_other.js?type='+area_type);
+    // $.getScript('http://localhost:3000/windows/populate_area_other.js?type='+area_type);
+  }
+  function populate_work_area_other()
+  {
+    var area_type=event.target.innerHTML;
+    $.getScript('https://www.realtybucket.com/windows/populate_work_area_other.js?type='+area_type);
+    // $.getScript('http://localhost:3000/windows/populate_work_area_other.js?type='+area_type);
+  }
+  function populate_occupation_other()
+  {
+    var occupation_type=event.target.innerHTML;
+    $.getScript('https://www.realtybucket.com/windows/populate_occupation_other.js?type='+occupation_type);
+    // $.getScript('http://localhost:3000/windows/populate_occupation_other.js?type='+occupation_type);
+  }
+</script>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

@@ -1,0 +1,72 @@
+<%@header = 'Re-engaged Leads'%>
+<% flash.each do |key, value| %>
+  <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+  </div>
+<% end %>
+<div align="center"><h3><b>Re-engaged Leads</b></h3></div>
+<%= form_tag 'reengaged_lead_index' do  %>
+  <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Marketing' %>
+    <div class="row">
+      <div class="col-lg-1">
+        <i>  Executive </i>
+      </div>
+      <div class="col-lg-3">
+        <%= select_tag 'executive_id', options_for_select(@executives, selected: @executive), :class => 'form-control'%>
+      </div>
+      <div class="col-lg-2">
+        <% if current_personnel.organisation_id == 1 %>
+          <% if current_personnel.status=='Admin' || current_personnel.status=='Team Lead' %> 
+            <%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+          <%end%>
+        <%else%>
+          <%= submit_tag 'Refresh', name: 'Refresh', :class => 'btn btn-primary' %>
+        <%end%>  
+      </div>
+    </div>
+  <% end %>
+<% end %>
+  <br>
+<%= form_tag 'followup_history', :html => {:class => 'form-horizontal'} do %>
+  <table class="customers" id="reengaged_lead_index">
+    <thead>
+      <tr>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Type</th>
+        <th>Name</th>
+        <% if current_personnel.organisation_id == 6 %>
+          <th>Email</th>
+          <th>Mobile</th>
+        <%end%>
+        <th>Reengaged on</th>
+        <th>Executive</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    	<% @leads.each do |lead| %>
+	        <tr>
+	        	<td><%= lead.id%></td>
+	        	<td><%= lead.business_unit.name%></td>
+	        	<% if lead.anticipation=='Hot'%>
+	            <td style="background-color: #ffd0d0!important">Hot</td> 
+	          <% elsif lead.anticipation=='Good'%>
+	            <td style="background-color: #aae5aa6e!important">Good</td> 
+	          <% else %>
+	            <td></td>
+	          <%end%>
+          	<td><%= lead.name%></td>
+          	<% if current_personnel.organisation_id == 6 %>
+              <td><%= lead.email%></td>
+          	  <td><%= link_to lead.mobile.to_s, "tel:+91"+(lead.mobile.to_s) %></td>
+            <%end%>
+          	<td><%= lead.reengaged_on.strftime("%d/%m/%y - %H:%M")%></td>
+          	<td><%= lead.personnel.name%></td>
+          	<td><%= button_tag 'Call', value: lead.id, type: :submit, name: :id%></td>
+	        </tr>
+      	<% end %>
+    </tbody>
+  </table>
+<%end%>

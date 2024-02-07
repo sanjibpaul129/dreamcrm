@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  body: MyText
+  business_unit_id: 1
+  send_after_days: 1
+  live: false
+  lost: false
+  ad_hoc: false
+  inactive: false
+  organisation_id: 1
+
+two:
+  title: MyString
+  body: MyText
+  business_unit_id: 1
+  send_after_days: 1
+  live: false
+  lost: false
+  ad_hoc: false
+  inactive: false
+  organisation_id: 1

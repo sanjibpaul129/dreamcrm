@@ -1,0 +1,22 @@
+<h1>Broker Dashboard</h1>
+<table class="customers">
+	<thead>
+		<th>Description</th>
+		<% @executives.each do |executive| %>
+			<th><%= executive%></th>
+		<%end%>
+		<th>Total</th>
+	</thead>
+	<tbody>
+		<%@telecaller_wise_data.each do |data|%>
+			<tr>
+				<% data.each do |key, value|%>
+					<td><%= key%></td>
+					<% value.each do |total_count|%>
+						<td><%= total_count%></td>
+					<%end%>
+				<%end%>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

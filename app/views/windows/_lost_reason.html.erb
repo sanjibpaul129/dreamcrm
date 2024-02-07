@@ -1,0 +1,5 @@
+<% if @lost_reason_type == 'Lost'%>
+	<div class="col-lg-2">
+		<%= select_tag 'lost_reason[selected]', options_for_select(@lost_reasons), :class => 'form-control'%>
+	</div>
+<%end%>

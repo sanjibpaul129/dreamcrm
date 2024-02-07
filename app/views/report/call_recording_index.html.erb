@@ -1,0 +1,56 @@
+<%@header = 'Call Recording Index'%>
+<div align="center"><h3><b>Call Recording Index</b></h3></div>
+<%= form_tag 'call_recording_index' do  %>
+  <div class="row">
+    <div class="col-lg-1">
+      <i>Executives:</i>
+    </div>
+    <div class="col-lg-3">
+      <%= select_tag "current_executive_id", options_for_select(@executives, selected: @executive.id), :class => 'form-control', :prompt => 'Please Select' %>
+    </div>
+    <div class="col-lg-2">
+        <%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+      </div>
+  </div>
+  <br>
+  <table class="customers">
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Lead id</th>
+        <th>Name</th>
+        <th>Source</th>
+        <th>Status</th>
+        <th>Recordings</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <td><%= lead.business_unit.name %></td>
+          <td><%= lead.id %></td>
+          <td><%= lead.name %></td>
+          <td><%= lead.source_category.heirarchy %></td>
+          <% if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+            <td>Qualified</td>
+          <% elsif lead.osv == true && lead.status == false && lead.interested_in_site_visit_on != nil %>
+            <td>Interested in Site Visit</td>
+          <% elsif lead.osv == true %>
+            <td>OV</td>
+          <% elsif lead.osv== false && lead.status== nil %>
+            <td>Negotiation</td>
+          <% elsif lead.osv==nil  && lead.status==nil %>
+            <td>In Follow Up</td>
+          <% elsif lead.osv==nil && lead.status==false %>
+            <td>Site Visited</td>
+          <% elsif lead.osv== false && lead.status== false %>
+            <td>Field Visited</td>
+          <%else%>
+            <td></td>
+          <% end %>
+          <td><%= link_to 'View Recordings', report_lead_wise_recording_path(lead), :class => 'edit_btn', :style => "text-decoration: none"%></td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+<% end %>

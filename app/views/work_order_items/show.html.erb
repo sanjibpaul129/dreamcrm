@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Marketing instance:</strong>
+  <%= @work_order_item.marketing_instance_id %>
+</p>
+
+<p>
+  <strong>Work order:</strong>
+  <%= @work_order_item.work_order_id %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @work_order_item.rate %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @work_order_item.quantity %>
+</p>
+
+<p>
+  <strong>Tax:</strong>
+  <%= @work_order_item.tax %>
+</p>
+
+<p>
+  <strong>Remarks:</strong>
+  <%= @work_order_item.remarks %>
+</p>
+
+<%= link_to 'Edit', edit_work_order_item_path(@work_order_item) %> |
+<%= link_to 'Back', work_order_items_path %>

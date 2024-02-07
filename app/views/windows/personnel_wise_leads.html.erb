@@ -1,0 +1,96 @@
+<%@header = 'Executive Wise Leads'%>
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+
+
+
+<center><h1>Executive Wise Open Leads</h1></center>
+<%= form_tag 'personnel_wise_leads' do  %>
+<div class="row">
+  <div class="col-lg-3">  
+    <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+  </div>
+  <div class="col-lg-2">
+    <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+  </div>
+</div>
+
+<table class="customers" id="orderedtasks">
+  <thead>
+    <tr>
+      
+      <th>Executive</th>
+      <th> Fresh Leads</th>
+      <th> Follow Ups Due</th>
+      <th> Future Follow Ups</th>
+      <th> Total</th>
+      <th>Qualified</th>
+      <th>Interested In Site Visit</th>
+      <th> Site Visited Follow Ups</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @total_leads.each do |key, value| %>
+     
+      <tr>
+        <td><%= Personnel.find(key).name %></td>
+        <% if @fresh_leads[key] == nil%>
+          <td></td>
+        <%else%>
+          <td><%= link_to @fresh_leads[key], windows_fresh_leads_path("executive" => Personnel.find(key).id), method: :post %></td>
+        <%end%>
+        <% if @follow_ups_due[key] == nil%>
+          <td></td>
+        <%else%>
+          <td><%= link_to @follow_ups_due[key], windows_followup_due_path("executive" => Personnel.find(key).id), method: :post %>-<small>sv-<%= @follow_ups_due_site_visited[key] %>,fv-<%= @follow_ups_due_field_visited[key] %>,ov-<%= @follow_ups_due_visit_organised[key] %></small></td>
+        <%end%>
+        <% if @future_follow_ups[key] == nil%>
+          <td></td>
+        <%else%>
+          <td><%= link_to @future_follow_ups[key], windows_pending_followups_path("executive" => Personnel.find(key).id), method: :post  %>-<small>sv-<%= @future_follow_ups_site_visited[key] %>,fv-<%= @future_follow_ups_field_visited[key] %>,ov-<%= @future_follow_ups_visit_organised[key] %></small></td>
+        <%end%>
+        <td><%= link_to (@fresh_leads[key].to_i + @follow_ups_due[key].to_i + @future_follow_ups[key].to_i), windows_all_live_leads_index_path("site_executive" => {"current_executive" => Personnel.find(key).id}, "commit" => 'Refresh'), method: :post%></td>
+        <%if @qualified_leads[key] == nil%>
+          <td></td>
+        <%else%>
+          <td><%= link_to @qualified_leads[key] , windows_all_live_leads_index_path("site_executive" => {"current_executive" => Personnel.find(key).id}, "commit" => 'Refresh', "qualified" => 'true'), method: :post %></td>
+        <%end%>
+        <%if @isv_leads[key] == nil%>
+          <td></td>
+        <%else%>
+          <td><%= link_to @isv_leads[key] , windows_all_live_leads_index_path("site_executive" => {"current_executive" => Personnel.find(key).id}, "commit" => 'Refresh', "interested" => 'true'), method: :post %></td>
+        <%end%>
+        <% if @future_follow_ups_site_visited[key]==nil && @follow_ups_due_site_visited[key]==nil%>
+          <td>0</td>
+        <% elsif @future_follow_ups_site_visited[key]==nil %>
+          <td><%= link_to (@follow_ups_due_site_visited[key]), windows_all_live_leads_index_path("site_executive" => {"current_executive" => Personnel.find(key).id}, "commit" => 'Refresh', "site_visited" => 'true'), method: :post %></td>
+        <% elsif @follow_ups_due_site_visited[key]==nil %>
+          <td><%= link_to (@future_follow_ups_site_visited[key]), windows_all_live_leads_index_path("site_executive" => {"current_executive" => Personnel.find(key).id}, "commit" => 'Refresh', "site_visited" => 'true'), method: :post %></td>
+        <% else %>
+          <td><%= link_to ((@future_follow_ups_site_visited[key])+(@follow_ups_due_site_visited[key])), windows_all_live_leads_index_path("site_executive" => {"current_executive" => Personnel.find(key).id}, "commit" => 'Refresh', "site_visited" => 'true'), method: :post %></td>
+        <% end %>
+      </tr>
+      
+    <% end %>
+    <tfoot>
+    <tr>
+      <td><b>GRAND TOTAL</b></td>
+      <td><b><%= @fresh_leads.sum{|key,value| value} %></b></td> 
+      <td><b><%= @follow_ups_due.sum{|key,value| value} %> </b></td>
+      <td><b><%= @future_follow_ups.sum{|key,value| value} %></b></td>
+      <td><b><%= @fresh_leads.sum{|key,value| value}+@follow_ups_due.sum{|key,value| value}+@future_follow_ups.sum{|key,value| value}%></b></td>
+      <td><b><%= @qualified_leads.sum{|key, value| value}%></b></td>
+      <td><b><%= @isv_leads.sum{|key, value| value}%></b></td>
+      <td><b><%= @future_follow_ups_site_visited.sum{|key,value| value} + @follow_ups_due_site_visited.sum{|key,value| value} %></b></td>
+    </tr>
+    </tfoot>
+  </tbody>
+</table>
+
+<% end %>

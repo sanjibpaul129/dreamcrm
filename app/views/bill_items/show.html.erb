@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Marketing instance:</strong>
+  <%= @bill_item.marketing_instance_id %>
+</p>
+
+<p>
+  <strong>From:</strong>
+  <%= @bill_item.from %>
+</p>
+
+<p>
+  <strong>To:</strong>
+  <%= @bill_item.to %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @bill_item.quantity %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @bill_item.status %>
+</p>
+
+<p>
+  <strong>Remarks:</strong>
+  <%= @bill_item.remarks %>
+</p>
+
+<p>
+  <strong>Bill:</strong>
+  <%= @bill_item.bill_id %>
+</p>
+
+<%= link_to 'Edit', edit_bill_item_path(@bill_item) %> |
+<%= link_to 'Back', bill_items_path %>

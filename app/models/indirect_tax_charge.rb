@@ -1,0 +1,2 @@
+class IndirectTaxCharge < ApplicationRecord
+end

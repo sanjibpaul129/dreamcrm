@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  business_unit_id: 1
+  name: MyString
+  number: 1
+  floors: 1
+
+two:
+  business_unit_id: 1
+  name: MyString
+  number: 1
+  floors: 1

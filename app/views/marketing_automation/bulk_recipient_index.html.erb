@@ -1,0 +1,73 @@
+<%@header = 'Bulk Recipients'%>
+<%= form_tag 'bulk_recipient_submit', :html => {:class => 'form-horizontal'} do %>
+	<h1>Bulk Recipients(Total:<%= @total_bulk_recipients%>,Tried:<%= @recipients_sent+@recipients_not_sent%>,Sent:<%= @recipients_sent%>,Not Sent:<%= @recipients_not_sent%>)</h1>
+	<table class="customers" id="bulk_recipient_index">
+		<thead>
+			<th id="check_all" style="cursor: pointer!important;">Select All</th>
+          	<th>Email</th>
+			<th>Mobile</th>
+			<th>Field One</th>
+			<th>Field two</th>
+			<th>Field Three</th>
+			<th>Field Four</th>
+			<th>Field Five</th>
+			<th>Email Sent</th>
+			<th>Wtsp Sent</th>
+			<th>Wtsp Dlvrd</th>
+			<th>Wtsp Read</th>
+			<th>Sms Sent</th>
+			<th>To Send</th>
+			<th>Remarks</th>
+		</thead>
+		<tbody>
+			<% @bulk_recipients.each do |bulk_recipient| %>
+				<tr>
+					<td><%= check_box_tag 'bulk_recipient_ids[]',bulk_recipient.id%></td>
+	          		<td><%= bulk_recipient.email%></td>
+					<td><%= bulk_recipient.mobile%></td>
+					<td><%= bulk_recipient.field_one%></td>
+					<td><%= bulk_recipient.field_two%></td>
+					<td><%= bulk_recipient.field_three%></td>
+					<td><%= bulk_recipient.field_four%></td>
+					<td><%= bulk_recipient.field_five%></td>
+					<td><%= bulk_recipient.email_sent %></td>
+					<td><%= bulk_recipient.whatsapp_sent %></td>
+					<td><%= bulk_recipient.delivered %></td>
+					<td><%= bulk_recipient.read %></td>
+					<td></td>
+					<td><%= bulk_recipient.to_send %></td>
+					<td><%= bulk_recipient.remarks %></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<br>
+<%= link_to 'Bulk Recipient Upload', marketing_automation_bulk_recipient_upload_form_path, :class => 'btn btn-primary' %>
+<%= submit_tag 'Destroy', :class => 'btn btn-primary'%>
+<%= submit_tag 'Retry', :class => 'btn btn-primary'%>
+<%= submit_tag 'Destroy All', :class => 'btn btn-danger'%>
+<%end%>
+
+<script type="text/javascript">
+      $('#check_all').on("click", function(){
+  var cbxs = $('input[type="checkbox"]');
+  cbxs.prop("checked", !cbxs.prop("checked"));
+});
+</script>
+<style >
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+ .edit_btn{
+  width: 30px!important;
+ }
+ </style>

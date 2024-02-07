@@ -1,0 +1,46 @@
+<%= form_for(@payment_plan) do |f| %>
+  <% if @payment_plan.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@payment_plan.errors.count, "error") %> prohibited this payment_plan from being saved:</h2>
+
+      <ul>
+      <% @payment_plan.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Payment Plan</legend>
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Block', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+           <%= select(:payment_plan, :block_id, options_for_select(@blocks, selected: @payment_plan.block_id),{}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Description', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+            <%= f.text_field :description, :class => 'form-control'%>
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Business unit', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+           <%= select(:payment_plan, :business_unit_id, options_for_select(@business_units, selected: @payment_plan.business_unit_id),{}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-6 col-lg-offset-4">
+          <br>
+          <%= f.submit :class => 'btn btn-primary btn-block btn_width'%>
+        </div>
+      </div>
+<% end %>

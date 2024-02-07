@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  business_unit_id: 1
+  name: MyString
+  overall: 9.99
+  car_park: 9.99
+  basic: 9.99
+  plc: 9.99
+  edc: 9.99
+  applicable_from: 2019-12-20
+
+two:
+  business_unit_id: 1
+  name: MyString
+  overall: 9.99
+  car_park: 9.99
+  basic: 9.99
+  plc: 9.99
+  edc: 9.99
+  applicable_from: 2019-12-20

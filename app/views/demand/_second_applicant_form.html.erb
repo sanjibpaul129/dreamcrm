@@ -1,0 +1,119 @@
+<center><h4 style="color: #000!important;"><b><u>SECOND/JOINT APPLICANT</u></b></h4></center>
+<div class="row">
+  <div class="col-lg-offset-1 col-lg-3">
+    Name:
+  </div>
+  <div class="col-lg-2">
+      <%= select_tag 'lead[second_applicant_title]', options_for_select(['Mr.', 'Mrs.', 'Dr.', 'Ms.']), :class => 'form-control' %>
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[second_applicant]', '', placeholder: 'mandatory*', :class => "form-control" %>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-offset-1 col-lg-3">
+    Father's Name:
+  </div>
+  <div class="col-lg-2">
+      <%= select_tag 'lead[second_applicant_father_title]', options_for_select(['Mr.', 'Dr.']), :class => 'form-control' %>
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[father_of_second_applicant]', '', placeholder: 'mandatory*', :class => "form-control" %>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-offset-1 col-lg-3">
+    Mother's Name:
+  </div>
+  <div class="col-lg-2">
+      <%= select_tag 'lead[second_applicant_mother_title]', options_for_select(['Mrs.', 'Dr.', 'Ms.']), :class => 'form-control' %>
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[mother_of_second_applicant]', '', placeholder: 'mandatory*', :class => "form-control" %>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-offset-1 col-lg-3">
+    Spouse-Name:
+  </div>
+  <div class="col-lg-2">
+      <%= select_tag 'lead[second_applicant_spouse_title]', options_for_select(['Mr.','Mrs.', 'Dr.', 'Ms.']), :class => 'form-control' %>
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[second_applicant_spouse_name]', '', :class => "form-control"%>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-2">
+    DOB:
+  </div>
+  <div class="col-lg-4">
+    <%= date_field_tag 'lead[second_applicant_DOB]', '', :class => "form-control"%>
+  </div>
+  <div class="col-lg-2">
+    Occupation:
+  </div>
+  <div class="col-lg-4">
+    <%= select_tag 'lead[second_applicant_occupation_id]', options_for_select(@occupations), :class => 'form-control chosen', :prompt => 'Select Occupation', :onchange => 'populate_second_occupation_other()' %>
+  </div>
+  <div class="col-lg-offset-6 col-lg-6">
+    <div id="second_occupation_other">
+    </div>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-2">
+    Designation:
+  </div>
+  <div class="col-lg-4">
+    <%= select_tag 'lead[second_applicant_designation_id]', options_for_select(@designations), :class => 'form-control chosen', :prompt => 'Select designation', :onchange => 'populate_second_designation_other()' %>
+  </div>
+  <div class="col-lg-2">
+    PAN No.:
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[second_applicant_pan]', '', :class => "form-control"%>
+  </div>
+</div>
+<div class="row">
+  <div class=" col-lg-6 col-lg-offset-0">
+    <div id="second_designation_other">
+    </div>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-2">
+    Company:
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[second_applicant_company]', '', :class => "form-control"%>
+  </div>
+  <div class="col-lg-2">
+    Mobile:
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[second_applicant_mobile]', '', :class => "form-control"%>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-2">
+    Email:
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[second_applicant_email]', '', :class => "form-control"%>
+  </div>
+  <div class="col-lg-2">
+    Aadhar:
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[second_applicant_aadhar]', '', :class => "form-control"%>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-2">
+    Qualification:
+  </div>
+  <div class="col-lg-4">
+    <%= text_field_tag 'lead[qualification_of_second_applicant]', '', :class => 'form-control' %>
+  </div>
+</div><br>

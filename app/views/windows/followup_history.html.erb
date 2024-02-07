@@ -1,0 +1,1263 @@
+<% if current_personnel.business_unit.organisation_id == 1%>
+    <%@header = 'Followup History'%>
+  <% flash.each do |key, value| %>
+    <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+    </div>
+  <% end %>
+  <div align="center">
+    <h3><b>Followup History</b></h3>
+  </div>
+  <div class="row" style="margin-left: 15px!important;">
+    <% first_telephony_call = TelephonyCall.where(lead_id: @lead.id).sort_by{|x| x.created_at}[0]%>
+    <% if first_telephony_call == nil %>
+    <%else%>
+      <% if first_telephony_call.lead.source_category.description == "Super Receptionist"%>
+        <% if first_telephony_call.recording_url == "None" %>
+        <%else%>
+          <div class="col-lg-3">
+            First incoming call: <%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), first_telephony_call.recording_url%>
+          </div>
+        <%end%>
+      <% end %>
+    <%end%>
+    <h3>
+      Project: <%= @lead.business_unit.name%>, Lead ID: <%= @lead.id%>-, Lead Name: <%= @lead.name%>-<%= @lead.personnel.name %>, Mob: <%= @lead.mobile.last(4)%>,
+      <% if current_personnel.status == 'Marketing' || current_personnel.view_only==true %>
+      <% else %>
+        <% if current_personnel.email == 'rima.bhadra@techshu.in' || current_personnel.email == "riddhi.gadhiya@beyondwalls.com"%>
+        <%else%>       
+          <abbr title="Lead Edit"> <%= link_to edit_lead_path(@lead), class: "btn btn-default btn-xs" do%>
+            <i class="glyphicon glyphicon-pencil"></i></abbr>
+          <%end%>
+        <% end %>
+      <% end %>
+      <% if current_personnel.mapped == nil %>
+      <%else%>
+        <input type="text" value="https://www.realtybucket.com/webhook/click_to_call?lead_id=<%= +@lead.id.to_s%>&agent_number=<%= Personnel.find(current_personnel.mapped).mobile%>" id="click_to_call_link" style="display: none;">
+        <a onclick="click_to_call_cpy_link()" style="cursor: pointer;">©️</a>
+      <%end%>
+    </h3>
+  </div>
+  <div class="row" style="margin-left: 15px!important;">
+    <%
+      google_campaign = "" 
+      google_lead_detail = GoogleLeadDetail.find_by_lead_id(@lead.id)
+      if google_lead_detail == nil
+      else
+        campaign_id = google_lead_detail.campaignid 
+        if campaign_id == nil || campaign_id == "" 
+        else
+          google_campaign = GoogleCampaign.find_by_campaign_id(campaign_id).try(:campaign_name)
+        end
+      end
+    %>
+    <h3 style="color: #000; font-size: 17px; font-weight: 800;">Source: <%= google_campaign.to_s+"-"+@lead.source_category.heirarchy.to_s%></h3>
+  </div>
+  <%= form_tag 'drilldown_followup_entry' do %>
+    <%= hidden_field_tag :telephony_call_id, nil, :id => 'telephony_call' %>
+    <table class="customers" id="followup_history">
+      <thead>
+        <tr>
+          <th>Updated on</th>
+          <th>Updated on sort</th>
+          <th>Status</th>
+          <th>Remarks</th>
+          <th>Followup Date</th>
+          <th>Followup Date sort</th>
+          <th>Executive</th>
+          <% if current_personnel.organisation_id == 6%>
+            <th>Score</th>
+          <%else%>
+            <th>Call Recording File</th>
+          <%end%>
+          <th>EntryTime</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% all_followups = [] %>
+        <% lead_follow_ups = @lead.follow_ups %>
+        <% lead_follow_ups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.sms_followups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.email_followups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.whatsapp_followups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.call_records.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.sent_cost_sheets.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.whatsapps.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.template_sends.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+
+        <% all_followups = all_followups.sort_by{|x| [x.created_at, x.id]} %>
+        <% if lead_follow_ups != [] %>
+        <% last_follow_up_status=lead_follow_ups.last.current_status %>
+        <% else %>
+        <% last_follow_up_status='Fresh' %>
+        <% end %>
+        <% all_followups.reverse.each do |followup| %>
+          <% if followup.class.table_name == 'sms_followups' %>
+            <tr>
+             <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up_status %></td>
+             <td>SMS Sent</td>
+             <td></td>
+             <td></td>
+             <td>
+              <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+              <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+             </td>
+             <td></td>
+             <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>
+          <% elsif followup.class.table_name == 'email_followups' %>
+            <tr>
+             <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up_status %></td>
+             <td>Email Sent</td>
+             <td></td>
+             <td></td>
+             <td>
+             <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+              <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+             </td>
+            <td></td>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>
+          <% elsif followup.class.table_name == 'whatsapp_followups' %>
+            <tr>
+              <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+              <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+              <td><%= last_follow_up_status %></td>
+              <% if followup.template_message == nil %>
+                <% if followup.remarks == nil || followup.remarks == "" %>
+                  <% if followup.bot_message == nil || followup.bot_message == "" %>
+                    <td></td>
+                  <%else%>
+                    <td><%= followup.bot_message%></td>
+                  <%end%>
+                <%else%>
+                  <td><%= followup.remarks%></td>
+                <%end%>
+              <%else%>
+                <% if followup.delivered_on != nil && followup.read_on == nil %>
+                  <td><font color="Orange"><%= followup.template_message%></font></td>
+                <%elsif followup.read_on != nil%>
+                  <td><font color="DodgerBlue"><%= followup.template_message%></font></td>
+                <%else%>
+                  <td><%= followup.template_message%></td>
+                <%end%>
+              <%end%>
+              <td></td>
+              <td></td>
+              <td>
+              <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                  <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                  <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+              </td>
+              <td></td>
+              <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>
+          <% elsif followup.class.table_name == 'whatsapps' %>
+            <tr>
+             <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up_status %></td>
+             <td><% if followup.by_lead==true %>
+              Lead Whatsapp: <%= followup.message %>
+              <% elsif followup.by_lead==false %>
+              <%= followup.message %>
+              <% else followup.by_lead==false %>
+              Executive Whatsapp: <%= followup.message %>  
+              <% end %> 
+             </td>
+             <td></td>
+             <td></td>
+             <td>
+             <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+              <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+             </td>
+            <td></td>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>  
+          <% elsif followup.class.table_name == 'sent_cost_sheets' %>
+            <tr>
+             <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up_status %></td>
+             <td>Cost Sheet Sent</td>
+             <td></td>
+             <td></td>
+             <td>
+             <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+              <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+             </td>
+            <td><%= link_to 'Cost Sheet', 'cost_sheet_send?sent_cost_sheet_id='+(SentCostSheet.find(followup.id).cost_sheet_id).to_s, method: :post %></td>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>  
+          <% elsif followup.class.table_name == 'call_records' %>
+            <tr>
+              <td><%= (followup.occurred_at+19800).strftime("%d/%m/%y") %></td>
+              <td><%= (followup.occurred_at+19800).strftime("%m/%d/%y") %></td>
+              <td><%= last_follow_up_status %></td>
+              <td>Call at : <%= (followup.occurred_at).strftime("%d/%m/%y-%H:%M") %>, <% if followup.url == "None"%><%else%><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), followup.url%><%end%>
+              </td>
+              <td></td>
+              <td></td>
+              <td><%= Personnel.find(followup.personnel_id).name%></td>
+              <td></td>
+              <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>  
+          <% elsif followup.class.table_name == "template_sends" %>
+            <tr>
+              <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+              <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+              <td><%= last_follow_up_status %></td>
+              <td><%= followup.template%></td>
+              <td></td>
+              <td></td>
+              <td>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                  <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                    <%= Lead.find(followup.lead_id).personnel.name %>
+                  <% else %>
+                    <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                  <% end %>
+                <% else %>
+                  <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+                <% end %>
+              </td>
+              <td></td>
+              <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>
+          <% else %>
+            <tr>
+             <td><%= (followup.communication_time+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= followup.current_status %></td>
+             <% if followup.hot==true %>
+             <td><b><%= followup.remarks %></b></td>
+             <% else %>
+             <td><%= followup.remarks %></td>
+             <% end %>
+             <td><%= (followup.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+             <td><%= (followup.follow_up_time).strftime("%m/%d/%y") %></td>
+             <td><%= followup.personnel.name %></td>
+             <% if current_personnel.organisation_id == 6 %>
+              <td><%= followup.score %></td>
+             <%else%>
+              <% if followup.telephony_call_id == nil || followup.telephony_call == nil%>
+                <td></td>
+              <%else%>
+                <% if followup.telephony_call.recording_url == nil || followup.telephony_call.recording_url == "" || followup.telephony_call.recording_url == "None"%>
+                    <td></td>
+                <%else%>
+                    <td><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), followup.telephony_call.recording_url%></td>
+                <%end%>
+              <%end%>
+             <%end%>
+             <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>
+            </tr>
+            <% last_follow_up_status=followup.current_status %>  
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <% if current_personnel.email == "riddhi.gadhiya@beyondwalls.com" || current_personnel.email == "rima.bhadra@techshu.in" %>
+  <%else%>
+    <% if @lead.follow_ups != [] %>  
+      <% if current_personnel.status=='Marketing' || current_personnel.view_only==true %>
+      <% else %>
+        <br>
+        <div class="container">
+          <div class="form-group">
+            <%= hidden_field_tag :leading_id, @lead.follow_ups[0].lead_id %>
+            <% @latest_followup=@lead.follow_ups.sort_by{|x| [x.communication_time, x.id] }.last %>
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Sales Executive' || current_personnel.status=='Team Lead' || current_personnel.status == "Audit" %>
+              <div class="row">
+                <div class="col-md-3 executive_div">
+                  <div ><b><i><font color="#004fff">  Executive </font></i></b></div>
+                  <%= select(:leading, :personnel, options_for_select(@executives, selected: @lead.personnel_id), {}, { :class => 'form-control', :id => 'executive_option' })   %>
+                </div> 
+            <% end %>
+                <div class="col-md-5">
+                  <div ><b><i><font color="#004fff">  Followed up/Site Visited/Booked/Lost Date </font></i></b></div>
+                  <% 
+                    if @latest_followup.follow_up_time<Date.today 
+                      min_date=@latest_followup.follow_up_time
+                    else
+                      min_date=Time.now
+                    end
+                  %>
+                  <%= date_field(:leading, :flexible_date, max: Date.today, :class => "form-control", :value => min_date.strftime('%Y-%m-%d'), :required => true)%>
+                </div>   
+                <div class="col-md-4">
+                  <div ><b><i><font color="#004fff">To Followup On</font></i></b></div>
+                  <%= date_field(:leading, :followup_date, :class => "form-control", :value => ((min_date.to_date)+1.day)) %>
+                  <%= time_select :leading, :followup_time, {ampm: true, minute_step: 30, default: Time.now.beginning_of_day+19.hours} %>
+                </div>    
+              </div>
+              <!-- <first row end> -->
+              <% old_status=0
+                 if @latest_followup.osv == true && @latest_followup.status == false && @latest_followup.lead.interested_in_site_visit_on == nil && @latest_followup.lead.qualified_on != nil
+                  old_status=9
+                 elsif @latest_followup.osv == true && @latest_followup.status == false && @latest_followup.lead.interested_in_site_visit_on != nil
+                  old_status=10
+                 elsif @latest_followup.osv == true 
+                  old_status=1
+                 elsif @latest_followup.osv== false && @latest_followup.status==nil 
+                  old_status=8
+                 elsif @latest_followup.osv== false && @latest_followup.status==false 
+                  old_status=6 
+                 elsif @latest_followup.osv==nil  && @latest_followup.status==nil 
+                  old_status=0
+                 elsif @latest_followup.osv==nil && @latest_followup.status==false 
+                  old_status=2
+                 elsif @latest_followup.status==true && @latest_followup.lead.lost_reason_id==nil
+                  old_status=4
+                 elsif @latest_followup.status==true
+                  old_status=5
+                 end 
+              %>
+              <!--<second row start> -->
+              <div class="row">
+                <% if @lead.anticipation==''%>
+                  <div class="col-md-2 list_design">
+                    <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot' %>Hot</p>
+                    <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+                    <p class="text-info"><%= radio_button_tag :anticipation , '', true %>Normal</p>
+                  </div>
+                <% elsif @lead.anticipation=='Hot' %>
+                  <div class="col-md-2 list_design">
+                    <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot', true %>Hot</p>
+                    <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+                    <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+                  </div>  
+                <% else %>
+                  <div class="col-md-2 list_design">
+                    <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot' %>Hot</p>
+                    <p class="text-success"><%= radio_button_tag :anticipation , 'Good', true %>Good</p>
+                    <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+                  </div>  
+                <% end %>
+                <div class="col-md-4">
+                  <div ><b><i><font color="#004fff"> Status </font></i></b></div>
+                  <% if current_personnel.organisation.name=='Jain Group' && current_personnel.access_right==nil %>
+                    <% if @lead.site_visited_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Site Visited',2 ],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.virtually_visited_on != nil %>
+                      <%= select(:leading, :status, options_for_select([['Virtually Visited', 11],['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.visit_organised_on != nil || @lead.interested_in_site_visit_on != nil || @lead.qualified_on != nil %>
+                      <%= select(:leading, :status, options_for_select([['Qualified', 9],['Interested in Site Visit', 10],['OV', 1],['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% else %> 
+                      <%= select(:leading, :status, options_for_select([['In Follow Up', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% end %>
+                  <% elsif current_personnel.organisation.name=='Jain Group' && current_personnel.access_right==2 %>
+                    <% if current_personnel.name == "Shradhya Saha" || current_personnel.name == "Moumita Mitra" %>
+                      <%= select(:leading, :status, options_for_select([['In Follow Up', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control', :onchange => "executive_option_status()" })   %>&nbsp;
+                    <%else%>
+                      <% if @lead.site_visited_on != nil %>
+                        <% if current_personnel.name == 'Tapan Samanta' %>
+                          <%= select(:leading, :status, options_for_select([['Site Visited',2 ],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                        <% else %> 
+                          <%= select(:leading, :status, options_for_select([['Site Visited',2 ],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                        <% end %>
+                      <% elsif @lead.virtually_visited_on != nil %>
+                        <%= select(:leading, :status, options_for_select([['Virtually Visited', 11],['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                      <% elsif @lead.visit_organised_on != nil || @lead.interested_in_site_visit_on != nil || @lead.qualified_on != nil%>
+                        <%= select(:leading, :status, options_for_select([['Qualified', 9],['Interested in Site Visit', 10],['OV', 1],['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                      <% else %> 
+                        <%= select(:leading, :status, options_for_select([['In Follow Up', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                      <% end %>
+                    <%end%>
+                  <% else %>
+                    <% if @lead.site_visited_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Site Visited',2 ],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.virtually_visited_on != nil %>
+                      <%= select(:leading, :status, options_for_select([['Virtually Visited', 11],['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.visit_organised_on != nil %>
+                      <%= select(:leading, :status, options_for_select([['OV', 1],['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.interested_in_site_visit_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.qualified_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Qualified', 9],['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% else %> 
+                      <%= select(:leading, :status, options_for_select([['In Follow Up', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% end %>
+                  <% end %>  
+                  <%= select(:leading, :lost_reason, options_for_select(@lost_reasons,selected: @latest_followup.lead.lost_reason_id),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' })   %>
+                </div>
+                <div class="col-md-6 follow_up_status_div">
+                  <div>
+                    <b><i><font color="#004fff">Followup Remarks</font></i></b>
+                  </div>
+                  <%= select_tag 'remarks', options_for_select(@common_followup_remarks), :class => 'form-control', :id => 'dropdown_remarks', :prompt => 'Select Followup Remarks',:onchange => 'textarea_remarks_disable("textarea_remarks")'%><br>
+                  <div class="row">
+                    <div class="col-lg-9">
+                      <%= text_area_tag(:remarks, nil, placeholder: 'Enter Followup Remarks', class: "form-control", autocomplete: 'remarks', :id => 'textarea_remarks', :onchange => 'dropdown_remarks_disable("dropdown_remarks")') %>
+                    </div>
+                    <div class="col-lg-2">
+                      Feedback:
+                    </div>
+                    <div class="col-lg-1">
+                      <%= check_box_tag 'site_visit_feedback', true, nil%>
+                    </div>
+                  </div>
+                </div>
+              </div><br>
+              <div class="row">
+                <div class="col-lg-1">
+                  Followup:
+                </div>
+                <div class="col-lg-3">
+                  <%= select_tag 'followups[]', options_for_select(["Sms Followup", "Email Followup"]), :class => 'form-control, multi_select_style', :multiple => true %>
+                </div>
+                <div class="col-lg-1">
+                  Whatsapp:
+                </div>
+                <div class="col-lg-3">
+                  <% if current_personnel.business_unit_id == 70%>
+                    <%= select_tag 'whatsapp_templates[]', options_for_select(@gurukul_whatsapp_templates), :class => 'form-control, multi_select_style', :multiple => true %>
+                  <%else%>
+                    <%= select_tag 'whatsapp_templates[]', options_for_select(@whatsapp_templates), :class => 'form-control, multi_select_style', :multiple => true %>
+                  <%end%>
+                </div>
+                <div class="col-lg-1">
+                  Email:
+                </div>
+                <div class="col-lg-3">
+                  <%= select_tag 'email_templates[]', options_for_select(@email_templates), :class => 'form-control, multi_select_style', :multiple => true %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-2">
+                  Whatsapp Message:
+                </div>
+                <div class="col-lg-4">
+                  <%= text_area_tag "extra_whatsapp_message", '', :class => 'form-control' %>
+                </div>
+              </div><br>
+              <br><div class="small_dividor"></div><br>
+              <div class="row">
+                <% if @lead.area_id == nil || @lead.area_id== ''%>
+                  <div class="col-md-3">
+                    Pincode:
+                    <%= number_field_tag "leading[pincode]", @lead.try(:pincode), :class => 'form-control' %>
+                  </div>
+                <%end%>
+                <% if @lead.age_bracket == nil || @lead.age_bracket== ''%>
+                  <div class="col-md-3">
+                    Age Bracket:
+                    <%= select_tag 'leading[age_bracket]', options_for_select(@age_brackets, selected: @lead.age_bracket), :class => 'form-control', :prompt => 'Select Age Bracket' %>
+                  </div>
+                <%end%>
+                <% if @lead.occupation_id == nil || @lead.occupation_id== ''%>
+                  <div class="col-md-3">
+                    Occupation:
+                    <%= select_tag 'leading[occupation_id]', options_for_select(@occupations, selected: @lead.occupation_id), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select Occupation', :onchange => 'populate_occupation_other()' %>
+                    <div id="occupation_other">
+                    </div>
+                  </div>
+                <%end%>
+                <!-- <% if @lead.work_area_id == nil || @lead.work_area_id== ''%>
+                  <div class="col-md-3">
+                    Company Area:
+                    <%= select_tag 'leading[work_area_id]', options_for_select(@areas, selected: @lead.work_area_id), :prompt => 'Select Area', :class => 'form-control selectpicker', data: { live_search: true }, :onchange => 'populate_work_area_other()' %>
+                    <div id="work_area_other">
+                    </div>
+                  </div>
+                <%end%> -->
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-12">
+                  <div ><i>  &nbsp;</i></div>
+                  <%= submit_tag 'Update',name: 'update', :class => 'btn btn-primary', id: 'follow_up_update', :disabled => true %>
+                  <% params[:id]%>
+                  <% if @lead.site_visited_on == nil && @lead.booked_on == nil %>
+                  <% else %>
+                    <%= submit_tag 'Cost Sheet', name: 'cost_sheet', :class => 'btn btn-info' %>
+                  <% end %>
+                  <%= link_to 'Site Visit Form', windows_site_visit_form_path(@lead), :class => 'btn btn-primary' %>
+                </div>
+              </div><br>
+            </div>
+            <!-- <second row ends> -->
+          <% end %>
+        <% end %>        
+      <% end %>
+      </div>
+      </div>
+  <%end%>
+  <style >
+    .list_design{
+      display: inline-block;
+    }
+    /*.executive_div{
+      width: 20%;
+    }
+    .follow_up_status_div{
+      width: 20%;
+    }*/
+    .anticipation_div{
+      width: 10%;
+    }
+
+    .dataTables_scrollHead{
+      height: 40px;
+    }
+    .dataTables_info{
+      display:inline-block;
+      float:left;
+    }
+   .dataTables_length{
+      display:inline-block;
+      float:right;
+    }
+    .fixedHeader-floating th { background-color: #2b3e50; }
+    .dividor{
+      border-bottom: 3px solid black!important;
+    }
+    .small_dividor{
+      border-bottom: 1px solid #c3c3c3!important;
+    }
+    .whatsapp_size{
+      width: 30px;
+    }
+    .play_btn{
+      width: 30px!important;
+      height: auto;
+    }
+  </style>
+  <script>
+    function updateFormEnabled() {
+        if (verifyAdSettings()) {
+            // $('#follow_up_update').prop('disabled', false);
+            $('#follow_up_update').prop('value', 'Update');
+            document.getElementById('follow_up_update').removeAttribute('data-confirm');
+        } else {
+            // $('#follow_up_update').prop('disabled', true);
+            $('#follow_up_update').prop('value', 'Pick Lost Reason');
+        }
+        if (BookingPicked()) {
+        } else {
+            document.getElementById('follow_up_update').setAttribute('data-confirm', "Are you sure this is a booking?");
+        }
+    }
+
+    function verifyAdSettings() {
+        if ($('#leading_lost_reason').val() == "" && $('#leading_status').val() == 5) {
+            return false;
+        } else {
+            return true
+        }
+    }
+
+    function BookingPicked() {
+        if ($('#leading_status').val() == 4) {
+            return false;
+        } else {
+            return true
+        }
+    }
+
+    $('#leading_status').change(updateFormEnabled);
+    $('#leading_lost_reason').change(updateFormEnabled);
+  
+    function disable_link(link_disable){
+      document.getElementById(link_disable).disabled = true;
+    }
+    function textarea_remarks_disable(textarea_remarks)
+    {
+      var remarks = event.target.value;
+      if (remarks == "") {
+        document.getElementById(textarea_remarks).disabled = false;  
+      } else {
+        document.getElementById(textarea_remarks).disabled = true;
+      }
+    }
+    function dropdown_remarks_disable(dropdown_remarks)
+    {
+       document.getElementById(dropdown_remarks).disabled = true;
+    }
+    function populate_area_other()
+    {
+      var area_type = event.target.innerHTML;
+      $.getScript('https://www.realtybucket.com/windows/populate_area_other.js?type='+area_type);
+      // $.getScript('http://localhost:3000/windows/populate_area_other.js?type='+area_type);
+    }
+    function populate_work_area_other()
+    {
+      var area_type=event.target.innerHTML;
+      $.getScript('https://www.realtybucket.com/windows/populate_work_area_other.js?type='+area_type);
+      // $.getScript('http://localhost:3000/windows/populate_work_area_other.js?type='+area_type);
+    }
+    function populate_occupation_other()
+    {
+      var occupation_type=event.target.innerHTML;
+      $.getScript('https://www.realtybucket.com/windows/populate_occupation_other.js?type='+occupation_type);
+      // $.getScript('http://localhost:3000/windows/populate_occupation_other.js?type='+occupation_type);
+    }
+    function executive_option_status()
+    {
+      var status = event.target.value;
+      console.log(status);
+      console.log("=====================");
+      if (status === 9 || status === "9")
+      {
+        document.getElementById("executive_option").style.display = "none";
+      }
+      else
+      {
+       document.getElementById("executive_option").style.display = "block"; 
+      }
+    }
+  </script>
+  <script type="text/javascript">
+    $(".chosen").chosen();
+  </script>
+  <script>
+    $(document).ready(function() {
+    $(".multi_select_style").multiselect().multiselectfilter();
+    $(".ui-multiselect-all").hide();
+    $(".ui-multiselect-none").hide()
+    });
+  </script>
+  
+  <script>
+    function click_to_call_cpy_link()
+    { 
+      var copyText = document.getElementById("click_to_call_link");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(copyText.value);
+      alert("Copied the text: " + copyText.value);
+    }
+  </script>
+<%else%>
+  <%@header = 'Followup History'%>
+  <% flash.each do |key, value| %>
+    <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+    </div>
+  <% end %>
+  <div align="center"><h3><b>Followup History</b> of <%= @lead.name %>,<%= link_to @lead.mobile.to_s, "tel:+91"+(@lead.mobile.to_s) %>,<%= @lead.email %>,<%= link_to @lead.other_number.to_s, "tel:+91"+(@lead.other_number.to_s) %>-<%= @lead.personnel.name %>
+      <% if current_personnel.email == 'mitul@ursdigitally.com'%>
+      <%else%>
+        <% if @lead.mobile != nil %>
+        <%= link_to "https://web.whatsapp.com/send?phone=91"+@lead.mobile, target: "_blank" do %>
+        <%= image_tag("whatsapp.png", :class => "whatsapp_size")%>
+        <% end %>
+      <%end%>
+      <%end%>
+  <% if current_personnel.status == 'Marketing' || current_personnel.view_only==true %>
+  <% else %>
+    <% if current_personnel.email == 'rima.bhadra@techshu.in' || current_personnel.email == "riddhi.gadhiya@beyondwalls.com"%>
+    <%else%>       
+     <abbr title="Lead Edit"> <%= link_to edit_lead_path(@lead), class: "btn btn-default btn-xs" do%>
+        <i class="glyphicon glyphicon-pencil"></i></abbr>
+    <%end%>
+    <% end %>
+  <% end %>
+  </h3></div>
+  <%= form_tag 'drilldown_followup_entry' do  %>
+    <table class="customers" id="followup_history">
+      <thead>
+        <tr>
+          <th>Updated on</th>
+          <th>Updated on sort</th>
+          <th>Status</th>
+          <th>Remarks</th>
+          <th>Followup Date</th>
+          <th>Followup Date sort</th>
+          <th>Executive</th>
+          <th>Score</th>
+          <th>EntryTime</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% all_followups = [] %>
+        <% lead_follow_ups=@lead.follow_ups %>
+        <% lead_follow_ups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.sms_followups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.email_followups.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.call_records.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.sent_cost_sheets.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.whatsapps.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+        <% @lead.template_sends.each do |followup| %>
+          <% all_followups += [followup] %>
+        <% end %>
+
+        <% all_followups = all_followups.sort_by{|x| [x.created_at, x.id]} %>
+        <% if lead_follow_ups != [] %>
+        <% last_follow_up_status=lead_follow_ups.last.current_status %>
+        <% else %>
+        <% last_follow_up_status='Fresh' %>
+        <% end %>
+        <% all_followups.reverse.each do |followup| %>
+          <% if followup.class.table_name == 'sms_followups' %>
+            <tr>
+             <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up_status %></td>
+             <td>SMS Sent</td>
+             <td></td>
+             <td></td>
+             <td>
+              <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+              <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+             </td>
+            <td></td>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>
+          <% elsif followup.class.table_name == 'email_followups' %>
+            <tr>
+             <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up_status %></td>
+             <td>Email Sent</td>
+             <td></td>
+             <td></td>
+             <td>
+             <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+              <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+             </td>
+            <td></td>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>
+          <% elsif followup.class.table_name == 'whatsapps' %>
+            <tr>
+             <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up_status %></td>
+             <td><% if followup.by_lead==true %>
+              Lead Whatsapp: <%= followup.message %>
+              <% elsif followup.by_lead==false %>
+              <%= followup.message %>
+              <% else followup.by_lead==false %>
+              Executive Whatsapp: <%= followup.message %>  
+              <% end %> 
+             </td>
+             <td></td>
+             <td></td>
+             <td>
+             <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+              <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+             </td>
+            <td></td>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>  
+          <% elsif followup.class.table_name == 'sent_cost_sheets' %>
+            <tr>
+             <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up_status %></td>
+             <td>Cost Sheet Sent</td>
+             <td></td>
+             <td></td>
+             <td>
+             <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                <%= Lead.find(followup.lead_id).personnel.name %>
+                <% else %>
+                <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                <% end %>
+              <% else %>
+              <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+              <% end %>
+             </td>
+            <td><%= link_to 'Cost Sheet', 'cost_sheet_send?sent_cost_sheet_id='+(SentCostSheet.find(followup.id).cost_sheet_id).to_s, method: :post %></td>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>  
+          <% elsif followup.class.table_name == 'call_records' %>
+            <tr>
+              <td><%= (followup.occurred_at+19800).strftime("%d/%m/%y") %></td>
+              <td><%= (followup.occurred_at+19800).strftime("%m/%d/%y") %></td>
+              <td><%= last_follow_up_status %></td>
+              <td>Call at : <%= (followup.occurred_at).strftime("%d/%m/%y-%H:%M") %>, <%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), followup.url%>   
+              </td>
+              <td></td>
+              <td></td>
+              <td><%= Personnel.find(followup.personnel_id).name%></td>
+              <td></td>
+              <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>  
+          <% elsif followup.class.table_name == "template_sends" %>
+            <tr>
+              <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+              <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+              <td><%= last_follow_up_status %></td>
+              <td><%= followup.template%></td>
+              <td></td>
+              <td></td>
+              <td>
+                <% if Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at)==[] %>
+                  <% if Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at)==[] %>
+                    <%= Lead.find(followup.lead_id).personnel.name %>
+                  <% else %>
+                    <%= Lead.find(followup.lead_id).follow_ups.where('created_at > ?',followup.created_at).first.personnel.name %>
+                  <% end %>
+                <% else %>
+                  <%= Lead.find(followup.lead_id).follow_ups.where('created_at < ?',followup.created_at).last.personnel.name %>  
+                <% end %>
+              </td>
+              <td></td>
+              <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>
+          <% else %>
+            <tr>
+             <td><%= (followup.communication_time+19800).strftime("%d/%m/%y") %></td>
+             <td><%= (followup.created_at+19800).strftime("%m/%d/%y") %></td>
+             <td><%= followup.current_status %></td>
+             <td><%= followup.remarks %></td>
+             <td><%= (followup.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+             <td><%= (followup.follow_up_time).strftime("%m/%d/%y") %></td>
+             <td><%= followup.personnel.name %></td>
+             <td><%= followup.score %></td>
+             <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>  
+            </tr>
+          <% last_follow_up_status=followup.current_status %>  
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <% if current_personnel.email == "riddhi.gadhiya@beyondwalls.com" || current_personnel.email == "rima.bhadra@techshu.in" %>
+  <%else%>
+    <% if @lead.follow_ups != [] %>  
+      <% if current_personnel.status=='Marketing' || current_personnel.view_only==true %>
+      <% else %>
+        <br>
+        <div class="container">
+          <div class="form-group">
+            <%= hidden_field_tag :leading_id, @lead.follow_ups[0].lead_id %>
+            <% @latest_followup=@lead.follow_ups.sort_by{|x| [x.communication_time, x.id] }.last %>
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Sales Executive' || current_personnel.status=='Team Lead' || current_personnel.status == "Audit" %>
+              <div class="row">
+                <div class="col-md-3 executive_div">
+                  <div ><b><i><font color="#004fff">  Executive </font></i></b></div>
+                  <%= select(:leading, :personnel, options_for_select(@executives, selected: @lead.personnel_id), {}, { :class => 'form-control selectpicker', data: { live_search: true } })   %>
+                </div> 
+            <% end %>
+                <div class="col-md-5">
+                  <div ><b><i><font color="#004fff">  Followed up/Site Visited/Booked/Lost Date </font></i></b></div>
+                  <% 
+                    if @latest_followup.follow_up_time<Date.today 
+                      min_date=@latest_followup.follow_up_time
+                    else
+                      min_date=Time.now
+                    end
+                  %>
+                  <%= date_field(:leading, :flexible_date, max: Date.today, :class => "form-control", :value => min_date.strftime('%Y-%m-%d'), :required => true)%>
+                </div>   
+                <div class="col-md-4">
+                  <div ><b><i><font color="#004fff">To Followup On</font></i></b></div>
+                  <%= date_field(:leading, :followup_date, :class => "form-control", :value => ((min_date.to_date)+1.day)) %>
+                  <%= time_select :leading, :followup_time, {ampm: true, minute_step: 30, default: Time.now.beginning_of_day+19.hours} %>
+                </div>    
+              </div>
+              <!-- <first row end> -->
+              <% old_status=0
+                 if @latest_followup.osv == true && @latest_followup.status == false && @latest_followup.lead.interested_in_site_visit_on == nil && @latest_followup.lead.qualified_on != nil
+                  old_status=9
+                 elsif @latest_followup.osv == true && @latest_followup.status == false && @latest_followup.lead.interested_in_site_visit_on != nil
+                  old_status=10
+                 elsif @latest_followup.osv == true 
+                  old_status=1
+                 elsif @latest_followup.osv== false && @latest_followup.status==nil 
+                  old_status=8
+                 elsif @latest_followup.osv== false && @latest_followup.status==false 
+                  old_status=6 
+                 elsif @latest_followup.osv==nil  && @latest_followup.status==nil 
+                  old_status=0
+                 elsif @latest_followup.osv==nil && @latest_followup.status==false 
+                  old_status=2
+                 elsif @latest_followup.status==true && @latest_followup.lead.lost_reason_id==nil
+                  old_status=4
+                 elsif @latest_followup.status==true
+                  old_status=5
+                 end 
+              %>
+              <!--<second row start> -->
+              <div class="row">
+                <% if @lead.anticipation==''%>
+                  <div class="col-md-2 list_design">
+                    <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot' %>Hot</p>
+                    <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+                    <p class="text-info"><%= radio_button_tag :anticipation , '', true %>Normal</p>
+                  </div>
+                <% elsif @lead.anticipation=='Hot' %>
+                  <div class="col-md-2 list_design">
+                    <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot', true %>Hot</p>
+                    <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+                    <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+                  </div>  
+                <% else %>
+                  <div class="col-md-2 list_design">
+                    <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot' %>Hot</p>
+                    <p class="text-success"><%= radio_button_tag :anticipation , 'Good', true %>Good</p>
+                    <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+                  </div>  
+                <% end %>
+                <div class="col-md-4">
+                  <div ><b><i><font color="#004fff"> Status </font></i></b></div>
+                  <% if current_personnel.organisation.name=='Jain Group' && current_personnel.access_right==nil %>
+                    <% if @lead.site_visited_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Site Visited',2 ], ['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.visit_organised_on != nil %>
+                      <%= select(:leading, :status, options_for_select([['OV', 1],['Site Visited',2 ], ['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.interested_in_site_visit_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Interested in Site Visit', 10],['OV', 1], ['Site Visited', 2], ['Virtually Visited', 11], ['Repeat Site Visited',3 ], ['Field Visited',6 ], ['Repeat Field Visited',7 ], ['Negotiation',8], ['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.qualified_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Qualified', 9],['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ], ['Virtually Visited', 11], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ], ['Negotiation',8], ['Lost', 5]],selected: old_status),{}, { :class => 'form-control' }) %>&nbsp;
+                    <% else %> 
+                      <%= select(:leading, :status, options_for_select([['In Follow Up', 0], ['Qualified', 9], ['Interested in Site Visit', 10], ['OV', 1], ['Site Visited',2 ], ['Virtually Visited', 11], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% end %>
+                  <% elsif current_personnel.organisation.name=='Jain Group' && current_personnel.access_right==2 %>
+                    <% if @lead.site_visited_on != nil %>
+                      <% if current_personnel.name == 'Tapan Samanta' %>
+                        <%= select(:leading, :status, options_for_select([['Site Visited',2 ],['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                      <% else %> 
+                        <%= select(:leading, :status, options_for_select([['Site Visited',2 ],['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                      <% end %>
+                    <% elsif @lead.visit_organised_on != nil %>
+                      <%= select(:leading, :status, options_for_select([['OV', 1],['Site Visited',2 ], ['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.interested_in_site_visit_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ],['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.qualified_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Qualified', 9],['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ],['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% else %> 
+                      <%= select(:leading, :status, options_for_select([['In Follow Up', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ],['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% end %>  
+                  <% else %>
+                    <% if @lead.site_visited_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Site Visited',2 ],['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.visit_organised_on != nil %>
+                      <%= select(:leading, :status, options_for_select([['OV', 1],['Site Visited',2 ], ['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.interested_in_site_visit_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ],['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% elsif @lead.qualified_on != nil %> 
+                      <%= select(:leading, :status, options_for_select([['Qualified', 9],['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ],['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% else %> 
+                      <%= select(:leading, :status, options_for_select([['In Follow Up', 0], ['Qualified', 9], ['Interested in Site Visit', 10],['OV', 1], ['Site Visited',2 ], ['Virtually Visited', 11],['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8],['Booked', 4],['Lost', 5]],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+                    <% end %>
+                  <% end %>  
+                  <%= select(:leading, :lost_reason, options_for_select(@lost_reasons,selected: @latest_followup.lead.lost_reason_id),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' })   %>
+                </div>
+                <div class="col-md-6 follow_up_status_div">
+                  <div>
+                    <b><i><font color="#004fff">Followup Remarks</font></i></b>
+                  </div>
+                  <%= select_tag 'remarks', options_for_select(@common_followup_remarks), :class => 'form-control', :id => 'dropdown_remarks', :prompt => 'Select Followup Remarks',:onchange => 'textarea_remarks_disable("textarea_remarks")'%><br>
+                  <div class="row">
+                    <div class="col-lg-9">
+                      <%= text_area_tag(:remarks, nil, placeholder: 'Enter Followup Remarks', class: "form-control", autocomplete: 'remarks', :id => 'textarea_remarks', :onchange => 'dropdown_remarks_disable("dropdown_remarks")') %>
+                    </div>
+                    <div class="col-lg-2">
+                      Feedback:
+                    </div>
+                    <div class="col-lg-1">
+                      <%= check_box_tag 'site_visit_feedback', true, nil%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br><div class="small_dividor"></div><br>
+              <div class="row">
+                <% if @lead.area_id == nil || @lead.area_id== ''%>
+                  <div class="col-md-3">
+                    Place of Residence:
+                    <%= select_tag 'leading[area_id]', options_for_select(@areas, selected: @lead.area_id), :prompt => 'Select Area', :class => 'form-control selectpicker', data: { live_search: true },  :onchange => 'populate_area_other()' %>
+                    <div id="area_other">
+                    </div>
+                  </div>
+                <%end%>
+                <% if @lead.age_bracket == nil || @lead.age_bracket== ''%>
+                  <div class="col-md-3">
+                    Age Bracket:
+                    <%= select_tag 'leading[age_bracket]', options_for_select(@age_brackets, selected: @lead.age_bracket), :class => 'form-control', :prompt => 'Select Age Bracket' %>
+                  </div>
+                <%end%>
+                <% if @lead.occupation_id == nil || @lead.occupation_id== ''%>
+                  <div class="col-md-3">
+                    Occupation:
+                    <%= select_tag 'leading[occupation_id]', options_for_select(@occupations, selected: @lead.occupation_id), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select Occupation', :onchange => 'populate_occupation_other()' %>
+                    <div id="occupation_other">
+                    </div>
+                  </div>
+                <%end%>
+                <% if @lead.work_area_id == nil || @lead.work_area_id== ''%>
+                  <div class="col-md-3">
+                    Company Area:
+                    <%= select_tag 'leading[work_area_id]', options_for_select(@areas, selected: @lead.work_area_id), :prompt => 'Select Area', :class => 'form-control selectpicker', data: { live_search: true }, :onchange => 'populate_work_area_other()' %>
+                    <div id="work_area_other">
+                    </div>
+                  </div>
+                <%end%>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div ><i>  &nbsp;</i></div>
+                  <%= submit_tag 'Update',name: 'update', :class => 'btn btn-primary', id: 'follow_up_update' %>
+                  <% params[:id]%>
+                  <%= submit_tag 'SMS Followup', name: 'sms_followup', :class => 'btn btn-info' %>
+                  <%= submit_tag 'Email Followup', name: 'email_followup', :class => 'btn btn-info' %>
+                  <% if @lead.site_visited_on == nil && @lead.booked_on == nil %>
+                  <% else %>
+                    <%= submit_tag 'Cost Sheet', name: 'cost_sheet', :class => 'btn btn-info' %>
+                  <% end %>
+                  <%= link_to 'Site Visit Form', windows_site_visit_form_path(@lead), :class => 'btn btn-primary' %>
+                </div>
+              </div><br>
+              <% if @whatsapp_templates == [] && @email_templates == [] && @sms_templates == [] %>
+              <% else %>
+                <div class="dividor"></div>
+                <br>
+                <div class="row">
+                  <p>Whatsapp Templates:</p>
+                  <% @whatsapp_templates.each do |whatsapp_template| %>
+                    <div class="col-lg-2">
+                      <%= link_to whatsapp_template, 'template_send?whatsapp_template='+(whatsapp_template).to_s+'*'+@lead.id.to_s,:class => 'btn btn-primary', :onchange => 'disable_link("link_disable")'%>
+                    </div>
+                  <%end%>
+                </div>
+                <br>
+                <div class="row">
+                  <p>Email Templates:</p>
+                  <% @email_templates.each do |email_template| %>
+                    <div class="col-lg-2">
+                      <%= link_to email_template, 'template_send?email_template='+(email_template).to_s+'*'+@lead.id.to_s,:class => 'btn btn-primary'%>
+                    </div>
+                  <%end%>
+                </div>
+                <br>
+                <div class="row">
+                  <p>SMS Templates:</p>
+                  <% @sms_templates.each do |sms_template| %>
+                    <div class="col-lg-2">
+                      <%= link_to sms_template, 'template_send?sms_template='+(sms_template).to_s+'*'+@lead.id.to_s,:class => 'btn btn-primary'%>
+                    </div>
+                  <%end%>
+                </div>
+              <%end%>
+            </div>
+            <!-- <second row ends> -->
+          <% end %>
+        <% end %>        
+      <% end %>
+      </div>
+      </div>
+  <%end%>
+  <div class="col-lg-10">
+    <% if current_personnel.organisation.name=='Rajat Group' %>
+      <%= form_tag 'whatsapp_snippet' do  %>
+        <%= hidden_field_tag :leading_id, @lead.id %>
+        <div class='row'>
+          <%= select(:snippet, :flat_id, options_for_select(@flats),{}, { :class => 'form-control selectpicker', data: { live_search: true } })   %>
+          <%= submit_tag 'Whatsapp Basic Cost Breakup', name: 'cost_sheet', :class => 'btn btn-info' %>
+          <%= submit_tag 'Whatsapp Area Details', name: 'cost_sheet', :class => 'btn btn-info' %>
+          <%= submit_tag 'Email Area Details', name: 'cost_sheet', :class => 'btn btn-info' %>
+          <%= submit_tag 'Whatsapp Cost Breakup', name: 'cost_sheet', :class => 'btn btn-info' %>
+          <%= submit_tag 'Email Cost Breakup', name: 'cost_sheet', :class => 'btn btn-info' %>
+          <%= number_field_tag 'mark_up' , 0, step: "any", :class => 'form-control' %>
+      <% end %>
+        </div>
+    <% end %>  
+  </div>
+  <style >
+    .list_design{
+      display: inline-block;
+    }
+    /*.executive_div{
+      width: 20%;
+    }
+    .follow_up_status_div{
+      width: 20%;
+    }*/
+    .anticipation_div{
+      width: 10%;
+    }
+
+      .dataTables_scrollHead{
+        height: 40px;
+      }
+      .dataTables_info{
+        display:inline-block;
+        float:left;
+      }
+     .dataTables_length{
+        display:inline-block;
+        float:right;
+      }
+     .fixedHeader-floating th { background-color: #2b3e50; }
+     .dividor{
+        border-bottom: 3px solid black!important;
+      }
+      .small_dividor{
+        border-bottom: 1px solid #c3c3c3!important;
+      }
+      .whatsapp_size{
+        width: 30px;
+      }
+      .play_btn{
+        width: 30px!important;
+        height: auto;
+      }
+  </style>
+  <script>
+    function updateFormEnabled() {
+        if (verifyAdSettings()) {
+            $('#follow_up_update').prop('disabled', false);
+            $('#follow_up_update').prop('value', 'Update');
+            document.getElementById('follow_up_update').removeAttribute('data-confirm');
+        } else {
+            $('#follow_up_update').prop('disabled', true);
+            $('#follow_up_update').prop('value', 'Pick Lost Reason');
+        }
+        if (BookingPicked()) {
+        } else {
+            document.getElementById('follow_up_update').setAttribute('data-confirm', "Are you sure this is a booking?");
+        }
+    }
+    function verifyAdSettings() {
+        if ($('#leading_lost_reason').val() == "" && $('#leading_status').val() == 5) {
+            return false;
+        } else {
+            return true
+        }
+    }
+
+    function BookingPicked() {
+        if ($('#leading_status').val() == 4) {
+            return false;
+        } else {
+            return true
+        }
+    }
+
+    $('#leading_status').change(updateFormEnabled);
+    $('#leading_lost_reason').change(updateFormEnabled);
+  
+    function disable_link(link_disable){
+      document.getElementById(link_disable).disabled = true;
+    }
+    function textarea_remarks_disable(textarea_remarks)
+    {
+      var remarks = event.target.value;
+      if (remarks == "") {
+        document.getElementById(textarea_remarks).disabled = false;  
+      } else {
+        document.getElementById(textarea_remarks).disabled = true;
+      }
+    }
+    function dropdown_remarks_disable(dropdown_remarks)
+    {
+       document.getElementById(dropdown_remarks).disabled = true;
+    }
+    function populate_area_other()
+    {
+      var area_type = event.target.innerHTML;
+      $.getScript('https://www.realtybucket.com/windows/populate_area_other.js?type='+area_type);
+      // $.getScript('http://localhost:3000/windows/populate_area_other.js?type='+area_type);
+    }
+    function populate_work_area_other()
+    {
+      var area_type=event.target.innerHTML;
+      $.getScript('https://www.realtybucket.com/windows/populate_work_area_other.js?type='+area_type);
+      // $.getScript('http://localhost:3000/windows/populate_work_area_other.js?type='+area_type);
+    }
+    function populate_occupation_other()
+    {
+      var occupation_type=event.target.innerHTML;
+      $.getScript('https://www.realtybucket.com/windows/populate_occupation_other.js?type='+occupation_type);
+      // $.getScript('http://localhost:3000/windows/populate_occupation_other.js?type='+occupation_type);
+    }
+  </script>
+  <script type="text/javascript">
+    $(".chosen").chosen();
+  </script>
+<%end%>

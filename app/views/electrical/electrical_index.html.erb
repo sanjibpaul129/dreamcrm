@@ -1,0 +1,28 @@
+<%@header ='Electrical Charge Rate'%>
+<h1>Electrical Charges List</h1>
+<table id="customers" style="width: 100% height:100%">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Business Unit</th>
+      <th>Rate</th>
+      <th>Applicable From</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @electrical_charges.each do |electrical_charge|%>
+  		<tr>
+  			<td><%= electrical_charge.company.name%></td>
+  			<td><%= electrical_charge.business_unit.name%></td>
+  			<td><%= electrical_charge.rate%></td>
+        <td><%= electrical_charge.applicable_from.try{|x| x.strftime('%d/%m/%Y')}%></td>
+  			<td><%= link_to 'Edit', electrical_electrical_edit_path(electrical_charge), :class => 'edit_btn'%></td>
+  			<td><%= link_to 'Destroy', electrical_electrical_destroy_path(electrical_charge), data: { confirm: 'Are you sure ?'}, :class => 'dlt_btn'%></td>
+  		</tr>
+  	<%end%>
+  </tbody>
+</table><br>
+<%= link_to 'New Entry', electrical_electrical_new_path, :class => 'btn btn-primary' %>

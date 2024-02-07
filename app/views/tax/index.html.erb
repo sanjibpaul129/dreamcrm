@@ -1,0 +1,46 @@
+<%@header = 'Tax'%>
+<h1>Tax</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      
+      <th>Name</th>
+      <th>Project</th>
+      <th>Overall</th>
+      <th>Car Park</th>
+      <th>Basic</th>
+      <th>Plc</th>
+      <th>Edc</th>
+      <th>ServantQuarter</th>
+      <th>Applicable From</th>
+      
+      
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @taxs.each do |tax| %>
+      <tr>
+        <td><%= tax.name %></td>
+        <td><%= tax.business_unit.name %></td>
+        <td><%= tax.overall %></td>
+        <td><%= tax.car_park %></td>
+        <td><%= tax.basic %></td>
+        <td><%= tax.plc %></td>
+        <td><%= tax.edc %></td>
+        <td><%= tax.servant_quarter %></td>
+        <td><%= tax.applicable_from %></td>
+        
+        <td><%= link_to 'Edit', tax_edit_path(tax), :class => "edit_btn", :style => "text-decoration:none;" %></td>
+        <td><%= link_to 'Destroy', tax_destroy_path(tax),:class => "dlt_btn", :style => "text-decoration:none;",data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New tax', tax_new_path, :class => 'btn btn-primary' %>

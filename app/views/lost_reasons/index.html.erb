@@ -1,0 +1,24 @@
+<%@header = 'Lost Reasons'%>
+<h1>Listing Lost Reasons</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @lost_reasons.each do |lost_reason| %>
+      <tr>
+        <td><%= lost_reason.description %></td>
+        <td><%= link_to 'Edit', edit_lost_reason_path(lost_reason), :class => "edit_btn", :style => "text-decoration:none;"%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Lost reason', new_lost_reason_path, :class => "btn btn-primary" %>

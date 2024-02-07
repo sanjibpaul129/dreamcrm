@@ -1,0 +1,109 @@
+<%@header = 'Raise Demand'%>
+<h1>Booked Customers</h1>
+<%= form_tag 'bookings', :html => {:class => 'form-horizontal'} do %>
+  <div class="form-group">
+     <div class="col-lg-1">
+      <%= label_tag 'Blocks:' %>
+    </div>
+    <div class="col-lg-3">  
+      <%= select_tag 'block_id', options_for_select(@blocks, selected: @selected_block_id), :class => 'form-control chosen'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>          
+    </div>
+  </div>
+<%end%><br><br>
+<%= form_tag 'booking_submit_for_action', :html => {:class => 'form-horizontal'} do %>
+  <table id="customers">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Project</th>
+        <th>Booking Date</th>
+        <th>Customer</th>
+        <th>Block</th>
+        <th>Flat</th>
+        <th>Area</th>
+        <th>Payment Plan</th>
+        <th>Agreement Date</th>
+        <th>Mortgage Noc Date</th>
+        <th>Allotment Date</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+    	<% @bookings.each do |booking|%>      
+    		<tr>
+          <% if booking.cancelled == nil%>
+            <td><%= radio_button_tag :booking_id, booking.id %></td>
+          <%else%>
+            <td></td>
+          <%end%>
+          <td><%= booking.cost_sheet.flat.block.business_unit.name%></td>
+          <td><%= booking.date.to_date.strftime('%d/%m/%Y')%></td>
+          <td><%= booking.cost_sheet.lead.try(:name)%></td>
+          <td><%= booking.cost_sheet.flat.block.name %></td>
+          <td><%= booking.cost_sheet.flat.full_name %></td>
+          <td><%= booking.cost_sheet.flat.SBA%></td>
+          <td><%= booking.cost_sheet.payment_plan.description %></td>
+          <td><%= booking.agreement_date.try{|x| x.strftime('%d/%m/%Y')}%></td>
+          <td><%= booking.mortgage_noc_date.try{|x| x.strftime('%d/%m/%Y')}%></td>
+          <td><%= booking.allotment_date.try{|x| x.strftime('%d/%m/%Y')}%></td>
+          <td><%= link_to 'Edit', demand_booking_date_edit_path(booking), :class => 'edit_btn'%></td>
+          <td><%= link_to 'Cost_Sheet', {:controller => "windows", :action => "cost_sheet_send", :sent_cost_sheet_id => booking.cost_sheet_id },:class => 'link_btn ', :style => "text-decoration: none"%></td>
+          <% if LedgerEntryHeader.find_by_booking_id(booking.id) == nil %>
+            <% if DemandMoneyReceipt.find_by_booking_id(booking.id) == nil %>
+              <td><%= link_to 'Unconfirm Booking', demand_unconfirmed_booking_path(booking), :class => 'btn btn-primary'%></td>
+            <%else%>
+                <td></td>
+            <%end%>
+          <%else%>
+            <td></td>
+          <%end%>
+          <td><%= link_to 'Booking Preview', demand_booking_preview_path(booking), :class => 'btn btn-primary'%></td>
+      	</tr>
+      <%end%>
+    </tbody>
+  </table>
+  <br>
+  <div class="row">
+    <div class="col-lg-2">
+      <%= submit_tag 'Raise Demand', :class => 'btn btn-primary' %>
+    </div>
+    <% if current_personnel.organisation_id == 6 %>
+    <%else%>
+      <div class="col-lg-2">
+        <%= submit_tag 'Send Welcome Letter', :class => 'btn btn-primary' %>
+      </div>
+    <%end%>
+    <div class="col-lg-1">
+      <%= submit_tag 'Agreement', :class => 'btn btn-primary' %>
+    </div>
+    <% if current_personnel.organisation_id == 6 %>
+      <div class="col-lg-2">
+        <%= select_tag 'bank_name', options_for_select(['SBI Bank', 'ICICI Bank', 'Oil India Ltd']), :class => 'form-control'%>
+      </div>
+      <div class="col-lg-2">
+        <%= submit_tag 'Mortgage NOC', :class => 'btn btn-primary' %>
+      </div>
+    <%else%>
+      <div class="col-lg-2">
+        <%= submit_tag 'Mortgage NOC', :class => 'btn btn-primary' %>
+      </div>
+      <div class="col-lg-1">
+        <%= submit_tag 'Builder NOC', :class => 'btn btn-primary' %>
+      </div>
+    <%end%>
+    <div class="col-lg-1">
+      <%= submit_tag 'Allotment Letter', :class => 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>

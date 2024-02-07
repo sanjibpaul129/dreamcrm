@@ -1,0 +1,2 @@
+class FlatPlc < ApplicationRecord
+end

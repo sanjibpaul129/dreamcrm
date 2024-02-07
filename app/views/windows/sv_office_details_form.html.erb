@@ -1,0 +1,297 @@
+<% if params[:existing_lead] == nil %>
+  <%= form_tag 'sv_office_details_submit', :html => {:class => 'form-horizontal'} do %>  
+    <%= hidden_field_tag "lead[name]", params[:lead][:name]%>
+    <%= hidden_field_tag "lead[email]", params[:lead][:email]%>
+    <%= hidden_field_tag "lead[mobile]", params[:lead][:mobile]%>
+    <%= hidden_field_tag "dob", params[:dob]%>
+    <%= hidden_field_tag "lead[address]", params[:lead][:address]%>
+    <%= hidden_field_tag "lead[pincode]", params[:lead][:pincode]%>
+    <%= hidden_field_tag "source_category_id", params[:source_category_id] %>
+    <%= hidden_field_tag "broker_lead_intimation", params[:broker_lead_intimation] %>
+    <div class="col-xs-12">
+      <div class="well bs-component">
+        <div class="row">
+          <div class="col-xs-4">
+            <% if current_personnel.business_unit.name == "Dream One"%>
+              <%= image_tag("Dream One - Rajarhat_Logo.png", alt: "" , class: "img-responsive form_logo") %>
+            <%elsif current_personnel.business_unit.name == "Dream Palazzo"%>
+              <%= image_tag("dream palazzo.jpeg", alt: "" , class: "img-responsive form_logo") %>
+            <%elsif current_personnel.business_unit.name == "Dream Gurukul"%>
+                <%= image_tag("deam_gurukul_logo.png", alt: "" , class: "img-responsive form_logo") %>
+            <%end%>
+          </div>
+          <div class="col-xs-7 form_heading_margin">
+            <p class ="form_heading">SITE VISIT FORM</p>
+          </div>
+        </div>
+        <div class="division"></div><br>
+        <center style="margin-top: 50px;"><p class="form_sub_heading">Office Details</p></center><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Occupation:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= select_tag 'lead[occupation_id]', options_for_select(@occupations), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select Occupation', :onchange => 'populate_occupation_other()', :style => 'margin-top: 5px!important;' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-7 col-xs-offset-4">
+            <div id="occupation_other">
+            </div>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Designation:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= select_tag 'lead[designation_id]', options_for_select(@designations), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select designation', :onchange => 'populate_designation_other()', :style => 'margin-top: 5px!important;' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class=" col-xs-7 col-xs-offset-4">
+            <div id="designation_other">
+            </div>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 15px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Company:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= text_field_tag 'lead[company]', '', :class => "form-control"%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 25px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Off-Location:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= text_field_tag 'lead[work_address]', '', :class => "form-control", :placeholder => "Example:- Park Street/Esplaned/Ruby" %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 15px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Pincode:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= text_field_tag 'lead[office_pincode]', '', :class => "form-control"%>
+          </div>
+        </div><br>
+        <div class="row">
+          <center>
+            <%= submit_tag "Next", :class => 'btn', :style => 'background: #27303f; color: #fff; border-left: 11px solid #c8222c;' %>
+          </center>
+        </div>
+        <div class="row">
+          <div class="col-xs-offset-6 col-xs-6 footer_logo" style="margin-top: 36%;">
+            <%= image_tag("sv_form_logo.png", alt: "" , class: "img-responsive form_logo", style: "margin-left: 32%;") %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+<%else%>
+  <%= form_tag 'sv_office_details_submit', :html => {:class => 'form-horizontal'} do %>  
+    <%= hidden_field_tag "lead[name]", params[:lead][:name]%>
+    <%= hidden_field_tag "lead[email]", params[:lead][:email]%>
+    <%= hidden_field_tag "lead[mobile]", params[:lead][:mobile]%>
+    <%= hidden_field_tag "dob", params[:dob]%>
+    <%= hidden_field_tag "lead[address]", params[:lead][:address]%>
+    <%= hidden_field_tag "lead[pincode]", params[:lead][:pincode]%>
+
+    <%= hidden_field_tag "existing_lead", @lead.id%>
+    <div class="col-xs-12">
+      <div class="well bs-component">
+        <div class="row">
+          <div class="col-xs-4">
+            <% if current_personnel.business_unit.name == "Dream One"%>
+              <%= image_tag("Dream One - Rajarhat_Logo.png", alt: "" , class: "img-responsive form_logo") %>
+            <%elsif current_personnel.business_unit.name == "Dream Palazzo"%>
+              <%= image_tag("dream palazzo.jpeg", alt: "" , class: "img-responsive form_logo") %>
+            <%end%>
+          </div>
+          <div class="col-xs-7 form_heading_margin">
+            <p class ="form_heading">SITE VISIT FORM</p>
+          </div>
+        </div>
+        <div class="division"></div><br>
+        <center style="margin-top: 50px;"><font style="color: dimgray; letter-spacing: 2px; font-style: oblique; font-weight: 700;">Office Details</font></center><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Occupation:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= select_tag 'lead[occupation_id]', options_for_select(@occupations, selected: @lead.occupation_id), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select Occupation', :onchange => 'populate_occupation_other()', :style => 'margin-top: 5px!important;' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-7 col-xs-offset-4">
+            <div id="occupation_other">
+            </div>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 10px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Designation:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= select_tag 'lead[designation_id]', options_for_select(@designations, selected: @lead.designation_id), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select designation', :onchange => 'populate_designation_other()', :style => 'margin-top: 5px!important;' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class=" col-xs-7 col-xs-offset-4">
+            <div id="designation_other">
+            </div>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 15px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Company:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= text_field_tag 'lead[company]', @lead.try(:company), :class => "form-control"%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 25px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;" >Off-Location:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= text_area_tag 'lead[work_address]', @lead.try(:work_address), :class => "form-control"%>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-3 col-xs-offset-1" style="margin-top: 15px;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Pincode:</font>
+          </div>
+          <div class="col-xs-7">
+            <%= text_field_tag 'lead[office_pincode]', @lead.try(:office_pincode), :class => "form-control"%>
+          </div>
+        </div><br>
+        <div class="row">
+          <center>
+            <%= submit_tag "Next", :class => 'btn', :style => 'background: #27303f; color: #fff; border-left: 11px solid #c8222c;' %>
+          </center>
+        </div>
+        <div class="row">
+          <div class="col-xs-offset-6 col-xs-6 footer_logo" style="margin-top: 36%;">
+            <%= image_tag("sv_form_logo.png", alt: "" , class: "img-responsive form_logo", style: "margin-left: 32%;") %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+<%end%>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>
+<script type="text/javascript">
+  function populate_occupation_other()
+  {
+    var occupation_type=event.target.innerHTML;
+    console.log(occupation_type);
+    console.log("========================================");
+    $.getScript('https://www.realtybucket.com/leads/leads/populate_occupation_other.js?type='+occupation_type);
+  }
+  function populate_designation_other()
+  {
+    var designation_type=event.target.innerHTML;
+    console.log(designation_type);
+    console.log("========================================");
+    $.getScript('https://www.realtybucket.com/leads/leads/populate_designation_other.js?type='+designation_type);
+  }
+</script>
+
+<style>
+  body{
+    line-height: 1.82857143!important;
+  }
+  .well{
+    background-image: url(../assets/form_background.png);
+    border-radius: 0px !important;
+/*    border: 5px solid red;*/
+    height: 100vh!important;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .division{
+    border-bottom: 2px solid darkgrey;
+    margin-top: -22px;
+    margin-bottom: 5px;
+    width: 90%;
+  }
+  .form-control{
+    margin-top: 5px!important;
+  }
+  .form_logo{
+    width: 68%;
+  }
+  .form_heading{
+    color: #000!important;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
+  .form_sub_heading{
+      color: dimgray;
+      letter-spacing: 2px;
+      font-style: oblique;
+      font-weight: 700;
+      font-size: 18px;
+  }
+  .form_heading_margin{
+    margin-top: 50px!important;
+  }
+  #user_nav{
+    display: none!important;
+  }
+  @media (max-width: 500px){
+    .well{
+      padding: 10px!important;
+      background-image: url(../assets/form_background_mobile.PNG);
+      border-radius: 0px !important;
+      height: 100vh!important;
+      background-repeat: no-repeat;
+      background-size: cover;   
+    }
+    .division{
+      margin-top: 0px;
+    }
+    .col-xs-6{
+      width: 100%;
+      margin-bottom: 7px;
+    }
+    .form_logo{
+      width: 100%!important;
+    }
+    .form_heading{
+      font-size: 13px;
+      letter-spacing: 1px;   
+    }
+    .form_sub_heading{
+      font-size: 13px;
+    }
+    .form_heading_margin{
+      margin-top: 48px!important;
+    }
+    center{
+      margin-top: -25px!important;
+    }
+    .footer_logo{
+      display: none;
+    }
+    font{
+      margin-left: -25px;
+    }
+    .col-xs-8 {
+      width: 71.666667%;
+    }
+    .radio_button{
+      width: 30%;
+    }
+    .second_line{
+      margin-left: 92px;
+    }
+  }
+</style>

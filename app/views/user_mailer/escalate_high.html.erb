@@ -1,0 +1,46 @@
+<p>Dear Sir,</p>
+<h1>Listing pending followups > 3 hours</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+       <th>name</th>
+       <th>generated on</th>
+       <th>email</th>
+        <th>mobile</th>
+        <th>other_number</th>
+        <th>project</th>
+        <th>followup remarks</th>
+        <th>time</th>
+        <th>escalated before</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @followups.each do |followup| %>
+      <tr>
+        <td><%= followup.lead.name %></td>
+        <td><%= followup.lead.generated_on.strftime("%d/%m/%y") %></td>
+        <% if follouwp.lead.business_unit.organisation_id == 1 %>
+          <td></td>
+          <td></td>
+          <td></td>
+        <%else%>
+          <td><%= followup.lead.email %></td>
+          <td><%= followup.lead.mobile %></td>
+          <td><%= followup.lead.other_number %></td>
+        <%end%>
+        <td><%= followup.lead.business_unit.name %></td>
+        <td><%= followup.remarks %></td>
+        <td><%= followup.follow_up_time.strftime("%d/%m/%y - %H:%M") %></td>
+        <% if @new_count < 1 %>
+        <td>true</td>
+        <% else %>
+        <td></td>
+        <% end %>
+      </tr>
+      <% @new_count=@new_count-1 %>
+    <% end %>
+  </tbody>
+</table>
+

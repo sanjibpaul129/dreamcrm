@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Wheels:</strong>
+  <%= @car_park_nature.wheels %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @car_park_nature.description %>
+</p>
+
+<%= link_to 'Edit', edit_car_park_nature_path(@car_park_nature) %> |
+<%= link_to 'Back', car_park_natures_path %>

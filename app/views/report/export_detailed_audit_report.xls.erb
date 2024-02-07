@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Date</Data></Cell>    
+        <Cell><Data ss:Type="String">Lead Id</Data></Cell>
+        <Cell><Data ss:Type="String">Customer</Data></Cell>
+        <Cell><Data ss:Type="String">Email</Data></Cell>
+        <Cell><Data ss:Type="String">Mobile</Data></Cell>
+        <Cell><Data ss:Type="String">Status</Data></Cell>
+        <Cell><Data ss:Type="String">Lost Reason</Data></Cell>
+        <Cell><Data ss:Type="String">Followup Remarks</Data></Cell>
+      </Row>
+      <% @leads_with_dates.each do |key, value| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= key.to_date.strftime('%d/%m/%Y')%></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+        </Row>
+        <% value.each do |lead_id|%>
+          <% lead = Lead.find(lead_id.to_i) %>
+          <% 
+            followup = FollowUp.where(lead_id: lead.id).where('created_at >= ? AND created_at < ?', key.to_datetime.beginning_of_day, key.to_datetime.beginning_of_day+1.day)
+            followup = followup.last
+          %>
+          <Row>
+            <Cell><Data ss:Type="String"></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.id%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.name%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.email%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.mobile%></Data></Cell>
+            <%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+              <Cell><Data ss:Type="String">Qualified</Data></Cell>
+            <%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+              <Cell><Data ss:Type="String">Interested in Site Visit</Data></Cell>
+            <% elsif lead.osv == true %>
+              <Cell><Data ss:Type="String">OSV</Data></Cell>
+            <% elsif lead.osv== false %>
+              <Cell><Data ss:Type="String">Negotiation</Data></Cell>
+            <% elsif lead.osv==nil  && lead.status==nil %>
+              <Cell><Data ss:Type="String">Fresh</Data></Cell>
+            <% elsif lead.osv==nil && lead.status==false %>
+              <Cell><Data ss:Type="String">Site Visited</Data></Cell>
+            <% elsif lead.status==true && lead.lost_reason_id==nil %>
+              <Cell><Data ss:Type="String">Booked</Data></Cell>
+            <% else %>
+              <Cell><Data ss:Type="String">Lost</Data></Cell>
+            <% end %>
+            <Cell><Data ss:Type="String"><%= lead.lost_reason.try{|x| x.description}%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= followup.try(:remarks)%></Data></Cell>
+            <Cell><Data ss:Type="String"></Data></Cell>
+          </Row>
+        <% end %>  
+      <% end %>  
+    </Table>
+  </Worksheet>
+</Workbook>

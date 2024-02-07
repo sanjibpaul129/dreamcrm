@@ -1,0 +1,11 @@
+
+<% @car_parks.each do |car_park|%>
+	<div class="form-group">
+		<div class="col-lg-4">
+    		<%= car_park.car_park_nature.description %>
+    	</div>
+    	<div class="col-lg-8">
+        	<%= number_field_tag 'quantity['+car_park.car_park_nature_id.to_s+']' , nil,min: 1, :class => 'form-control'%><br>
+        </div>
+    </div>
+<% end%>

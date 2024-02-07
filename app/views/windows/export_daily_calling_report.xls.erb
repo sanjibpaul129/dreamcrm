@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Fresh Leads">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Lead Id</Data></Cell>    
+        <Cell><Data ss:Type="String">Project</Data></Cell>    
+        <Cell><Data ss:Type="String">Name</Data></Cell>    
+        <Cell><Data ss:Type="String">Mobile</Data></Cell>    
+        <Cell><Data ss:Type="String">Other Number</Data></Cell>    
+        <Cell><Data ss:Type="String">Status</Data></Cell>    
+        <Cell><Data ss:Type="String">Current Executive</Data></Cell>    
+        <Cell><Data ss:Type="String">Last Followup Remarks</Data></Cell>    
+        <Cell><Data ss:Type="String">Current Followup Remarks</Data></Cell>    
+      </Row>
+      <% @fresh_leads.each do |lead| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= lead.id%></Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.business_unit.name%></Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.name%></Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.mobile%></Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.other_number%></Data></Cell>
+          <%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+            <Cell><Data ss:Type="String">Qualified</Data></Cell>
+          <%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+            <Cell><Data ss:Type="String">Interested in Site Visit</Data></Cell>
+          <% elsif lead.osv == true %>
+            <Cell><Data ss:Type="String">OSV</Data></Cell>
+          <% elsif lead.osv== false %>
+            <Cell><Data ss:Type="String">Negotiation</Data></Cell>
+          <% elsif lead.osv==nil  && lead.status==nil %>
+            <Cell><Data ss:Type="String">Fresh</Data></Cell>
+          <% elsif lead.osv==nil && lead.status==false %>
+            <Cell><Data ss:Type="String">Site Visited</Data></Cell>
+          <% elsif lead.status==true && lead.lost_reason_id==nil %>
+            <Cell><Data ss:Type="String">Booked</Data></Cell>
+          <% else %>
+            <Cell><Data ss:Type="String">Lost</Data></Cell>
+          <% end %>
+          <Cell><Data ss:Type="String"><%= lead.personnel.name%></Data></Cell>
+          <% count = lead.follow_ups.count%>
+          <Cell><Data ss:Type="String"><%= lead.follow_ups[count-2].remarks%></Data></Cell>
+          <Cell><Data ss:Type="String"><%= lead.follow_ups.last.remarks%></Data></Cell>
+        </Row>
+      <%end%>
+    </Table>
+  </Worksheet>
+  <Worksheet ss:Name="Followup Leads">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Lead Id</Data></Cell>    
+        <Cell><Data ss:Type="String">Project</Data></Cell>    
+        <Cell><Data ss:Type="String">Name</Data></Cell>    
+        <Cell><Data ss:Type="String">Mobile</Data></Cell>    
+        <Cell><Data ss:Type="String">Other Number</Data></Cell>    
+        <Cell><Data ss:Type="String">Status</Data></Cell>    
+        <Cell><Data ss:Type="String">Current Executive</Data></Cell>    
+        <Cell><Data ss:Type="String">Last Followup Remarks</Data></Cell>    
+        <Cell><Data ss:Type="String">Current Followup Remarks</Data></Cell>    
+      </Row>
+      <% @followup_leads.each do |lead| %>
+        <% if lead == nil%>
+        <%else%>
+          <Row>
+            <Cell><Data ss:Type="String"><%= lead.id%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.business_unit.name%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.name%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.mobile%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.other_number%></Data></Cell>
+            <%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+              <Cell><Data ss:Type="String">Qualified</Data></Cell>
+            <%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+              <Cell><Data ss:Type="String">Interested in Site Visit</Data></Cell>
+            <% elsif lead.osv == true %>
+              <Cell><Data ss:Type="String">OSV</Data></Cell>
+            <% elsif lead.osv== false %>
+              <Cell><Data ss:Type="String">Negotiation</Data></Cell>
+            <% elsif lead.osv==nil  && lead.status==nil %>
+              <Cell><Data ss:Type="String">Fresh</Data></Cell>
+            <% elsif lead.osv==nil && lead.status==false %>
+              <Cell><Data ss:Type="String">Site Visited</Data></Cell>
+            <% elsif lead.status==true && lead.lost_reason_id==nil %>
+              <Cell><Data ss:Type="String">Booked</Data></Cell>
+            <% else %>
+              <Cell><Data ss:Type="String">Lost</Data></Cell>
+            <% end %>
+            <Cell><Data ss:Type="String"><%= lead.personnel.name%></Data></Cell>
+            <% count = lead.follow_ups.count%>
+            <Cell><Data ss:Type="String"><%= lead.follow_ups[count-2].remarks%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= lead.follow_ups.last.remarks%></Data></Cell>
+          </Row>
+        <%end%>
+      <%end%>
+    </Table>
+  </Worksheet>
+</Workbook>

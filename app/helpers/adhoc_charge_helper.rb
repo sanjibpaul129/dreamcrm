@@ -1,0 +1,2 @@
+module AdhocChargeHelper
+end

@@ -1,0 +1,31 @@
+<% if @lead.business_unit.organisation.name=='Jain Group' %>
+	<p>Dear <%= @lead.try(:name)%>,</p>
+	<p>Whilst expressing our deep appreciation towards your investment in Dream One - Kolkata’s most technologically advanced home , we further feel privileged for having placed your trust on us in selecting your Dream Home.</p>
+
+	<p>Please find cost sheet of selected flat attached herewith.</p>
+	<p>Please feel free to get in touch with the undersigned with any queries/ feedback or for assistance. It is always our pleasure to be of service to you today and in the future.</p>
+
+	<p>Once again we warmly welcome you to the growing Jain Group family.</p>
+
+	<p><i>Warm Regards,</i></p>
+	<%= @lead.personnel.name%>,
+	<% if @lead.business_unit.organisation_id == 1 %>
+	<%else%>
+		<%= @lead.personnel.mobile%>
+	<%end%>
+<% elsif @lead.business_unit.organisation.name=='Oswal Group' %>
+	<p>Dear sir/madam,</p>
+	<p>Please find cost sheet of selected flat attached herewith.</p>
+<% elsif @lead.business_unit.organisation.name=='JSB Infrastructures' %>
+	<p>Dear <%= @lead.try(:name)%>,</p>
+	<p>Whilst expressing our deep appreciation towards your investment in <%= @lead.business_unit.name %>, we further feel privileged for having placed your trust on JSB Infrastructures in selecting your dream home.</p>
+
+	<p>Please find cost sheet of selected flat attached herewith.</p>
+	<p>Please feel free to get in touch with the undersigned with any queries/ feedback or for assistance. It is always our pleasure to be of service to you today and in the future.</p>
+
+	<p>Once again we warmly welcome you to the growing JSB Infrastructures family.</p>
+
+	<p>Warm Regards,</p>
+	<%= @lead.personnel.name%>,
+	<%= @lead.personnel.mobile%>
+<% end %>

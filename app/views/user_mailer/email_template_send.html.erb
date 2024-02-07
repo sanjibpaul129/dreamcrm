@@ -1,0 +1,5 @@
+<%= @email_template.body.html_safe%>
+<% if @email_template.file_name == nil && @email_template.file_url == nil%>
+<%else%>
+	<%= @email_template.file_url%>
+<%end%>

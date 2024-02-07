@@ -1,0 +1,60 @@
+<%= form_tag 'customer_with_flat_submit', :html => {:class => 'form-horizontal'} do %>
+<h1>Particualr Project's Customer List</h1>
+<table  id="customers" >
+  <thead>
+    <tr>
+      <th>Mark individuals</th>
+      <th>Project</th>
+      <th>Lead ID</th>
+      <th>Customer</th>
+      <th>Block</th>
+      <th>Flat</th>
+      <th>Bulk</th>
+      <th>Individual</th>
+      <th>Remarks</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @flats.each do |flat| %>
+          <tr>
+            <td><%= check_box_tag 'flat_ids[]',flat.id%></td>
+            <td><%= flat.block.business_unit.name %></td>
+            <td><%= flat.lead_id %></td>
+            <td><%= flat.lead.name %></td>
+            <td><%= flat.block.name%></td>
+            <td><%= flat.name %></td>
+            <% if flat.individual_bill_generation == false %>
+              <td>true</td>
+            <%else%>
+              <td></td>
+            <%end%>
+            <% if flat.individual_bill_generation == true %>
+              <td>true</td>
+            <%else%>
+              <td></td>
+            <%end%>
+            <td><%= flat.try(:remarks)%></td>
+            <td><%= link_to 'Put Remarks', maintainance_bill_individual_remarks_path(flat),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+          </tr>
+    <% end %>
+  </tbody>
+</table><br>
+<%= submit_tag 'Individual',:class => 'btn btn-primary' %>
+<%= submit_tag 'Bulk',:class => 'btn btn-primary' %>
+
+
+<%end%>          
+  
+<style>
+  .link_btn{
+    color: #ffffff;
+    padding:3px;
+    border-radius: 6px;
+    background-color: #df691a;
+    border-color: #df691a;    
+    width: 40px!important;
+    height:auto!important;
+  }
+</style>

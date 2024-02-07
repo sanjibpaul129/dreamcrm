@@ -1,0 +1,21 @@
+<p>Please check the project wise full details of customers outstandings listed below.</p>
+<table border="2">
+	<thead>
+		<th>Project</th>
+		<th>Customer</th>
+		<th>Outstanding</th>
+	</thead>
+	<tbody>
+		<% @project_wise_outstandings.each do |project, customer_outstanding_array| %>
+			<% customer_outstanding_array.each do |customer_outstanding|%>
+				<% customer_outstanding.each do |key, value| %>
+					<tr>
+						<td><%= project%></td>
+						<td><%= key%></td>
+						<td><%= value%></td>
+					</tr>
+				<%end%>
+			<%end%>
+		<% end %>
+	</tbody>
+</table>

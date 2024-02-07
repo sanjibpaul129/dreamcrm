@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  maintainence_bill_id: 1
+  money_receipt_id: 1
+  amount: 9.99
+  month: 1
+  year: 1
+
+two:
+  maintainence_bill_id: 1
+  money_receipt_id: 1
+  amount: 9.99
+  month: 1
+  year: 1

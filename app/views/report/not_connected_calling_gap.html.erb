@@ -1,0 +1,34 @@
+<h1>Followup Frequency Check</h1>
+<%= form_tag 'not_connected_calling_gap', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "from", @from.to_date, :class => "form-control"%>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "to", @to.to_date, :class => "form-control"%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Executives</th>
+		<th>Average Time</th>
+	</thead>
+	<tbody>
+		<% @telecaller_wise_data.each do |key, value|%>
+			<tr>
+				<td><%= key%></td>
+				<td><%= value%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

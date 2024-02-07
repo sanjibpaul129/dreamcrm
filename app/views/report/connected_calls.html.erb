@@ -1,0 +1,44 @@
+<%@header = 'Connected Calls Report'%>
+<center><h1>Connected Calls Report</h1></center>
+<%= form_tag 'connected_calls', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			<h4>From:</h4>
+		</div>
+		<div class="col-lg-3">
+			<%= date_field_tag 'from',@from.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			<h4>To:</h4>
+		</div>
+		<div class="col-lg-3">
+			<%= date_field_tag 'to',@to.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'Pick' , :class => 'btn btn-primary' %>
+		</div>
+	</div>
+<%end%>
+</br>
+<%if request.post?%>
+	<table class = "customers">
+		<thead>
+			<tr>
+				<th>Executive</th>
+				<th>Call Rang</th>
+				<th>Connected Calls</th>
+				<th>Percentage</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @connected_calls.each do |key, value|%>
+				<tr>
+					<td><%= key%></td>
+					<% value.each do |data|%>
+						<td><%= data%></td>
+					<%end%>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<%end%>

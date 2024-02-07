@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @marketing_instance.description %>
+</p>
+
+<p>
+  <strong>Business unit:</strong>
+  <%= @marketing_instance.business_unit_id %>
+</p>
+
+<p>
+  <strong>Source category:</strong>
+  <%= @marketing_instance.source_category_id %>
+</p>
+
+<p>
+  <strong>Work order:</strong>
+  <%= @marketing_instance.work_order_id %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @marketing_instance.rate %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @marketing_instance.quantity %>
+</p>
+
+<p>
+  <strong>Tax:</strong>
+  <%= @marketing_instance.tax %>
+</p>
+
+<%= link_to 'Edit', edit_marketing_instance_path(@marketing_instance) %> |
+<%= link_to 'Back', marketing_instances_path %>

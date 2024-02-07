@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  block_id: 1
+  floor: 1
+  name: MyString
+  status: false
+  SBA: 1
+  OTA: 1
+  flat_bua: 9.99
+  ot_bua: 9.99
+  flat_bua_markup: 9.99
+  ot_bua_markdown: 9.99
+  bathrooms: 1
+  balconies: 1
+
+two:
+  block_id: 1
+  floor: 1
+  name: MyString
+  status: false
+  SBA: 1
+  OTA: 1
+  flat_bua: 9.99
+  ot_bua: 9.99
+  flat_bua_markup: 9.99
+  ot_bua_markdown: 9.99
+  bathrooms: 1
+  balconies: 1

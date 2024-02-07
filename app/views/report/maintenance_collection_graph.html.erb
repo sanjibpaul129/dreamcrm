@@ -1,0 +1,69 @@
+
+<script type="text/javascript" charset="utf-8">
+
+Highcharts.setOptions({
+  lang: {
+    decimalPoint: '.',
+    thousandsSep: ','
+  }
+});
+
+$(function () {
+    // Create the chart
+   new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: "maintenance_collection"
+        },
+        title: {
+            text: 'Last 6 months Status'
+        },
+        xAxis: {
+            categories: <%= @months %>,
+            crosshair: true
+            },
+        yAxis: {
+            title: {
+                text: 'Count'
+            }
+
+        },
+        legend: {
+            enabled: true
+        },
+        plotOptions: {
+        column: {
+            pointPadding: 0.3,
+            borderWidth: 0,
+            dataLabels: {
+                    align: "left",
+                    enabled: true,
+                    format: '{point.y:,.05f}',
+                    allowOverlap: true,
+                    padding: 0,
+                    rotation: -45                }
+        }
+        },
+
+        tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+        },
+
+        series: <%= @series %>
+       
+    });
+});
+
+
+</script>
+<div class="col-lg-8 col-lg-offset-2">
+	<div class="jumbotron">
+		<div id="maintenance_collection">
+		</div>
+	</div>
+</div>

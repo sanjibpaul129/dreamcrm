@@ -1,0 +1,25 @@
+<%= form_for(@flat_plc) do |f| %>
+  <% if @flat_plc.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@flat_plc.errors.count, "error") %> prohibited this flat_plc from being saved:</h2>
+
+      <ul>
+      <% @flat_plc.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :flat_id %><br>
+    <%= select(:flat_plc, :flat_id, options_for_select(@flats),{}, { :class => 'form-group' })   %>
+  </div>
+  <div class="field">
+    <%= f.label :plc_charge_id %><br>
+    <%= select(:flat_plc, :plc_charge_id, options_for_select(@plc_charges),{}, { :class => 'form-group' }) %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

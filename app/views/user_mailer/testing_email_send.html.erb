@@ -1,0 +1,5 @@
+<%= @email_template.body.gsub('//s3.amazon','https://s3.amazon').html_safe %>
+<% if @email_template.file_name == nil && @email_template.file_url == nil%>
+<%else%>
+	<%= @email_template.file_url%>
+<%end%>

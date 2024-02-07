@@ -1,0 +1,2 @@
+class EmailFollowup < ApplicationRecord
+end

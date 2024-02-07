@@ -1,0 +1,131 @@
+<%@header = 'Google Leads Expandable'%>
+<% flash.each do |key, value| %>
+  <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+  </div>
+<% end %>
+<h1>Google Leads Expandable Report</h1>
+<%= form_tag 'keyword_wise_google_report' do  %>
+  <div class="row">
+    <div class="col-lg-1">
+      From:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "from", @from.to_date, :class => 'form-control' %>
+    </div>
+    <div class="col-lg-1">
+      to:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "to", @to.to_date, :class => 'form-control' %>
+    </div>
+    <div class="col-lg-3">
+      <%= select_tag "business_unit_id", options_for_select(@projects, selected: @project_selected), :class => 'form-control', :prompt => 'Please Select'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+    </div>
+  </div>
+  <table class="customers">
+    <thead>
+      <tr>      
+        <th>Source</th>
+        <th>AdGrp</th>
+        <th>Keyword</th>
+        <th>Leads Genereated</th>
+        <th>Qualified</th>
+        <th>Site Visited</th>
+        <th>Booked</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @google_data.each do |key, value| %>
+        <% if key == "campaigns" %>
+          <% value.each do |campaign_hash, adgroup_hash|%>
+            <% campaign_hash.each do |campaign_name, campaign_data| %>
+              <tr>
+                <% if campaign_name == "Blank"%>
+                  <td><%= campaign_name%></td>
+                <%else%>
+                  <td><%= link_to campaign_name, report_keyword_wise_google_report_path("source" => "campaign", "business_unit_id" => @project_selected, "from" => @from, "to" => @to, "campaign_name" => campaign_name), method: :post %></td>
+                <%end%>
+                <td></td>
+                <td></td>
+                <% campaign_data.each do |data|%>
+                  <td><%= data%></td>
+                <%end%>
+              </tr>
+            <%end%>
+          <%end%>
+        <% elsif key == "adgroups" %>
+          <% value.each do |campaign_hash, adgroup_hash|%>
+            <% campaign_hash.each do |campaign_name, campaign_data| %>
+              <tr>
+                <% if campaign_name == "Blank"%>
+                  <td><%= campaign_name%></td>
+                <%else%>
+                  <td><%= link_to campaign_name, report_keyword_wise_google_report_path("source" => "campaign", "business_unit_id" => @project_selected, "from" => @from, "to" => @to, "campaign_name" => campaign_name), method: :post %></td>
+                <%end%>
+                <td></td>
+                <td></td>
+                <% campaign_data.each do |data|%>
+                  <td><%= data%></td>
+                <%end%>
+              </tr>
+            <%end%>
+            <% adgroup_hash.each do |adgroup_name, adgroup_data|%>
+              <tr>
+                <td></td>
+                <td><%= adgroup_name%></td>
+                <td><%= link_to "KW+", report_keyword_wise_google_report_path("source" => "adgroup_kw", "business_unit_id" => @project_selected, "from" => @from, "to" => @to, "adgroup_name" => adgroup_name, "campaign_name" => params[:campaign_name]), method: :post %></td>
+                <% adgroup_data.each do |data|%>
+                  <td><%= data%></td>
+                <%end%>
+              </tr>
+            <%end%>
+          <%end%>
+        <% elsif key == "adgroup_kw" %>
+          <% value.each do |campaign_hash, adgroup_hash|%>
+            <% campaign_hash.each do |campaign_name, campaign_data| %>
+              <tr>
+                <% if campaign_name == "Blank"%>
+                  <td><%= campaign_name%></td>
+                <%else%>
+                  <td><%= link_to campaign_name, report_keyword_wise_google_report_path("source" => "campaign", "business_unit_id" => @project_selected, "from" => @from, "to" => @to, "campaign_name" => campaign_name), method: :post %></td>
+                <%end%>
+                <td></td>
+                <td></td>
+                <% campaign_data.each do |data|%>
+                  <td><%= data%></td>
+                <%end%>
+              </tr>
+            <%end%>
+            <% adgroup_hash.each do |adgroup_detail_hash, creative_hash|%>
+              <% adgroup_detail_hash.each do |adgroup_name, adgroup_data|%>
+                <tr>
+                  <td></td>
+                  <td><%= adgroup_name%></td>
+                  <td><%= link_to "KW+", report_keyword_wise_google_report_path("source" => "adgroup_kw", "business_unit_id" => @project_selected, "from" => @from, "to" => @to, "adgroup_name" => adgroup_name, "campaign_name" => params[:campaign_name]), method: :post %></td>
+                  <% adgroup_data.each do |data|%>
+                    <td><%= data%></td>
+                  <%end%>
+                </tr>
+              <%end%>
+              <% creative_hash.each do |creative_id, creative_data|%>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><%= creative_id%></td>
+                  <% creative_data.each do |data|%>
+                    <td><%= data%></td>
+                  <%end%>
+                </tr>    
+              <%end%>
+            <%end%>
+          <%end%>
+        <%end%>
+      <%end%>
+    </tbody>
+  </table>
+<%end%>

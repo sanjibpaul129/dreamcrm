@@ -1,0 +1,142 @@
+<h1>Daily Callings</h1><br>
+<div class="row">
+	<%= form_tag 'daily_calling_report', :html => {:class => 'form-horizontal'} do %>  
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag 'from', @from.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag 'to', @to.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			Executives:
+		</div>
+		<div class="col-lg-2">
+			<%= select_tag 'personnel_id', options_for_select(@executives, selected: @current_executive), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Please Select'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'View Details', :class => 'btn btn-primary' %>
+		</div>
+	<%end%>
+		<div class="col-lg-1">
+	    <%= button_to "Export", :action => "export_daily_calling_report" , format: "xls", :method => :get, :current_executive => @current_executive, :level => @level_type, :from => @from, :to => @to %>
+		</div>
+</div><br>
+<% if request.post?%>
+	<table class="customers">
+		<thead>
+			<tr>
+				<th colspan="9" style="text-align:center!important;">Fresh Leads called</th>
+			</tr>
+			<tr>
+				<th>lead Id</th>
+				<th>Project</th>
+				<th>Name</th>
+				<% if current_personnel.organisation_id == 6 %>
+					<th>Mobile</th>
+					<th>Other Number</th>
+				<%end%>
+				<th>Status</th>
+				<th>Current Executive</th>
+				<th>Last Followup Remarks</th>
+				<th>Current Followup Remarks</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @fresh_leads.each do |lead| %>
+				<tr>
+						<td><%= lead.id%></td>
+						<td><%= lead.business_unit.name%></td>
+						<td><%= lead.name%></td>
+						<% if current_personnel.organisation_id == 6 %>
+							<td><%= lead.mobile%></td>
+							<td><%= lead.other_number%></td>
+						<%end%>
+						<%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+	           	<td>Qualified</td>
+	          <%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+	            <td>Interested in Site Visit</td>
+	          <% elsif lead.osv == true %>
+	          	<td>OSV</td>
+	          <% elsif lead.osv== false %>
+	          	<td>Negotiation</td>
+	          <% elsif lead.osv==nil  && lead.status==nil %>
+	          	<td>Fresh</td>
+	          <% elsif lead.osv==nil && lead.status==false %>
+	          	<td>Site Visited</td>
+	          <% elsif lead.status==true && lead.lost_reason_id==nil %>
+	          	<td>Booked</td>
+	          <% else %>
+	          	<td>Lost</td>
+	          <% end %>
+	          <td><%= lead.personnel.name%></td>
+						<% count = lead.follow_ups.count%>
+						<td><%= lead.follow_ups[count-2].remarks%></td>
+						<td><%= lead.follow_ups.last.remarks%></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table><br>
+	<table class="customers" id="daily_callings">
+		<thead>
+			<tr>
+				<th colspan="9" style="text-align:center!important;">Leads Followup</th>
+			</tr>
+			<tr>
+				<th>lead Id</th>
+				<th>Project</th>
+				<th>Name</th>
+				<% if current_personnel.organisation_id == 6 %>
+					<th>Mobile</th>
+					<th>Other Number</th>
+				<%end%>
+				<th>Status</th>
+				<th>Current Executive</th>
+				<th>Last Followup Remarks</th>
+				<th>Current Followup Remarks</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @followup_leads.each do |lead| %>
+				<tr>
+						<td><%= lead.id%></td>
+						<td><%= lead.business_unit.name%></td>
+						<td><%= lead.name%></td>
+						<% if current_personnel.organisation_id == 6 %>
+							<td><%= lead.mobile%></td>
+							<td><%= lead.other_number%></td>
+						<%end%>
+						<%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+	           	<td>Qualified</td>
+	          <%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+	            <td>Interested in Site Visit</td>
+	          <% elsif lead.osv == true %>
+	          	<td>OSV</td>
+	          <% elsif lead.osv== false %>
+	          	<td>Negotiation</td>
+	          <% elsif lead.osv==nil  && lead.status==nil %>
+	          	<td>Fresh</td>
+	          <% elsif lead.osv==nil && lead.status==false %>
+	          	<td>Site Visited</td>
+	          <% elsif lead.status==true && lead.lost_reason_id==nil %>
+	          	<td>Booked</td>
+	          <% else %>
+	          	<td>Lost</td>
+	          <% end %>
+	          <td><%= lead.personnel.name%></td>
+						<% count = lead.follow_ups.count%>
+						<td><%= lead.follow_ups[count-2].remarks%></td>
+						<td><%= lead.follow_ups.last.remarks%></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table><br>
+<%end%>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

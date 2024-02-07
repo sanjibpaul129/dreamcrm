@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  lead_id: 1
+  message: MyText
+  by_lead: false
+
+two:
+  lead_id: 1
+  message: MyText
+  by_lead: false

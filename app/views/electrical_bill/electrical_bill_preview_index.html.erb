@@ -1,0 +1,209 @@
+<%= form_tag 'electrical_bill_download', :html => {:class => 'form-horizontal'} do %>
+<%= hidden_field_tag 'electrical_bill_id', @electrical_bill.id%>
+<html>
+  <head>
+    <style>
+    * { margin: 0; padding: 0; }
+    /**/
+    body {font-family: Arial, Helvetica, sans-serif;}
+    #page-wrap { width: 850px; height: 455px; margin: 0 auto; background: #fff !important; border: 1px solid #000; }
+
+    textarea { border: 0; font: 14px Times, Serif; overflow: hidden; resize: none; }
+   
+    .delivery_to { border: 0; font: 14px Times, Serif; height:130px;width:240px; resize: none; }
+
+    table { border-collapse: collapse; width: 848px;}
+    table td, table th { border: 1px solid black !important; padding: 2px; background: #fff !important; color: #584d4d!important}
+
+    #header { height: 100px; width: 100%; margin: 10px 0; background: #fff; text-align: center; color: #584d4d;font: bold;text-decoration: uppercase;  padding: 4px 0px; }
+
+    .customeraddress { margin: 0 10px 0 0; width: 220px; height: 300px; float: left; }
+    /**/
+    .cc_mail_box{width: 200px; height: 25px; font: 14px Times, Serif; }
+    #attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; position: relative; top: 61px; }
+    #attachment_else_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; right: 370px; position: relative; top: 61px; }
+    #regular_attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none;float:left; position: relative; bottom: 140px; left: 720px}
+    #found_ok {width: 25em;  height: 5em; float: center; position: relative; bottom: -57px; left: 235px}
+    #customer { overflow: hidden; }
+    #button { width: 250px; height: 50px; float: right; }
+    #smallbutton {width: 125px; height: 50px; float: right; }
+    #sidesmallbutton {width: 125px; height: 50px; float: right;}
+    #leftsmallbutton { width: 125px; height: 50px; float: left; }
+    #logo { text-align: right; float: right; position: relative; margin-top: 0px; margin-right: 60px; border: 1px solid #fff; max-width: 540px; max-height: 150px; overflow: hidden; float:center; }
+    #logoctr { display: none; }
+    #logo:hover #logoctr, #logo.edit #logoctr { display: block; text-align: right; line-height: 25px; background: #22222263; padding: 0 5px; }
+    #logohelp { text-align: left; display: none; font-style: italic; padding: 10px 5px;}
+    #logohelp input { margin-bottom: 5px; }
+    .edit #logohelp { display: block; }
+    .edit #save-logo, .edit #cancel-logo { display: inline; }
+    .edit #image, #save-logo, #cancel-logo, .edit #change-logo, .edit #delete-logo { display: none; }
+    #customer-title { font-size: 15px; font-weight: bold; }
+
+    #meta { margin-top: 1px; width: 845px; float: right; }
+
+    #meta td.meta-head { width: 200px; text-align: left; background: #22222263; }
+    #meta td textarea { width: 700px; text-align: left; }
+
+    #metadata { margin-top: 1px; width: 845px; float: left; }
+    #metadata td { text-align: left;  }
+    #metadata td.meta-head { width: 20px; text-align: left; background: #22222263; }
+    #metadata td textarea { height: 20px; text-align: left; width: 200px; }
+
+    #items { clear: both; width: 100%; margin: 30px 0 0 0 }
+    #items th { background: #c85e17; }
+    #items th.quantity { text-align: right; }
+    #items textarea { width: 80px; height: 50px; }
+    #items tr.item-row td { border-width: 0px; border-bottom: 1px solid black; vertical-align: top; }
+    #items td.description { width: 300px; }
+    #items td.item-name { width: 175px; }
+    #items td.description textarea, #items td.item-name textarea { width: 100%; }
+    #items td.total-line { border-right: 0; text-align: right; }
+    #items td.reg-nos { border-right: 0; text-align: center; text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 5px; }
+    #items td.quantity { text-align: right; }
+    #items td.quantity_centre { text-align: center; }
+
+    #items td.total-value { border-left: 0; padding: 10px; text-align: right; }
+    #items td.total-value textarea { height: 20px; background: none; }
+    #items td.balance { background: #c85e17; }
+    #items td.blank { border: 0; }
+    .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+
+    #terms { text-align: left; margin: 8px 0 0 0; }
+    #terms h5 { text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 10px; border-bottom: 1px solid black; padding: 0 0 4px 0; margin: 0 0 8px 0; }
+    #terms h3 { text-align: center; font: 10px Helvetica, Sans-Serif; letter-spacing: 4px; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+    #terms h4 { text-align: center; font: 15px Helvetica, Sans-Serif; letter-spacing: 4px; border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+
+    #terms textarea { width: 100%; text-align: left;}
+
+    .auto-textarea{height:auto; width:auto;}
+    .quatation_details{width:100px;}
+    .item_details{width:770px;text-align:justify;text-justify:inter-word;}
+    .delete-wpr { position: relative; }
+    .delete { display: block; color: #000; text-decoration: none; position: absolute; background: #EEEEEE; font-weight: bold; padding: 0px 3px; border: 1px solid; top: -6px; left: -22px; font-family: Verdana; font-size: 12px; }
+
+    .address { margin: 0 10px 10px 0; width: 200px; height: 120px; float: right;text-align: left; }
+    .customer_address {  border: 0; font: 14px Times, Serif; width:200px; text-align:left; float: right; }
+    .company_address { border: 0; font: 14px Times, Serif; width:240px; resize: none; text-align: left; float: left;   }
+    </style>
+  </head>
+
+  <body>
+    <div id="page-wrap">
+      <div id="header">
+        <div class="row">
+          <div class="col-md-12">
+          <p><b>PALANHARE MAINTENANCE LLP</b><br><U>44/2A, Hazra Road, Kolkata-700019</U><br><u>Project: <%= @electrical_bill.flat.block.business_unit.name %></u><br><u><b>Electricity Reimbursement Bill</b></u></p>
+          </div>
+        </div>
+      </div>                    
+      <div class="row">
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6">
+        	<br>
+          <p style="text-align: right !important; color: #000 !important;">Bill Date: <%= @electrical_bill.date.to_date.strftime('%d.%m.%y')%><br>Reimbursement bill No.<%= @electrical_bill.try(:serial)%><br>Due Date: <% due_date = @electrical_bill.date+15.days%><%= due_date.to_date.strftime('%d.%m.%y')%></p>
+        </div>
+      </div>	
+    <table class="table table-striped table-hover metadata">
+      <tbody>
+        <tr>
+          <td colspan="2"><b>Name of Owner:</b></td>
+          <td colspan="5"><b><%= @electrical_bill.lead.name%></b></td>
+          <td colspan="2"><%= @electrical_bill.flat.block.name%>-<%= @electrical_bill.flat.full_name%></td>
+        </tr>
+        <tr>
+          <td><b>Unit:</b></td>
+          <td><%= @electrical_bill.unit%></td>
+          <td><b>Rate:</b></td>
+          <td><%= @electrical_bill.rate%></td>
+          <%if @electrical_bill.opening_reading == nil && @electrical_bill.opening_reading == nil%>
+            <td></td><td></td><td></td><td></td>
+          <%else%>
+          <td><b>Opening-reading:</b></td>
+          <td><%= @electrical_bill.opening_reading%></td>
+          <td><b>Closing-reading:</b></td>
+          <td><%= @electrical_bill.closing_reading%></td>
+          <%end%>
+        </tr>
+        <%if @electrical_bill.from==nil && @electrical_bill.to==nil%>
+        <%else%>
+          <tr>
+            <td colspan="4"><b>Period:</b></td>
+            <td colspan="5"><%= @electrical_bill.from.to_date.strftime('%d.%m.%y')%> to <%= @electrical_bill.to.to_date.strftime('%d.%m.%y')%></td>
+          </tr>
+        <%end%>
+        <%amount= @electrical_bill.unit*@electrical_bill.rate%>
+          <tr>
+            <td colspan="7"><b>Amount:</b></td>
+            <td colspan="2" style="text-align: right!important;"><%= amount%></td>
+          </tr>
+          <tr>
+            <td colspan="7"><b>SGST @ 9%:</b></td>
+            <td colspan="2" style="text-align: right!important;"><%= (amount.to_f*0.09).round %></td>
+          </tr>
+          <tr>
+            <td colspan="7"><b>CGST @ 9%:</b></td>
+            <td colspan="2" style="text-align: right!important;"><%= (amount.to_f*0.09).round %></td>
+          </tr>
+          <tr>
+            <td colspan="7"><b>Total:</b></td>
+            <td colspan="2" style="text-align: right!important;"><b><%= @electrical_bill.amount%></b></td>
+          </tr>
+          <tr>
+            <td colspan="9">Amount in words (Rs.): <b><i><%= @electrical_bill.amount.round.to_i.rupees%> only.</i></b></td>
+          </tr>
+          <tr>
+            <td colspan="6"><b><u>Note:</u></b><br>1. Payment can be made by an A/c. payee cheque in favour of <b>PALANHARE MAINTENANCE LLP,</b> via UPI ID <b>palanharemaintenance.99712537@hdfcbank</b> or by scanning the QR-Code seen alongside.<br>2. Late fee of Rs.250/- will be levied beyond due date.<br>3. If not paid within 10 days from date of invoice, interest 18% p.a. will be charged.<br>4. Kindly ignore if already paid.<br>5. Please mention Name, Flat no. & Contact no. at reverse side of cheque.<br>6. if arear dues already paid please check with the accounts department.<br>7. For issuing duplicate copy of bill, Rs. 100/- will be charged extra.</td>
+            <td colspan="3" style="text-align: center!important;"><%= image_tag("palanhare qrcode.jpg", alt: "", :class => "qrcode_size")%><br><B>SCAN TO PAY</B></td>
+          </tr>
+          <tr>
+          	<td colspan="5">
+          		Company Name: PALANHARE MAINTENANCE LLP<br>
+				PAN: AATFP2178H<br>
+				GSTIN: 19AATFP2178H1ZM<br>
+				SAC CODE: 995419<br>
+				Bank Name : HDFC BANK LTD<br>
+				Bank Branch Add : 72 SARAT BOSE ROAD<br>
+				Kolkata : 700025<br>
+				Bank A/C No : 50200026846903<br>
+				IFSC : HDFC0001404
+			</td>
+          	<td colspan="4">
+          		E & O.E.<br><br><br>For PALANHARE MAINTENANCE LLP<br><br><br>This is a computer generated document no signature required
+          	</td>
+          </tr>
+</tbody>
+ 
+
+</table>
+  <div class="row">
+    <div class="col-lg-offset-5">
+      <%= submit_tag 'Download', name: 'download', :class => 'btn btn-info' %>
+      <%if @electrical_bill.flat.lead.email == nil || @electrical_bill.flat.lead.email == ''%>
+      <%else%>
+      <%= submit_tag 'Email', name: 'email', :class => 'btn btn-info' %>
+      <%end%>
+    </div>
+  </div><br><br>
+  
+    </body>
+</html>
+<%end%>
+<style>
+  .qrcode_size{
+    width: 185px;
+    height: auto;
+  }
+  
+  .table > thead > tr > th,
+  .table > tbody > tr > th,
+  .table > tfoot > tr > th,
+  .table > thead > tr > td,
+  .table > tbody > tr > td,
+  .table > tfoot > tr > td {
+    padding: 12px!important;
+    line-height: 1.42857143;
+    vertical-align: middle!important;
+    /*border-top: 1px solid transparent;*/
+  }
+</style>

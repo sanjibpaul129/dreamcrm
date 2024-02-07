@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Flat:</strong>
+  <%= @flat_plc.flat_id %>
+</p>
+
+<p>
+  <strong>Plc charge:</strong>
+  <%= @flat_plc.plc_charge_id %>
+</p>
+
+<%= link_to 'Edit', edit_flat_plc_path(@flat_plc) %> |
+<%= link_to 'Back', flat_plcs_path %>

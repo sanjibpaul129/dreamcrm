@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  mobile: MyString
+  field_one: MyString
+  field_two: MyString
+  field_three: MyString
+  field_four: MyString
+  field_five: MyString
+  email_sent: false
+  whatsapp_sent: false
+  sms_sent: false
+  remarks: MyText
+
+two:
+  email: MyString
+  mobile: MyString
+  field_one: MyString
+  field_two: MyString
+  field_three: MyString
+  field_four: MyString
+  field_five: MyString
+  email_sent: false
+  whatsapp_sent: false
+  sms_sent: false
+  remarks: MyText

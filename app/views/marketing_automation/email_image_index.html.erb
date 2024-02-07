@@ -1,0 +1,15 @@
+<h1>Email Images</h1>
+<table id="customers" >
+	<thead>
+		<th>Email Template</th>
+		<th>URL</th>
+	</thead>
+	<tbody>
+		<% @email_images.each do |email_image| %>
+			<tr>
+				<td><%= email_image.email_template.title%></td>
+				<td><%= email_image.url %></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

@@ -1,0 +1,68 @@
+<h1>Broker Contact List</h1>
+<table class="customers">
+	<thead>
+		<th>Id</th>
+		<th>Broker</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Mobile</th>
+		<th>Other Number</th>
+		<th>Url</th>
+		<th>Saved In Phone</th>
+		<th>Reference</th>
+		<th>Remarks</th>
+		<th>Executive</th>
+		<th>Head Count</th>
+		<th>Inactive</th>
+		<th>Project Detail View</th>
+		<th>Project Details Send</th>
+		<th></th>
+		<th></th>
+		<th></th>
+	</thead>
+	<tbody>
+		<% @broker_contacts.each do |broker_contact|%>
+			<tr>
+				<td><%= broker_contact.id %></td>
+				<td><%= broker_contact.broker.name %></td>
+				<td><%= broker_contact.name%></td>
+				<td><%= broker_contact.try(:email)%></td>
+				<td><%= broker_contact.try(:mobile_one)%></td>
+				<td><%= broker_contact.try(:mobile_two)%></td>
+				<% if broker_contact.mobile_one == nil || broker_contact.mobile_one == ""%>
+					<% if broker_contact.mobile_two == nil || broker_contact.mobile_two == ""%>
+						<% if broker_contact.email == nil || broker_contact.email == ""%>
+							<td><%="https://dreamgurukul.in/brochure.html?broker_contact_id="+broker_contact.id.to_s%></td>
+						<%else%>
+							<td><%="https://dreamgurukul.in/brochure.html?broker_contact_id="+broker_contact.id.to_s+"&email="+broker_contact.try(:email).to_s%></td>
+						<%end%>
+					<%else%>
+						<% if broker_contact.email == nil || broker_contact.email == ""%>
+							<td><%="https://dreamgurukul.in/brochure.html?broker_contact_id="+broker_contact.id.to_s+"&mobile="+broker_contact.try(:mobile_two).to_s%></td>
+						<%else%>
+							<td><%="https://dreamgurukul.in/brochure.html?broker_contact_id="+broker_contact.id.to_s+"&mobile="+broker_contact.try(:mobile_two).to_s+"&email="+broker_contact.try(:email).to_s%></td>
+						<%end%>
+					<%end%>
+				<%else%>
+					<% if broker_contact.email == nil || broker_contact.email == ""%>
+						<td><%="https://dreamgurukul.in/brochure.html?broker_contact_id="+broker_contact.id.to_s+"&mobile="+broker_contact.try(:mobile_one).to_s%></td>
+					<%else%>
+						<td><%="https://dreamgurukul.in/brochure.html?broker_contact_id="+broker_contact.id.to_s+"&mobile="+broker_contact.try(:mobile_one).to_s+"&email="+broker_contact.try(:email).to_s%></td>
+					<%end%>
+				<%end%>
+				<td><%= broker_contact.try(:saved_in_phone)%></td>
+				<td><%= broker_contact.try(:reference)%></td>
+				<td><%= broker_contact.try(:remarks)%></td>
+				<td><%= broker_contact.personnel.try{|x| x.name}%></td>
+				<td><%= broker_contact.try(:head_count)%></td>
+				<td><%= broker_contact.inactive %></td>
+				<td><%= link_to "Project Details View", broker_setup_project_details_path(broker_contact), :class => 'btn btn-primary', :style => "text-decoration: none" %></td>
+				<td><%= link_to "Project Details Send", broker_setup_broker_lead_intimation_link_send_path(broker_contact), :class => 'btn btn-primary', :style => "text-decoration: none" %></td>
+				<td><%= link_to "WP", broker_setup_broker_contact_whatsapp_path(broker_contact), :class => 'btn btn-primary', :style => "text-decoration: none" %></td>
+				<td><%= link_to 'Edit', broker_setup_broker_contact_edit_path(broker_contact),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+            	<td><%= link_to 'Destroy', broker_setup_broker_contact_destroy_path(broker_contact),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table><br>
+<%= link_to "New Broker Contact", broker_setup_broker_contact_new_url, :class => 'btn btn-primary'%>

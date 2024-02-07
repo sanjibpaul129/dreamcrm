@@ -1,0 +1,95 @@
+<%@header = 'Demand Accrued Interest'%>
+<h1>Demand Accrued Interest</h1>
+<%= form_tag 'demand_accrued_interest', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-2">
+			Customers-with-flats:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag 'flat_id', options_for_select(@customer_with_flats), :class => 'form-control chosen'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'View Details', :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%><br>
+<%if request.post?%>
+	<table class="customers">
+		<thead>
+			<th>Date</th>
+			<th>Milestone</th>
+			<th>Amount</th>
+			<th>Payment</th>
+			<th>Pending Amount</th>
+			<th>Delay</th>
+			<th>interest</th>
+		</thead>
+		<tbody>
+		<% money_receipt_carry_forward=0%>
+		<% previous_demanded_amount=0 %>
+		<% cumulative_milestone_amount=0 %>
+        <% pending_amount=0 %>
+        <% money_receipt_last=-1 %>
+        <% @ledger_entry_items.each do |ledger_entry_item|%>
+        <% pending_amount+=ledger_entry_item.ledger_entry_header.booking.cost_sheet.milestone_amount(ledger_entry_item.milestone_id) %>
+        <% cumulative_milestone_amount+=ledger_entry_item.ledger_entry_header.booking.cost_sheet.milestone_amount(ledger_entry_item.milestone_id) %>
+            <tr>
+              <td><%= ledger_entry_item.ledger_entry_header.date.strftime('%d/%m/%Y') %></td>
+              <td><%= ledger_entry_item.milestone.payment_milestone.description %></td>
+              <td><%= ledger_entry_item.ledger_entry_header.booking.cost_sheet.milestone_amount(ledger_entry_item.milestone_id)%></td>
+              <td></td><td><%= pending_amount %></td><td></td><td></td>
+            </tr>
+        	<% if money_receipt_carry_forward > 0 %>
+        	<tr>
+        	<td></td>
+            <td></td>
+            <td></td>
+            
+                <% if money_receipt_carry_forward < pending_amount %>
+	        	<td><%= money_receipt_carry_forward %></td>
+	        	<% pending_amount=pending_amount-money_receipt_carry_forward %>
+	        	<% money_receipt_carry_forward=0 %>
+	        	<% else %>
+	        	<td><%= pending_amount %></td>
+	            <% pending_amount=0 %>
+	            <% money_receipt_carry_forward=money_receipt_carry_forward-pending_amount %>
+	            <% end %>
+        	<td><%= pending_amount %></td>
+            </td><td></td><td></td>
+        	</tr>
+            <% end %>
+            <% cumulative_paid=0 %>
+            <% if money_receipt_carry_forward==0 %>
+	            <% @demand_money_receipts.each_with_index do |money_receipt,serial| %>
+	            <% cumulative_paid+=money_receipt.amount %>
+				    <% if cumulative_paid > previous_demanded_amount && cumulative_paid <= cumulative_milestone_amount && serial>money_receipt_last %>
+		            <% pending_amount=pending_amount-money_receipt.amount %>
+		            <td><%= money_receipt.date.strftime('%d/%m/%Y') %></td>
+		            <td></td>
+		            <td></td>
+		            <td><%= money_receipt.amount %></td>
+		            <td><%= pending_amount %></td>
+		            </td><td></td><td></td>
+		            <% money_receipt_last=serial %>
+		            <% elsif money_receipt_carry_forward == 0 && serial>money_receipt_last %>
+		            <% pending_amount=0 %>
+		            <td><%= money_receipt.date.strftime('%d/%m/%Y') %></td>
+		            <td></td>
+		            <td></td>
+		            <td><%= pending_amount %></td>
+		            <td><%= 0 %></td>
+		            </td><td></td><td></td>
+		            <% money_receipt_last=serial %>
+		            <% money_receipt_carry_forward=money_receipt.amount-pending_amount %>
+		            <% end %>
+	            <% end %>
+            <% end %>
+        <% previous_demanded_amount+=ledger_entry_item.ledger_entry_header.booking.cost_sheet.milestone_amount(ledger_entry_item.milestone_id) %>
+        <%end%>
+		</tbody>
+	</table>
+<%end%>
+
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

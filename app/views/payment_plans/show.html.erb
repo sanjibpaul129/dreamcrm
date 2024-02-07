@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Block:</strong>
+  <%= @payment_plan.block_id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @payment_plan.description %>
+</p>
+
+<p>
+  <strong>Business unit:</strong>
+  <%= @payment_plan.business_unit_id %>
+</p>
+
+<%= link_to 'Edit', edit_payment_plan_path(@payment_plan) %> |
+<%= link_to 'Back', payment_plans_path %>

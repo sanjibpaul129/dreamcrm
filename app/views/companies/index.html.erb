@@ -1,0 +1,40 @@
+<%@header = 'Companies'%>
+<h1>Companies</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Organisation</th>
+      <th>GSTIN NO</th>
+      <th>Bank Details</th>
+      <th>Address 1</th>
+      <th>Address 2</th>
+      <th>Address 3</th>
+      <th>Address 4</th>
+      <th>Phone</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @companies.each do |company| %>
+      <tr>
+        <td><%= company.name %></td>
+        <td><%= company.organisation.name %></td>
+        <td><%= company.GSTIN%></td>
+        <td><%= company.bank_details%></td>
+        <td><%= company.address_1 %></td>
+        <td><%= company.address_2 %></td>
+        <td><%= company.address_3 %></td>
+        <td><%= company.address_4 %></td>
+        <td><%= company.phone %></td>
+        <td><%= link_to 'Edit', edit_company_path(company), :class => "edit_btn", :style => "text-decoration: none;"%></td>       
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Company', new_company_path, :class => 'btn btn-primary' %>

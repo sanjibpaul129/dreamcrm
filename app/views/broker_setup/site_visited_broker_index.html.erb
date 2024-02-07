@@ -1,0 +1,48 @@
+<h3>Site Visited Brokers who don't signed the Channel Partner Contract(<%= @site_visited_brokers.count %>)</h3>
+<table class="customers">
+	<thead>
+		<th>Id</th>
+		<th>Broker</th>
+		<th>Name</th>
+		<th>Agreement Link</th>
+		<th>Mobile One</th>
+		<th>Mobile Two</th>
+	</thead>
+	<tbody>
+		<% @site_visited_brokers.each do |broker_contact| %>
+			<tr>
+				<td><%= broker_contact.id%></td>
+				<td><%= broker_contact.broker.name%></td>
+				<td><%= broker_contact.name%></td>
+				<td><%= link_to "Agreement", broker_setup_broker_agreement_index_path(broker_contact.broker), :class => 'btn btn-primary', :style => "text-decoration: none"%></td>
+				<% if broker_contact.mobile_one==nil || broker_contact.mobile_one=="" %>
+				<td></td>
+				<% else %>
+				<td><a href=<%="tel:"+broker_contact.mobile_one%>>Click To Call</a></td>
+				<% end %>
+				<% if broker_contact.mobile_two==nil || broker_contact.mobile_two=="" %>
+				<td></td>
+				<% else %>
+				<td><a href=<%="tel:"+broker_contact.mobile_two%>>Click To Call</a></td>
+				<% end %>
+			</tr>
+		<%end%>
+	</tbody>
+</table><br>
+<h3>Site Visited Brokers who signed the Channel Partner Contract(<%= @agreement_signed_brokers.count%>)</h3>
+<table class="customers">
+	<thead>
+		<th>Id</th>
+		<th>Broker</th>
+		<th>Name</th>
+	</thead>
+	<tbody>
+		<% @agreement_signed_brokers.each do |broker_contact| %>
+			<tr>
+				<td><%= broker_contact.id%></td>
+				<td><%= broker_contact.broker.name%></td>
+				<td><%= broker_contact.name%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

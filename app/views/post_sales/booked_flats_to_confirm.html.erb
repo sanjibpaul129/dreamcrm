@@ -1,0 +1,74 @@
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+
+
+<div align="center"><h3><b>Flat Availablity Update</b></h3></div>
+
+<%= form_tag 'booked_flats_to_confirm' do %>
+  
+  
+   <div class="col-xs-3">
+      <div ><i>  Project </i></div>
+        <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {})  %>
+    </div>
+
+    <div class="col-xs-3">
+      <div ><i>  Blocks </i></div>
+      <%= select(:project, :block_id, options_for_select(@blocks))%>
+    </div>
+
+     <%= submit_tag 'Refresh', name: 'refresh', :class => 'btn btn-primary btn-xs' %><br>
+<% end %>
+
+<%= form_tag 'booking_entry' do %>
+
+<table class="table table-striped table-hover " id="flat_availability" style="width: 100% height:100%">
+  <thead>
+    <tr>
+      
+      <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+     <th>Block</th>
+     <th>Name</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @flats==nil%>
+    <%else%>
+    <% @flats.each do |flat| %>
+    <tr>
+      
+      <td><%= check_box_tag 'flat_ids[]', flat.id  %></td>
+      <td><%= flat.block.name %></td>
+      <td><%= flat.try(:floor).to_s+flat.name %></td>
+    </tr>
+    <% end %> 
+    <%end%>
+  </tbody>
+</table>
+<br>
+  <div class="row">
+  <div ><i>  &nbsp;</i></div>
+  <%= submit_tag 'Confirm', name: 'update', :class => 'btn btn-primary' %>  
+<% end %>
+<style>
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+  </style>
+  
+
+  

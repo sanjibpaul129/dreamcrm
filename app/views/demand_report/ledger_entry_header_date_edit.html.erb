@@ -1,0 +1,35 @@
+<%= form_tag 'ledger_entry_header_date_update', :html => {:class => 'form-horizontal'} do %>
+  
+  <div class="col-lg-5 col-lg-offset-4">
+    <div class="well bs-component">
+      <center><legend>&nbspEdit Demand Date</legend></center>
+      <div class="row">
+        <div class="col-lg-2">
+          <%= label_tag :'Date:' %>
+        </div>
+        <div class="col-lg-10">
+          <%= date_field_tag 'ledger_entry_header[date]', @ledger_entry_header.date.to_date, :class => 'form-control'%>
+        </div>
+      </div>
+      <br>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <%= submit_tag 'Update',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= hidden_field_tag :ledger_entry_header_id, @ledger_entry_header.id%>
+<% end %>
+<style>
+  .well{
+    width: 340px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

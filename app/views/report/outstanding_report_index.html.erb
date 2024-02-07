@@ -1,0 +1,120 @@
+<%@header = 'Maintenance Outstanding Report'%>
+<div class="row">
+  <div class="col-lg-12">
+    <center><h1>Maintenance Outstanding report</h1></center>
+    <div class="row">
+      <%= form_tag 'outstanding_report_index' do %>    
+        <div class="col-lg-1">
+          <h5>Project:</h5>
+        </div>
+        <div class="col-lg-4">
+          <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+        </div>
+        <div class="col-lg-2">
+          <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+        </div>
+      <%end%>
+      <div class="col-lg-offset-3 col-lg-1">
+        <%= button_to "Export", :action => "export_maintenance_outstanding_report" , format: "xls", :method => :get %>
+      </div>
+    </div><br>
+    <%= form_tag 'outstanding_reminder', :html => {:class => 'form-horizontal'} do %>
+      <%= hidden_field_tag :business_unit_id, @business_unit_id %>
+      <table class="customers" id="outstanding_report_index">
+        <thead>
+          <tr>
+            <th id="check_all" style="cursor: pointer!important;">Select All</th>
+            <th>Project</th>
+            <th>Block</th>
+            <th>Customer</th>
+            <th>Mobile</th>
+            <th>Email</th>
+            <th></th>
+            <th>Flat</th>
+            <th>Reminder</th>
+            <th>Email-Count</th>
+            <th>Whatsapp-Count</th>
+            <th>Remarks</th>
+            <th></th>
+            <th>Chat</th>
+            <th style="text-align: right!important;">Outstanding</th>
+            <th style="text-align: right!important;">Accrued Interest</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% grand_total=0%>
+          <% interest_total=0%>
+          <% @flats.each do |flat|%>
+            <% if flat.outstanding != 0 %>
+              <tr>
+                <td><%= check_box_tag 'flat_ids[]',flat.id%></td>
+                <td><%= flat.block.business_unit.name%></td>
+                <td><%= flat.block.name%></td>
+                <td><%= flat.lead.try(:name)%></td>
+                <td><%= flat.lead.try(:mobile)%></td>
+                <td><%= flat.lead.try(:email)%></td>
+                <td style="text-align: right!important;"><%= link_to 'Edit', edit_lead_path(flat.try(:lead)),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+                <td><%= flat.full_name%></td>
+                <% if flat.on_7d_reminder? %>
+                  <td>7 Days Reminder</td>
+                <%elsif flat.on_3d_reminder?%>
+                  <td>3 Days Reminder</td>
+                <%else%>
+                  <td>No Reminder</td>
+                <%end%>
+                <td><%= flat.reminder_logs.where(whatsapp: nil).count%></td>
+                <td><%= flat.reminder_logs.where(whatsapp: true).count%></td>
+                <td><%= flat.remarks %></td>
+                <td style="text-align: right!important;"><%= link_to 'edit', report_individual_remarks_edit_path(flat.id),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+                <td><%= 'not created' if flat.chat_id==nil %></td>
+                <td style="text-align: right!important;"><%= flat.outstanding%></td>
+                <td style="text-align: right!important;"><%= flat.accrued_interest.round%></td>
+                <% grand_total += flat.outstanding %>
+                <% interest_total += flat.accrued_interest %>
+                <td style="text-align: right!important;"><%= link_to 'Ledger', report_individual_customer_ledger_path(flat.id),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+                <td style="text-align: right!important;"><%= link_to 'Ledger with Interest', report_individual_customer_ledger_with_interest_path(flat.id),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+              </tr>
+            <% end %>  
+          <%end%>
+          <tr>
+            <td><b>Grand Total:</b></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            <td style="text-align: right!important;"><b><%= grand_total%></b></td>
+            <td style="text-align: right!important;"><b><%= interest_total%></b></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<div class="row">
+  <div class="col-lg-offset-2">
+    <%= submit_tag 'Send E-mail Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag 'Send Whatsapp Reminder',:class => 'btn btn-success' %>
+    <%= submit_tag 'No Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag '7d Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag '3d Reminder',:class => 'btn btn-primary' %>
+  </div>
+</div>
+<%end%>
+<style>
+ .col-lg-offset-1 {
+    margin-left: 16.333333% !important;
+}
+@media (min-width: 1200px){
+  .col-lg-offset-3 {
+    margin-left: 30.7%!important;
+}
+}
+</style>
+
+<script type="text/javascript">
+      $('#check_all').on("click", function(){
+  var cbxs = $('input[type="checkbox"]');
+  cbxs.prop("checked", !cbxs.prop("checked"));
+});
+</script>

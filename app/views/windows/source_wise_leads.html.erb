@@ -1,0 +1,194 @@
+<%@header = 'Source Wise Leads'%>
+<% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+        </div>
+<% end %>
+
+
+<h1>Source Wise Leads Funnel & Absolute</h1>
+
+<%= form_tag 'source_wise_leads' do  %>
+<div class="row">
+  <div class="col-lg-1">
+    From 
+  </div>
+  <div class="col-lg-2">
+    <%= date_field(:lead, :from, :value => @from, :class => 'form-control') %>
+  </div>
+  <div class="col-lg-1">
+    to 
+  </div>
+  <div class="col-lg-2">
+    <%= date_field(:lead, :to, :value => @to, :class => 'form-control') %>
+  </div>
+  <div class="col-lg-2">
+    <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+  </div>
+  <div class="col-lg-2">
+    <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Marketing' || current_personnel.status=='Team Lead' %>
+    <%= select(:site_executive, :picked, options_for_select(@site_executives, selected: @executive), {}, {:class => 'form-control'})   %>
+    <% end %>
+  </div>
+  <div class="col-lg-2">
+    <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+  </div>
+</div>
+
+<table class="customers" id="orderedtasks">
+  <thead>
+    <tr>      
+      <th rowspan="2">Source</th>
+      <th rowspan="2">Generated</th>
+      <th colspan="7"><u>Funnel out of leads generated<span id="popoverData" data-content="Out of the leads generated during the period, till the end of the leads lifecycle as on today" rel="popover" data-placement="top" data-trigger="hover"><i style="cursor:pointer;" class="glyphicon glyphicon-question-sign"></i></span></u></th>
+      <th colspan="3" style="background: red!important;"><u>Absolute During the Period</u></th>
+    </tr>
+    <tr>
+      <th>Qualified</th>
+      <th>Interested In Site Visit</th>
+      <th>Lost</th>
+      <th>Visit</th>
+      <th>Booking</th>
+      <th>Lost(%)</th>
+      <th>Visit(%)</th>
+      <th style="background: red!important;">Lost</th>
+      <th style="background: red!important;">Visit</th>
+      <th style="background: red!important;">Booking</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <% @sources.each do |source| %>
+        <% if @leads_generated[source.id]==nil && @site_visited[source.id]==nil && @booked[source.id]==nil %>
+        <% else %>
+        <tr>
+         <td><%= source.heirarchy %></td>
+         <%if @leads_generated[source.id] == nil || @leads_generated[source.id] == ''%> 
+           <td></td>
+         <%else%>
+            <td><%= link_to @leads_generated[source.id] , windows_all_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post %></td>
+         <%end%>
+         
+         <% if @leads_generated[source.id]==nil 
+          leads_generated=0
+          else
+          leads_generated=@leads_generated[source.id]
+          end
+         %>
+         <% if @lost_from_leads_generated[source.id]==nil 
+          leads_lost=0
+          else
+          leads_lost=@lost_from_leads_generated[source.id]
+          end
+         %>
+         <% if @booked_from_leads_generated[source.id]==nil 
+          booked=0
+          else
+          booked=@booked_from_leads_generated[source.id]
+          end
+         %>
+         <%if @qualified_leads_from_generated[source.id] == nil%>
+            <td></td>
+         <%else%>
+            <td><%= link_to @qualified_leads_from_generated[source.id], windows_all_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "lead_type" => 'Qualified'),  method: :post%></td>
+         <%end%>
+         <%if @isv_leads_from_generated[source.id] == nil%>
+            <td></td>
+         <%else%>
+            <td><%= link_to @isv_leads_from_generated[source.id], windows_all_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "lead_type" => 'Interested in Site Visit'),  method: :post%></td>
+         <%end%>
+
+         <% if @lost_from_leads_generated[source.id]==nil %>
+            <td></td>
+         <%else%>
+            <td><%= link_to @lost_from_leads_generated[source.id] , windows_all_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "lead_type" => 'Lost'),  method: :post %></td>
+         <%end%>
+         <% if @site_visited_from_leads_generated[source.id]==nil %>
+            <td></td>
+         <%else%>
+            <td><%= link_to @site_visited_from_leads_generated[source.id] , windows_all_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "lead_type" => 'Site Visit'),  method: :post %></td>
+         <%end%>
+         <% if @booked_from_leads_generated[source.id]==nil %>
+            <td></td>
+         <%else%>
+            <td><%= link_to @booked_from_leads_generated[source.id] , windows_all_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "lead_type" => 'Booked'),  method: :post %></td>
+         <%end%>
+         <% if leads_generated==0 %>
+         <td>NA</td>
+         <td>NA</td>
+         <% else %>
+           <td><%= ((leads_lost.to_f/leads_generated.to_f)*100).round %></td>
+           <% if @site_visited_from_leads_generated[source.id]==nil %>
+           <td>0</td>
+           <% else %>
+           <td><%= (((@site_visited_from_leads_generated[source.id].to_f)/(leads_generated.to_f))*100).round %></td> 
+           <% end %> 
+         <% end %>
+        <% if @leads_lost[source.id]==nil %>
+          <td style="background: #ff000029!important;"></td>
+        <%else%>
+          <td style="background: #ff000029!important;"><%= link_to @leads_lost[source.id] , windows_lost_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post%></td>
+        <% end %>
+        <% if @site_visited[source.id]==nil %>
+          <td style="background: #ff000029!important;"></td>
+        <%else%>
+          <td style="background: #ff000029!important;"><%= link_to @site_visited[source.id] , windows_site_visited_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post%></td>
+        <% end %>
+        <% if @booked[source.id]==nil %>
+          <td style="background: #ff000029!important;"></td>
+        <%else%>
+          <td style="background: #ff000029!important;"><%= link_to @booked[source.id] , windows_booked_leads_path("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>source.id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post%></td>
+        <% end %>
+        </tr>
+        <% end %>  
+      <% end %>
+      <tfoot>
+      <tr>
+        <td><b>TOTAL</b></td>
+        <td><b><%= @leads_generated.sum{|key,value| value} %></b></td>
+        <td><b><%= @qualified_leads_from_generated.sum{|key, value| value}%></b></td>
+        <td><b><%= @isv_leads_from_generated.sum{|key, value| value}%></b></td>
+        <td><b><%= @lost_from_leads_generated.sum{|key,value| value} %></b></td>
+        <td><b><%= @site_visited_from_leads_generated.sum{|key,value| value} %></b></td>
+        <td><b><%= @booked_from_leads_generated.sum{|key,value| value} %></b></td>
+        <td></td>
+        <td></td>
+        <td style="background: #ff000029!important;"><b><%= @leads_lost.sum{|key,value| value} %></b></td>
+        <td style="background: #ff000029!important;"><b><%= @site_visited.sum{|key,value| value} %></b></td>
+        <td style="background: #ff000029!important;"><b><%= @booked.sum{|key,value| value} %></b></td>
+      </tr>
+      </tfoot>
+      </tbody>
+</table>
+
+<% end %>
+
+ <script>
+$('#popoverData').popover();
+ </script>
+<style>
+  .customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif!important;
+  border-collapse: collapse!important;
+  width: 100%!important;
+}
+
+.customers td, .customers th {
+  /*border: 1px solid #ddd!important;*/
+  padding: 8px!important;
+}
+
+.customers tr:nth-child(even){background-color: #f2f2f2!important;}
+
+.customers tr:hover {background-color: #ddd!important;}
+
+.customers th {
+  padding-top: 12px!important;
+  padding-bottom: 12px!important;
+  text-align: left!important;
+  background-color: #0083ff!important;
+  color: white!important;
+}
+
+</style>

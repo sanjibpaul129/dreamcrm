@@ -1,0 +1,256 @@
+<%= form_tag 'progress_bar', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-3 col-lg-offset-2">
+			<legend>Progress Report Type:</legend>
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag 'report_type', options_for_select(['With Actual Value', 'Without Actual Value'], selected: @report_type), :class => 'form-control', :prompt => 'Please Select'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'View Details', :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<% if request.post? %>
+	<div class="col-lg-8 col-lg-offset-2 well" style="padding: 20px!important;">
+		<center><h1>Project Wise Progress Report</h1></center>
+		<b><u><h2>Sales Report</h2></u></b>
+		<div class="row">
+			<div class="col-lg-3">
+				<legend style="margin-left: 40px;">Dream One</legend>
+			</div>
+			<div class="col-lg-7" style="margin-top: 12px;">
+				<div class="skill-bar">
+					<div class="skill-per" style="background: linear-gradient(45deg, #1fe6ff, #673AB7)!important;" per="<%= @do_booking_percentage%>"></div>
+				</div>
+			</div>
+			<div class="col-lg-2" style="margin-top: 5px;">
+				<span>🏆</span>
+				<%if @do_monthly_target.bookings == nil%>
+					<b>No Target</b>
+				<%else%>
+					<% if @report_type == 'With Actual Value'%>
+						<b><%= @do_monthly_target.try(:bookings_achieved)%>/<%= @do_monthly_target.bookings %> Unit</b>
+					<%else%>
+						<b><%= @do_monthly_target.bookings %> Unit</b>
+					<%end%>
+				<%end%>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-3">
+				<legend style="margin-left: 40px;">Dream World City</legend>
+			</div>
+			<div class="col-lg-7" style="margin-top: 12px;">
+				<div class="skill-bar">
+					<div class="skill-per" style="background: linear-gradient(45deg, #ffee54, #ff00ca)!important;" per="<%= @dwc_booking_percentage%>"></div>
+				</div>
+			</div>
+			<div class="col-lg-2" style="margin-top: 5px;">
+				<span>🏆</span>
+				<%if @dwc_monthly_target.bookings == nil%>
+					<b>No Target</b>
+				<%else%>
+					<% if @report_type == 'With Actual Value'%>
+						<b><%= @dwc_monthly_target.try(:bookings_achieved)%>/<%= @dwc_monthly_target.bookings%> Unit</b> 
+					<%else%>
+						<b><%= @dwc_monthly_target.bookings%> Unit</b> 
+					<%end%>
+				<%end%>
+				
+			</div>
+		</div>
+		<b><u><h2>Leads Report</h2></u></b>
+		<div class="row">
+			<div class="col-lg-3">
+				<legend style="margin-left: 40px;">Dream One</legend>
+			</div>
+			<div class="col-lg-7" style="margin-top: 12px;">
+				<div class="skill-bar">
+					<div class="skill-per" style="background: linear-gradient(45deg, #1fe6ff, #673AB7)!important;" per="<%= @do_leads_percentage%>"></div>
+				</div>
+			</div>
+			<div class="col-lg-2" style="margin-top: 5px;">
+				<span>🏆</span>
+				<%if @do_monthly_target.leads == nil%>
+					<b>No Target</b>
+				<%else%>	
+					<% if @report_type == 'With Actual Value'%>
+						<b><%= @do_monthly_target.try(:leads_achieved)%>/<%= @do_monthly_target.leads%> Leads</b>
+					<%else%>
+						<b><%= @do_monthly_target.leads%> Leads</b>
+					<%end%>
+				<%end%>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-3">
+				<legend style="margin-left: 40px;">Dream World City</legend>
+			</div>
+			<div class="col-lg-7" style="margin-top: 12px;">
+				<div class="skill-bar">
+					<div class="skill-per" style="background: linear-gradient(45deg, #ffee54, #ff00ca)!important;" per="<%= @dwc_leads_percentage%>"></div>
+				</div>
+			</div>
+			<div class="col-lg-2" style="margin-top: 5px;">
+				<span>🏆</span>
+				<%if @dwc_monthly_target.leads ==nil%>
+					<b>No Target</b>
+				<%else%>
+					<% if @report_type == 'With Actual Value'%>
+						<b><%= @dwc_monthly_target.try(:leads_achieved)%>/<%= @dwc_monthly_target.leads%> Leads</b>
+					<%else%>
+						<b><%= @dwc_monthly_target.leads%> Leads</b>
+					<%end%>
+				<%end%>	
+
+			</div>
+		</div>
+		<b><u><h2>Collection Report</h2></u></b>
+		<div class="row">
+			<div class="col-lg-3">
+				<legend style="margin-left: 40px;">Dream One</legend>
+			</div>
+			<div class="col-lg-7" style="margin-top: 12px;">
+				<div class="skill-bar">
+					<div class="skill-per" style="background: linear-gradient(45deg, #1fe6ff, #673AB7)!important;" per="<%= @do_collection_percentage%>"></div>
+				</div>
+			</div>
+			<div class="col-lg-2" style="margin-top: 5px;">
+				<span>🏆</span>
+				<%if @do_monthly_target.collection == nil%>
+					<b>No Target</b>
+				<%else%>
+					<% if @report_type == 'With Actual Value'%>
+						<b><%= @do_monthly_target.try(:collection_achieved)%>/<%= @do_monthly_target.collection%> Rs.</b> 
+					<%else%>
+						<b><%= @do_monthly_target.collection%> Rs.</b> 
+					<%end%>
+				<%end%>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-3">
+				<legend style="margin-left: 40px;">Dream World City</legend>
+			</div>
+			<div class="col-lg-7" style="margin-top: 12px;">
+				<div class="skill-bar">
+					<div class="skill-per" style="background: linear-gradient(45deg, #ffee54, #ff00ca)!important;" per="<%= @dwc_collection_percentage%>"></div>
+				</div>
+			</div>
+			<div class="col-lg-2" style="margin-top: 5px;">
+				<span>🏆</span>
+				<%if @dwc_monthly_target.collection == nil%>
+					<b>No Target</b>
+				<%else%>
+					<% if @report_type == 'With Actual Value'%>
+						<b><%= @dwc_monthly_target.try(:collection_achieved)%>/<%= @dwc_monthly_target.collection%> Rs.</b> 
+					<%else%>
+						<b><%= @dwc_monthly_target.collection%> Rs.</b> 
+					<%end%>
+				<%end%>
+			</div>
+		</div>
+		<b><u><h2>Activity Completion Report</h2></u></b>
+		<div class="row">
+			<div class="col-lg-3">
+				<legend style="margin-left: 40px;">Dream One</legend>
+			</div>
+			<div class="col-lg-7" style="margin-top: 12px;">
+				<div class="skill-bar">
+					<div class="skill-per" style="background: linear-gradient(45deg, #1fe6ff, #673AB7)!important;" per="<%= @do_activities_achieved%>"></div>
+				</div>
+			</div>
+			<div class="col-lg-2" style="margin-top: 5px;">
+				<span>🏆</span>
+				<%if @do_monthly_target.activities == nil%>
+					<b>No Activity</b>
+				<%else%>	
+					<% if @report_type == 'With Actual Value'%>
+						<b><%= @do_monthly_target.try(:activities_achieved)%>/<%= @do_monthly_target.activities%> Activity</b>
+					<%else%>
+						<b><%= @do_monthly_target.activities%> Activity</b>
+					<%end%>
+				<%end%>	
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-3">
+				<legend style="margin-left: 40px;">Dream World City</legend>
+			</div>
+			<div class="col-lg-7" style="margin-top: 12px;">
+				<div class="skill-bar">
+					<div class="skill-per" style="background: linear-gradient(45deg, #ffee54, #ff00ca)!important;" per="<%= @dwc_activities_achieved%>"></div>
+				</div>
+			</div>
+			<div class="col-lg-2" style="margin-top: 5px;">
+				<span>🏆</span>
+				<%if @dwc_monthly_target.activities == nil%>
+					<b>No Activity</b>
+				<%else%>	
+					<% if @report_type == 'With Actual Value'%>
+						<b><%= @dwc_monthly_target.try(:activities_achieved)%>/<%= @dwc_monthly_target.activities%> Activity</b>
+					<%else%>
+						<b><%= @dwc_monthly_target.activities%> Activity</b>
+					<%end%>
+				<%end%>	
+			</div>
+		</div>
+	</div>
+<%end%>
+<style>
+	.skill-name{
+		font-size: 18px;
+		margin: 20px;
+	}
+	.skill-bar{
+		height: 20px;
+		background: #cacaca;
+		border-radius: 8px;
+	}
+	.skill-per{
+		height: 20px;
+		background-color: red;
+		border-radius: 8px;
+		width: 0;
+		transition: 1s linear;
+		position: relative;
+	}
+
+	.skill-per::before{
+		content: attr(per);
+		position: absolute;
+		padding: 4px 6px;
+		background: #000;
+		color: #fff;
+		font-size: 12px;
+		border-radius: 4px;
+		top: -35px;
+		right: 0;
+		transform: translateX(50%);
+	}
+	.skill-per::after{
+		content: '🏇🏻';
+		position: absolute;
+		font-size: 5rem;
+		top: -23px;
+		right: -33px;
+		transform: scaleX(-1);
+	}
+</style>
+<script>
+	$('.skill-per').each(function(){
+		var $this = $(this);
+		var per = $this.attr('per');
+		$this.css("width",per+'%');
+		$({animatedvalue: 0}).animate({animatedvalue: per},{
+			duration: 1000,
+			step: function(){
+				$this.attr('per', Math.floor(this.animatedvalue) + '%');
+			},
+			complete: function(){
+				$this.attr('per', Math.floor(this.animatedvalue) + '%');
+			}
+		})
+	});
+</script>

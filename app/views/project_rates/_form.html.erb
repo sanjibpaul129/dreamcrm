@@ -1,0 +1,29 @@
+<%= form_for(@project_rate) do |f| %>
+  <% if @project_rate.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@project_rate.errors.count, "error") %> prohibited this project_rate from being saved:</h2>
+
+      <ul>
+      <% @project_rate.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :business_unit_id %><br>
+    <%= f.number_field :business_unit_id %>
+  </div>
+  <div class="field">
+    <%= f.label :base_rate %><br>
+    <%= f.number_field :base_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :date %><br>
+    <%= f.datetime_select :date %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

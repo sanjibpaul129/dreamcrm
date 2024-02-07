@@ -1,0 +1,417 @@
+<% if current_personnel.business_unit.organisation_id == 1 %>
+  <%@header = 'Fresh Leads'%>
+  <% flash.each do |key, value| %>
+    <div class="<%= flash_class(key) %>">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Heads up!</strong> <%= value %>
+    </div>
+  <% end %>
+  <div align="center"><h3><b>Fresh Leads</b></h3></div>
+  <%= form_tag 'fresh_lead_submit' do  %>
+    <% if current_personnel.status=='Admin' %>
+      <div class="row">
+        <div class="col-lg-1">
+          <i>Executive</i>
+        </div>
+        <div class="col-lg-3">
+          <%= select(:site_executive, :picked, options_for_select(@executives, selected: @executive), {}, {:class => 'form-control'})   %>
+        </div>
+        <div class="col-lg-2">
+          <%= submit_tag 'Refresh', name: 'Refresh', :class => 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  <% end %><br>
+  <%= form_tag 'customer_followup_entry' do  %>
+    <% if current_personnel.email == "ayush@thejaingroup.com" || current_personnel.email == "pranabeshpratiharjgm@gmail.com" %>
+      <div class="col-lg-2">
+        Allocate To:
+      </div>
+      <div class="col-lg-3">
+        <%= select(:site_executive, :picked, options_for_select(@executives, selected: @executive), {}, {:class => 'form-control'})   %>
+      </div>
+      <div class="col-lg-2">
+        <%= submit_tag 'Allocate', name: 'Allocate', :class => 'btn btn-success' %>
+      </div>
+    <% end %>
+    <table class="customers" id="fresh_lead">
+      <thead>
+        <tr>
+          <% if current_personnel.email == "ayush@thejaingroup.com" || current_personnel.email == "pranabeshpratiharjgm@gmail.com"%>
+            <th><%= check_box_tag "selectAll", "selectAll" %></th>
+          <%else%>
+            <th></th>
+          <%end%>
+          <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+          <th>Lead id</th>
+          <th>Project</th>
+          <th>Name</th>
+          <th>Src</th>
+          <th>Generated on</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @leads.each do |lead| %>
+          <% google_lead_detail = GoogleLeadDetail.find_by_lead_id(lead.id)%>
+          <% if google_lead_detail == nil %>
+            <tr>
+          <% elsif (google_lead_detail.campaignid == nil && google_lead_detail.adgroupid == nil && google_lead_detail.creative == nil && google_lead_detail.utm_source == nil) || (google_lead_detail.campaignid == "" && google_lead_detail.adgroupid == "" && google_lead_detail.creative == "" && google_lead_detail.utm_source == "")%>
+            <tr style="background: #9999ff!important;">
+          <%else%>
+            <tr>
+          <%end%>
+            <% if current_personnel.email == "ayush@thejaingroup.com" || current_personnel.email == "pranabeshpratiharjgm@gmail.com"%>
+              <td><%= check_box_tag 'lead_id[]' , lead.id %></td>
+            <%else%>
+              <% if lead.name.include?("Connected") == true && lead.name.include?("Not") == false %>
+                <td><%= check_box_tag 'lead_ids[]' , lead.id %></td>
+              <%else%>
+                <% if lead.mobile.length == 10 %>
+                  <% checker = lead.mobile.to_i%>
+                  <% if checker.to_s.length == 10%>
+                    <td></td>
+                  <%else%>
+                    <td><%= check_box_tag 'lead_ids[]' , lead.id %></td>
+                  <%end%>
+                <%else%>
+                  <td><%= check_box_tag 'lead_ids[]' , lead.id %></td>
+                <%end%>
+              <% end %>
+            <%end%>
+            <% if lead.escalated==true %>
+              <td><span class="label label-danger">!</span></td>
+            <% elsif lead.escalated==false %>
+              <td><span class="label label-info">!</span></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            <td><%= lead.id %></td>
+            <td><%= lead.business_unit.name %></td>
+            <td><%= lead.name %></td>
+            <% if google_lead_detail == nil %>
+              <td><%= lead.source_category.description %></td>
+            <%else%>
+              <% campaign_id = google_lead_detail.campaignid %>
+              <% if campaign_id == nil || campaign_id == "" %>
+                <td><%= lead.source_category.description %></td>
+              <%else%>
+                <% google_campaign = GoogleCampaign.find_by_campaign_id(campaign_id).try(:campaign_name) %>
+                <% if google_campaign == nil || google_campaign == "" %>
+                  <td><%= lead.source_category.description %></td>
+                <%else%>
+                  <td><%= google_campaign.to_s+":- "+lead.source_category.description.to_s %></td>
+                <%end%>
+              <%end%>
+            <%end%>
+            <td><%= (lead.generated_on+5.hours+30.minutes).strftime("%d/%m/%y - %H:%M") %></td>
+            <td><%= submit_tag "Call 1", :name => "call_1[#{lead.id}]" %></td>
+            <td><%= submit_tag "Call 2", :name => "call_2[#{lead.id}]" %></td>
+            <% if lead.other_number == "" || lead.other_number == nil%>
+              <td></td>
+            <%else%>
+              <td><%= submit_tag "Call Other No.", :name => "call_other[#{lead.id}]" %></td>
+            <%end%>
+            <% if lead.name.include?("Not") == true %>
+              <td></td>
+            <%elsif lead.name.include?("Connected") == true %>
+              <td><%= submit_tag ">", :name => "connected_call[#{lead.id}]", :class => 'btn btn-primary' %></td>
+            <%else%>
+              <td></td>
+            <%end%>
+          </tr>
+        <% end %>
+      </tbody>
+    </table><br>
+    <% if current_personnel.email == "ayush@thejaingroup.com"  || current_personnel.email == "pranabeshpratiharjgm@gmail.com"%>
+      <div class="container">
+        <%= render 'followup_update' %>
+      </div>
+    <% end %>
+    <br>
+    <div class="row">
+      <div class="col-lg-3">
+        <%= select(:leading, :status, options_for_select([['Lost', 5]]),{}, { :class => 'form-control' })   %>&nbsp;
+        <%= select(:leading, :lost_reason, options_for_select(@lost_reasons),{}, { :class => 'form-control' })   %>
+      </div>
+      <div class="col-lg-2">
+        Followup Remarks:
+      </div>
+      <div class="col-lg-3">
+        <%= text_area_tag "followup_remarks", "", :class => 'form-control'%>
+      </div>
+      <div class="col-lg-2">
+        <!-- <%= submit_tag 'Update', :class => 'btn btn-success' %> -->
+        <%= submit_tag 'Update', name: 'update', :class => 'btn btn-primary', id: 'follow_up_update' %>   
+      </div>
+    </div>
+  <%end%>
+  <style >
+    .dataTables_scrollHead{
+      height: 40px;
+    }
+    .dataTables_info{
+      display:inline-block;
+      float:left;
+    }
+   .dataTables_length{
+    display:inline-block;
+   float:right;
+   }
+   .fixedHeader-floating th { background-color: #2b3e50; }
+    </style>
+    <style type="text/css">
+    .dividor{
+      border-bottom: 3px solid black!important;
+    }
+  </style>
+
+  <script>
+    $(document).ready(function(){
+    var FilterTable=$("#fresh_lead").DataTable({  
+       "fixedHeader": true,   
+       "dom": '<"wrapper"lit>',
+       "bAutoWidth": false,
+       "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+       "bDeferRender": true,
+       "aoColumns": [
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true}
+                                 ],
+        "order": [[ 13, "desc" ]]
+    });
+
+    $("#filterbox").keyup(function() {
+            FilterTable.search(this.value).draw();
+        });
+    });
+
+  </script>
+<%else%>
+  <%@header = 'Fresh Leads'%>
+  <% flash.each do |key, value| %>
+  <div class="<%= flash_class(key) %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Heads up!</strong> <%= value %>
+  </div>
+  <% end %>
+
+  <div align="center"><h3><b>Fresh Leads</b></h3></div>
+  <%= form_tag 'fresh_lead_submit' do  %>
+    <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Marketing' %>
+      <div class="row">
+        <div class="col-lg-1">
+          <i>Executive</i>
+        </div>
+        <div class="col-lg-3">
+          <%= select(:site_executive, :picked, options_for_select(@executives, selected: @executive), {}, {:class => 'form-control'})   %>
+        </div>
+        <div class="col-lg-2">
+          <%= submit_tag 'Refresh', name: 'Refresh', :class => 'btn btn-primary' %>
+        </div>
+    <!-- &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp -->
+        <% if current_personnel.status != 'Marketing' %>
+          <div class="col-lg-2">
+            <%= submit_tag 'Allocate', name: 'Allocate', :class => 'btn btn-success' %>
+          </div>
+        <% end %>
+      </div>
+    <% end %><br>
+    <table class="customers" id="fresh_lead">
+      <thead>
+        <tr>
+          <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status == 'Audit'%>
+            <th><%= check_box_tag "selectAll", "selectAll" %></th>
+          <% else %>
+            <th></th>
+          <% end %>
+          <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+          <th>Lead id</th>
+          <th>Project</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <% if current_personnel.organisation_id != 6 %>
+            <th>Other No.</th>
+            <th>Email</th>
+          <%end%>
+          <th>Budget</th>
+          <th>BHK</th>
+          <th>Source</th>
+          <th>Remarks</th>
+          <th>Generated on</th>
+          <th>Generated on sort</th>
+          <th>Imported On</th>
+          <% if current_personnel.organisation_id != 6 %>
+            <th>Score</th>
+          <%end%>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @leads.each do |lead| %>
+          <tr>
+            <% if current_personnel.status=='Sales Executive'|| current_personnel.status=='Team Lead' %>
+            <td><%= radio_button_tag :lead_id , lead.id %></td>
+            <% elsif current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status == 'Audit'%>
+            <td><%= check_box_tag 'lead_id[]' , lead.id %></td>
+            <% else %>
+            <td></td>
+            <% end %>
+          
+            <% if lead.escalated==true %>
+            <td><span class="label label-danger">!</span></td>
+            <% elsif lead.escalated==false %>
+            <td><span class="label label-info">!</span></td>
+            <% else %>
+            <td></td>
+            <% end %>
+          
+            <td><%= lead.id %></td>
+            <td><%= lead.business_unit.name %></td>
+            <td><%= lead.name %></td>
+            <td><%= link_to lead.mobile.to_s, "tel:+91"+(lead.mobile.to_s) %></td>
+            <% if current_personnel.organisation_id != 6 %>
+              <td><%= link_to lead.other_number.to_s, "tel:+91"+(lead.other_number.to_s) %></td>
+              <td><%= lead.email %></td>
+            <%end%>
+            <td><%= lead.budget_from %>-<%= lead.budget_to %></td>
+            <td><%= lead.flat_type %></td>
+            <td><%= lead.source_category.description %></td>
+            <td><%= lead.customer_remarks %></td>
+            <td><%= lead.generated_on.strftime("%d/%m/%y") %></td>
+            <td><%= lead.generated_on.strftime("%m/%d/%y") %></td>
+           
+            <% date = lead.created_at + 19800 %>
+            <td><%= date.strftime("%d/%m/%y - %H:%M") %></td>
+            <% if current_personnel.organisation_id != 6 %>
+              <td><%= lead.score %></td>
+            <%end%>
+          
+            <% if current_personnel.status=='Marketing' || current_personnel.view_only==true %>
+              <td></td>
+            <% else %>
+              <td><%= link_to 'Edit', edit_lead_path(lead),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+            <% end %>
+
+            <td><%= lead.whatsapps.count %></td>        
+            <td><%= submit_tag ">", name: lead.id, :class => 'btn btn-default btn-xs' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <br>
+    <% if current_personnel.status == "Marketing" || current_personnel.view_only==true %>
+    <% else %>
+      <div class="container">
+        <%= render 'followup_update' %>
+      </div>
+    <% end %>
+
+    <% if @whatsapp_templates == [] && @email_templates == [] && @sms_templates == [] %>
+    <% elsif current_personnel.status=='Admin' || current_personnel.status=='Back Office' %>
+       <div class="dividor"></div>
+       <br>
+       <div class="row">
+        <p>Whatsapp Templates:</p>
+        <% @whatsapp_templates.each do |whatsapp_template| %>
+          <div class="col-lg-2">
+            <%= submit_tag whatsapp_template, :name => 'whatsapp', :class => 'btn btn-primary'%>
+          </div>
+        <%end%>
+       </div>
+       <br>
+       <div class="row">
+        <p>Email Templates:</p>
+        <% @email_templates.each do |email_template| %>
+          <div class="col-lg-2">
+            <%= submit_tag email_template, :name => 'email', :class => 'btn btn-primary'%>
+          </div>
+        <%end%>
+       </div>
+       <br>
+       <div class="row">
+        <p>SMS Templates:</p>
+        <% @sms_templates.each do |sms_template| %>
+          <div class="col-lg-2">
+            <%= submit_tag sms_template, :class => 'btn btn-primary'%>
+          </div>
+        <%end%>
+       </div>
+    <%end%>
+  <% end %>
+
+  <style >
+    .dataTables_scrollHead{
+      height: 40px;
+    }
+    .dataTables_info{
+      display:inline-block;
+      float:left;
+    }
+   .dataTables_length{
+    display:inline-block;
+   float:right;
+   }
+   .fixedHeader-floating th { background-color: #2b3e50; }
+    </style>
+    <style type="text/css">
+    .dividor{
+      border-bottom: 3px solid black!important;
+    }
+  </style>
+
+  <script>
+    $(document).ready(function(){
+  var FilterTable=$("#fresh_lead").DataTable({  
+     "fixedHeader": true,   
+     "dom": '<"wrapper"lit>',
+     "bAutoWidth": false,
+     "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+     "bDeferRender": true,
+     "aoColumns": [
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                <% if current_personnel.organisation_id != 6%>
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                <%end%>
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"iDataSort": 13},
+                                {"bVisible": false},
+                                {"bSortable": true},
+                                <% if current_personnel.organisation_id != 6 %>
+                                  {"bSortable": true},
+                                <%end%>
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true}
+                               ],
+      "order": [[ 13, "desc" ]]
+  });
+
+  $("#filterbox").keyup(function() {
+          FilterTable.search(this.value).draw();
+      });
+  });
+  </script>
+<%end%>

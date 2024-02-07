@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  business_unit_id: 1
+  rate: 9.99
+  date: 2019-12-13 17:20:40
+
+two:
+  business_unit_id: 1
+  rate: 9.99
+  date: 2019-12-13 17:20:40

@@ -1,0 +1,105 @@
+<%@header = 'Demand Register'%>
+<h1>Demand Register</h1>
+
+<%= form_tag 'ledger_entry_header_index', :html => {:class => 'form-horizontal'} do %>    
+  <div class="row">
+    <div class="col-lg-1">
+      <h5>Project:</h5>
+    </div>
+    <div class="col-lg-2">
+      <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{prompt: "Select Project"}, {:class => 'form-control'}) %>
+    </div>
+
+    <div class="col-lg-1">
+      <h5>Block:</h5>
+    </div>
+    <div class="col-lg-2">
+      <%= select(:block, :block_id, options_for_select(@blocks, selected: @block_id),{}, {:class => 'form-control'}) %>
+    </div>
+
+    <div class="col-lg-1">
+      <h5>From:</h5>
+    </div>
+    <% 
+      if request.get?
+        previous_from = DateTime.now.beginning_of_month
+        previous_to = DateTime.now.end_of_month
+      else
+        previous_from = @from
+        previous_to = @to
+      end
+    %>
+    <div class="col-lg-2">
+      <%= date_field_tag 'ledger_entry_header[from]',previous_from.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-1">
+      <h5>To:</h5>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag 'ledger_entry_header[to]',previous_to.to_date, :class => 'form-control'%>
+    </div>
+  </div><br>
+  <div class="row">
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+    </div>
+  </div><br>
+<%end%>
+<%= form_tag 'multi_demand_destroy', :html => {:class => 'form-horizontal'} do %>    
+  <table id="customers">
+    <thead>
+      <tr>
+        <%if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+          <th></th>
+        <%end%>
+        <th>Date</th>
+        <th>Project</th>
+        <th>Block</th>
+        <th>Flat</th>
+        <th>Customers</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Amount</th>
+        <th></th>
+        <th></th>
+        <%if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+          <th></th>
+        <%end%>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @ledger_entry_headers.each do |ledger_entry_header| %>
+        <tr>
+          <%if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+            <td><%= check_box_tag 'ledger_entry_header_ids[]',ledger_entry_header.id%></td>
+          <%end%>
+          <td><%= ledger_entry_header.date.to_date.strftime('%d/%m/%Y')%></td>
+          <td><%= ledger_entry_header.booking.cost_sheet.flat.block.business_unit.name %></td>
+          <td><%= ledger_entry_header.booking.cost_sheet.flat.block.name%></td>
+          <td><%= ledger_entry_header.booking.cost_sheet.flat.full_name%></td>
+          <td><%= ledger_entry_header.booking.cost_sheet.lead.name%></td>
+          <td><%= ledger_entry_header.booking.cost_sheet.lead.mobile%></td>
+          <td><%= ledger_entry_header.booking.cost_sheet.lead.email%></td>
+          <%
+            total_amount=0
+            ledger_entry_header.ledger_entry_items.each do |ledger_entry_item|
+              total_amount+=ledger_entry_header.booking.cost_sheet.milestone_amount(ledger_entry_item.milestone_id)
+            end
+          %>
+          <td><%= total_amount%></td>
+          <td><%= link_to 'Edit', demand_report_ledger_entry_header_date_edit_path(ledger_entry_header), :class => 'edit_btn'%></td>
+          <td><%= link_to 'Preview', demand_report_milestone_invoice_preview_path(ledger_entry_header),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+          <%if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'sumit@jsb.in.net'%>
+            <td><%= link_to 'Destroy', demand_report_demand_destroy_path(ledger_entry_header),:class => 'dlt_btn ', :style => "text-decoration: none"%></td>
+          <%end%>
+        </tr>
+      <%end%>
+    </tbody>
+  </table><br>
+  <div class="row">  
+    <div class="col-lg-2">
+      <%= submit_tag 'Multi Demand Delete', :class => 'btn btn-primary'%>
+    </div>
+  </div>
+<%end%>

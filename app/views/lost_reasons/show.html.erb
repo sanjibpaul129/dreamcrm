@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @lost_reason.description %>
+</p>
+
+<p>
+  <strong>Organisation:</strong>
+  <%= @lost_reason.organisation_id %>
+</p>
+
+<%= link_to 'Edit', edit_lost_reason_path(@lost_reason) %> |
+<%= link_to 'Back', lost_reasons_path %>

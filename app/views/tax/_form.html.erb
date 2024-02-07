@@ -1,0 +1,90 @@
+<%= form_for @tax, url: {action: @tax_action} do |f| %>
+
+  
+<div class="col-lg-5 col-lg-offset-4">
+  <div class="well bs-component">
+    <legend>&nbspTax Charges</legend>
+      <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :'Business_Unit:', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-8">
+            <%= select(:tax, :business_unit_id, options_for_select(@business_units, selected: @tax.business_unit_id),{}, {:class => 'form-control'})%>    
+          </div>
+      </div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :'Name:', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-8">
+           <%= f.text_field :name, :class => 'form-control' %>
+          </div>
+        </div>     
+      
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :'Overall:', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-8">
+           <%= f.text_field :overall, :class => 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :'Car Park:', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-8">
+           <%= f.text_field :car_park, :class => 'form-control' %>
+          </div>
+        </div>
+          <div class="form-group row">
+            <div class="col-lg-3">
+              <%= f.label :'Servant Quarter:', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-8">
+           <%= f.text_field :servant_quarter, :class => 'form-control' %>
+          </div><br>
+      </div>
+         <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Basic:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+           <%= f.text_field :basic, :class => 'form-control' %>
+          </div><br>
+      </div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :'Plc&Flc', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-8">
+           <%= f.text_field :plc, :class => 'form-control' %>
+          </div><br>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Edc', :class => 'control-label'%>
+        </div>
+        <div class="col-lg-8">
+          <%= f.text_field :edc, :class => 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <%= f.label :'Applicable From:', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-8">
+            <%= f.date_field :applicable_from, :class => 'form-control' %>
+          </div>
+      </div><br>
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <%= f.submit :class => 'btn btn-primary btn-block' %>      
+        </div>   
+      </div>
+      <br><br>
+  </div>
+</div>
+
+<%= hidden_field_tag :tax_id, @tax.id %>
+<% end %>

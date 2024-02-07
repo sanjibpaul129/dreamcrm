@@ -1,0 +1,77 @@
+<%@header = 'Credit Note Entry'%>
+<%= form_tag 'credit_note', :html => {:class => 'form-horizontal'} do %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <center><legend>&nbspCredit Note Entry</legend></center>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Customer with flats:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= select_tag 'credit_note_entry[flat_id]', options_for_select(@customer_with_flats), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Select Customer' %>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Period:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= text_field_tag 'credit_note_entry[head]', '', :class => 'form-control'%>
+        </div>    
+      </div>
+      <br> 
+     <div class="row">
+        <div class="col-lg-2">
+          <%= label_tag :'Date:' %>
+        </div>
+        <div class="col-lg-4">
+          <%= date_field_tag 'credit_note_entry[date]', '', :class => 'form-control', required: true%>
+        </div> 
+        <div class="col-lg-2">
+          <%= label_tag :'Amount:' %>
+        </div>      
+        <div class="col-lg-4">
+          <%= number_field_tag 'credit_note_entry[amount]', '', required: true, step: "any", :class => 'form-control'%>
+        </div>
+      </div>
+<br>
+      <div class="row">
+        <div class="col-lg-2">
+            <%= label_tag :'Personnel Remarks:' %>
+        </div>
+        <div class="col-lg-10">
+          <%= text_area_tag 'credit_note_entry[remarks]', '', :class => 'form-control'%>
+        </div>
+     </div>
+ <br>    
+      <div class="row">
+        <div class="col-lg-2">
+            <%= label_tag :'Remarks To Show:' %>
+        </div>
+        <div class="col-lg-10">
+          <%= text_area_tag 'credit_note_entry[remarks_to_show]', '', :class => 'form-control'%>
+        </div>
+      </div>
+  <br>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= submit_tag 'Create Credit Note Entry',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

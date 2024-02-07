@@ -1,0 +1,42 @@
+
+
+
+      <div class="row" >
+        <div class="form-group">    
+          <div class="col-lg-2">
+          	<%= label_tag :'Generated on:'%>
+          </div>
+          <div class="col-lg-4">
+            <%= date_field_tag 'maintainence_bill[date]','', :class => 'form-control', :required => true%>
+          </div>
+          <div class="col-lg-2">
+          	<%= label_tag :Rate %>
+          </div>
+          <div class="col-lg-4">
+           <%= text_field_tag 'maintainence_bill[rate]',@rate, :class => 'form-control', :readonly => true%>
+          </div>
+        </div>
+      </div><br>
+      
+      <div class="row">
+        <div class="form-group">    
+          <div class="col-lg-2">
+          	<%= label_tag :From %>
+          </div>
+          <div class="col-lg-4">
+           <%= date_field_tag 'maintainence_bill[from]','', :class => 'form-control', :required => true%>
+          </div>
+          <div class="col-lg-2">
+            <%= label_tag :To%>
+          </div>
+          <div class="col-lg-4">
+           <%= date_field_tag 'maintainence_bill[to]','', :class => 'form-control', :required => true %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= submit_tag 'Generate Bill',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>

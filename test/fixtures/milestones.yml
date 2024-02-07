@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: 1
+  flat_value_percentage: 9.99
+  extra_charge_percentage: 9.99
+  extra_charge_id: 1
+  nature: false
+  payment_plan_id: 1
+
+two:
+  name: 1
+  flat_value_percentage: 9.99
+  extra_charge_percentage: 9.99
+  extra_charge_id: 1
+  nature: false
+  payment_plan_id: 1

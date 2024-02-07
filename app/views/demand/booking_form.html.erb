@@ -1,0 +1,500 @@
+<%= form_tag 'booking_form_submit', :html => {:class => 'form-horizontal'} do %>  
+  <%= hidden_field_tag :cost_sheet_id, @cost_sheet.id%>
+  <div class="col-lg-8 col-lg-offset-2">
+    <div class="well bs-component">
+      <center><legend>&nbsp<b><u>Apartment booking application form</u></b></legend></center>
+      <center><h4 style="color: #000!important;"><b><u>FLAT CHOICE</u></b></h4></center>
+      <div class="row">
+        <div class="col-lg-1">
+          Project:
+        </div>
+        <div class="col-lg-3">
+          <font color="#000"><%= @cost_sheet.flat.block.business_unit.name%></font>
+        </div>
+        <div class="col-lg-1">
+          Block:
+        </div>
+        <div class="col-lg-2">
+          <font color="#000"><%= @cost_sheet.flat.block.name%></font>
+        </div>
+        <div class="col-lg-1">
+          Flat:
+        </div>
+        <div class="col-lg-1">
+          <font color="#000"><%= @cost_sheet.flat.full_name%></font>
+        </div>
+        <div class="col-lg-1">
+          Floors:
+        </div>
+        <div class="col-lg-1">
+          <font color="#000"><%= @cost_sheet.flat.floor%></font>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-1">
+          BHK:
+        </div>
+        <div class="col-lg-2">
+          <font color="#000"><%= @cost_sheet.flat.BHK%></font>
+        </div>
+        <div class="col-lg-1">
+          SBA:
+        </div>
+        <div class="col-lg-3">
+          <font color="#000"><%= @cost_sheet.flat.SBA%> Sq.ft.</font>
+        </div>
+        <div class="col-lg-2">
+          Carpet Area:
+        </div>
+        <div class="col-lg-2">
+          <% if @cost_sheet.flat.carpet_area == nil || @cost_sheet.flat.carpet_area == '' %>
+          <%else%>
+            <font color="#000"><%= @cost_sheet.flat.carpet_area.round%></font>
+          <%end%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Booking Date:
+        </div>
+        <div class="col-lg-3">
+          <%= date_field_tag 'booking[date]', '', :class => "form-control"%>
+        </div>
+      </div><br>
+      <center><h4 style="color: #000!important;"><b><u>FIRST/SOLE APPLICANT</u></b></h4></center>
+      <div class="row">
+        <div class="col-lg-offset-1 col-lg-3">
+          Name:
+        </div>
+      	<div class="col-lg-2">
+        		<%= select_tag 'lead_title', options_for_select(['Mr.', 'Mrs.', 'Dr.', 'Ms.'], selected: @title_1), :class => 'form-control' %>
+  	    </div>
+  	    <div class="col-lg-4">
+  	      <%= text_field_tag 'lead[name]', @actual_name_1, placeholder: 'mandatory*', :class => "form-control", :id => 'lead_name' %>
+  	    </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-offset-1 col-lg-3">
+          Father's Name:
+        </div>
+        <div class="col-lg-2">
+            <%= select_tag 'lead[father_title]', options_for_select(['Mr.', 'Dr.'], selected: @title_3), :class => 'form-control' %>
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[father_of_first_applicant]', @actual_name_3, placeholder: 'mandatory*', :class => "form-control" %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-offset-1 col-lg-3">
+          Mother's Name:
+        </div>
+        <div class="col-lg-2">
+            <%= select_tag 'lead[mother_title]', options_for_select(['Mrs.', 'Dr.', 'Ms.'], selected: @title_4), :class => 'form-control' %>
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[mother_of_first_applicant]', @actual_name_4, placeholder: 'mandatory*', :class => "form-control" %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-offset-1 col-lg-3">
+          Spouse-Name:
+        </div>
+        <div class="col-lg-2">
+            <%= select_tag 'lead[spouse_title]', options_for_select(['Mr.','Mrs.', 'Dr.', 'Ms.'], @title_7), :class => 'form-control' %>
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[spouse_name]', @actual_name_7, :class => "form-control"%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          DOB:
+        </div>
+        <div class="col-lg-4">
+          <%= date_field_tag 'lead[dob]', @cost_sheet.lead.dob.try{|x| x.to_date}, :class => "form-control"%>
+        </div>
+        <div class="col-lg-2">
+          Occupation:
+        </div>
+        <div class="col-lg-4">
+          <%= select_tag 'lead[occupation_id]', options_for_select(@occupations, selected: @cost_sheet.lead.occupation_id), :class => 'form-control chosen', :prompt => 'Select Occupation', :onchange => 'populate_occupation_other()' %>
+        </div>
+        <div class="col-lg-offset-6 col-lg-6">
+          <div id="occupation_other">
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Designation:
+        </div>
+        <div class="col-lg-4">
+          <%= select_tag 'lead[designation_id]', options_for_select(@designations, selected: @cost_sheet.lead.designation_id), :class => 'form-control chosen', :prompt => 'Select designation', :onchange => 'populate_designation_other()' %>
+        </div>
+        <div class="col-lg-2">
+          PAN No.:
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[pan]', @cost_sheet.lead.try(:pan), :class => "form-control"%>
+        </div>
+      </div>
+      <div class="row">
+        <div class=" col-lg-6 col-lg-offset-0">
+          <div id="designation_other">
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Company:
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[company]', @cost_sheet.lead.try(:company), :class => "form-control"%>
+        </div>
+        <div class="col-lg-2">
+          Mobile:
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[mobile]', @cost_sheet.lead.try(:mobile), :class => "form-control"%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Email:
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[email]', @cost_sheet.lead.try(:email), :class => "form-control"%>
+        </div>
+        <div class="col-lg-3">
+          Marriage Anniversary:
+        </div>
+        <div class="col-lg-3">
+          <%= date_field_tag 'lead[doa]', @cost_sheet.lead.doa.try{|x| x.to_date}, :class => "form-control"%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Country:
+        </div>
+        <div class="col-lg-4">
+          <%= select_tag 'lead[nationality_id]', options_for_select(@nationalities, selected: @cost_sheet.lead.nationality_id), :class => 'form-control chosen', :prompt => 'Select nationality', :onchange => 'populate_nationality_other()' %>
+        </div>
+        <div class="col-lg-2">
+          Aadhar:
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[first_applicant_aadhar]', @cost_sheet.lead.try(:first_applicant_aadhar), :class => "form-control"%>
+        </div>
+      </div>
+      <div class="row">
+        <div class=" col-lg-6 col-lg-offset-0">
+          <div id="nationality_other">
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Qualification:
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[qualification_of_first_applicant]', @cost_sheet.lead.try(:qualification_of_first_applicant), :class => 'form-control' %>
+        </div>
+        <div class="col-lg-2">
+          Pincode:
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'lead[pincode]', @cost_sheet.lead.try(:pincode), :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          Permanent Address:
+        </div>
+        <div class="col-lg-9">
+          <%= text_area_tag 'lead[address]', @cost_sheet.lead.try(:address), :class => "form-control"%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-8">
+          <font color="#000">Is your Correspondence address is same as permanent address:</font>
+        </div>
+        <div class="col-lg-1">
+          <%= check_box_tag 'same_address', true, nil, :onchange => 'correspondence_address_disable("correspondence_address")'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          Correspondence Address:
+        </div>
+        <div class="col-lg-9">
+          <%= text_area_tag 'lead[current_address]', @cost_sheet.lead.try(:current_address), :class => "form-control", :id => 'correspondence_address'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-5">
+          <font color="#000">Click to enter Joint Applicant details:</font>
+        </div>
+        <div class="col-lg-1">
+          <%= check_box_tag 'joint_applicant_details', true, nil, :onchange => 'populate_second_applicant_form()'%>
+        </div>
+      </div><br>
+      <div id="second_applicant_form">
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Source:
+        </div>
+        <div class="col-lg-10">
+          <%= select(:lead, :source_category_id, options_for_select(@source_categories, selected: @source_pick),{}, { :class => 'form-control chosen' })   %>
+        </div>
+      </div><br>
+      <table class="customers">
+        <thead>
+          <th>Children Name</th>
+          <th>DOB</th>
+          <th></th>
+          <th></th>
+        </thead>
+        <tbody>
+          <% if @cost_sheet.lead.multiple_children == [] %>
+            <tr class="tr_clone">
+              <td><%= text_field_tag 'children_name[]', '', :class => 'form-control' %></td>
+              <td><%= date_field_tag 'children_dob[]', '', :class => 'form-control' %></td>
+              <td><input type="button" name="add" value="Remove" class="tr_clone_remove btn btn-danger btn-xs"></td>
+              <td><input type="button" name="add" value="Duplicate" class="tr_clone_duplicate btn btn-info btn-xs"></td>
+            </tr>
+          <%else%>
+            <% @cost_sheet.lead.multiple_children.each do |multiple_child| %>
+              <tr class="tr_clone">
+                <td><%= text_field_tag 'children_name[]', multiple_child.name, :class => 'form-control' %></td>
+                <td><%= date_field_tag 'children_dob[]', multiple_child.dob.to_date, :class => 'form-control' %></td>
+                <td><input type="button" name="add" value="-" style="font-size: 20px!important;" class="tr_clone_remove btn btn-danger btn-xs"></td>
+                <td><input type="button" name="add" value="+" style="font-size: 20px!important;" class="tr_clone_duplicate btn btn-info btn-xs"></td>
+              </tr>
+            <%end%>
+          <%end%>
+        </tbody>
+      </table><br>
+      <p style="color: #000!important;">If you have any reference then please fill the reference form.</p>
+      <center><h4 style="color: #000!important;"><b><u>Reference Form</u></b></h4></center>
+      <table class="customers">
+        <thead>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Mobile</th>
+          <th></th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr class="tr_clone">
+            <td><%= text_field_tag 'referred_lead[name][]', '', :class => 'form-control'%></td>
+            <td><%= text_field_tag 'referred_lead[email][]', '', :class => 'form-control'%></td>
+            <td><%= text_field_tag 'referred_lead[mobile][]', '', :class => 'form-control'%></td>
+            <td><input type="button" name="add" value="-" style="font-size: 20px!important;" class="tr_clone_remove btn btn-danger btn-xs"></td>
+            <td><input type="button" name="add" value="+" style="font-size: 20px!important;" class="tr_clone_duplicate btn btn-info btn-xs"></td>
+          </tr>
+        </tbody>
+      </table><br>
+      <center><h4 style="color: #000!important;"><b><u>PAYMENT DETAILS</u></b></h4></center>
+      <div class="row">
+        <div class="col-lg-3">
+          Booking Amount:
+        </div>
+        <div class="col-lg-3">
+          <font color="#000">₹ <%= comma_separated(@cost_sheet.milestone_amount(Milestone.where(payment_plan_id: @cost_sheet.payment_plan_id).sort_by{|x| x.order}.first.id))%></font>
+        </div>
+
+        <div class="col-lg-3">
+          Total Flat value:
+        </div>
+        <div class="col-lg-3">
+          <font color="#000">₹ <%= comma_separated(@cost_sheet.total_flat_value.round)%></font>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          Amount:
+        </div>      
+        <div class="col-lg-3">
+          <%= number_field_tag 'demand_money_receipt[amount]', '', step: "any", :class => 'form-control'%>
+        </div>
+        <div class="col-lg-3">
+          Payment Mode:
+        </div>
+        <div class="col-lg-3">
+          <%= select_tag 'demand_money_receipt[payment_mode]', options_for_select(@payment_modes), :class => 'form-control', :prompt => 'Select PaymentMode', :onchange => 'cheque_number_disable()' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          Drawn On:
+        </div>
+        <div class="col-lg-3">
+           <%= select_tag 'demand_money_receipt[bank_name]', options_for_select(@bank_names), :class => 'form-control', :prompt => 'Select Bank', :onchange => 'populate_bank_other()'%>
+        </div>
+        <div class="col-lg-3">
+          Payment Date:
+        </div>
+        <div class="col-lg-3">
+          <%= date_field_tag 'demand_money_receipt[date]', '', :class => 'form-control'%>
+        </div> 
+      </div>
+      <div class="row">
+        <div style="margin-left: -209px!important;" class="col-lg-9">
+          <div id="bank_other">
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          Cheque No.:
+        </div>
+        <div class="col-lg-3">
+          <%= text_field_tag 'demand_money_receipt[cheque_number]', '', :class => 'form-control', :id => 'cheque_number'%>
+        </div>    
+        <div class="col-lg-3">
+          Cheque/RTGS Date:
+        </div>
+        <div class="col-lg-3">
+          <%= date_field_tag 'demand_money_receipt[instrument_date]', '', :class => 'form-control'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-8">
+          <font color="#000"><b>Are you applying for loan under Pradhan Mantri Aawas Yojna:</b></font>
+        </div>
+        <div class="col-lg-1">
+          <% if @cost_sheet.lead.loan_under_PMAY == nil %>
+            <%= check_box_tag 'lead[loan_under_PMAY]', true, nil%>
+          <%else%>
+            <%= check_box_tag 'lead[loan_under_PMAY]', true, nil, :checked => true%>
+          <%end%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-6">
+          <canvas id="signature_1" width="400px" height ="150px" style="border: 1px solid blue; background-color: #fff!important;"></canvas>
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<font color="#000"><u>Signature of the applicant 1</u></font><br>
+          <p id="clear-signature_1" class="col-lg-offset-5 btn btn-primary">Clear</p>
+        </div>
+        <div id="second_applicant_signature">
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-offset-5 col-lg-2">
+          <%= submit_tag 'Submit Booking Form', :class => 'btn btn-primary'%>
+        </div>
+      </div><br>
+      </div>
+    </div> 
+  </div>
+<%end%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+<script>
+  jQuery(document).ready(function($){
+  
+  var canvas = document.getElementById("signature_1");
+  var signaturePad = new SignaturePad(canvas);
+  
+  $('#clear-signature_1').on('click', function(){
+      signaturePad.clear();
+  });
+
+  // var canvas2 = document.getElementById("signature_2");
+  // var signaturePad2 = new SignaturePad(canvas2);
+  
+  // $('#clear-signature_2').on('click', function(){
+  //     signaturePad2.clear();
+  // });
+  
+  });
+  
+</script>
+<script>
+  $("table").on('click',"input.tr_clone_duplicate" , function() {
+      var tr    = $(this).closest('.tr_clone');
+      var clone = tr.clone();
+      tr.after(clone);
+  });  
+
+  $("table").on('click',"input.tr_clone_remove" , function() {
+      $(this).closest('tr').remove();
+  });
+</script>
+
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>
+<script type="text/javascript">
+  function correspondence_address_disable(correspondence_address)
+  {
+    document.getElementById(correspondence_address).disabled = true;
+  }
+  function cheque_number_disable()
+  {  
+    var payment_mode=event.target.value;
+    console.log(payment_mode);
+    if (payment_mode == 'CHEQUE'){
+      document.getElementById('cheque_number').disabled = false;
+    }else{
+      document.getElementById('cheque_number').disabled = true;
+    }
+    
+  }
+</script>
+
+<script>
+  function populate_occupation_other()
+  {
+    var occupation_type=event.target.innerHTML;
+    $.getScript('https://www.realtybucket.com/leads/leads/populate_occupation_other.js?type='+occupation_type);
+    // $.getScript('http://localhost:3000/leads/leads/populate_occupation_other.js?type='+occupation_type);
+  }
+
+  function populate_designation_other()
+  {
+    var designation_type=event.target.innerHTML;
+    $.getScript('https://www.realtybucket.com/leads/leads/populate_designation_other.js?type='+designation_type);
+    // $.getScript('http://localhost:3000/leads/leads/populate_designation_other.js?type='+designation_type);
+  }
+  function populate_nationality_other()
+  {
+    var nationality_type=event.target.innerHTML;
+    $.getScript('https://www.realtybucket.com/leads/leads/populate_nationality_other.js?type='+nationality_type);
+    // $.getScript('http://localhost:3000/leads/leads/populate_nationality_other.js?type='+nationality_type);
+  }
+  function populate_second_occupation_other()
+  {
+    var occupation_type=event.target.innerHTML;
+    // $.getScript('https://www.realtybucket.com/leads/leads/populate_occupation_other.js?type='+occupation_type);
+    $.getScript('https://www.realtybucket.com/demand/populate_occupation_other.js?type='+occupation_type); 
+  }
+  function populate_second_designation_other()
+  {
+    var designation_type=event.target.innerHTML;
+    // $.getScript('https://www.realtybucket.com/leads/leads/populate_designation_other.js?type='+designation_type);
+    $.getScript('https://www.realtybucket.com/demand/populate_designation_other.js?type='+designation_type);
+  }
+
+  function populate_bank_other()
+  {
+    var bank_name=event.target.value;
+    // $.getScript('https://www.realtybucket.com/demand/populate_bank_other.js?name='+bank_name);
+    $.getScript('https://www.realtybucket.com/demand/populate_bank_other.js?name='+bank_name);
+  }
+  function populate_second_applicant_form()
+  {
+    var value = event.target.value;
+    $.getScript('https://www.realtybucket.com/demand/populate_second_applicant_form.js?form_value='+value); 
+    $.getScript('https://www.realtybucket.com/demand/populate_second_applicant_signature.js?form_value='+value); 
+  }
+</script>
+<style>
+  @media (max-width: 768px) {
+  canvas{
+    width: 370px!important;
+    height: 150px!important;
+  }
+}
+</style>

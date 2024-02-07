@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div id="container"></div>
+    </div>
+</div>
+<script>
+  $(function () {
+        // Create the chart
+       new Highcharts.chart('container',
+  {
+    chart:
+    {
+        type: 'bar',
+        height: 800
+    },
+    title:
+    {
+        text: 'Broker Leaderboard'
+    },
+    xAxis:
+    {   
+        categories: <%= raw @broker_wise_data_keys %>
+    },
+    yAxis:
+    {
+        min: 0,
+        title:
+        {
+            text: 'Goals'
+        }
+    },
+    legend:
+    {
+        reversed: true
+    },
+    plotOptions:
+    {
+        series:
+        {
+            stacking: 'normal',
+            dataLabels:
+            {
+                enabled: true
+            }
+        }
+    },
+    colors: ['#003E77','#004aad','#41b8d6','#6be5e8'],
+    series: <%=  @broker_wise_data_value %>
+  });
+});
+
+</script>

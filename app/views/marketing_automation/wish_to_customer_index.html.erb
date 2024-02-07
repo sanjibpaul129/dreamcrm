@@ -1,0 +1,46 @@
+<%@header = 'Wish To Customer'%>
+<%= form_tag 'wish_to_customer_submit', :html => {:class => 'form-horizontal'} do %>
+	<h1>Customers</h1>
+	<table id="customers" >
+		<thead>
+			<th id="check_all" style="cursor: pointer!important;">Select All</th>
+          	<th>Name</th>
+			<th>Email</th>
+			<th>Mobile</th>
+			<th>DOB</th>
+			<th>DOA</th>
+			<th>Field One</th>
+			<th>Field two</th>
+			<th>Field Three</th>
+			<th></th>			
+		</thead>
+		<tbody>
+			<% @wish_to_customers.each do |wish_to_customer| %>
+				<tr>
+					<td><%= check_box_tag 'wish_to_customer_ids[]',wish_to_customer.id%></td>
+					<td><%= wish_to_customer.name%></td>
+	          		<td><%= wish_to_customer.email%></td>
+					<td><%= wish_to_customer.mobile%></td>
+					<td><%= wish_to_customer.dob.try{|x| x.strftime('%d/%m/%Y')} %></td>
+					<td><%= wish_to_customer.doa.try{|x| x.strftime('%d/%m/%Y')} %></td>
+					<td><%= wish_to_customer.try( :field_one)%></td>
+					<td><%= wish_to_customer.try( :field_two)%></td>
+					<td><%= wish_to_customer.try( :field_three)%></td>
+					<td><%= link_to 'Edit', marketing_automation_wish_to_customer_edit_path(wish_to_customer), :class => 'edit_btn'%></td>					
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<br>
+<%= link_to 'Customer Upload', marketing_automation_wish_to_customer_upload_form_path, :class => 'btn btn-primary' %>
+<%= submit_tag 'Retry', :class => 'btn btn-primary'%>
+
+<%= submit_tag 'Destroy', :class => 'btn btn-danger'%>
+<%end%>
+
+<script type="text/javascript">
+      $('#check_all').on("click", function(){
+  var cbxs = $('input[type="checkbox"]');
+  cbxs.prop("checked", !cbxs.prop("checked"));
+});
+</script>

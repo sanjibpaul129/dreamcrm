@@ -1,0 +1,123 @@
+<%@header = 'Site Visit Report'%>
+<% flash.each do |key, value| %>
+  <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+  </div>
+<% end %>
+
+<div align="center"><h3><b>Site Visit Form Register</b></h3></div>
+
+<%= form_tag 'site_visit_form_register' do  %>
+  <div class="row">
+    <div class="col-lg-1">
+      Projects:
+    </div>
+   <div class="col-lg-2">  
+      <%= select_tag "business_unit_id", options_for_select(@projects, selected: @project_selected), :class => 'form-control', :prompt => 'Please Select'  %>
+    </div>
+    <div class="col-lg-1">
+      From:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "from", @from.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-1">
+      To:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "to", @to.to_date, :class => 'form-control'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag "Refresh", :class => 'btn btn-primary' %>
+    </div>
+</div>
+
+  <table class="customers " id="site_visit_form_register">
+    <thead>
+      <tr>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>age</th>
+        <th>Address</th>
+        <th>Pincode</th>
+        <th>Source</th>
+        <th>Occupation</th>
+        <th>Designation</th>
+        <th>Company</th>
+        <th>Office Address</th>
+        <th>Off-Pincode</th>
+        <th>Investment</th>
+        <th>flat type</th>
+        <th>Budget From</th>
+        <th>Budget To</th>
+        <th>Searching since</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <td><%= lead.id %></td>
+          <td><%= lead.business_unit.name %></td>
+          <td><%= lead.name %></td>
+          <td><%= lead.mobile.last(4) %></td>
+          <td><%= lead.email %></td>
+          <td><%= lead.try(:age_bracket) %></td>
+          <td><%= lead.try(:address)%></td>
+          <td><%= lead.try(:pincode)%></td>
+          <td><%= lead.source_category.heirarchy %></td>
+          <td><%= lead.occupation.try{|x| x.description}%></td>
+          <td><%= lead.designation.try{|x| x.description}%></td>
+          <td><%= lead.try(:company)%></td>
+          <td><%= lead.try(:work_address)%></td>
+          <td><%= lead.try(:office_pincode)%></td>
+          <td><%= lead.try(:investment)%></td>
+          <td><%= lead.try(:flat_type) %></td>
+          <td><%= lead.try(:budget_from) %></td>
+          <td><%= lead.try(:budget_to) %></td>
+          <td><%= lead.try(:searching_since)%></td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+<%end%>
+<script>
+  $(document).ready(function(){
+var FilterTable=$("#site_visit_form_register").DataTable({  
+   "fixedHeader": true,   
+   "dom": '<"wrapper"lit>',
+   "bAutoWidth": false,
+   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+   "bDeferRender": true,
+   "aoColumns": [
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true}
+                             ]
+});
+
+$("#filterbox").keyup(function() {
+        FilterTable.search(this.value).draw();
+    });
+});
+</script>

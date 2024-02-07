@@ -1,0 +1,6 @@
+<%= select_tag "broker_name", options_for_select(@brokers, selected: @broker.id), :class => 'form-control selectpicker', :style => 'width: 220px!important;', data: { live_search: true }, :id => 'broker_dropdown_'+@broker_contact_id.to_s, :onchange => 'populate_other_broker('+@broker_contact_id.to_s+')'%> <%= check_box_tag "broker_name_update", true, nil, :onchange => 'broker_name_update('+@broker_contact_id.to_s+')' %>
+<script>
+    $(document).ready(function() {
+        $('.selectpicker').selectpicker();
+    });
+</script>

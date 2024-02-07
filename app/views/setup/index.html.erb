@@ -1,0 +1,411 @@
+<%@header = 'Setup'%>
+<% if AccessPointPersonnel.includes(:access_point).where(:access_points => {menu: "Setup"}, personnel_id: current_personnel.id) == [] %>
+  <div class="row">
+  <div class="col-lg-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">PreSales</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% if current_personnel.email=='ayush_ruia@hotmail.com' %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Organisations', {controller: 'organisations', action: 'index'} %></a>
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Personnels', {controller: 'personnels', action: 'index'} %></a>
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Companies', {controller: 'companies', action: 'index'} %></a>
+            </li>
+
+            
+          <% end %>
+          <% if current_personnel.status=='Back Office' || current_personnel.status=='Admin' %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Personnels', {controller: 'personnels', action: 'index'} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Source Category', {controller: 'source_categories', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Lost Reason', {controller: 'lost_reasons', action: 'index'} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Project Rates', {controller: 'setup', action: 'project_rate_index'} %></a>
+            </li>
+          <%end%>
+        </ul>
+      </div>
+    </div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Maintenance</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% if current_personnel.organisation.name == 'Jain Group' %> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Rate of Maintainance', {controller: 'maintainance', action: 'maintainance_index'}, {method: :post} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Rate of Electrical-Charge', {controller: 'electrical', action: 'electrical_index'}, {method: :post} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Opening-Balances', {controller: 'flats', action: 'opening_balance_index'} %></a>
+            </li> 
+          <%end%>            
+        </ul>
+      </div>
+    </div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Marketing</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% if current_personnel.organisation.name == 'Jain Group' || current_personnel.organisation.name == 'Alcove Group' || current_personnel.organisation.name == 'JSB Infrastructures' || current_personnel.organisation.name == 'Holiday Inn Kolkata Airport' || current_personnel.organisation.name == 'Rajat Group' %> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Make email templates', {controller: 'marketing_automation', action: 'email_template_index'} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Make whatsapp templates', {controller: 'marketing_automation', action: 'whatsapp_template_index'} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Make SMS templates', {controller: 'marketing_automation', action: 'sms_template_index'} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Wish To Customer', {controller: 'marketing_automation', action: 'wish_to_customer_index'} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Referred Leads', {controller: 'marketing_automation', action: 'referred_leads_index'} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Bulk Recipients', {controller: 'marketing_automation', action: 'bulk_recipient_index'} %></a>
+            </li>
+            <% if current_personnel.email=='ayush@thejaingroup.com' %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Source tagging with Facebook', {controller: 'source_categories', action: 'source_tag_with_facebook_index'} %></a>
+            </li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>    
+  </div>
+
+  <div class="col-lg-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">PostSales</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% if current_personnel.status=='Back Office' || current_personnel.status=='Admin'|| current_personnel.status=='Team Lead' %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Block', {controller: 'blocks', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Flat', {controller: 'flats', action: 'flat_index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Car Park', {controller: 'car_parks', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Payment Plan', {controller: 'payment_plans', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Car Park Nature', {controller: 'car_park_natures', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Plc', {controller: 'plcs', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Plc Charge', {controller: 'plc_charges', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Flc Charges', {controller: 'flc_charges', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Edc', {controller: 'extra_development_charges', action: 'extra_development_charges_index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Extra Charges', {controller: 'extra_charges', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Payment Milestone', {controller: 'windows', action: 'payment_milestone_index'} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Milestone', {controller: 'milestones', action: 'milestone_index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Servant Quarter', {controller: 'servant_quarter', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Tax', {controller: 'tax', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Posession Charges', {controller: 'posession_charges', action: 'index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Adhoc Charges', {controller: 'adhoc_charge', action: 'adhoc_charge_index'} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Credit Notes', {controller: 'credit_note_head', action: 'credit_note_head_index'} %></a>
+            </li> 
+          <%end%>    
+        </ul>
+      </div>            
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Customer Profile</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Occupations', {controller: 'occupations', action: 'index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Designations', {controller: 'designations', action: 'index'} %></a>
+          </li>
+          
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Newspapers', {controller: 'newspapers', action: 'index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Tv Channels', {controller: 'channels', action: 'index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Radio Stations', {controller: 'stations', action: 'index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Magazines', {controller: 'magazines', action: 'index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Communities', {controller: 'communities', action: 'index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Nationalities', {controller: 'nationalities', action: 'index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Preferred Locations', {controller: 'preferred_locations', action: 'index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Other Projects', {controller: 'other_project', action: 'other_project_index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Areas', {controller: 'setup', action: 'area_index'} %></a>
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%=  %></span>
+            <a><span class="glyphicon glyphicon-check"></span> 
+            <%= link_to 'Cities', {controller: 'setup', action: 'city_index'} %></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <%if current_personnel.email == 'ayush@thejaingroup.com'%>
+    <div class="col-lg-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Admin</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Access Rights', {controller: 'access_point', action: 'access_point_index', method: :get} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Access Rights Tagging with Personnel', {controller: 'access_point', action: 'access_point_with_personnel', method: :get} %></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-4">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Brokers Area</h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Brokers', {controller: 'broker_setup', action: 'broker_index'} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Broker Contacts', {controller: 'broker_setup', action: 'broker_contact_index'} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Broker Project Status', {controller: 'broker_setup', action: 'broker_project_status_index'} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Broker Leader Board', {controller: 'broker_setup', action: 'broker_leaderboard'} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Broker Status Summary', {controller: 'broker_setup', action: 'status_pie_chart'} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Broker Source Category Tag', {controller: 'broker_setup', action: 'broker_source_category_tag_index'} %></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+<%else%>
+  <div class="row">
+    <% 
+      submenues = AccessPoint.where(menu: "Setup").pluck(:submenu).uniq 
+      submenues.each do |submenu|
+        if AccessPointPersonnel.includes(:access_point, :personnel).where(:access_points => {menu: "Setup", submenu: submenu}, personnel_id: current_personnel.id) == []
+          submenues -= [submenu]
+        end
+      end
+    %>
+    <% submenues.each do |submenu| %>
+      <% if submenues.count == 1%>
+        <div class="col-lg-4 col-lg-offset-4">
+      <%else%>
+        <div class="col-lg-3">
+      <%end%>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= submenu%></h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <% AccessPointPersonnel.includes(:access_point, :personnel).where(:access_points => {menu: "Setup", submenu: submenu}, personnel_id: current_personnel.id).sort_by{|x| x.access_point.order}.each do |access_point_personnel| %>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to access_point_personnel.access_point.name, {controller: access_point_personnel.access_point.controller, action: access_point_personnel.access_point.action} %></a>
+                </li>
+              <%end%>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <%end%>
+  </div>
+<%end%>
+<style type="text/css">
+	.list-group-item {
+		background-color: #0083ff1c!important;
+		border-radius: 5px!important;
+	}
+</style>

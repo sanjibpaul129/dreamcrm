@@ -1,0 +1,39 @@
+<h1>Emails</h1>
+
+<table class="table table-striped table-hover " id="orderedtasks">
+  <thead>
+    <tr>
+      
+      <th>Organisation</th>
+      <th>Subject</th>
+      <th>Body</th>
+     
+      <th>Date</th>
+      <th>From</th>
+     
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @emails.each do |email| %>
+      <tr>
+        
+        <td><%= email.organisation.name %></td>
+        <td><%= email.subject %></td>
+        
+        <% if email.body != nil %>
+        <td><%= truncate((strip_tags(email.body)), length: 200) { link_to 'Show', email }  %></td>
+        <% else %>
+        <td></td>
+        <% end %>
+         
+       
+        <td><%= email.date.strftime("%d/%m/%y") %></td>
+        <td><%= email.from %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+

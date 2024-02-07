@@ -1,0 +1,36 @@
+<p>Dear Sir,</p>
+<h1>Unattended Fresh Leads(<%= @fresh_leads.count %>)</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>enq dt</th>
+      <th>dist dt</th>
+      <th>name</th>
+      <th>email</th>
+      <th>mobile</th>
+      <th>project</th>
+      <th>executive</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @fresh_leads.each do |fresh_lead| %>
+      <tr>
+        <td><%= fresh_lead.generated_on.strftime("%d/%m/%y") %></td>
+        <td><%= fresh_lead.created_at.strftime("%d/%m/%y") %></td>
+        <td><%= fresh_lead.name %></td>
+        <% if fresh_lead.business_unit.organisation_id == 1 %>
+          <td></td>
+          <td></td>
+        <%else%>
+          <td><%= fresh_lead.email %></td>
+          <td><%= fresh_lead.mobile %></td>
+        <%end%>
+        <td><%= fresh_lead.business_unit.name %></td>
+        <td><%= fresh_lead.personnel.name %></td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>
+

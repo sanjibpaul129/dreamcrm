@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cost_sheet_id: 1
+  car_parking_nature_id: 1
+  quantity: 1
+
+two:
+  cost_sheet_id: 1
+  car_parking_nature_id: 1
+  quantity: 1

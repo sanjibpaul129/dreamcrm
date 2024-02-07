@@ -1,0 +1,222 @@
+<div class="col-lg-8 col-lg-offset-1">
+<h1>Customer Ledger</h1>
+	<b>Customer: <%= @customer.lead.name%></b>
+	<table class="customers" id="maintainance_bill_report_index" >
+	  <thead>
+	    <th>Date</th>
+	    <th>Description</th>
+	    <th style="text-align: right!important;">Amount</th>
+	    <th style="text-align: right!important;">Balance</th>
+	    <th style="text-align: right!important;">Delay</th>
+	    <th style="text-align: right!important;">Interest</th>
+	    <th></th>
+	  </thead>
+
+	  <tbody>
+	  	<% 	
+	  		maintainance_bill_amount=0
+	  		money_receipt_amount=0
+	  		balance=0
+	  		last_balance_date = nil
+	  		last_bill_date = nil
+	  		last_bill_balance_amount = 0
+	  		previous_balance = 0
+	  		last_bill = nil
+	  	%>
+	  	<% if @customer.opening_balance != nil %>
+  			<tr>
+  				<td>22.06.20</td>
+  				<% last_balance_date = ("22/06/2020").to_datetime%>
+  				<td>Opening Balance: </td>
+  				<td style="text-align: right!important;"><%= @customer.opening_balance %></td>
+  				<% balance += @customer.opening_balance %>
+  				<td style="text-align: right!important;"><%= balance %></td>
+  				<td style="text-align: right!important;">-</td>
+  				<td style="text-align: right!important;">-</td>
+  			</tr>
+	  	<% end %>		
+	  	<% 
+  			total_interest = 0
+  		 	interest = 0 
+	  	%>
+	  	<% @both_documents.each_with_index do |both_document, index|%>
+	  		<%if both_document.class == MaintainenceBill%>
+	  			<tr>
+	  				<td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+	  				<td>Maintenance Bill-Period: <%= both_document.from.to_date.strftime('%d.%m.%y')%>to <%= both_document.to.to_date.strftime('%d.%m.%y')%>-Rate: <%= both_document.rate%></td>
+	  				<td style="text-align: right!important;"><%= both_document.amount%></td>
+	  				<% 
+	  					previous_balance = balance
+	  					balance += both_document.amount 
+	  				%>
+	  				<td style="text-align: right!important;"><%= balance %></td>
+	  				<% if last_balance_date == nil %>
+	  					<td>-</td>
+	  					<% 
+	  						delay = 0 
+	  						last_balance_date = both_document.date.to_datetime
+	  						last_bill_date = both_document.date.to_datetime
+	  						last_bill_balance_amount = balance
+	  						last_bill = both_document
+	  					%>
+	  				<%else%>
+	  					<td style="text-align: right!important;"><%= delay=((both_document.date.to_datetime-last_balance_date.to_datetime).to_i)%></td>
+	  					<% 
+	  						last_balance_date = both_document.date.to_datetime
+	  						last_bill_date = both_document.date.to_datetime
+	  						last_bill_balance_amount = balance
+	  						last_bill = both_document
+	  					%>
+	  				<%end%>
+	  				<td style="text-align: right!important;"><%= interest=((previous_balance*0.18*delay)/365).round%></td>
+	  				<% total_interest+= interest%>
+	  				<td><%= link_to 'Preview', maintainance_bill_maintainance_bill_preview_index_path(both_document),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+	  			</tr>
+	  		<%elsif both_document.class == MoneyReceipt%>
+	  			<tr>
+	  				<td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+	  				<td>Money Receipt-Customer: <%= both_document.lead.name%>-Flat: <%= both_document.flat.full_name%></td>
+	  				<td style="text-align: right!important;">-<%= both_document.amount%></td>
+	  				<% 
+	  					previous_balance = balance
+	  					balance = balance-both_document.amount 
+	  				%>
+	  				<td style="text-align: right!important;"><%= balance %></td>
+	  				<% if last_balance_date == nil %>
+	  					<td style="text-align: right!important;">-</td>
+	  					<% 
+	  						delay = 0 
+	  						last_balance_date = both_document.date.to_datetime
+	  					%>
+	  				<%else%>
+	  					<td style="text-align: right!important;"><%= delay=((both_document.date.to_datetime-last_balance_date.to_datetime).to_i)%></td>
+	  				<%end%>
+	  				<%
+	  					if last_bill == nil 
+	  						if balance < previous_balance
+	  							if both_document.date <= last_balance_date+15.days
+	  								interest = 0
+	  							else
+	  								interest = ((previous_balance*0.18*delay)/365).round
+	  							end
+	  						end
+	  						last_balance_date = both_document.date.to_datetime 
+	  					else
+		  					if balance < last_bill.amount
+		  						if both_document.date <= last_bill.date+15.days
+		  							(index+1).times do |counter|
+		  								if both_document[counter].class == MaintainenceBill
+		  									if both_document[counter].date == last_bill_date
+		  										actual_interest_amount = last_bill_balance_amount-(both_document[counter].amount-balance)
+		  										interest = ((actual_interest_amount*0.18*delay)/365).round
+		  									end
+		  								end
+		  							end
+		  						else
+		  							interest = ((previous_balance*0.18*delay)/365).round	
+		  						end
+		  					else
+		  					 	interest = ((previous_balance*0.18*delay)/365).round
+		  					end
+		  					last_balance_date = both_document.date.to_datetime 
+		  				end
+	  				%>
+	  				<td style="text-align: right!important;"><%= interest%></td>
+	  				<% total_interest+= interest%>
+	  				<td><%= link_to 'Preview', maintainance_bill_money_receipt_preview_index_path(both_document),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+	  			</tr>
+	  		<%elsif both_document.class == MaintenanceCreditNoteEntry%>
+	  			<tr>
+	  				<td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+	  				<td>Credit Note:<%= both_document.head%></td>
+	  				<td style="text-align: right!important;">-<%= (both_document.amount*1.18).round(2)%></td>
+	  				<% 
+	  					previous_balance = balance
+	  					balance = balance-((both_document.amount*1.18).round(2)) 
+	  				%>
+	  				<td style="text-align: right!important;"><%= balance %></td>
+	  				<% if last_balance_date == nil %>
+	  					<td style="text-align: right!important;">-</td>
+	  					<% 
+	  						delay = 0 
+	  						last_balance_date = both_document.date.to_datetime
+	  					%>
+	  				<%else%>
+	  					<td style="text-align: right!important;"><%= delay=((both_document.date.to_datetime-last_balance_date.to_datetime).to_i)%></td>
+	  				<%end%>
+	  				<%
+	  					if last_bill == nil 
+	  						if balance < previous_balance
+	  							if both_document.date <= last_balance_date+15.days
+	  								interest = 0
+	  							else
+	  								interest = ((previous_balance*0.18*delay)/365).round
+	  							end
+	  						end
+	  						last_balance_date = both_document.date.to_datetime 
+	  					else
+		  					if balance < last_bill.amount
+		  						if both_document.date <= last_bill.date+15.days
+		  							(index+1).times do |counter|
+		  								if both_document[counter].class == MaintainenceBill
+		  									if both_document[counter].date == last_bill_date
+		  										actual_interest_amount = last_bill_balance_amount-(both_document[counter].amount-balance)
+		  										interest = ((actual_interest_amount*0.18*delay)/365).round
+		  									end
+		  								end
+		  							end
+		  						else
+		  							interest = ((previous_balance*0.18*delay)/365).round	
+		  						end
+		  					else
+		  					 	interest = ((previous_balance*0.18*delay)/365).round
+		  					end
+		  					last_balance_date = both_document.date.to_datetime 
+		  				end
+	  				%>
+	  				<td style="text-align: right!important;"><%= interest%></td>
+	  				<% total_interest+= interest%>
+	  				<td></td>
+	  			</tr>
+	  		<%end%>
+	  	<%end%>
+	  	<tr>
+	  		<td colspan="4">Interest Amount Till date</td>
+	  		<td style="text-align: right!important;"><%= delay=((DateTime.now.to_datetime-last_balance_date.to_datetime).to_i)%></td>
+	  		<td style="text-align: right!important;"><%= interest=((balance*0.18*delay)/365).round%></td>
+	  		<% total_interest+= interest%>
+	  		<td></td>
+	  	</tr>
+	  	<tr>
+	  		<td colspan="5"><b>Grand Total:</b></td>
+	  		<td style="text-align: right!important;"><%= total_interest%></td>
+	  		<td></td>
+	  	</tr>
+	  </tbody>
+	</table>
+
+<div class="row">
+  <div class="col-lg-offset-5">
+    <%= link_to 'Home', report_outstanding_report_index_path,:class => 'link_btn ', :style => "text-decoration: none"%>
+  </div>
+</div>
+	
+</div>
+
+<style>
+  .link_btn{
+    color: #ffffff;
+    padding:3px;
+    border-radius: 10%;
+      background-color: #ff8c00;
+      border-color: #ff8c00;
+      
+    width: 40px!important;
+    height:auto!important;
+  }
+</style>
+<style>
+ .col-lg-offset-1 {
+    margin-left: 16.333333% !important;
+}
+</style>

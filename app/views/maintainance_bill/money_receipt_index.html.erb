@@ -1,0 +1,54 @@
+<%@header = 'Maintenance Money Receipt'%>
+<%= form_tag 'money_receipt_pdf_converter', :html => {:class => 'form-horizontal'} do %>
+<h1>Money Receipts</h1>
+<table class=" " id="customers">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Project</th>
+      <th>Customer</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th>Block</th>
+      <th>Flat</th>
+      <th>Amount</th>
+      <th>Payment Date</th>
+      <th>Cheque No.</th>
+      <th>Bank</th>
+      <th>Remarks</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @money_receipts.each do |money_receipt|%>
+    		<tr>
+          <td><%= check_box_tag 'money_receipt_ids[]',money_receipt.id%></td>
+          <td><%= money_receipt.flat.block.business_unit.name%></td>
+    			<td><%= money_receipt.lead.name%></td>
+          <td><%= money_receipt.lead.email%></td>
+          <td><%= money_receipt.lead.mobile%></td>
+          <td><%= money_receipt.flat.block.name%></td>
+    			<td><%= money_receipt.flat.full_name%></td>
+    			<td><%= money_receipt.amount%></td>
+          <td><%= money_receipt.date.to_date.strftime('%d/%m/%y')%></td>
+          <td><%= money_receipt.try(:cheque_number)%></td>
+          <td><%= money_receipt.try(:bank_name)%></td>
+          <td><%= money_receipt.try(:remarks)%></td>
+    			<td><%= link_to 'Edit', maintainance_bill_money_receipt_edit_path(money_receipt),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+    			<td>
+            <% if current_personnel.email != 'ayush@thejaingroup.com' %>
+            <% else %>
+            <%= link_to 'Destroy', maintainance_bill_money_receipt_destroy_path(money_receipt),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%>
+            <% end %>
+          </td>
+          <td><%= link_to 'Preview', maintainance_bill_money_receipt_preview_index_path(money_receipt),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+    		</tr>
+  	<%end%>
+  </tbody>
+</table><br>
+<%= link_to 'New Entry', maintainance_bill_money_receipt_new_path, :class => 'btn btn-primary' %>
+<%= submit_tag 'Send Mail',:class => 'btn btn-primary' %>
+<%end%> 

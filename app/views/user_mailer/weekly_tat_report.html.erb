@@ -1,0 +1,31 @@
+<p>The date range for this report is <b><%= (DateTime.now-7.days).to_date.strftime('%d/%m/%Y')%> - <%= (DateTime.now-1.day).to_date.strftime('%d/%m/%Y')%></b></p><br>
+<table border="3">
+	<thead>
+		<th>Project</th>
+		<th>Fresh Calls</th>
+		<th>TAT(mins)</th>
+	</thead>
+	<tbody>
+		<%
+			fresh_total = 0
+		%>
+		<% @bu_wise_fresh_leads.each do |key, value|%>
+			<tr>
+				<td><%= key%></td>
+				<% value.each do |subkey, subvalue|%>
+					<% if subkey == "fresh_leads" %>
+						<td><%= subvalue.count%></td>
+						<% fresh_total += subvalue.count%>
+					<%else%>
+						<td><%=subvalue%></td>
+					<%end%>
+				<%end%>
+			</tr>
+		<%end%>
+		<tr>
+			<td><b>Total:</b></td>
+			<td><b><%= fresh_total %></b></td>
+			<td><b><%= (@total_delay/fresh_total).round %></b></td>
+		</tr>
+	</tbody>
+</table>

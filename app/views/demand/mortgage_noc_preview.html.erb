@@ -1,0 +1,377 @@
+<%= form_tag 'mortgage_noc_send', :html => {:class => 'form-horizontal'} do %>
+<%= hidden_field_tag 'booking_id', @booking.id%>
+<%= hidden_field_tag 'bank_name', @bank_name%>
+
+<html>
+  <head>
+    <style>
+    * { margin: 0; padding: 0; }
+    /**/
+    body { font: 14px/1.4 Times, Serif; }
+    <% if current_personnel.organisation_id == 6 %>
+      #page-wrap { width: 850px; height: 2390px; margin: 0 auto; background: #fff !important; border: 2px solid #000; }
+    <%else%>
+      #page-wrap { width: 850px; height: 900px; margin: 0 auto; background: #fff !important; border: 2px solid #000; }
+    <%end%>
+
+    textarea { border: 0; font: 14px Times, Serif; overflow: hidden; resize: none; }
+   
+    .delivery_to { border: 0; font: 14px Times, Serif; height:130px;width:240px; resize: none; }
+
+    table { border-collapse: collapse; width: 845px;}
+    table td, table th { border: 2px solid black !important; padding: 2px; background: #fff !important; color: #000!important;}
+
+    #header { height: 100px; width: 100%; margin: 10px 0; background: #fff; text-align: center; color: #000;font: bold;text-decoration: uppercase;  padding: 4px 0px; }
+
+    .customeraddress { margin: 0 10px 0 0; width: 220px; height: 300px; float: left; }
+    /**/
+    .cc_mail_box{width: 200px; height: 25px; font: 14px Times, Serif; }
+    #attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; position: relative; top: 61px; }
+    #attachment_else_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; right: 370px; position: relative; top: 61px; }
+    #regular_attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none;float:left; position: relative; bottom: 140px; left: 720px}
+    #found_ok {width: 25em;  height: 5em; float: center; position: relative; bottom: -57px; left: 235px}
+    #customer { overflow: hidden; }
+    #button { width: 250px; height: 50px; float: right; }
+    #smallbutton {width: 125px; height: 50px; float: right; }
+    #sidesmallbutton {width: 125px; height: 50px; float: right;}
+    #leftsmallbutton { width: 125px; height: 50px; float: left; }
+    #logo { text-align: right; float: right; position: relative; margin-top: 0px; margin-right: 60px; border: 1px solid #fff; max-width: 540px; max-height: 150px; overflow: hidden; float:center; }
+    #logoctr { display: none; }
+    #logo:hover #logoctr, #logo.edit #logoctr { display: block; text-align: right; line-height: 25px; background: #22222263; padding: 0 5px; }
+    #logohelp { text-align: left; display: none; font-style: italic; padding: 10px 5px;}
+    #logohelp input { margin-bottom: 5px; }
+    .edit #logohelp { display: block; }
+    .edit #save-logo, .edit #cancel-logo { display: inline; }
+    .edit #image, #save-logo, #cancel-logo, .edit #change-logo, .edit #delete-logo { display: none; }
+    #customer-title { font-size: 15px; font-weight: bold; }
+
+    #meta { margin-top: 1px; width: 845px; float: right; }
+
+    #meta td.meta-head { width: 200px; text-align: left; background: #22222263; }
+    #meta td textarea { width: 700px; text-align: left; }
+
+    #metadata { margin-top: 1px; width: 845px; float: left; }
+    #metadata td { text-align: left;  }
+    #metadata td.meta-head { width: 20px; text-align: left; background: #22222263; }
+    #metadata td textarea { height: 20px; text-align: left; width: 200px; }
+
+    #items { clear: both; width: 100%; margin: 30px 0 0 0 }
+    #items th { background: #c85e17; }
+    #items th.quantity { text-align: right; }
+    #items textarea { width: 80px; height: 50px; }
+    #items tr.item-row td { border-width: 0px; border-bottom: 1px solid black; vertical-align: top; }
+    #items td.description { width: 300px; }
+    #items td.item-name { width: 175px; }
+    #items td.description textarea, #items td.item-name textarea { width: 100%; }
+    #items td.total-line { border-right: 0; text-align: right; }
+    #items td.reg-nos { border-right: 0; text-align: center; text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 5px; }
+    #items td.quantity { text-align: right; }
+    #items td.quantity_centre { text-align: center; }
+
+    #items td.total-value { border-left: 0; padding: 10px; text-align: right; }
+    #items td.total-value textarea { height: 20px; background: none; }
+    #items td.balance { background: #c85e17; }
+    #items td.blank { border: 0; }
+    .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+
+    #terms { text-align: left; margin: 8px 0 0 0; }
+    #terms h5 { text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 10px; border-bottom: 1px solid black; padding: 0 0 4px 0; margin: 0 0 8px 0; }
+    #terms h3 { text-align: center; font: 10px Helvetica, Sans-Serif; letter-spacing: 4px; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+    #terms h4 { text-align: center; font: 15px Helvetica, Sans-Serif; letter-spacing: 4px; border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+
+    #terms textarea { width: 100%; text-align: left;}
+
+    .auto-textarea{height:auto; width:auto;}
+    .quatation_details{width:100px;}
+    .item_details{width:770px;text-align:justify;text-justify:inter-word;}
+    .delete-wpr { position: relative; }
+    .delete { display: block; color: #000; text-decoration: none; position: absolute; background: #EEEEEE; font-weight: bold; padding: 0px 3px; border: 1px solid; top: -6px; left: -22px; font-family: Verdana; font-size: 12px; }
+
+    .address { margin: 0 10px 10px 0; width: 200px; height: 120px; float: right;text-align: left; }
+    .customer_address {  border: 0; font: 14px Times, Serif; width:200px; text-align:left; float: right; }
+    .company_address { border: 0; font: 14px Times, Serif; width:240px; resize: none; text-align: left; float: left;   }
+    </style>
+  </head>
+
+  <body>
+
+    <% if current_personnel.organisation_id == 6 %>
+      <% if @bank_name == "SBI Bank"%>
+        <div id="page-wrap">
+          <br><br><br>
+          <div class="col-lg-10 col-lg-offset-1">
+            <div class="row">
+              <div class="col-lg-12" style="text-align: center!important;">
+                <font style="color: #000!important; font-size: 20px!important;"><b><u>Mortgage NOC</u></b></font>
+              </div>
+            </div><br><br><br>
+            <p style="color: #000!important; font-size: 20px!important;">
+              To<br>Manager<br>State Bank of India <br><br>Dear Sir,<br><br>We, JSB Infrastructures, here by certify that:<br><br>
+              1. We, have transferable rights to the property described below, which has been allotted by us to <b><%= @booking.cost_sheet.lead.name%></b>, herein referred to as purchasers, subject to the due and proper performance and compliances of all terms and conditions of the allotment letter/sale agreement dated <b><%= @booking.date.to_date.strftime("%d-%m-%Y")%></b> (herein referred to as the “Sale Document”)<br><br>
+              Description of the property:
+            </p>
+            <table style="font-size: 20px!important;">
+              <tbody>
+                <tr>
+                  <td>Flat No. /House No.</td>
+                  <td> <%= @booking.cost_sheet.flat.block.name%>-<%= @booking.cost_sheet.flat.full_name%></td>
+                </tr>
+                <tr>
+                  <td>Building No. /Name</td>
+                  <td> <%= @booking.cost_sheet.flat.block.business_unit.name%></td>
+                </tr>
+                <tr>
+                  <td>Locality Name</td>
+                  <td><%= @booking.cost_sheet.flat.block.business_unit.try(:locality)%></td>
+                </tr>
+                <tr>
+                  <td>Area Name</td>
+                  <td><%= @booking.cost_sheet.flat.block.business_unit.try(:area)%></td>
+                </tr>
+                <tr>
+                  <td>City Name</td>
+                  <td><%= @booking.cost_sheet.flat.block.business_unit.try(:city)%></td>
+                </tr>
+                <tr>
+                  <td>Pin Code</td>
+                  <td><%= @booking.cost_sheet.flat.block.business_unit.try(:pincode)%></td>
+                </tr>
+              </tbody>
+            </table><br>
+            <p style="color: #000!important; font-size: 20px!important;">
+              2.  That the total consideration for this transaction is <b>₹<%= comma_separated(@booking.cost_sheet.total_flat_value_without_gst.round) %> (<%= @booking.cost_sheet.total_flat_value_without_gst.round.rupees %>) only</b> towards sale documents and towards taxes  <b>₹<%= comma_separated((@booking.cost_sheet.total_flat_value-@booking.cost_sheet.total_flat_value_without_gst).round)%> (<%= (@booking.cost_sheet.total_flat_value-@booking.cost_sheet.total_flat_value_without_gst).round.rupees%>Only)</b>.<br><br>
+
+              3.  The title of the property described above is clear, marketable and free from all encumbrances and doubts.<br><br>
+
+              4.  We confirm that we have no objection whatsoever to the said purchasers, at their own costs, charges, risks and consequences mortgaging the said property to State Bank of India (herein referred to as The Bank) as security for the amount advanced by the bank to them subject to the due and proper performance and compliances of all terms and conditions of the sale documents by the said purchasers.<br><br>
+
+
+              5.  We have not borrowed from any financial institution for the purchase / development of the property and have not created and will not create any encumbrances on the property allotted to the said purchasers during the currency of the loan sanctioned / to be sanctioned by the Bank to them subject to the due and proper performance and compliances of all terms and conditions of the sale document by the said purchasers.<br><br>
+
+              6.  After creation of proper charge / mortgage and after receipt of the copies thereof and after receipt of proper nomination in favour of the Bank, from the said purchasers, we are agreeable to accept State Bank of India as a nominee of the above named purchaser for the property described above and the nomination favouring the Bank has been registered and advice sent to the Bank of having done so, I/We note not to change the same without the written NOC of the Bank.<br><br>
+
+              7.  After creation of charge / mortgage and after of the Bank, from the above named purchaser, I/We undertake to inform the society about the Bank’s charge on the said flat as when the society is formed.<br><br>
+
+              8.  Please note that the payment for this transaction should be made by crossed cheque/ Transfer of funds favouring “JSB INFRASTRUCTURES A/C JSB Serene Tower” ICICI Bank, Dibrugarh Branch, Account no: 083905002463<br><br>
+               
+              9.  In case of cancellation of the sale agreement for any other reason, We shall refund the amount by crossed cheque favouring Bank A/C <b>“<%= @booking.cost_sheet.lead.name%>”</b>, and forward the same to you directly.<br><br>
+
+              10. The signatory to this letter draws authority to sign this undertaking on behalf of the firm vide the Partnership Deed of the firm.<br><br>
+
+              Yours faithfully,<br><br><br>
+              Authorised Signatory.<br>
+              Name    : Sumit Misra<br>
+              Designation     : Administrative Incharge<br>
+              Place   : Dibrugarh<br>
+              Date    : <b><%= DateTime.now.to_date.strftime('%d-%m-%Y')%></b>
+            </p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-lg-7 col-lg-offset-5">
+            <%= submit_tag 'Download', :class => 'btn btn-primary'%>
+            <%= submit_tag 'Email', :class => 'btn btn-primary'%>
+          </div>
+        </div>
+      <%elsif @bank_name == 'ICICI Bank'%>
+        <div id="page-wrap" style="">
+          <br><br><br>
+          <div class="col-lg-10 col-lg-offset-1">
+            <div class="row">
+              <div class="col-lg-12" style="text-align: center!important;">
+                <font style="color: #000!important; font-size: 20px!important;"><b><u>Mortgage NOC</u></b></font>
+              </div>
+            </div><br><br><br>
+            <p style="color: #000!important; font-size: 20px!important;">
+              Date : <b><%= DateTime.now.to_date.strftime('%d/%m/%Y')%></b><br>
+              Place: Tinsukia/Dibrugarh<br><br>
+              To,<br><br>
+              ICICI Bank Limited<br>
+              Tinsukia/Dibrugarh, Branch<br><br><br>
+              Dear Sir,<br>
+              Re: Permission to mortgage flat no <b><%= @booking.cost_sheet.flat.full_name%></b>. on the <b><%= @booking.cost_sheet.flat.floor%></b>. floor of the building proposed to be named as <b><%= @booking.cost_sheet.flat.block.business_unit.name%></b>. situated at <b><%= @booking.cost_sheet.flat.block.business_unit.try(:city)%></b>.  <br><br>
+              1.  This is to confirm that we have allotted/sold flat no. <b><%= @booking.cost_sheet.flat.full_name%></b>. admeasuring <b><%= @booking.cost_sheet.flat.carpet_area%></b>. (carpet area) on the <b><%= @booking.cost_sheet.flat.floor%></b>. floor of the building proposed to be named as as <b><%= @booking.cost_sheet.flat.block.business_unit.name%></b> situated at <b><%= @booking.cost_sheet.flat.block.business_unit.try(:city)%>.</b> under construction by us to <b><%= @booking.cost_sheet.lead.name%>.</b> for a total consideration of Rs. <b>₹ <%= comma_separated(@booking.cost_sheet.total_flat_value.round)%>./- (<%= @booking.cost_sheet.total_flat_value.round.rupees %> only)</b> under an Agreement for Sale/Sale Deed dated <b><%= @booking.date.to_date.strftime("%d/%m/%Y")%></b><br><br>
+              2.  We confirm that we have obtained necessary permissions/approvals/sanctions for construction of the said building from all the concerned competent authorities and the construction of the building as well as of the flat are in accordance with the approved plans. We assure that the said flat as well as the said building and the land appurtenant thereto are not subject to any encumbrance, charge or liability of any kind whatsoever and that the entire property is free and marketable. We have a clear, legal and marketable title to the said property and every part thereof.<br><br>
+              3.  <b><%= @booking.cost_sheet.lead.name%></b> has paid an amount of Rs <b>₹ <%= comma_separated(DemandMoneyReceipt.where(booking_id: @booking.id).sort_by{|x| x.created_at}[0].amount.round)%></b>/- <b>(<%= DemandMoneyReceipt.where(booking_id: @booking.id).sort_by{|x| x.created_at}[0].amount.round.rupees%> only)</b> and a sum of Rs <b>₹ <%= comma_separated(@booking.demand_outstanding.round)%>. (<%= @booking.demand_outstanding.round%> only)</b> remains to be paid towards the cost of the said flat.<br><br>
+              4.  Possession of the said flat has been based on the approved plans and specification, JSB Infrastructure assures to hand over possession of the Residential space on or before 31-12-2024 subject to receipt of occupancy certificate. <br><br>
+              5.  We are aware that the said <b><%= @booking.cost_sheet.lead.name%></b> has approached ICICI Bank Ltd for a loan for purchasing/acquiring the said flat and that ICICI Bank Ltd has agreed to sanction/grant the loan to <b><%= @booking.cost_sheet.lead.name%></b>. to purchase / acquire the above flat and <b><%= @booking.cost_sheet.lead.name%></b>. has agreed to mortgage the said flat in your favour / in favour of your security trustee as security for the said loan. We hereby confirm that we have no objection to <b><%= @booking.cost_sheet.lead.name%></b>. mortgaging the said flat to your Company / in favour of your security trustee by way of security for repayment of the said loan.<br>
+                AND not with standing anything to the contrary contained in the said Agreement for Sale, we hereby agree to note the aforesaid charge in our books in respect of the said flat and  <b><%= @booking.cost_sheet.lead.name%></b> will not be permitted to transfer, assign, sell off / cancel or in any other way / manner deal with the said flat prejudicial to the interest of the aforesaid mortgagee without the prior written consent of the aforesaid mortgagee.<br>
+              • We undertake to form a Co-operative Society / Condominium under the Apartment Ownership Act of the premises/flat holders in the aforesaid building within the statutory period. And we agree to inform and give proper notice to the Co-operative Society/Condominium as and when formed, about and said unit/flat being so mortgaged to your Company / the security trustee nominated by your Company.<br>
+              • " We further agree that in case the Agreement for sale of the flat/premises executed between ourselves and Mr. xxxis terminated or otherwise the flat / premises purchase transaction is cancelled on account of non-payment of own contribution or for any reason whatsoever, then your bank shall have priority over the sum or sums of money advanced to xxx and xxx and paid to us, and we hereby undertake to forthwith refund to you without demur, such sum/sums of money paid to us".<br><br>
+              6.  We further agree and confirms that the Bank reserves the right to visit the above mentioned property being mortgaged to the bank whenever applicable for recovery of dues related to loans borrowed from ICICI Bank.<br><br><br>
+              Yours faithfully,<br><br>
+              For JSB Infrastructures<br><br>
+              Signatures<br>
+            </p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-lg-7 col-lg-offset-5">
+            <%= submit_tag 'Download', :class => 'btn btn-primary'%>
+            <%= submit_tag 'Email', :class => 'btn btn-primary'%>
+          </div>
+        </div>
+      <% elsif @bank_name == "Oil India Ltd"%>
+        <div id="page-wrap">
+          <br><br><br>
+          <div class="col-lg-10 col-lg-offset-1">
+            <div class="row">
+              <div class="col-lg-12" style="text-align: center!important;">
+                <font style="color: #000!important; font-size: 20px!important;"><b><u>Mortgage NOC</u></b></font>
+              </div>
+            </div><br><br><br>
+            <p style="color: #000!important; font-size: 20px!important;">
+              To<br>Manager<br>Oil India Ltd <br><br>Dear Sir,<br><br>We, JSB Infrastructures, here by certify that:<br><br>
+              1. We, have transferable rights to the property described below, which has been allotted by us to <b><%= @booking.cost_sheet.lead.name%></b>, herein referred to as purchasers, subject to the due and proper performance and compliances of all terms and conditions of the allotment letter/sale agreement dated <b><%= @booking.date.to_date.strftime("%d-%m-%Y")%></b> (herein referred to as the “Sale Document”)<br><br>
+              Description of the property:
+            </p>
+            <table style="font-size: 20px!important;">
+              <tbody>
+                <tr>
+                  <td>Flat No. /House No.</td>
+                  <td> <%= @booking.cost_sheet.flat.block.name%>-<%= @booking.cost_sheet.flat.full_name%></td>
+                </tr>
+                <tr>
+                  <td>Building No. /Name</td>
+                  <td> <%= @booking.cost_sheet.flat.block.business_unit.name%></td>
+                </tr>
+                <tr>
+                  <td>Locality Name</td>
+                  <td><%= @booking.cost_sheet.flat.block.business_unit.try(:locality)%></td>
+                </tr>
+                <tr>
+                  <td>Area Name</td>
+                  <td><%= @booking.cost_sheet.flat.block.business_unit.try(:area)%></td>
+                </tr>
+                <tr>
+                  <td>City Name</td>
+                  <td><%= @booking.cost_sheet.flat.block.business_unit.try(:city)%></td>
+                </tr>
+                <tr>
+                  <td>Pin Code</td>
+                  <td><%= @booking.cost_sheet.flat.block.business_unit.try(:pincode)%></td>
+                </tr>
+              </tbody>
+            </table><br>
+            <p style="color: #000!important; font-size: 20px!important;">
+              2.  That the total consideration for this transaction is <b>₹<%= comma_separated(@booking.cost_sheet.total_flat_value_without_gst.round) %> (<%= @booking.cost_sheet.total_flat_value_without_gst.round.rupees %>) only</b> towards sale documents and towards taxes  <b>₹<%= comma_separated((@booking.cost_sheet.total_flat_value-@booking.cost_sheet.total_flat_value_without_gst).round)%> (<%= (@booking.cost_sheet.total_flat_value-@booking.cost_sheet.total_flat_value_without_gst).round.rupees%>Only)</b>.<br><br>
+
+              3.  The title of the property described above is clear, marketable and free from all encumbrances and doubts.<br><br>
+
+              4.  We confirm that we have no objection whatsoever to the said purchasers, at their own costs, charges, risks and consequences mortgaging the said property to Oil India Ltd (herein referred to as The Bank) as security for the amount advanced by the bank to them subject to the due and proper performance and compliances of all terms and conditions of the sale documents by the said purchasers.<br><br>
+
+
+              5.  We have not borrowed from any financial institution for the purchase / development of the property and have not created and will not create any encumbrances on the property allotted to the said purchasers during the currency of the loan sanctioned / to be sanctioned by the Bank to them subject to the due and proper performance and compliances of all terms and conditions of the sale document by the said purchasers.<br><br>
+
+              6.  After creation of proper charge / mortgage and after receipt of the copies thereof and after receipt of proper nomination in favour of the Bank, from the said purchasers, we are agreeable to accept Oil India Ltd as a nominee of the above named purchaser for the property described above and the nomination favouring the Bank has been registered and advice sent to the Bank of having done so, I/We note not to change the same without the written NOC of the Bank.<br><br>
+
+              7.  After creation of charge / mortgage and after of the Bank, from the above named purchaser, I/We undertake to inform the society about the Bank’s charge on the said flat as when the society is formed.<br><br>
+
+              8.  Please note that the payment for this transaction should be made by crossed cheque/ Transfer of funds favouring “JSB INFRASTRUCTURES A/C JSB Serene Tower” ICICI Bank, Dibrugarh Branch, Account no: 083905002463<br><br>
+               
+              9.  In case of cancellation of the sale agreement for any other reason, We shall refund the amount by crossed cheque favouring Bank A/C <b>“<%= @booking.cost_sheet.lead.name%>”</b>, and forward the same to you directly.<br><br>
+
+              10. The signatory to this letter draws authority to sign this undertaking on behalf of the firm vide the Partnership Deed of the firm.<br><br>
+
+              Yours faithfully,<br><br><br>
+              Authorised Signatory.<br>
+              Name    : Sumit Misra<br>
+              Designation     : Administrative Incharge<br>
+              Place   : Duliajan<br>
+              Date    : <b><%= DateTime.now.to_date.strftime('%d-%m-%Y')%></b>
+            </p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-lg-7 col-lg-offset-5">
+            <%= submit_tag 'Download', :class => 'btn btn-primary'%>
+            <%= submit_tag 'Email', :class => 'btn btn-primary'%>
+          </div>
+        </div>
+      <%end%>
+    <%else%>
+      <div id="page-wrap">
+        <div id="header">
+          <div class="row">
+            <div class="col-md-3">
+              <%= image_tag(@booking.cost_sheet.lead.personnel.organisation.group_logo, alt: "", class: "ledger-logo") %>
+            </div>
+            <div class="col-md-6">
+              <p><b>Dream Projects</b><br><U>44/2A, Hazra Road, Kolkata-700019</U><br><U>Tel: 03340319999</U><br><u>Website: www.thejaingroup.com</u><br><u>E-mail: contact@thejaingroup.com</u><br><u>Project: <%= @booking.cost_sheet.flat.block.business_unit.name%></u></p>
+            </div>
+            <div class="col-md-3">
+              <%= image_tag(@booking.cost_sheet.flat.block.business_unit.logo, alt: "", class: "ledger-logo") %>
+            </div>
+          </div>
+        </div>                    
+        <div class="row">
+          <div class="col-md-6">
+            
+          </div>
+          <div class="col-md-6">
+          	<br>
+            <p style="text-align: right !important; color: #000 !important;"><br>Date: <%= DateTime.now.to_date.strftime('%d/%m/%Y')%><br></p>
+          </div>
+        </div>	
+        <div class="row">
+          <p style="color: #000!important; margin-left: 30px!important;">
+            To
+            <br><br>
+            The Regional Manager<br>
+            TATA CAPITAL HOUSING FINANCE Ltd.<br>
+            71, Park Street<br>
+            Kolkata- 700016, West Bengal<br>
+  <br><br>
+            Sir/Madam,<br>
+            <center style="color: #000!important;"><u><b>Sub: </b>No Objection Certificate for sale of Flat at <%= @booking.cost_sheet.flat.block.business_unit.name%></u></center><br><br>
+          </p>
+          <p style="color: #000!important;margin-left: 30px!important;">
+            This is to confirm that we have agreed to sell Flat No: <%= @booking.cost_sheet.flat.floor%><%= @booking.cost_sheet.flat.name%>, floor: <%= @booking.cost_sheet.flat.floor%>, Block: <%= @booking.cost_sheet.flat.block.name%> in our project <%= @booking.cost_sheet.flat.block.business_unit.name%> situated at <%= @booking.cost_sheet.flat.block.business_unit.address_1%>, <%= @booking.cost_sheet.flat.block.business_unit.address_2%>, <%= @booking.cost_sheet.flat.block.business_unit.address_3%>, <%= @booking.cost_sheet.flat.block.business_unit.address_4%>. The details of the above flat/flats are mentioned below:
+          </p>
+        </div><br>
+      <table class="table table-striped table-hover metadata">
+        <tbody>
+          <tr>
+            <th>SL No.</th>
+            <th>Flat No.</th>
+            <th>Floor</th>
+            <th>Block No.</th>
+            <th>SBU Area(Sq.ft)</th>
+            <th>Loan amount</th>
+            <th>Bank Name</th>
+            <th>BU Area(Sq.ft)</th>
+            <th>Price(Rs.)</th>
+            <th>Customer's Name</th>
+          </tr>
+          <tr>
+            <td>1.</td>
+            <td><%= @booking.cost_sheet.flat.floor%><%= @booking.cost_sheet.flat.name%></td>
+            <td><%= @booking.cost_sheet.flat.floor%></td>
+            <td><%= @booking.cost_sheet.flat.block.name%></td>
+            <td><%= @booking.cost_sheet.flat.SBA%></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><%= @booking.cost_sheet.lead.name%></td>
+          </tr>
+        </tbody>
+      </table><br>
+      <div class="row">
+        <p style="color: #000!important;margin-left: 30px!important;">You are requested to issue us NOC in respect of the above mentioned flat/flats. We confirm that the consideration receivable for the above flat will be directly paid/ deposite in out Escrow Account No. 8211937047 maintained with you as per the payments received from the customer according to construction/payment schedule.
+  <br><br>
+        Please do the needful in the matter at the earliest and oblige.
+  <br><br>
+        Thanking You,
+  <br><br>
+        Your's faithfully,
+  <br><br>
+        Dream Projects.</p>
+      </div>
+    <%end%>
+  </body>
+</html>
+<%end%>

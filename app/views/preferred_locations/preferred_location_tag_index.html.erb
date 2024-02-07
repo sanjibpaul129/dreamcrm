@@ -1,0 +1,27 @@
+<h1>List of Leads tagging with Preferred Locations</h1>
+<table id="customers" >
+  <thead>
+    <tr>
+      <th>Preferred Location</th>
+      <th>Customer</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @preferred_location_tags.each do |preferred_location_tag|%>      
+  		<tr>
+            <td><%= preferred_location_tag.preferred_location.description%></td>
+            <td><%= preferred_location_tag.lead.name%></td>
+            <td><%= preferred_location_tag.lead.email%></td>
+        	<td><%= preferred_location_tag.lead.mobile%></td>
+        	<td><%= link_to 'Edit', preferred_locations_preferred_location_tag_edit_path(preferred_location_tag),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+     	   	<td><%= link_to 'Destroy', preferred_locations_preferred_location_tag_destroy_path(preferred_location_tag),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+        </tr>
+  	<%end%>
+  </tbody>
+</table><br>
+<%= link_to 'New Entry', preferred_locations_preferred_location_tag_new_path, :class => 'btn btn-primary' %>

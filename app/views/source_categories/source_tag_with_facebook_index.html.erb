@@ -1,0 +1,30 @@
+<%@header = 'Facebook Source Tag'%>
+<h1>Source Tagging with Facebook</h1>
+<table class="customers">
+	<thead>
+		<th>Business Unit</th>
+		<th>Source Categories</th>
+		<th>Campaign-Id</th>
+		<th>Adset-Id</th>
+		<th>Ad-Id</th>
+		<th>Form-Id</th>
+		<th></th>
+		<th></th>
+	</thead>
+	<tbody>
+		<% @facebook_ads.each do |facebook_ad|%>
+			<tr>
+				<td><%= facebook_ad&.business_unit&.name %></td>
+				<td><%= facebook_ad&.source_category&.heirarchy %></td>
+				<td><%= facebook_ad.campaign_id%></td>
+				<td><%= facebook_ad.adset_id%></td>
+				<td><%= facebook_ad.ad_id%></td>
+				<td><%= facebook_ad.form_id%></td>
+				<td><%= link_to 'Edit', source_categories_source_tag_with_facebook_edit_path(facebook_ad),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+				<td><%= link_to 'Destroy', source_categories_source_tag_with_facebook_destroy_path(facebook_ad),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>
+<br>
+<%= link_to 'New Tagging', source_categories_source_tag_with_facebook_new_path, :class => 'btn btn-primary' %>

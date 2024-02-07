@@ -1,0 +1,414 @@
+<%@header = 'Transaction'%>
+<% if AccessPointPersonnel.includes(:access_point).where(:access_points => {menu: "Transaction"}, personnel_id: current_personnel.id) == [] %>
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Others</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Home', {controller: 'leads', action: 'home'}, {method: :post} %></a>
+            </li>
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.email=='sales@oswalgroup.net' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Import Leads', {controller: 'windows', action: 'import_leads'} %></a>
+              </li>
+              <% if current_personnel.organisation_id == 1 %>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Import Qualified Leads', {controller: 'windows', action: 'import_qualified_leads'} %></a>
+                </li>
+
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Import Site Visited Leads', {controller: 'windows', action: 'import_site_visited_leads'} %></a>
+                </li>
+              <%end%>
+            <% end %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Lead Search', {controller: 'windows', action: 'mobile_number_search'} %></a>
+            </li>
+            <% if current_personnel.status == 'Marketing' || current_personnel.view_only==true %>
+            <% else %>          
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Create New Lead', {controller: 'leads', action: 'new'}, {method: :get} %></a>
+              </li>
+            <% end %>
+            <% if current_personnel.email == 'ayush@thejaingroup.com' || current_personnel.email == 'info@oswalgroup.net' || current_personnel.email == 'rsoumyo@rajathomes.com' || current_personnel.email == 'msankalan@rajathomes.com' || current_personnel.email == 'sumit@jsb.in.net' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'All Live Leads', {controller: 'windows', action: 'all_live_leads_index'}, {method: :get} %></a>
+              </li>
+            <% end %>    
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Fresh Leads', {controller: 'windows', action: 'fresh_leads'}, {method: :get} %></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%
+                if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Marketing'
+                  @executive=current_personnel.id
+                  @followup_due=Lead.includes(:follow_ups, :source_category, :business_unit, :personnel).where( :follow_ups => { :last => true } ).where('follow_ups.follow_up_time <= ?', Date.today+1.day).where('leads.status is ? OR leads.status = ?', nil, false).where(:leads => { :personnel_id => @executive }).count
+                elsif current_personnel.status=='Team Lead'
+                  @followup_due=Lead.includes(:follow_ups, :source_category, :business_unit, :personnel).where( :follow_ups => { :last => true } ).where('follow_ups.follow_up_time <= ?', Date.today+1.day).where('leads.status is ? OR leads.status = ?', nil, false).where(:leads => { :personnel_id => current_personnel.member_array }).count
+                else  
+                  @followup_due=Lead.includes(:follow_ups, :source_category, :business_unit, :personnel).where( :follow_ups => { :last => true } ).where('follow_ups.follow_up_time <= ?', Date.today+1.day).where('leads.status is ? OR leads.status = ?', nil, false).where(:leads => { :personnel_id => current_personnel.id }).count
+                end
+              %>
+              <%= link_to 'Followup Due', {controller: 'windows', action: 'followup_due'}, {method: :post} %><font style="color: #000!important;"><b>(<%= @followup_due%>)</b></font></a>
+            </li> 
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Future Followup', {controller: 'windows', action: 'pending_followups'}, {method: :post} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Site Visit Form', {controller: 'windows', action: 'sv_form_index'}, {method: :get} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Re-engaged Leads', {controller: 'windows', action: 'reengaged_lead_index'}, {method: :get} %> <font style="color: #000!important;"><b>(<%= Lead.where(personnel_id: current_personnel.id, booked_on: nil, lost_reason_id: nil).where.not(reengaged_on: nil).count%>)</b></font></a>
+            </li> 
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Marketing' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Marketing Expenditure', {controller: 'windows', action: 'expenditure_entry_form'}, {method: :get} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'FB/Google Marketing Expenditure', {controller: 'windows', action: 'fb_google_expenditure_entry_form'}, {method: :get} %></a>
+              </li> 
+            <% end %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Cost Sheet', {controller: 'windows', action: 'cost_sheet' , standalone_cost_sheet: true}, {} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Bulk Recipients', {controller: 'marketing_automation', action: 'bulk_recipient_index'}, {} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Monthly Targets', {controller: 'report', action: 'monthly_target_index'}, {method: :get} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Import Costing Report', {controller: 'windows', action: 'import_costing_report'}, {method: :get} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Import Call Logs', {controller: 'report', action: 'import_call_logs'}, {method: :get} %></a>
+            </li> 
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Maintenance</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">  
+            <% if current_personnel.organisation.name == 'Oswal Group' || current_personnel.organisation.name == 'JSB Infrastructures' || current_personnel.organisation.name == 'Rajat Group'  %>
+            <% else %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Generate & Mail Bulk Maintenance Bill', {controller: 'maintainance_bill', action: 'maintainance_bill_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Generate & Mail Individual Maintenance Bill', {controller: 'maintainance_bill', action: 'individual_maintainance_bill_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Maintainence Customer List', {controller: 'maintainance_bill', action: 'customer_with_flat_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Manual Maintenance Bill Sending List', {controller: 'maintainance_bill', action: 'manual_maintainance_bill_send_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Generate Maintenance Money Receipt', {controller: 'maintainance_bill', action: 'money_receipt_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Manual Maintenance Money Receipt Sending list', {controller: 'maintainance_bill', action: 'manual_money_receipt_send_index'}, {method: :post} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Flat Tagging With Leads', {controller: 'maintainance_bill', action: 'flat_tag_with_lead'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Credit Note Entry', {controller: 'maintainance_bill', action: 'credit_note_entry'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Credit Note Entry In Bulk', {controller: 'maintainance_bill', action: 'credit_note_entry_in_bulk'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Flat Transfer', {controller: 'maintainance_bill', action: 'flat_transfer'}, {method: :get} %></a>
+              </li>
+            <%end%> 
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Electrical</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% if current_personnel.organisation.name == 'Oswal Group' || current_personnel.organisation.name == 'JSB Infrastructures' || current_personnel.organisation.name == 'Rajat Group' %>
+            <% else %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Generate & Mail Electric Bill', {controller: 'electrical_bill', action: 'electrical_bill_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Manual Electric Bill Sending List', {controller: 'electrical_bill', action: 'manual_electrical_bill_send_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Generate Electrical Money Receipt', {controller: 'electrical_bill', action: 'electrical_money_receipt_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Manual Electrical Receipt sending list', {controller: 'electrical_bill', action: 'manual_electrical_receipt_send_index'}, {method: :post} %></a>
+              </li>
+            <%end%>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+      <div class="col-lg-3">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Brokers</h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Fresh Brokers', {controller: 'broker_setup', action: 'fresh_broker'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Followup Brokers', {controller: 'broker_setup', action: 'followup_broker'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Future Followup Brokers', {controller: 'broker_setup', action: 'future_followup_broker'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Broker Contact Search', {controller: 'broker_setup', action: 'broker_contact_search'}, {method: :get} %></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <%end%>
+    <div class="col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Demand</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% if current_personnel.organisation.name == 'Oswal Group' || current_personnel.organisation.name == 'Rajat Group' %>
+            <% else %> 
+              <% if current_personnel.access_right==nil %>
+              <% else %>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Confirm Cost Sheets for Booking', {controller: 'demand', action: 'booking_confirmation_form'}, {method: :post} %></a>
+                </li> 
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Raise Demand', {controller: 'demand', action: 'bookings'}, {method: :post} %></a>
+                </li>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Adhoc Charge', {controller: 'demand', action: 'adhoc_charge_entry'}, {method: :post} %></a>
+                </li>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Credit Note', {controller: 'demand', action: 'credit_note_entry'}, {method: :post} %></a>
+                </li>
+                <%if current_personnel.email != 'sumit@jsb.in.net' && current_personnel.organisation_id == 6%>
+                <%else%>
+                  <li class="list-group-item">
+                    <span class="badge"><%=  %></span>
+                    <a><span class="glyphicon glyphicon-check"></span> 
+                    <%= link_to 'Flat Cancellation', {controller: 'demand', action: 'cancellation_form'}, {method: :post} %></a>
+                  </li> 
+                <%end%>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Generate & Mail Demand Money Receipt', {controller: 'demand', action: 'demand_money_receipt_index'}, {method: :post} %></a>
+                </li>
+              <% end %>
+              <% if current_personnel.name=='Anup Baruah' %>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Confirm Cost Sheets for Booking', {controller: 'demand', action: 'booking_confirmation_form'}, {method: :post} %></a>
+                </li> 
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Raise Demand', {controller: 'demand', action: 'bookings'}, {method: :post} %></a>
+                </li>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Adhoc Charge', {controller: 'demand', action: 'adhoc_charge_entry'}, {method: :post} %></a>
+                </li>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Credit Note', {controller: 'demand', action: 'credit_note_entry'}, {method: :post} %></a>
+                </li>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Flat Cancellation', {controller: 'demand', action: 'cancellation_form'}, {method: :post} %></a>
+                </li> 
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Generate & Mail Demand Money Receipt', {controller: 'demand', action: 'demand_money_receipt_index'}, {method: :post} %></a>
+                </li>
+              <% end %>
+            <% end %>                      
+          </ul>  
+        </div>
+      </div>
+    </div>
+  </div>
+<%else%>
+  <div class="row">
+    <% 
+      submenues = AccessPoint.where(menu: "Transaction").pluck(:submenu).uniq 
+      submenues.each do |submenu|
+        if AccessPointPersonnel.includes(:access_point, :personnel).where(:access_points => {menu: "Transaction", submenu: submenu}, personnel_id: current_personnel.id) == []
+          submenues -= [submenu]
+        end
+      end
+    %>
+    <% submenues.each do |submenu| %>
+      <% if submenues.count == 1%>
+        <div class="col-lg-4 col-lg-offset-4">
+      <%else%>
+        <div class="col-lg-3">
+      <%end%>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= submenu%></h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <% AccessPointPersonnel.includes(:access_point, :personnel).where(:access_points => {menu: "Transaction", submenu: submenu}, personnel_id: current_personnel.id).sort_by{|x| x.access_point.order}.each do |access_point_personnel| %>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to access_point_personnel.access_point.name, {controller: access_point_personnel.access_point.controller, action: access_point_personnel.access_point.action} %>
+                  <% if access_point_personnel.access_point.name == "Re-engaged Leads"%>
+                    <font style="color: #000!important;"><b>(<%= Lead.where(personnel_id: current_personnel.id, booked_on: nil, lost_reason_id: nil).where.not(reengaged_on: nil).count%>)</b></font>
+                  <%elsif access_point_personnel.access_point.name == "Followup Due"%>
+                    <%
+                      if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Marketing' || current_personnel.status == "Audit"
+                        @executive=current_personnel.id
+                        if current_personnel.access_right == 4
+                          if current_personnel.id == 274
+                            start_date = "01/09/2021"
+                          else
+                            start_date = "16/06/2022"
+                          end
+                          leads = Lead.includes(:follow_ups, :source_category, :business_unit, :personnel).where( :follow_ups => { :last => true } ).where('follow_ups.follow_up_time >= ? AND follow_ups.follow_up_time <= ?', start_date.to_datetime, Date.today+1.day).where('leads.lost_reason_id is not ?', nil).where(:leads => { :personnel_id => @executive })
+                          leads += Lead.includes(:follow_ups, :source_category, :business_unit, :personnel).where( :follow_ups => { :last => true } ).where('follow_ups.follow_up_time >= ? AND follow_ups.follow_up_time <= ?', start_date.to_datetime, Date.today+1.day).where('leads.status is ? OR leads.status = ?', nil, false).where(:leads => { :personnel_id => @executive })
+                          @followup_due=leads.count
+                        else
+                          @followup_due=Lead.includes(:follow_ups, :source_category, :business_unit, :personnel).where( :follow_ups => { :last => true } ).where('follow_ups.follow_up_time <= ?', Date.today+1.day).where('leads.status is ? OR leads.status = ?', nil, false).where(:leads => { :personnel_id => @executive }).count
+                        end
+                      elsif current_personnel.status=='Team Lead'
+                        @followup_due=Lead.includes(:follow_ups, :source_category, :business_unit, :personnel).where( :follow_ups => { :last => true } ).where('follow_ups.follow_up_time <= ?', Date.today+1.day).where('leads.status is ? OR leads.status = ?', nil, false).where(:leads => { :personnel_id => current_personnel.member_array }).count
+                      else  
+                        @followup_due=Lead.includes(:follow_ups, :source_category, :business_unit, :personnel).where( :follow_ups => { :last => true } ).where('follow_ups.follow_up_time <= ?', Date.today+1.day).where('leads.status is ? OR leads.status = ?', nil, false).where(:leads => { :personnel_id => current_personnel.id }).count
+                      end
+                    %>
+                    <font style="color: #000!important;"><b>(<%= @followup_due%>)</b></font>
+                  <%end%>
+                  </a>
+                </li>
+              <%end%>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <%end%>
+  </div>
+<%end%>
+<style type="text/css">
+	.list-group-item {
+		background-color: #0083ff1c!important;
+		border-radius: 5px!important;
+	}
+</style>

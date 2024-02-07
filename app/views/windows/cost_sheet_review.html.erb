@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<%= form_tag 'cost_sheet_download_or_mail' do %>
+<%= hidden_field_tag 'final', @final %>
+<%= hidden_field_tag 'flat_id', @selected_flat_id %>
+<% if current_personnel.organisation_id == 6 %>
+  <%= hidden_field_tag 'remarks_for_validation', @remarks_for_validation %>
+<%end%>
+<%= hidden_field_tag 'payment_plan_id', @selected_payment_plan %>
+<%= hidden_field_tag 'car_parks_quantity', @car_parks_quantity %>
+<% if current_personnel.organisation_id != 6 %>
+  <%= hidden_field_tag 'servant_quarter_quantity', @servant_quarter_quantity %>
+<%end%>
+<%= hidden_field_tag 'discount',params[:discount] %>
+<% if @standalone_cost_sheet=="true"%>
+<%else%>
+<% lead=Lead.find(params[:lead_id])%>
+<%end%>
+
+
+
+<html>
+  <head>
+      <% if @header==nil %>
+      <% @header='Cost Sheet' %>
+      <% end %>
+        <title><%= @header %></title>
+      <style>
+      * { margin: 0; padding: 0; }
+      /**/
+      body { font-family: Arial, Helvetica, sans-serif; }
+      #page-wrap { width: 900px; height: 1000px; margin: 0 auto; }
+
+      textarea { border: 0; font: 14px Times, Serif; overflow: hidden; resize: none; }
+     
+      .delivery_to { border: 0; font: 14px Times, Serif; height:130px;width:240px; resize: none; }
+
+      table { border-collapse: collapse; width: 900px;}
+      table td, table th { border: 1px solid black; padding: 2px; color: #584d4d!important;}
+      #header { height: 30px; width: 100%; margin: 10px 0; background: #0083ff!important; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding-top: 10px; }
+      </style>
+  </head>
+  <body>
+    <% numero_alpha={1=>"A",2=>"B",3=>"C",4=>"D",5=>"E",6=>"F",7=>"G",8=>"H",9=>"I",10=>"J",11=>"K",12=>"L",13=>"M",14=>"N",15=>"O",16=>"P",17=>"Q",18=>"R",19=>"S",20=>"T",21=>"U",22=>"V",23=>"W",24=>"X",25=>"Y",26=>"Z"} %>
+    <div id="page-wrap">
+      <textarea id="header">ESTIMATED OFFER PRICE</textarea>  
+      <% @business_unit=BusinessUnit.find(@business_unit_id)%>
+      <% 
+        if @selected_flat_id == nil
+        else
+        flat=Flat.find(@selected_flat_id) 
+      %>
+      <div style="clear:both"></div>
+      <div id="customer">
+        <table class="table table-striped table-hover metadata">
+          <% if current_personnel.organisation_id == 6%>
+            <tr>
+              <td class=""><b>Project:</b></td>
+              <td colspan="2"><%= @business_unit.name%></td>
+              <td class=""><b>Address:</b></td>
+              <td colspan="4"><%= @business_unit.address_1+','+ @business_unit.address_2+','+ @business_unit.address_3%></td>
+              <td class=""><b>SBA:</b></td>
+              <td><div class="quatation_details"><%=flat.SBA%> Sq.ft.</div></td>
+            </tr>
+            <tr>
+              <td class=""><b>Block:</b></td>
+              <td><div class="quatation_details"><%= flat.block.name%> 
+              <td class=""><b>Floor:</b></td>
+              <td><div class="quatation_details"> <%=flat.floor%> </div></td>
+              <td class=""><b>Flat:</b></td>
+              <td><div class="quatation_details"><%=flat.full_name%></div></td>
+              <% if flat.block.business_unit.organisation.edc_hidden==true %>
+                <% if flat.carpet_area == nil || flat.carpet_area == ''%>
+                  <td colspan="4"></td>
+                <%else%>
+                  <td class="" colspan="2"><b>Carpet:</b></td>
+                  <td colspan="2"><div class="quatation_details"><%=flat.carpet_area%></div></td>
+                <%end%>
+              <% else %>
+                <td><b>BHK:</b></td>
+                <td colspan="2"><%=flat.BHK%></td>
+              <% end %>
+            </tr>
+          <%else%>
+            <tr>
+              <td><b>Project:</b></td>
+              <td><div class="quatation_details"><%= @business_unit.name%> 
+              <td><b>Block:</b></td>
+              <td><div class="quatation_details"><%= flat.block.name%> 
+              <td><b>Address:</b></td>
+              <td colspan="5"><%= @business_unit.address_1+','+ @business_unit.address_2+','+ @business_unit.address_3%>
+            </tr>
+            <tr>
+              <td><b>SBA:</b></td>
+              <td><div class="quatation_details"><%=flat.SBA%>
+              <% if flat.OTA == nil%>
+              <%else%>
+              <td><b>Chargeable Terrace:</b></td>
+              <td><div class="quatation_details"><%= (flat.OTA)/2%></div></td>
+              <%end%>
+              <td><b>Floor:</b></td>
+              <td><div class="quatation_details"> <%=flat.floor%> </div></td>
+              <td><b>Flat:</b></td>
+              <td><div class="quatation_details"><%=flat.full_name%></div></td>
+              <% if flat.block.business_unit.organisation.edc_hidden==true %>
+                <% if flat.carpet_area == nil || flat.carpet_area == ''%>
+                  <td colspan="2"></td>
+                <%else%>
+                  <td><b>Carpet:</b></td>
+                  <td><div class="quatation_details"><%=flat.carpet_area%></div></td>
+                <%end%>
+              <% else %>
+              <td><b>BHK:</b></td>
+              <td colspan="2"><%=flat.BHK%></td>
+              <% end %>
+            </tr> 
+          <%end%>
+          <%if @standalone_cost_sheet=="true"%>
+          <%else%>
+            <tr>
+                <td class=""><b>Name:</b></td>
+                <td colspan="2"><%= lead.name%>
+                <td class=""><b>Email:</b></td>
+                <td colspan="3"><div class="quatation_details"> <%= lead.try(:email)%> </div></td>
+                <td class=""><b>Mobile:</b></td>
+                <td colspan="2"><div class="quatation_details"><%= lead.try(:mobile)%></div></td>
+            </tr> 
+          <%end%>
+        </table>
+      </div>                  
+      <table class="table metadata">
+        <tbody>
+          <% if flat.block.business_unit.organisation.edc_hidden==true %>
+            <tr>
+              <center><td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center"><b>Total Price of the Unit</b></td></center>
+            </tr>
+            <%
+              total_unit=(flat.rate*(flat.SBA+flat.chargeable_terrace)).round 
+              total_plc=0.0
+              if flat.plc_charge_rate[1]==0
+              else
+                plc_charge_rate=flat.plc_charge_rate[1] 
+                total_plc=((flat.SBA+flat.chargeable_terrace)*plc_charge_rate).round
+              end
+              total_parking=0.0
+              parking=0.0   
+              if @car_parks==[]
+              else
+                @car_parks.each do |car_park|
+                  quantity=car_park[1]
+                  parking=(quantity*car_park[0].rate).round
+                  total_parking+=parking
+                end
+              end
+              flat_value_with_out_gst=total_unit+total_plc+total_parking
+              total_extra_development_charges=0
+              @extra_development_charges.each do |extra_development_charge|
+                if extra_development_charge.amount !=nil
+                  extra_development_charges = extra_development_charge.amount
+                elsif extra_development_charge.rate !=nil
+                  extra_development_charges =((flat.SBA)*extra_development_charge.rate).round
+                elsif extra_development_charge.percentage != nil
+                  extra_development_charge.percentage
+                  extra_development_charges =((flat_value_with_out_gst*extra_development_charge.percentage)/100).round
+                end
+                total_extra_development_charges+=extra_development_charges
+              end
+              total_unit_price=flat_value_with_out_gst+total_extra_development_charges
+              total_flat_amount=(flat_value_with_out_gst*(1+(@tax.basic/100))).round
+              total_parking_gross=(total_parking*(1+(@tax.basic/100))).round
+              total_extra_development_charges_gross=(total_extra_development_charges*(1+(@tax.basic/100))).round
+            %>
+            <tr>
+              <td colspan="2"><b>Particulars</b></td>
+              <% if current_personnel.organisation_id == 6 %>
+                <td align="right"><b>Basic Price</b></td>
+              <%else%>
+                <td align="right"><b>Total(Rs.)</b></td>
+              <%end%>
+              <td align="right"><b>GST</b></td>
+              <td align="right"><b>GST Amount</b></td>
+              <% if current_personnel.organisation_id == 6 %>
+                <td align="right"><b>Total Amount</b></td>
+              <%else%>
+                <td align="right"><b>Gross Amount</b></td>
+              <%end%>
+            </tr>
+            <tr>
+              <td colspan="2"><b>Total Unit Price</b></td>
+              <td align="right">₹ <%= comma_separated(total_unit_price.round) %></td>
+              <td align="right"><%=@tax.basic%>%</td>
+              <td align="right">₹ <%= comma_separated(gstamt_unit=((total_unit_price*@tax.basic)/100).round )%></td>
+              <td align="right">₹ <%= comma_separated((total_unit_price+gstamt_unit).round) %></td>
+            </tr>
+          <% else %>
+            <tr>
+              <center><td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center"><b>Unit Charges Details</b></td></center>
+            </tr>
+            <tr>
+              <td><b>Particulars</b></td>
+              <td><b>Rate</b></td>
+              <td><b>Total(Rs.)</b></td>
+              <td><b>GST</b></td>
+              <td><b>GST Amount</b></td>
+              <td><b>Gross Amount</b></td>
+            </tr>
+            <tr>
+              <td><b>Unit Price</b></td>
+              <td align="right"><%= flat.rate %></td>
+              <td align="right">₹ <%= comma_separated(total_unit=(flat.rate*flat.SBA).round )%></td>
+              <td align="right"><%=@tax.basic%>%</td>
+              <td align="right">₹ <%= comma_separated(gstamt_unit=((total_unit*@tax.basic)/100).round )%></td>
+              <td align="right">₹ <%= comma_separated(gross_unit=(total_unit+gstamt_unit).round )%></td>
+            </tr>
+            <%
+              total_ota = 0.0
+              gstamt_ota = 0.0
+              gross_ota = 0.0
+            %>
+            <%if flat.OTA == nil %>
+            <%else%>
+              <tr>
+                <td><b>Chargeable terrace</b></td>
+                <td align="right"><%= chargeable_ota=flat.OTA/2 %></td>
+                <td align="right"><%= total_ota=(flat.rate*chargeable_ota).round %></td>
+                <td align="right"><%= @tax.basic%>%</td>
+                <td align="right"><%= gstamt_ota=((total_ota*@tax.basic)/100).round %></td>
+                <td align="right"><%= gross_ota=(total_ota+gstamt_ota).round %></td>
+              </tr>
+            <%end%>
+            <%
+              gstamt_escalation=0.0
+              gross_escalation=0.0
+              total_escalation=0.0
+            %>
+            <% if flat.flc_charge_rate==0 %>
+            <%else%>
+              <tr>
+                <% flc_charge_rate=flat.flc_charge_rate %>
+                <td><b>Floor Escalation</b></td>
+                <td align="right"><%= flc_charge_rate %></td>
+                <td align="right"><%= total_escalation=((flat.SBA+flat.chargeable_terrace)*flc_charge_rate).round  %></td>
+                <td align="right"><%=@tax.plc%>%</td>
+                <td align="right"><%= gstamt_escalation=((total_escalation*@tax.plc)/100).round %></td>
+                <td align="right"><%= gross_escalation=(total_escalation+gstamt_escalation).round %></td>
+              </tr>
+            <% end %>      
+            <!-- PLC CHARGES START HERE -->
+            <%
+              gst_plc_amnt=0.0
+              gross_plc=0.0
+              total_plc=0.0
+            %>
+            <% if flat.plc_charge_rate[1]==0 %>
+            <%else%>
+              <tr>
+                <% plc_charge_rate=flat.plc_charge_rate[1] %> 
+                <td><b>PLC:<%= flat.plc_charge_rate[0] %></b></td>
+                <td align="right"><%= plc_charge_rate.round %></td>
+                <td align="right"><%= total_plc=((flat.SBA+flat.chargeable_terrace)*plc_charge_rate).round  %></td>
+                <td align="right"><%=@tax.plc%>%</td>
+                <td align="right"><%= gst_plc_amnt=((total_plc*@tax.plc)/100).round %></td>
+                <td align="right"><%= gross_plc=(total_plc+gst_plc_amnt).round %></td>
+              </tr>
+            <%end%>
+            <!-- PLC CHARGES END HERE -->
+            <!--SERVANT QUARTER CHARGES START HERE-->
+            <%  servant_quarter_amnt=0.0
+                servant_quarter_gst=0.0
+                servant_quarter_amnt_gross=0.0
+                charges=0.0
+                gstamt_charges=0.0
+                gross=0.0
+            %>
+            <%if @servant_quarter_quantity==0%>
+            <%else%>
+              <tr>
+                <center><td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center"><b>Servant Quarter Charges Details</b></td></center>
+              </tr> 
+              <% @servant_quarters.each do |servant_quarter| %>
+                <tr>
+                  <td><%= @servant_quarter_quantity %>-Servant Quarter</td>
+                  <td align="right"><%= servant_quarter.rate %></td>
+                  <td align="right"><%= charges=(@servant_quarter_quantity*servant_quarter.rate).round%></td>
+                  <td align="right"><%=@tax.servant_quarter%>%</td>
+                  <%servant_quarter_amnt+=charges%>
+                  <td align="right"><%= gstamt_charges=((charges*@tax.servant_quarter)/100).round %></td>
+                  <%servant_quarter_gst+=gstamt_charges%>
+                  <td align="right"><%= gross=(charges+gstamt_charges).round %></td>
+                  <%servant_quarter_amnt_gross+=gross%>
+                </tr>
+              <%end%>
+              <tr>
+                <td><b>TOTAL</b></td>
+                <td></td>
+                <td align="right"><%= servant_quarter_amnt.round%></td>
+                <td></td>
+                <td align="right"><%=servant_quarter_gst.round.round%></td>
+                <td align="right"><%=servant_quarter_amnt_gross.round %></td>
+              </tr>
+            <%end%><!-- IF ENDS HERE -->  
+            <!--SERVANT QUARTER CHARGES END HERE-->
+            <% total_parking=0.0
+                total_gst_parking=0.0
+                total_parking_gross=0.0
+                parking=0.0
+                gstamt_parking=0.0
+                gross=0.0
+            %>
+            <% if @car_parks==[]%>
+            <%else%>
+              <tr>
+                <center><td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center"><b>Parking Details</b></td></center>
+              </tr>
+            <% @car_parks.each do |car_park| %>
+              <tr>
+                <td><b><%= quantity=car_park[1] %>-<%= car_park[0].car_park_nature.try(:description)%></b></td>
+                <td align="right"><%= car_park[0].rate.round %></td>
+                <td align="right"><%= parking=(quantity*car_park[0].rate).round%></td>
+                <%total_parking+=parking%>
+                <td><%= (@tax.car_park )%>%</td>
+                <td align="right"><%= gstamt_parking=((parking*@tax.car_park)/100).round %></td>
+                <%total_gst_parking+=gstamt_parking%>
+                <td align="right"><%= gross=(parking+gstamt_parking).round %></td>
+                <%total_parking_gross+=gross%>
+              </tr>
+            <%end%>
+            <tr>
+              <td><b>TOTAL</b></td>
+              <td></td>
+              <td align="right"><%= total_parking.round%></td>
+              <td></td>
+              <td align="right"><%=total_gst_parking.round%></td>
+              <td align="right"><%=total_parking_gross.round %></td>
+            </tr>
+          <%end%>
+          <!-- TOTAL FLAT VALUE-->    
+          <% discount=params[:discount].to_f%>
+          <% if params[:discount]==nil || params[:discount]==''%>
+            <!-- TOTAL FLAT VALUE-->
+            <tr style="font-weight: bold">
+              <td ><b>TOTAL FLAT VALUE</b></td>
+              <td></td>
+              <td align="right">₹ <%= comma_separated(flat_value_with_out_gst=total_unit+total_escalation+total_plc+charges+total_parking+total_ota)%></td>
+              <td></td>
+              <td align="right">₹ <%= comma_separated(total_flat_gst_amount=(gstamt_unit+gstamt_escalation+gst_plc_amnt+servant_quarter_gst+total_gst_parking+gstamt_ota).round)%></td>
+              <td align="right">₹ <%= comma_separated(total_flat_amount=(gross_unit+gross_escalation+gross_plc+servant_quarter_amnt_gross+total_parking_gross+gross_ota).round)%></td>
+            </tr>
+            <!--TOTAL FLAT VALUE END-->
+          <%else%>
+            <!--FLAT VALUE DISCOUNT  WITH TOTAL FLAT VALUE-->
+            <tr style="font-size=25px;font-weight: bold">
+              <td colspan="1"><b>FLAT VALUE</b></td>
+              <td></td>
+              <td align="right">₹ <%= comma_separated(flat_value_with_out_gst=(total_unit+total_escalation+total_plc+charges+total_parking+total_ota).round )%></td>
+              <td></td>
+              <td align="right">₹ <%= comma_separated(total_flat_gst_amount=(gstamt_unit+gstamt_escalation+gst_plc_amnt+servant_quarter_gst+total_gst_parking+gstamt_ota).round)%></td>
+              <td align="right">₹ <%= comma_separated(flat_amount=(gross_unit+gross_escalation+gross_plc+servant_quarter_amnt_gross+total_parking_gross+gross_ota).round)%></td>
+            </tr>
+            <% extra_development_total_percentage=0 %>
+            <% @extra_development_charges.each do |extra_development_charge| %>
+              <% if extra_development_charge.percentage != nil %>
+                <% extra_development_total_percentage+=extra_development_charge.percentage %>
+              <% end %>
+            <% end %>
+            <% final_discount=discount %>
+            <!--final_discount =basic_discount*(1+extra_development_total_percentage/100)*(1+@tax.basic/100)-->
+            <% basic_discount=(final_discount/(1+(extra_development_total_percentage.to_f/100)))/(1+(@tax.basic/100)) %>
+            <tr>
+              <td colspan="1"><b> Discount</b></td>
+              <td align="right"><%= (basic_discount/flat.SBA).round(2) %></td>
+              <td align="right"><%= discount_with_out_gst=basic_discount.round%></td>
+              <td align="right"><%= @tax.basic%>%</td>
+              <td align="right"><%= gst=((basic_discount*@tax.basic)/100).round%></td>
+              <td align="right"><%= (discount_with_out_gst+gst).round%></td>
+            </tr>
+            <tr style="font-weight: bold">
+              <td colspan="1"> <b>TOTAL FLAT VALUE</b></td>
+              <td></td>
+              <td align="right"><%= flat_value_with_out_gst=flat_value_with_out_gst-discount_with_out_gst%></td>
+              <td></td>
+              <td align="right"><%= total_flat_gst_amount=((gstamt_unit+gstamt_escalation+gst_plc_amnt+servant_quarter_gst+total_gst_parking+total_ota)-gst).round%></td>
+              <td align="right"><%= total_flat_amount=((gross_unit+gross_escalation+gross_plc+servant_quarter_amnt_gross+total_parking_gross+gross_ota)-(discount_with_out_gst+gst)).round%></td>
+            </tr>
+            <!--FLAT VALUE DISCOUNT WITH TOTAL FLAT VALUE-->   
+          <%end%>
+          <!--TOTAL FLAT VALUE END-->  
+          <!--EXTRA DEVELOPMENT CHARGES START HERE-->
+          <tr>
+            <td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center"><b>EXTRA DEVELOPMENT CHARGES (EDC)</b></td>
+          </tr>
+          <%  
+            total_extra_development_charges=0
+            total_gst_extra_development_charges=0
+            total_extra_development_charges_gross=0
+          %>
+          <% @extra_development_charges.each do |extra_development_charge| %>  
+            <tr>
+              <td><b><%= extra_development_charge.extra_charge.try(:description)%></b></td>
+              <% if extra_development_charge.amount !=nil%>
+                <%if flat.BHK == extra_development_charge.flat_type%>
+                  <td align="right"></td>
+                  <td align="right"><%= extra_development_charges = extra_development_charge.amount%></td>
+                <%end%>
+              <%elsif extra_development_charge.rate !=nil %>
+                  <td align="right"><%= extra_development_charge.rate %></td>
+                  <td align="right"><%= extra_development_charges =((flat.SBA)*extra_development_charge.rate).round %></td>
+              <%elsif extra_development_charge.percentage != nil%>
+                  <td align="right"><%= extra_development_charge.percentage %> %</td>
+                  <td align="right"><%= extra_development_charges =((flat_value_with_out_gst*extra_development_charge.percentage)/100).round %></td>
+              <%end%>
+              <%total_extra_development_charges+=extra_development_charges%>
+              <td align="right"><%=@tax.edc%>%</td>
+              <td align="right"><%= gst_extra_development_charges =((extra_development_charges*@tax.edc)/100).round %></td>
+              <%total_gst_extra_development_charges+=gst_extra_development_charges%>
+              <td align="right"><%= extra_development_charges_gross =extra_development_charges+gst_extra_development_charges %></td>
+              <%total_extra_development_charges_gross+=extra_development_charges_gross%>
+            </tr>
+          <%end%>
+          <tr>
+            <td><b>TOTAL</b></td>
+            <td></td>
+            <td align="right"><%= total_extra_development_charges%></td>
+            <td></td>
+            <td align="right"><%= total_gst_extra_development_charges %></td>
+            <td align="right"><%=total_extra_development_charges_gross%></td>
+          </tr>
+          <!--EXTRA DEVEL[0]OPMENT CHARGES END HERE-->
+          <!--GRAND TOTAL-->
+          <tr style="font-weight: bold">
+            <td colspan="1">GRAND TOTAL</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td align="right">₹ <%= comma_separated(grand_total_gst_amount=(total_flat_gst_amount+total_gst_extra_development_charges).round)%></td>
+            <td align="right">₹ <%= comma_separated(grand_total_amount=(total_flat_amount+total_extra_development_charges_gross).round)%></td>
+          </tr>
+          <!--GRAND TOTAL END-->
+          <% end %>
+          <!--MILESTONE-->
+          <tr>
+            <td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center"><b>PAYMENT SCHEDULE</b></td>
+          </tr>
+          <tr>
+            <% if flat.block.business_unit.organisation.edc_hidden==true %>
+              <td colspan="3"><b>EVENT PARTICULARS</b></td>
+              <td align="right"><b>Consideration</b></td>
+              <td align="right"><b>Gst</b></td>
+              <td align="right"><b>Amount</b></td>
+            <% else %>
+              <td colspan="2"><b>EVENT PARTICULARS</b></td>
+              <td><b>UNIT</b></td>
+              <td><b>PARKING</b></td>
+              <td><b>EDC</b></td>
+              <td><b>Gross Amount</b></td>
+            <% end %>
+          </tr>
+          <% milestone_unit_total=0.0
+             milestone_parking_total=0.0
+             milestone_extra_charge_total=0.0
+             milestone_gross_total=0.0
+             deduction=0.0
+             basic_total = 0.0
+             gst_total = 0.0
+          %>
+          <% @milestones.each do |milestone| %>
+            <tr>
+              <% if flat.block.business_unit.organisation.edc_hidden==true %>
+                <td colspan="3">
+              <% else %>
+                <td colspan="2">
+              <% end %>
+                <%= milestone.payment_milestone.try(:description)%>
+                <% if milestone.flat_value_percentage != nil %>
+                  <% if deduction==0 %>
+                    (<%= milestone.flat_value_percentage%>% of Flat Value)+GST
+                  <% else %>
+                    (<%= milestone.flat_value_percentage%>% of Flat Value - less Booking Amount)+GST
+                  <% end %>
+                <% end %>
+                <% if flat.block.business_unit.organisation.edc_hidden != true %>
+                  <% if milestone.extra_development_charge_percentage != nil %>
+                  , Extra Development charges( <%=milestone.try(:extra_development_charge_percentage)%>%)+GST
+                  <% end %>
+                <% end %>
+              </td>
+              <% if milestone.flat_value_percentage==nil %>
+                <% unit=milestone.amount.to_i %>
+                <% if current_personnel.organisation_id == 6 %>
+                  <% unit_without_gst = milestone.amount.to_i %>
+                <%end%>
+                <% deduction=unit %>
+              <% else %>
+                <% unit=((((total_flat_amount-total_parking_gross)*milestone.flat_value_percentage)/100)-deduction).round %>
+                <% if current_personnel.organisation_id == 6 %>
+                  <% unit_without_gst = ((((total_unit_price-total_parking)*milestone.flat_value_percentage)/100)-deduction).round%>
+                <%end%>
+                <% deduction=0 %>
+              <% end %>
+
+              <% if flat.block.business_unit.organisation.edc_hidden != true %>
+                <td align="right"><%= unit %></td>
+              <% end %>
+              <%milestone_unit_total+=unit%>
+              <% if milestone.flat_value_percentage==nil %>
+                <% parking=0 %>
+                <% parking_without_gst = 0 %>
+              <% else %>
+                 <%  parking=((total_parking_gross*milestone.flat_value_percentage)/100).round %>
+                 <% parking_without_gst = ((total_parking*milestone.flat_value_percentage)/100).round%>
+              <% end %>  
+              <% if flat.block.business_unit.organisation.edc_hidden != true %>
+                <td align="right"><%= parking %></td>
+              <% end %>
+              <%milestone_parking_total+=parking%>
+              <% if milestone.extra_development_charge_percentage==nil %>
+                <% extra=0 %>
+                <% extra_without_gst=0 %>
+              <% else %>
+                 <% extra=((total_extra_development_charges_gross*milestone.extra_development_charge_percentage)/100).round %>
+                 <% extra_without_gst = ((total_extra_development_charges*milestone.extra_development_charge_percentage)/100).round %>
+              <% end %>
+              <% if flat.block.business_unit.organisation.edc_hidden != true %>
+                <td align="right"><%= extra %></td>
+              <% end %>
+              <% if flat.block.business_unit.organisation.edc_hidden==true %>
+                <td align="right">₹ <%= comma_separated(basic=(unit_without_gst+parking_without_gst+extra_without_gst).round )%></td>
+                <% basic_total += basic%>
+                <td align="right">₹ <%= comma_separated(only_gst=(((unit+parking+extra).round)-basic).round)%></td>
+                <% gst_total += only_gst%>
+              <%end%>
+              <%milestone_extra_charge_total+=extra%>
+                <td align="right">₹ <%= comma_separated(gross=(unit+parking+extra).round )%></td>
+              <%milestone_gross_total+=gross%>
+            </tr>
+        <%end%>
+        <tr>
+          <% if flat.block.business_unit.organisation.edc_hidden == true %>
+            <td colspan="3"><b>TOTAL</b></td>
+            <td align="right"><b>₹ <%= comma_separated(basic_total.round)%></b></td>
+            <td align="right"><b>₹ <%= comma_separated(gst_total.round)%></b></td>
+          <% else %>
+            <td colspan="2">TOTAL</td>
+            <td align="right"><%= milestone_unit_total.round%></td>
+            <td align="right"><%= milestone_parking_total.round%></td>
+            <td align="right"><%= milestone_extra_charge_total.round%></td>
+          <% end %>
+          <td align="right"><b>₹ <%= comma_separated(milestone_gross_total.round)%></b></td>
+        </tr>
+        
+        <!--MILESTONE END-->
+        <!---  POSSESSION START -->
+        <%
+          posession_total=0.0
+          posession_gst_total=0.0
+          posession_gross_amount=0.0
+        %>
+        <%if @posession_charges != []%>
+        <tr>
+          <td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center">ADDITIONAL CHARGES (MANDATORY) TO BE PAID BEFORE POSSESSION</td>
+        </tr>
+        <tr>
+          <% if current_personnel.organisation_id == 6 %>
+            <td><b>PARTICULARS</b></td>
+          <%else%>
+            <td ><b>EVENT PARTICULARS</b></td>
+          <%end%>
+          <td align="right"><b>RATE (PER SQ. FT.)</b></td>
+          <td align="right"><b>Total(Rs.)</b></td>
+          <td align="right"><b>GST</b></td>
+          <td align="right"><b>GST Amount(Rs.)</b></td>
+          <td align="right"><b>Gross Amount(Rs.)</b></td>
+
+        </tr>
+        <% @posession_charges.each do |posession_charge| %>
+        <tr>
+          <td><%= posession_charge.extra_charge.try(:description)%></td>
+          <td align="right"><%= posession_charge.rate.round %></td>
+          <td align="right">₹ <%= comma_separated(posession=(flat.SBA*posession_charge.rate).round) %></td>
+              <%posession_total+=posession%>
+          <td align="right"><%= posession_charge.try(:gst)%></td>
+          <%if posession_charge.gst==nil %>
+            <td></td>
+          <%else%>
+          <td align="right"><%= posession_gst=((posession*posession_charge.try(:gst))/100).round %></td>
+              <%posession_gst_total+=posession_gst%>
+          <%end%>
+          <td align="right"><%= posession_gross=(posession_total+posession_gst_total).round %></td>
+              <% posession_gross_amount+=posession_gross%>
+        <tr>
+        <%end%>
+        <tr>
+          <td colspan="2"><b>TOTAL</b></td>
+          <td align="right">₹ <%= comma_separated(posession_total.round)%></td>
+          <td></td>
+          <% if posession_gst_total==0 %>
+          <td></td>
+          <% else %>
+          <td align="right"><%= posession_gst_total.round%></td>
+          <% end %>
+          <td align="right"><%= posession_gross_amount.round%></td>      
+        </tr>
+        <%end%>
+        <!---  POSSESSION END -->
+
+        <!---  NOTE -->
+        
+          <% if @business_unit.organisation_id==3%>
+          <tr>
+          <td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center">
+            <p>Note: The amount of Tax shown in the payment structure has been calculated at the rate prevailing on the day of booking. Any revision on the same will be reflected in the next demand. </p>
+          </td>
+          </tr>
+          <%elsif @business_unit.organisation_id==1%>
+          <tr>
+            <td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center">
+            <p>
+              1) Above calculations are an indicative offer price only. Final Price may vary after discounts, offers etc<br>
+              2)Taxes applicable as per govt norms.<br>
+              3) Customers are advised to check all calculations and revert.<br>
+              4) Please note that there may be changes in calculation due to decimal rounding off
+            </p>
+            </td>
+          </tr>
+          <%elsif @business_unit.organisation_id==6%>
+          <% if current_personnel.organisation_id == 6 %>
+            <% if @final == nil%>
+            <%else%>
+              <tr><td colspan="6"><b>Cancellation Fees - 10% of total consideration</b></td></tr>
+            <%end%>
+          <%else%>
+            <tr><td colspan="6"><b>Cancellation Fees - 10% of total consideration</b></td></tr>
+          <%end%>
+          <% if current_personnel.organisation_id == 6 %>
+            <tr>
+              <% if @remarks_for_validation == nil || @remarks_for_validation == ''%>
+              <%else%>
+                <td colspan="6"><b>Validity: <%= @remarks_for_validation%></b></td>
+              <%end%>
+            </tr>
+          <%end%>
+          <% if current_personnel.organisation_id == 6%>
+            <tr><td colspan="6"><b>Interest Penalty - As per Bank PLR</b></td></tr>
+          <%else%>
+            <tr><td colspan="6"><b>Interest Penalty - 15% per annum</b></td></tr>
+          <%end%>
+          <tr><td colspan="6" style="background-color:#0083ff; color: #fff!important; text-align: center">
+          <p><b>
+            NOTE: If the total consideration amount is more than fifty lakhs, then customer will have to pay TDS as per government norms and produce the TDS certificate to us. For further details representative of the JSBI will be available.
+          </b></p>
+          </td></tr>
+          <%end%>
+        </tr>
+        <!---  NOTE END -->
+      </tbody>
+      <%= hidden_field_tag 'cost_sheet[rate]', flat.rate%>
+    <%end%>
+    </table>
+<br><br><br>                     
+<%= submit_tag 'Download', name: 'download', :class => 'btn btn-primary' %>
+<%= submit_tag 'Save', name: 'save', :class => 'btn btn-primary' %>
+<% if @standalone_cost_sheet=="true"%>
+  <%= hidden_field_tag 'standalone_cost_sheet', @standalone_cost_sheet %>
+  <%= hidden_field_tag 'business_unit_id', @business_unit.id %>
+<%else%>
+  <%= hidden_field_tag 'lead_id', params[:lead_id] %>
+  <%if lead.email=='' || lead.email==nil%>
+    <p>Customer doesn't have mail id</p>
+  <%else%>
+    <%= submit_tag 'Email', name: 'email', :class => 'btn btn-primary' %>  
+  <%end%>
+  <%if lead.personnel.organisation.whatsapp_instance == nil%>
+    <p>Customer doesn't have Whatsapp</p>
+  <%else%>
+    <%= submit_tag 'Whatsapp', name: 'Whatsapp', :class => 'btn btn-primary' %>  
+  <%end%>
+<%end%>
+<%end%>
+  </body>
+  <style>
+    .table > thead > tr > th,
+        .table > tbody > tr > th,
+        .table > tfoot > tr > th,
+        .table > thead > tr > td,
+        .table > tbody > tr > td,
+        .table > tfoot > tr > td {
+          padding: 12px!important;
+          line-height: 1.42857143;
+          vertical-align: middle!important;
+          /*border-top: 1px solid transparent;*/
+        }
+  </style>
+</html> 

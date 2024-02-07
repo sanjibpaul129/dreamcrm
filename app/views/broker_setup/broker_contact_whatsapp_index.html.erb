@@ -1,0 +1,263 @@
+	<body>
+	<%= form_tag 'broker_contact_whatsapp_massages', :html => {:class => 'form-horizontal'} do %>
+		<%= hidden_field_tag "broker_contact_id", @selected_broker_contact.id if @selected_broker_contact != nil%>
+		<div class="green-styling"></div>
+		<div class= "main"> 
+			<div class="left-container">
+				<div class="profile-image"><h1>pic</h1></div>			
+				<div class="search-div">
+					<input type="text" id="searchInput" class="search" onkeyup="filterContacts()" placeholder="Search or Start a new chat">			
+				</div>
+				<div class="contacts">
+	             <% @broker_contacts.each do |broker_contact|%>
+					<%= link_to broker_contact.name, broker_setup_broker_contact_whatsapp_index_path(broker_contact), class: 'phone-number' %>
+					<%end%>
+				</div>
+			</div>
+			<div class ="right-container">  
+				<div class="right-navbar">
+					<% if @selected_broker_contact %>
+                        <%= @selected_broker_contact.name %>
+                    <% end %>
+				</div>
+				<div class="chatbox-container">
+					 <div class="chatbox" id="chatbox">	
+						<div class="messages" id="messages">
+						 	<% if @selected_broker_contact %>		 
+							    <% @selected_broker_contact.whatsapp_followups.sort_by{|x| x.created_at}.reverse.each do |whatsapp_followup| %>
+					              	<% if whatsapp_followup.remarks == nil || whatsapp_followup.remarks == "" %>
+						                <div class="reply">
+											<%= whatsapp_followup.bot_message%>
+											<div class="time">
+												<%= whatsapp_followup.created_at.in_time_zone('New Delhi').strftime('%I:%M %p')%>
+											</div>
+						                </div>
+						           	<% else %>
+						                <div class="message">
+						                	<% position_one = whatsapp_followup.remarks.index(":")%>
+											<%= whatsapp_followup.remarks[position_one+2..whatsapp_followup.remarks.length] %>
+											<div class="time">
+												<%= whatsapp_followup.created_at.in_time_zone('New Delhi').strftime('%I:%M %p')%>
+											</div>
+						                </div>
+						           	<% end %>
+						        <%end%>
+					        <% end %>
+						</div>
+					</div>			  				
+			    </div>
+				<div class="reply-bar">
+					<%= text_field_tag "reply_to_customer", '', placeholder: 'Type something', :class => 'reply-box' %>
+					<%= submit_tag "Send", :class => 'btn btn-primary'%>
+				</div>
+			</div>
+		 </div>	
+	<% end %>	
+	</body>
+	<script>
+		function filterContacts() {
+		    var input, filter, contacts, contact, i, txtValue;
+		    input = document.getElementById('searchInput');
+		    filter = input.value.toUpperCase();
+		    contacts = document.getElementsByClassName('phone-number');
+		    for (i = 0; i < contacts.length; i++) {
+		        contact = contacts[i];
+		        txtValue = contact.textContent || contact.innerText;
+		        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		            contacts[i].style.display = "";
+		        } else {
+		            contacts[i].style.display = "none";
+		        }
+		    }
+		}
+	   function rightNavbar(contactName,phoneId) {
+	       document.querySelector('.right-navbar').textContent = contactName;
+	       document.querySelector('.chatbox').innerHTML = chatbox;
+	       document.getElementById('chatbox').style.display = 'block';
+	   }
+	</script>
+
+	<style type="text/css">
+		*{
+			border: none;
+		}
+		body{
+			background-color: gray;
+			overflow: hidden;
+			background-color: #f0f2f5;
+
+		}
+		.green-styling{
+			background-color: #00a884;
+			height: 16.5vh;
+			width: 100vw;
+			position: absolute;
+			top: 0;
+			z-index: -1;
+		}
+		.main{
+			display: flex;
+			flex-direction: row;
+			height: 95vh;
+			width: 97.7vw;
+			margin: 1.2% 1.2%;
+		}
+		.left-container, .right-container{
+			display: flex;
+			flex-direction: column;
+		}
+		.left-container{
+			width: 30%;
+			background-color: white;
+
+		}
+		.profile-image{
+			background-color: #eff2f5;
+			height: 9vh;
+		}
+		.search-div{
+			width: 29.5%;
+			display: flex;
+			border-right: 1px solid #dddddd;
+			justify-content: center;
+			align-items: center;
+			border-bottom: 1px solid #eff2f5;
+			height: 9vh;
+			margin-top: 65px;
+			position: fixed;
+		}
+		.search{
+			width: 95%;
+			height: 35px;
+			padding: 1% 2.5%;
+			margin: 0;
+			background-color: #eff2f5 ;
+			border-radius: 7px;
+			border: none;
+		}
+		.search:focus {
+	    outline: none;
+	    border: 1px solid transparent;
+		}
+		.contacts{
+			display: flex;
+			flex-direction: column;
+			margin-top:65px ;
+			overflow-y: auto;
+			scrollbar-width: thin;
+		    scrollbar-color: #888 #f1f1f1;
+		}
+		.contacts::-webkit-scrollbar {
+		  width: 5px;
+		}
+		.contacts::-webkit-scrollbar-track {
+		  background: #f4f6f6;
+		}
+		.contacts::-webkit-scrollbar-thumb {
+		  background: #888;
+		}
+		.phone-number{
+			padding: 1% 5% 1% 5%;
+			border-bottom: 1px solid lightgray;
+			text-decoration: none;
+		}
+		.phone-number:hover{
+			background-color: #f4f6f6;
+		}
+		.phone-number:focus{
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+		.right-container{
+			width: 70%;
+			background-color: #f9f9f9;
+		}
+		.right-navbar{
+			width: 100%;
+			height: 70px;
+			background-color: #f4f6f6;
+			color: black;
+			padding: 2% 3%;
+			box-shadow: none;
+		}
+		.chatbox-container{
+			width: 100%;
+			height: 80%;
+			background-image: url('https://i.pinimg.com/736x/1e/4c/ef/1e4cefe5bf30c9878342660064560811.jpg');
+			background-size: 100%;
+			background-size: cover;
+			background-repeat: no-repeat;
+		}
+		
+		.chatbox{
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+		.messages {
+	      display: flex;
+	      flex-direction: column-reverse;
+	      overflow-y: auto;
+	      height: 100%;
+	    }
+
+	    .messages::-webkit-scrollbar {
+	        display: none;
+	      }
+
+	    .message,
+	    .reply {
+	      display: flex;
+	      flex-direction: column;
+	      min-width: 10%;
+	      max-width: 80%;
+	      margin: 10px;
+	      padding: 8px 12px;
+	      border-radius: 15px;
+	      word-wrap: break-word;
+	    }
+	    .time{
+	    	position: relative;
+	    	color: black;
+	    	font-size: 10px;
+	    	text-align: right;
+	    }
+	    .message {
+	      color: black;
+	      background-color:white ; 
+	      align-self: flex-start;
+	    }
+
+		.reply-bar{
+			background-color: transparent;
+			display: flex;
+			border-top: 1px solid #dddddd;
+			flex-direction: row;
+			top:90%;
+			bottom: 0;
+		}
+
+	    .reply {
+	      color: black;
+	      background-color:#dcf8c6 ;
+	      align-self: flex-end;
+	    }
+
+		.reply-box{
+			width: 80%;
+			height: 40px;
+			margin: 1.3% 2% 0 2%;
+			padding: 1% 2%;
+			border-radius: 12px;
+			background-color: white;
+		}
+		.send{
+			width: 20%;
+			height: 40px;
+			margin: 0 1%;
+			border-radius: 	12px;
+			margin: 2% 2% 2% 1%;
+		}
+		#user_nav{
+		    display: none!important;
+		}
+	</style>

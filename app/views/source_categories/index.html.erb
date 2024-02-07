@@ -1,0 +1,62 @@
+<%@header = 'Source Category'%>
+<%if notice.blank? %>
+<%else%>
+
+<script>alert("Successfully done!")</script>
+<% end %>
+
+
+<%= form_tag 'source_categories/drilldown' do  %>
+
+<h1>Sources</h1>
+<div class="table-responsive">
+<table id="customers">
+  <thead>
+    <tr>
+       <th></th>
+     
+      <th>Description</th>
+      <th>Heirarchy</th>
+      <th>Not used since</th>
+	  <th>Created since</th>
+	  <th>Inactive</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @source_categories.each do |source_category| %>
+      <tr>
+          <td><%= radio_button_tag :source_category_id , source_category.id %></td>
+          <td><%= source_category.description %></td>
+          <td><%= source_category.heirarchy %></td>
+		  <td><%=  %></td>
+		  <td><%= ((Time.now-source_category.created_at)/86400).round(0) %></td>
+          <% if source_category.inactive == true %>
+            <td><i class="glyphicon glyphicon-exclamation-sign"></i></td>
+          <% else %>
+            <td></td>
+          <% end %>
+         <% if SourceCategory.where(predecessor: source_category.id) != [] %>
+        <td><%= submit_tag  ">>", name: source_category.id, :class => 'link_btn' %></td>
+        <% else %>
+        <td></td>
+        <% end %>
+       <td> <%= link_to edit_source_category_path(source_category), class: "edit_btn" do%>
+    <i class="glyphicon glyphicon-pencil"></i>
+<% end %></td>
+
+       <td> <%= link_to source_category, method: :delete, data: { confirm: 'Are you sure?' }, class: "dlt_btn" do%>
+    <i class="glyphicon glyphicon-fire"></i>
+<% end %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<br>
+
+<%= submit_tag 'New Source', :class => 'btn btn-primary' %>
+<% end %>

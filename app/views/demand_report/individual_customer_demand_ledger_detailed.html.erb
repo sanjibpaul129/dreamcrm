@@ -1,0 +1,252 @@
+<%= form_tag 'demand_ledger_download_and_mail', :html => {:class => 'form-horizontal'} do %>
+<%= hidden_field_tag 'booking_id', @booking.id%>
+<html>
+  <head>
+    <style>
+    * { margin: 0; padding: 0; }
+    /**/
+    body { font: 14px/1.4 Times, Serif; }
+    #page-wrap { width: 850px; height: 455px; margin: 0 auto; background: #fff !important; border: 2px solid #000; }
+
+    textarea { border: 0; font: 14px Times, Serif; overflow: hidden; resize: none; }
+   
+    .delivery_to { border: 0; font: 14px Times, Serif; height:130px;width:240px; resize: none; }
+
+    table { border-collapse: collapse; width: 848px;}
+    table td, table th { border: 2px solid black !important; padding: 2px; background: #fff !important; color: #000!important;}
+
+    #header { height: 100px; width: 100%; margin: 10px 0; background: #fff; text-align: center; color: #000;font: bold;text-decoration: uppercase;  padding: 4px 0px; }
+
+    .customeraddress { margin: 0 10px 0 0; width: 220px; height: 300px; float: left; }
+    /**/
+    .cc_mail_box{width: 200px; height: 25px; font: 14px Times, Serif; }
+    #attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; position: relative; top: 61px; }
+    #attachment_else_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; right: 370px; position: relative; top: 61px; }
+    #regular_attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none;float:left; position: relative; bottom: 140px; left: 720px}
+    #found_ok {width: 25em;  height: 5em; float: center; position: relative; bottom: -57px; left: 235px}
+    #customer { overflow: hidden; }
+    #button { width: 250px; height: 50px; float: right; }
+    #smallbutton {width: 125px; height: 50px; float: right; }
+    #sidesmallbutton {width: 125px; height: 50px; float: right;}
+    #leftsmallbutton { width: 125px; height: 50px; float: left; }
+    #logo { text-align: right; float: right; position: relative; margin-top: 0px; margin-right: 60px; border: 1px solid #fff; max-width: 540px; max-height: 150px; overflow: hidden; float:center; }
+    #logoctr { display: none; }
+    #logo:hover #logoctr, #logo.edit #logoctr { display: block; text-align: right; line-height: 25px; background: #22222263; padding: 0 5px; }
+    #logohelp { text-align: left; display: none; font-style: italic; padding: 10px 5px;}
+    #logohelp input { margin-bottom: 5px; }
+    .edit #logohelp { display: block; }
+    .edit #save-logo, .edit #cancel-logo { display: inline; }
+    .edit #image, #save-logo, #cancel-logo, .edit #change-logo, .edit #delete-logo { display: none; }
+    #customer-title { font-size: 15px; font-weight: bold; }
+
+    #meta { margin-top: 1px; width: 845px; float: right; }
+
+    #meta td.meta-head { width: 200px; text-align: left; background: #22222263; }
+    #meta td textarea { width: 700px; text-align: left; }
+
+    #metadata { margin-top: 1px; width: 845px; float: left; }
+    #metadata td { text-align: left;  }
+    #metadata td.meta-head { width: 20px; text-align: left; background: #22222263; }
+    #metadata td textarea { height: 20px; text-align: left; width: 200px; }
+
+    #items { clear: both; width: 100%; margin: 30px 0 0 0 }
+    #items th { background: #c85e17; }
+    #items th.quantity { text-align: right; }
+    #items textarea { width: 80px; height: 50px; }
+    #items tr.item-row td { border-width: 0px; border-bottom: 1px solid black; vertical-align: top; }
+    #items td.description { width: 300px; }
+    #items td.item-name { width: 175px; }
+    #items td.description textarea, #items td.item-name textarea { width: 100%; }
+    #items td.total-line { border-right: 0; text-align: right; }
+    #items td.reg-nos { border-right: 0; text-align: center; text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 5px; }
+    #items td.quantity { text-align: right; }
+    #items td.quantity_centre { text-align: center; }
+
+    #items td.total-value { border-left: 0; padding: 10px; text-align: right; }
+    #items td.total-value textarea { height: 20px; background: none; }
+    #items td.balance { background: #c85e17; }
+    #items td.blank { border: 0; }
+    .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+
+    #terms { text-align: left; margin: 8px 0 0 0; }
+    #terms h5 { text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 10px; border-bottom: 1px solid black; padding: 0 0 4px 0; margin: 0 0 8px 0; }
+    #terms h3 { text-align: center; font: 10px Helvetica, Sans-Serif; letter-spacing: 4px; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+    #terms h4 { text-align: center; font: 15px Helvetica, Sans-Serif; letter-spacing: 4px; border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+
+    #terms textarea { width: 100%; text-align: left;}
+
+    .auto-textarea{height:auto; width:auto;}
+    .quatation_details{width:100px;}
+    .item_details{width:770px;text-align:justify;text-justify:inter-word;}
+    .delete-wpr { position: relative; }
+    .delete { display: block; color: #000; text-decoration: none; position: absolute; background: #EEEEEE; font-weight: bold; padding: 0px 3px; border: 1px solid; top: -6px; left: -22px; font-family: Verdana; font-size: 12px; }
+
+    .address { margin: 0 10px 10px 0; width: 200px; height: 120px; float: right;text-align: left; }
+    .customer_address {  border: 0; font: 14px Times, Serif; width:200px; text-align:left; float: right; }
+    .company_address { border: 0; font: 14px Times, Serif; width:240px; resize: none; text-align: left; float: left;   }
+    </style>
+  </head>
+
+  <body>
+    <div id="page-wrap">
+      <div id="header">                    
+        <div class="row">
+          <div class="col-md-3">
+            <%= image_tag(@booking.cost_sheet.lead.personnel.organisation.group_logo, alt: "", class: "ledger-logo") %>
+          </div>
+          <div class="col-md-6">
+            <p><b>Dream Gateway Hotels Limited</b><br><U>44/2A, Hazra Road, Kolkata-700019</U><br><U>Demand Letter</U><br><u>Project: <%=@booking.cost_sheet.flat.block.business_unit.name %></u></p>
+          </div>
+          <div class="col-md-3">
+            <%= image_tag(@booking.cost_sheet.flat.block.business_unit.logo, alt: "", class: "ledger-logo") %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6">
+        	<br>
+          <p style="text-align: right !important; color: #000 !important;"><br>Generation Date: <%= Date.today.strftime('%d/%m/%Y')%><br></p>
+        </div>
+      </div>	
+    <table class="table table-striped table-hover metadata">
+      <tbody>
+
+        <tr>
+          <td colspan="2"><b>Name of Owner:</b></td>
+          <td colspan="3"><b><%= @booking.cost_sheet.lead.name%></b></td>
+          <td colspan="2"><%= @booking.cost_sheet.flat.block.name%>, Flat <%= @booking.cost_sheet.flat.full_name%></td>
+          <td colspan="1"><b><%=@booking.cost_sheet.flat.SBA %> sft</b></td>
+          <td colspan="1"><b>@<%= @booking.cost_sheet.flat.rate%>/sft</b></td>  
+        </tr>
+        <tr>
+          <td colspan="1"><b>Email:</b></td>
+          <td colspan="2"><b><%=@booking.cost_sheet.lead.email %></b></td>
+          <td colspan="1"><b>Mobile:</b></td>
+          <td colspan="2"><b><%= @booking.cost_sheet.lead.mobile%></b></td>
+          <td colspan="1"><b>Address:</b></td>
+          <td colspan="2"><b><%= @booking.cost_sheet.lead.current_address%></b></td>
+        </tr>
+
+          <tr>
+            <td colspan="9" style="background-color: #9e9e9e!important;"><center><b>Ledger</b></center></td>
+          </tr>
+          <tr>
+            <td colspan="2"><b>Date</b></td>
+            <td colspan="4"><b>Description</b></td>
+            <td><b>Debit</b></td>
+            <td><b>Credit</b></td>
+            <td><b>Balance</b></td>
+          </tr>
+          <%balance=0%>
+          <%deduction=0%>
+            <% @both_documents.each do |both_document|%>
+              <%if both_document.class == LedgerEntryHeader%>
+                <tr>
+                  <td colspan="2"><%= both_document.date.to_date.strftime('%d/%m/%Y')%></td>
+                  <% full_description=''
+                  both_document.ledger_entry_items.each do |ledger_entry_item|
+                  full_description+=ledger_entry_item.milestone.payment_milestone.description+','  
+                    end
+                  full_description[full_description.length-1]='' 
+
+                  cost_sheet=@booking.cost_sheet
+                  total_unit_value=cost_sheet.unit_gross+cost_sheet.plc_gross+cost_sheet.flc_gross-(cost_sheet.discount[1].to_f)
+                  total_parking_value=cost_sheet.parking[1]
+                  total_edc_value=cost_sheet.edc
+
+                  milestone=both_document.ledger_entry_items[0].milestone
+                  if milestone.flat_value_percentage==nil
+                     unit=milestone.amount.to_i
+                     deduction=unit
+                  else
+                     unit=((((total_unit_value)*milestone.flat_value_percentage)/100)-deduction).round
+                     deduction=0
+                  end
+                  full_description=full_description+'(Unit Cost:'+(unit.to_s)
+                  if milestone.flat_value_percentage==nil
+                     parking=0
+                  else
+                     parking=((total_parking_value*milestone.flat_value_percentage)/100).round 
+                     full_description=full_description+',Parking:'+(parking.to_s) 
+                  end  
+                  if milestone.extra_development_charge_percentage==nil
+                     extra=0
+                  else
+                     extra=((total_edc_value*milestone.extra_development_charge_percentage)/100).round
+                     full_description=full_description+',EDC:'+(extra.to_s) 
+                  end
+                  full_description=full_description+')'
+                  %>
+
+
+                  <td colspan="4"><%= full_description %></td>
+                  <td style="text-align: right!important;"><%= both_document.amount%></td>
+                  <% balance += both_document.amount %>
+                  <td style="text-align: right!important;"></td>
+                  <td style="text-align: right!important;"><%= balance.round %></td>
+                </tr>
+              <%elsif both_document.class == DemandMoneyReceipt%>
+                <tr>
+                  <td colspan="2"><%= both_document.date.to_date.strftime('%d/%m/%Y')%></td>
+                  <td colspan="4">Money Receipt</td>
+                  <td style="text-align: right!important;"></td>
+                  <td style="text-align: right!important;">-<%= both_document.amount.round%></td>
+                  <% balance = balance-both_document.amount %>
+                  <td style="text-align: right!important;"><%= balance.round %></td>
+                </tr>
+              <%end%>
+            <%end%>
+          <tr>
+
+              <tr>
+                <td colspan="7"><b> Total Amount to be Paid:</b></td>
+                <td colspan="2" style="text-align: right!important;"><b><%= balance.to_i%></b></td>
+              </tr>
+              <tr>
+                <td colspan="9">Amount in words (Rs.): <b><i><%= balance.to_i.rupees%> only.</i></b></td>
+              </tr>
+          <tr>  
+            <td colspan="9"><b>Terms & Conditions:</b> The above mentioned total due amount is excluding interest for late payment. You are therefore requested to remit/pay the above mentioned amount immediately to avoid further interest accrual @ 18% p.a. However, interest on previous outstanding shall be payable till the date of payment. Please ignore this demand letter, if already paid. Demand letter does not mean revocation of termination. If you have been issued termination letter, kindly contact us immediately at 033-40319999. 
+          </tr>
+          <tr>  
+            <td colspan="9"><b>Note:</b> 1. Jain Group is committed towards transparency, customer satisfaction and highest ethics. Please mail rishi@thejaingroup.com or call 8420394944, if any Jain Group employee requests cash, gifts or any benefits whatsover.  <br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 2. Bank chanrges (if any) will also be payable plus GST. <br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 3. Interest @ 18% p.a. will be charged as applicable.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 4. If your accounts do not tally with our records, please contact us immediately.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 5. Please mention Customer Name, Project Name & Payment details behind your cheque/DD.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 6. Status of project completion(as per demand).</td>
+          </tr>
+          
+          <tr>
+          	<td colspan="5">
+          		Company Name: Dream Gateway Hotels Ltd.<br>
+      				PAN: AADCD0692H<br>
+      				GSTIN: AADCD0692H1ZL<br>
+      				SAC CODE: 995411<br>
+      				Bank Name : HDFC BANK LTD<br>
+      				Bank Branch Add : 72 SARAT BOSE ROAD<br>
+      				Kolkata : 700025<br>
+      				Bank A/C No : 50200006508062<br>
+      				IFSC : HDFC0001404
+			      </td>
+          	<td colspan="4">
+          		E & O.E.<br><br><br>For Dream Gateway Hotels Ltd.<br><br><br>This is a computer generated document no signature required
+          	</td>
+          </tr>
+</tbody>
+ 
+
+</table>
+<div class="row">
+    <div class="col-lg-offset-5">
+      <%= submit_tag 'Download', name: 'download', :class => 'btn btn-info' %>
+      <%= submit_tag 'Email', name: 'email', :class => 'btn btn-info' %>
+    </div>
+  </div><br><br>
+</div> 
+<style type="text/css">
+  .ledger-logo{
+    width: 150px!important;
+    height: auto!important;
+  }
+</style> 
+    </body>
+</html>
+<%end%>

@@ -1,0 +1,73 @@
+<%@header = 'Budget Status'%>
+
+<h1>Budget Allocation Status</h1>
+
+<table class="customers" id="digital_report">
+  <thead>
+    <tr>      
+      <th>Project</th>
+      <th>Budget</th>
+      <th>Actual</th>
+      <th>%</th>
+      <th>Monthly</th>
+      <th>FB(%)</th>
+      <th>Facebook</th>
+      <th>Google</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @project_budgets.each_with_index do |project_budget,position| %>
+    <tr>
+    <td><%= project_budget[:name] %></td>
+    <td><%= @proposed_budgets[position][:budget].to_i %></td>
+    <td><%= (((project_budget[:daily_budget])+(@google_project_budgets[position][:daily_budget]))*30) %></td></td>
+    <% if @proposed_budgets[position][:budget]==0 %>
+    <td></td>
+    <% else %>
+    <td><%= (((((project_budget[:daily_budget])+(@google_project_budgets[position][:daily_budget]))*30)/@proposed_budgets[position][:budget])*100).to_i %></td>
+    <% end %>
+    <td><%= ((project_budget[:daily_budget])+(@google_project_budgets[position][:daily_budget])) %></td>
+    <% if (((project_budget[:daily_budget])+(@google_project_budgets[position][:daily_budget])).to_f)==0 %>
+    <td>0</td>
+    <% else %>
+    <td><%= (((project_budget[:daily_budget].to_f)/(((project_budget[:daily_budget])+(@google_project_budgets[position][:daily_budget])).to_f))*100).to_i %></td>
+    <% end %>
+    <td><%= project_budget[:daily_budget] %></td>
+    <td><%= @google_project_budgets[position][:daily_budget] %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<style>
+ .customers td,.customers th{
+    text-align: right!important;
+  }
+</style>
+
+<script>
+$(document).ready(function(){
+var FilterTable=$("#budget_status").DataTable({  
+   "fixedHeader": true,   
+   "dom": '<"wrapper"lit>',
+   "bAutoWidth": false,
+   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+   "bDeferRender": true,
+   "aoColumns": [
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true}
+                             ]
+});
+
+$("#filterbox").keyup(function() {
+        FilterTable.search(this.value).draw();
+    });
+});
+</script>

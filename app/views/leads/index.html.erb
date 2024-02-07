@@ -1,0 +1,85 @@
+<h1>Leads</h1>
+
+<table class="customers" id="orderedtasks">
+  <thead>
+    <tr>
+      <th>Auto info</th>
+      <th>Business unit</th>
+      <th>Personnels</th>
+      <th>Budget From</th>
+      <th>Budget To</th>
+      <th>Status</th>
+      <th>Personnel remarks</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Lost reason</th>
+      <th>Address</th>
+      <th>Occupation</th>
+      <th>Requirement</th>
+      <th>Area</th>
+      <th>Mobile</th>
+      <th>Preferred location</th>
+      <th>Marketing instance</th>
+      <th>Source category</th>
+      <th>Customer remarks</th>
+      <th>Newspaper</th>
+      <th>Channel</th>
+      <th>Station</th>
+      <th>Magazine</th>
+      <th>Community</th>
+      <th>Nationality</th>
+      <th>Pan</th>
+      <th>Dob</th>
+      <th>Company</th>
+      <th>Designation</th>
+      <th>First applicant</th>
+      <th>Second applicant</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @leads.each do |lead| %>
+      <tr>
+        <td><%= lead.auto_info %></td>
+        <td><%= lead.business_unit_id %></td>
+        <td><%= lead.personnel_id %></td>
+        <td><%= lead.budget_from %></td>
+        <td><%= lead.budget_to %></td>
+        <td><%= lead.status %></td>
+        <td><%= lead.personnel_remarks %></td>
+        <td><%= lead.name %></td>
+        <td><%= lead.email %></td>
+        <td><%= lead.lost_reason_id %></td>
+        <td><%= lead.address %></td>
+        <td><%= lead.occupation_id %></td>
+        <td><%= lead.requirement %></td>
+        <td><%= lead.area %></td>
+        <td><%= lead.mobile %></td>
+        <td><%= lead.preferred_location_id %></td>
+        <td><%= lead.marketing_instance_id %></td>
+        <td><%= lead.source_category_id %></td>
+        <td><%= lead.customer_remarks %></td>
+        <td><%= lead.newspaper_id %></td>
+        <td><%= lead.channel_id %></td>
+        <td><%= lead.station_id %></td>
+        <td><%= lead.magazine_id %></td>
+        <td><%= lead.community_id %></td>
+        <td><%= lead.nationality_id %></td>
+        <td><%= lead.pan %></td>
+        <td><%= lead.dob %></td>
+        <td><%= lead.company %></td>
+        <td><%= lead.designation %></td>
+        <td><%= lead.first_applicant %></td>
+        <td><%= lead.second_applicant %></td>
+        <td><%= link_to 'Show', lead %></td>
+        <td><%= link_to 'Edit', edit_lead_path(lead) %></td>
+        <td><%= link_to 'Destroy', lead, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Lead', new_lead_path %>

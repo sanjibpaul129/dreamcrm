@@ -1,0 +1,75 @@
+<div class="col-lg-4 col-lg-offset-4">
+    <div class="well bs-component">
+
+<legend></legend>
+<%= form_for @organisation, :html => {:class => 'form-horizontal'} do |f| %>
+  <% if @organisation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@organisation.errors.count, "error") %> prohibited this organisation from being saved:</h2>
+
+      <ul>
+      <% @organisation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, :class => "col-lg-3 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :name, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, :class => "col-lg-3 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :email, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :shortform, :class => "col-lg-3 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :shortform, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :api_key, :class => "col-lg-3 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :api_key, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :'Whatsapp Instance:', :class => "col-lg-3 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :whatsapp_instance, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :'Whatsapp Key', :class => "col-lg-3 control-label" %>
+    <div class="col-lg-8">
+    <%= f.text_field :whatsapp_key, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :'Group Logo', :class => "col-lg-3 control-label" %>
+    <div class="col-lg-8">
+    <%= f.file_field :group_logo %>
+  </div>
+  </div>
+
+  <div class="form-group">
+      <div class="col-lg-8 col-lg-offset-2">
+    <%= f.submit :class => 'btn btn-primary btn-block'%>
+  </div>
+  </div>
+
+  </div>
+  </div>
+<% end %>

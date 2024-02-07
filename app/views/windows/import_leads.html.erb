@@ -1,0 +1,33 @@
+<%@header = 'Import Leads'%>
+<div class="col-lg-4 col-lg-offset-4">
+  <div class="well bs-component">
+  <legend>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspImport Leads</legend> 
+  <%= form_tag 'leads_import', multipart: true  do %>
+
+  <%= button_tag type: 'submit', :class =>"btn btn-primary"  ,'data-toogle' => "tooltip",'title' => "Import Leads"  do %>
+  
+     <%= content_tag :strong, 'Import Leads' %>
+      <% end %>
+  
+  <div class="col-lg-8">
+
+      <%= file_field_tag :file, class: 'filestyle', :'data-classButton' => 'btn btn-primary' %>
+<% end %>
+
+</div>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <b>INSTRUCTIONS:</b>
+    </div>
+  </div>
+  <div class="panel-body">
+    Populate as per headings(Source_Date, Name, Mobile_No, Email_ID, Source_Reference, Sales_Person, Project_Name){one out of mobile/email should be present-the rest of the fields are mandatory}
+  </div>
+</div>
+
+
+</div>
+</div>

@@ -1,0 +1,209 @@
+<%@header = 'Google Lead Details'%>
+<h1>Google Lead Details</h1>
+<%= form_tag 'google_lead_details', :html => {:class => 'form-horizontal'} do %>    
+  <div class="row">
+    <div class="col-lg-1">
+      From:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "from", @from.to_date, :class => "form-control"%>
+    </div>
+    <div class="col-lg-1">
+      To:
+    </div>
+    <div class="col-lg-2">
+      <%= date_field_tag "to", @to.to_date, :class => "form-control"%>
+    </div>
+    <div class="col-lg-1">
+      <h5>Project:</h5>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-2">
+      Report Types:
+    </div>
+    <div class="col-lg-3">
+      <%= select_tag "report_type", options_for_select(@report_types, selected: @report_type), :class => 'form-control', :prompt => 'Please Select'%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+    </div>
+  </div><br>
+<%end%>
+<% if request.post?%>
+  <% if @report_type == "Network"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @network_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "Campaing Id"%>
+  <% elsif @report_type == "Device"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @device_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "Placement"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @placement_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "keyword"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @keyword_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "Extention Id"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @extention_id_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "Target Id"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @target_id_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "Adposition"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @adposition_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "Source Id"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @source_id_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "Loc Interest MS"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @loc_interest_ms_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% elsif @report_type == "Loc Physical MS"%>
+    <table  id="customers" >
+      <thead>
+        <tr>
+          <th><%= @report_type%></th>
+          <th>Number Of Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @loc_physical_ms_hash.each do |key, value|%>
+          <tr>
+            <td><%= key%></td>
+            <td><%= value%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

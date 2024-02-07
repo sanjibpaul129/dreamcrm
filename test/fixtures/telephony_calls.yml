@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  duration: 9.99
+  recording_url: MyString
+  k_number: MyString
+  start_time: 2022-08-30 11:22:35
+  call_type: MyString
+  call_outcome: MyString
+
+two:
+  duration: 9.99
+  recording_url: MyString
+  k_number: MyString
+  start_time: 2022-08-30 11:22:35
+  call_type: MyString
+  call_outcome: MyString

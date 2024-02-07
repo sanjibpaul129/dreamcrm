@@ -1,0 +1,62 @@
+<h1>Google Lead Details</h1><br>
+<%= form_tag 'google_report', :html => {:class => 'form-horizontal'} do %>  
+	<div class="row">
+		<div class="col-lg-1">
+			Projects:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "business_unit_id", options_for_select(@projects, selected: @business_unit_id), :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "from", @from.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "to", @to.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Campaign</th>
+		<th>Adgroup</th>
+		<th>AdId</th>
+		<th>Leads</th>
+		<th>Qualified</th>
+		<th>Site Visits</th>
+	</thead>
+	<tbody>
+		<% 
+			total_leads = 0
+			qualified_total = 0
+			sv_total = 0
+		%>
+		<%@google_lead_details.each do |key,value|%>
+			<tr>
+				<td><%= value[0]%></td>
+				<td><%= value[1]%></td>
+				<td><%= key%></td>
+				<td><%= value[2]%></td>
+				<% total_leads += value[2] %>
+				<td><%= value[3]%></td>
+				<% qualified_total += value[3] %>
+				<td><%= value[4]%></td>
+				<% sv_total += value[4] %>
+			</tr>
+		<%end%>
+		<tr>
+			<th colspan="3">Grand Total:</th>
+			<th><%= total_leads%></th>
+			<th><%= qualified_total%></th>
+			<th><%= sv_total%></th>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,81 @@
+<%@header = 'Whatsapp Templates'%>
+<h1>Whatsapp Templates</h1>
+
+<%= form_tag 'whatsapp_template_index', :html => {:class => 'form-horizontal'} do %>    
+  <div class="row">
+		<div class="col-lg-1">
+			Project:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag 'business_unit_id', options_for_select(@business_units, selected: @business_unit_id.to_i), :class => 'form-control' %>
+		</div>
+    <div class="col-lg-1">
+	    <h5>Inactive:</h5>
+		</div>
+		<% if @inactive == "true"%>
+			<div class="col-lg-1">
+		    <%= check_box_tag 'inactive', true,nil, :checked => true%>
+		  </div>
+		<%else%>
+	    <div class="col-lg-1">
+	      <%= check_box_tag 'inactive', true,nil%>
+	    </div>
+		<%end%>
+    <div class="col-lg-2">
+    	<%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+  	</div>
+  </div><br>
+<%end%>
+<table class="customers" id="whatsapp_template_index">
+	<thead>
+		<th>Project</th>
+		<th>Title</th>
+		<th>Template Type</th>
+		<th>Lead Type</th>
+		<th>Send After Days</th>
+		<th>File URL</th>
+		<th></th>
+		<th></th>
+	</thead>
+	<tbody>
+		<% @whatsapp_templates.each do |whatsapp_template| %>
+			<tr>
+				<td><%= whatsapp_template.business_unit.name%></td>
+				<td><%= whatsapp_template.title%></td>
+				<td><%= whatsapp_template.try(:template_type)%></td>
+				<td><%= whatsapp_template.lead_type%></td>
+				<td><%= whatsapp_template.try(:send_after_days)%></td>
+				<td><%= whatsapp_template.try(:file_url)%></td>
+				<td><%= link_to 'Edit', marketing_automation_whatsapp_template_edit_path(whatsapp_template),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+				<td><%= link_to 'Destroy', marketing_automation_whatsapp_template_destroy_path(whatsapp_template),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>
+<br>
+<%= link_to 'New Entry', marketing_automation_whatsapp_template_new_path, :class => 'btn btn-primary' %>
+<script>
+	$(document).ready(function(){
+	var FilterTable=$("#whatsapp_template_index").DataTable({  
+	   "fixedHeader": true,   
+	   "dom": '<"wrapper"lit>',
+	   "bAutoWidth": false,
+	   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+	   "bDeferRender": true,
+	   "aoColumns": [
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true}
+	                             ]
+	});
+
+	$("#filterbox").keyup(function() {
+	        FilterTable.search(this.value).draw();
+	    });
+	});
+</script>

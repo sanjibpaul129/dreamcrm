@@ -1,0 +1,100 @@
+<%@header = 'Email Templates'%>
+<h1>Email Templates</h1>
+
+<%= form_tag 'email_template_index', :html => {:class => 'form-horizontal'} do %>    
+  <div class="row">
+  		<div class="col-lg-1">
+  			<h5>Project:</h5>
+  		</div>
+  		<div class="col-lg-3">
+	      <%= select_tag 'business_unit_id', options_for_select(@business_units, selected: @business_unit_id), :class => 'form-control', :prompt => 'Please Select' %>
+	    </div>
+	    <div class="col-lg-1">
+		    <h5>Email Type:</h5>
+		</div>
+	    <div class="col-lg-2">
+	      <%= select(:email_template,:email_type, options_for_select(@email_types, selected: @email_template_type),{prompt: "Email Type"}, {:class => 'form-control'}) %>
+	    </div>
+	    <div class="col-lg-1">
+		    <h5>Inactive:</h5>
+		</div>
+		<% if @inactive == "true"%>
+			<div class="col-lg-1">
+		      <%= check_box_tag 'inactive', true,nil, :checked => true%>
+		    </div>
+		<%else%>
+		    <div class="col-lg-1">
+		      <%= check_box_tag 'inactive', true,nil%>
+		    </div>
+		<%end%>
+	    <div class="col-lg-2">
+      		<%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+    	</div>
+  </div><br>
+<%end%>
+
+
+<table id="customers" >
+	<thead>
+		<th>Project</th>
+		<th>Send After Days</th>
+		<th>Title</th>
+		<th>Lost</th>
+		<th>Live</th>
+		<th>Adhoc</th>
+		<th>Birthday wish</th>
+		<th>Anniversary Wish</th>
+		<th>Fresh</th>
+		<th>Organised Visit</th>
+		<th>Site Visited</th>
+		<th>Booked</th>
+		<th>Introductory</th>
+		<th>On subscription</th>
+		<th>Congratulation on Booking</th>
+		<th>Inactive</th>
+		<th>Attachments</th>
+		<th>File Name</th>
+		<th>File URL</th>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th></th>
+	</thead>
+	<tbody>
+		<% @email_templates.each do |email_template| %>
+			<tr>
+				<td><%= email_template.business_unit.name%></td>
+				<td><%= email_template.send_after_days%></td>
+				<td><%= email_template.title%></td>
+				<td><%= email_template.try(:lost)%></td>
+				<td><%= email_template.try(:live)%></td>
+				<td><%= email_template.try(:ad_hoc)%></td>
+				<td><%= email_template.try(:birthday_wish)%></td>
+				<td><%= email_template.try(:anniversary_wish)%></td>
+				<td><%= email_template.try(:fresh)%></td>
+				<td><%= email_template.try(:organised_visit)%></td>
+				<td><%= email_template.try(:site_visited)%></td>
+				<td><%= email_template.try(:Booked)%></td>
+				<td><%= email_template.try(:introductory)%></td>
+				<td><%= email_template.try(:on_subscription)%></td>
+				<td><%= email_template.try(:congratulation_on_booking)%></td>
+				<td><%= email_template.try(:inactive)%></td>
+				<%
+					all_attachments=''
+					email_template.email_attachments.each do |email_attachment|
+						all_attachments+=email_attachment.data_file_name.to_s+','
+					end
+				%>
+				<td><%= all_attachments%></td>
+				<td><%= email_template.try(:file_name)%></td>
+				<td><%= email_template.try(:file_url)%></td>
+				<td><%= link_to 'Edit', marketing_automation_email_template_edit_path(email_template),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+				<td><%= link_to 'Destroy', marketing_automation_email_template_destroy_path(email_template),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+				<td><%= link_to 'Preview', marketing_automation_email_template_preview_index_path(email_template),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+				<td><%= link_to 'Upload File', marketing_automation_email_image_upload_form_path(email_template),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>
+<br>
+<%= link_to 'New Entry', marketing_automation_email_template_new_path, :class => 'btn btn-primary' %>

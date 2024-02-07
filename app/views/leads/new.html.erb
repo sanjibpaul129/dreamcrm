@@ -1,0 +1,243 @@
+<%@header = 'Create New Lead'%>
+<%= form_tag 'create', :html => {:class => 'form-horizontal'} do %>  
+	<div class="row">
+	  <div class="col-lg-2" id="mobile_tip">
+	    Mention either a mobile number (only digits 10 characters), or mention other number, kindly avoid mentioning both, if required mention the additional number in remarks    
+	  </div>
+	  <div class="col-lg-6">
+	    <div class="well bs-component">
+	      <center><legend>Lead Creation Form</legend></center>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Project:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= select_tag 'lead[business_unit_id]', options_for_select(@business_units), :class => 'form-control' %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          From:
+	        </div>
+	        <div class="col-lg-4">
+	          <%= number_field_tag 'lead[budget_from]', '', :class => 'form-control', :placeholder => "Budget In Lacs" %>
+	        </div>
+	        <div class="col-lg-2">
+	          To:
+	        </div>
+	        <div class="col-lg-4">
+	          <%= number_field_tag 'lead[budget_to]', '', :class => 'form-control', :placeholder => "Budget In Lacs" %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          BHK:
+	        </div>
+	        <div class="col-lg-10">
+	          1&nbsp<%= radio_button_tag 'lead[flat_type]' , 1 %>&nbsp&nbsp&nbsp&nbsp
+	          2&nbsp<%= radio_button_tag 'lead[flat_type]' , 2 %>&nbsp&nbsp&nbsp&nbsp
+	          3&nbsp<%= radio_button_tag 'lead[flat_type]' , 3 %>&nbsp&nbsp&nbsp&nbsp
+	          4&nbsp<%= radio_button_tag 'lead[flat_type]' , 4 %>&nbsp&nbsp&nbsp&nbsp
+	          Dplx&nbsp<%= radio_button_tag :flat_type , 5 %>      
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Type:
+	        </div>
+	        <div class="col-lg-10">
+	          <span class="text-danger"><%= radio_button_tag 'lead[anticipation]' , 'Hot' %>Hot</span>&nbsp&nbsp&nbsp&nbsp
+	          <span class="text-success"><%= radio_button_tag 'lead[anticipation]' , 'Good' %>Good</span>&nbsp&nbsp&nbsp&nbsp
+	          <span class="text-info"><%= radio_button_tag 'lead[anticipation]' , '' %>Normal</span></span>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Name:
+	        </div>
+	        <div class="col-lg-3">
+	          <%= select_tag 'lead_name_title', options_for_select(['Mr.', 'Mrs.', 'Dr.', 'Ms.']), { :class => 'form-control' } %>
+	        </div>
+	        <div class="col-lg-7">
+	          <%= text_field_tag 'lead[name]', '', :class => "form-control", :id => 'lead_name', :required => true %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Mobile:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= text_field_tag 'lead[mobile]', '', :class => "form-control", :id => 'lead_mobile', :required => true %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Other Number:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= text_field_tag 'lead[other_number]', '', :class => "form-control", :id => 'lead_other_number' %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Email:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= text_field_tag 'lead[email]', '', :class => "form-control", :id => 'lead_email' %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Address:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= text_area_tag 'lead[address]', '', :class => "form-control" %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Area:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= select_tag 'lead[area_id]', options_for_select(@areas), :prompt => 'Select Area', :class => 'form-control selectpicker', data: { live_search: true }, :onchange => 'populate_area_other()'  %>
+	        </div>
+	      </div>
+	      <div id="area_other">
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          City:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= select_tag 'lead[city_id]', options_for_select(@cities), :prompt => 'Select City', :class => 'form-control selectpicker', data: { live_search: true }, :onchange => 'populate_city_other()'  %>
+	        </div>
+	      </div>
+	      <div id="city_other">
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          State:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= select_tag 'lead[state]', options_for_select(@states), :prompt => 'Select State', :class => 'form-control selectpicker', data: { live_search: true } %>    
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Pincode:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= number_field_tag 'lead[pincode]', '', :class => 'form-control', :min =>  111111, :max => 999999 %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Source:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= select(:lead, :source_category_id, options_for_select(@source_categories),{}, { :class => 'form-control selectpicker', data: { live_search: true } }) %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Generation Date:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= date_field_tag 'lead[generated_on]', DateTime.now.to_date, :class => 'form-control' %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-2">
+	          Remarks:
+	        </div>
+	        <div class="col-lg-10">
+	          <%= text_area_tag 'lead[customer_remarks]', '', :class => 'form-control' %>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="col-lg-4">
+	    <div class="row">
+	      <div class="col-lg-12">
+	        Followed up/Site Visited/Booked/Lost Date:
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-lg-12">
+	        <%= date_field(:leading, :flexible_date, :class => "form-control", :value => ((Time.now)).strftime('%Y-%m-%d')) %>
+	      </div>
+	    </div><br>
+	    <div class="row">
+	      <div class="col-lg-12">
+	        Followup Remarks:
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-lg-12">
+	        <%= text_area_tag 'remarks', nil, :class => 'form-control' %>
+	      </div>
+	    </div><br>
+	    <div class="row">
+	      <div class="col-lg-2">
+	        Status:
+	      </div>
+	      <div class="col-lg-10">
+	        <%= select(:leading, :status, options_for_select([['Fresh Lead', 0], ['Qualified', 9], ['Interested in Site Visit', 10], ['OSV', 1], ['Site Visited',2 ], ['Negotiation',3 ],['Booked', 4],['Lost', 5]]),{}, { :class => 'form-control' ,:onchange =>'lost_reason_mandatory()'})   %>&nbsp
+	        <%= select(:leading, :lost_reason, options_for_select(@lost_reasons),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control', :id => 'lost_reasons'})   %>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-12">
+	          To Followup On:
+	        </div>
+	        <div class="col-lg-12">
+	          <%= date_field(:leading, :followup_date, :class => "form-control", :value => ((Time.now)+86400).strftime('%Y-%m-%d')) %>
+	          <%= time_select :leading, :followup_time, {ampm: true, minute_step: 30, default: 6.hours.from_now} %>
+	        </div>
+	      </div><br>
+	      <div class="row">
+	        <div class="col-lg-12">
+	          <%= submit_tag 'Create Lead', :class => 'btn btn-primary'%>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+<%end%>
+<style>
+@media only screen and (min-width: 900px) {
+    #mobile_tip{
+        padding-top:180px
+    }
+}
+</style>
+<script>
+  function lost_reason_mandatory(){
+    var status = event.target.value;
+    if (status == 5)
+    {
+      document.getElementById('lost_reasons').required = true;
+    }
+    else
+    {
+      document.getElementById('lost_reasons').required = false;
+    }
+  }
+</script>
+
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>
+<script>
+  function populate_area_other()
+  {
+    var area_type=event.target.innerHTML;
+    $.getScript('https://www.realtybucket.com/leads/leads/populate_area_other.js?type='+area_type);
+  }
+  function populate_city_other()
+  {
+    var city_type=event.target.innerHTML;
+    console.log(city_type);
+    $.getScript('https://www.realtybucket.com/leads/leads/populate_city_other.js?type='+city_type);
+  }
+</script>
+

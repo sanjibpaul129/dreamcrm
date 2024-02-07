@@ -1,0 +1,136 @@
+<%@header = 'Demand Outstanding Report'%>
+<div class="row">
+  <div class="col-lg-12">
+    <center><h1>Demand Outstanding report</h1></center>
+    <div class="row">
+      <%= form_tag 'demand_outstanding_report', :html => {:class => 'form-horizontal'} do %>    
+        <% if current_personnel.organisation_id == 6 %>
+          <div class="col-lg-2">
+            <h5>Project With Block:</h5>
+          </div>
+          <div class="col-lg-3">
+            <%= select(:block, :block_id, options_for_select(@blocks, selected: @block_id),{}, {:class => 'form-control chosen'}) %>
+          </div>
+        <%else%>
+          <div class="col-lg-1">
+            <h5>Project:</h5>
+          </div>
+          <div class="col-lg-3">
+            <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+          </div>
+        <%end%>
+        <div class="col-lg-2">
+          <%= submit_tag 'View Details',:class => 'btn btn-primary btn-block' %>
+        </div>
+      <%end%>
+    </div><br>
+<%= form_tag 'outstanding_submit', :html => {:class => 'form-horizontal'} do %>    
+    <table class="customers" id="demand_outstanding_report">
+      <thead>
+        <tr>
+          <th id="check_all" style="cursor: pointer!important;">Select All</th>
+          <th>Project</th>
+          <th>Block</th>
+          <th>Customer</th>
+          <th>Mobile</th>
+          <th>Email</th>
+          <th></th>
+          <th>Flat</th>
+          <th>Reminder</th>
+          <th>Total Flat Value</th>
+          <th>% Demanded Till Date</th>
+          <th>Demanded Till Date</th>
+          <th>Pyament Till Date</th>
+          <th style="text-align: right!important;">Outstanding</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% 
+          grand_total=0
+          grand_total_of_flat_value=0
+          grand_total_of_percent_demanded=0
+          grand_total_of_demanded=0
+          grand_total_of_payment=0
+        %>
+        <% @bookings.each do |booking|%>
+          <tr>
+            <td><%= check_box_tag 'booking_ids[]',booking.id%></td>
+            <td><%= booking.cost_sheet.flat.block.business_unit.name%></td>
+            <td><%= booking.cost_sheet.flat.block.name%></td>
+            <td><%= booking.cost_sheet.lead.name%></td>
+            <td><%= booking.cost_sheet.lead.try(:mobile)%></td>
+            <td><%= booking.cost_sheet.lead.try(:email)%></td>
+            <td style="text-align: right!important;"><%= link_to 'Edit', edit_lead_path(booking.cost_sheet.lead),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+            <td><%= booking.cost_sheet.flat.full_name%></td>
+            <% if booking.cost_sheet.flat.on_7d_reminder? %>
+            <td>Reminder every 7 days</td>
+            <% elsif booking.cost_sheet.flat.on_3d_reminder? %>
+            <td>Reminder every 3 days</td>
+            <% else %>
+            <td>No Reminder</td>
+            <% end %>
+            <td style="text-align: right!important;"><%= comma_separated(booking.cost_sheet.total_flat_value.round)%></td>
+            <% grand_total_of_flat_value += booking.cost_sheet.total_flat_value.round%>
+            <td style="text-align: right!important;"><%= comma_separated(booking.total_demanded_percentage.round)%></td>
+            <% grand_total_of_percent_demanded += booking.total_demanded_percentage.round%>
+            <td style="text-align: right!important;"><%= comma_separated(booking.total_demanded_till_date.round)%></td>
+            <% grand_total_of_demanded += booking.total_demanded_till_date.round%>
+            <td style="text-align: right!important;"><%= comma_separated(booking.total_payment_till_date.round)%></td>
+            <% grand_total_of_payment += booking.total_payment_till_date.round%>
+            <td style="text-align: right!important;"><%= comma_separated(booking.demand_outstanding.round)%></td>
+            <%  grand_total += booking.demand_outstanding.round %>
+            <td style="text-align: right!important;"><%= link_to 'Simple_Ledger', demand_report_individual_customer_demand_ledger_path(booking.id),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+            <td style="text-align: right!important;"><%= link_to 'BreakUp_Ledger', demand_report_demand_letter_with_breakup_path(booking.id),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+          </tr>
+        <%end%>
+      </tbody>
+      <footer>
+        <td><b>Grand Total:</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="text-align: right!important;"><b><%= comma_separated(grand_total_of_flat_value)%></b></td>
+        <td style="text-align: right!important;"><b><%= comma_separated(grand_total_of_percent_demanded)%></b></td>
+        <td style="text-align: right!important;"><b><%= comma_separated(grand_total_of_demanded)%></b></td>
+        <td style="text-align: right!important;"><b><%= comma_separated(grand_total_of_payment)%></b></td>
+        <td style="text-align: right!important;"><b><%= comma_separated(grand_total.round)%></b></td>
+        <td></td>
+        <td></td>
+      </footer>
+    </table>
+  </div>
+</div><br>
+<div class="row">
+  <div class="col-lg-offset-3">
+    <%= submit_tag 'Send E-mail Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag 'Whatsapp Reminder',:class => 'btn btn-success' %>
+    <%= submit_tag 'Ignore',:class => 'btn btn-primary' %>
+    <%= submit_tag 'No Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag '7d Reminder',:class => 'btn btn-primary' %>
+    <%= submit_tag '3d Reminder',:class => 'btn btn-primary' %>
+  </div>
+</div>
+<%end%>
+<style>
+ .col-lg-offset-1 {
+    margin-left: 16.333333% !important;
+}
+</style>
+
+<script type="text/javascript">
+      $('#check_all').on("click", function(){
+  var cbxs = $('input[type="checkbox"]');
+  cbxs.prop("checked", !cbxs.prop("checked"));
+});
+</script>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

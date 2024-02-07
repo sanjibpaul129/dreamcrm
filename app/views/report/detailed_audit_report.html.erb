@@ -1,0 +1,64 @@
+<center><h1>Detailed Audit Report</h1></center>
+<br>
+<div class="row">
+	<div class="col-lg-2">
+		<%= button_to "Export", :action => "export_detailed_audit_report" , format: "xls", :method => :get, params: {lead_data: @leads_with_dates} %>
+	</div>
+</div>
+<%= form_tag 'detailed_audit_report' do  %>
+	<table class="customers">
+		<thead>
+			<th>Date</th>
+			<th>Lead Id</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Mobile</th>
+			<th>Status</th>
+			<th>Lost Reason</th>
+			<th>Followup Remarks</th>
+			<th></th>
+		</thead>
+		<tbody>
+			<% @leads_with_dates.each do |key, value| %>
+				<tr>
+					<td><%= key.to_date.strftime('%d/%m/%Y')%></td>
+					<td colspan="6"></td>
+				</tr>
+				<% value.each do |lead_id|%>
+					<% lead = Lead.find(lead_id.to_i) %>
+					<% 
+						followup = FollowUp.where(lead_id: lead.id).where('created_at >= ? AND created_at < ?', key.to_datetime.beginning_of_day, key.to_datetime.beginning_of_day+1.day)
+						followup = followup.last
+					%>
+					<tr>
+						<td></td>
+						<td><%= lead.id%></td>
+						<td><%= lead.name%></td>
+						<td><%= lead.email%></td>
+						<td><%= lead.mobile%></td>
+						<%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+	            			<td>Qualified</td>
+	          			<%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+	            			<td>Interested in Site Visit</td>
+	          			<% elsif lead.osv == true %>
+	          				<td>OSV</td>
+	          			<% elsif lead.osv== false %>
+	          				<td>Negotiation</td>
+	          			<% elsif lead.osv==nil  && lead.status==nil %>
+	      					<td>Fresh</td>
+	          			<% elsif lead.osv==nil && lead.status==false %>
+	          				<td>Site Visited</td>
+	          			<% elsif lead.status==true && lead.lost_reason_id==nil %>
+	          				<td>Booked</td>
+	          			<% else %>
+	          				<td>Lost</td>
+	          			<% end %>
+	          			<td><%= lead.lost_reason.try{|x| x.description}%></td>
+	          			<td><%= followup.try(:remarks)%></td>
+				        <td><%= submit_tag ">", name: lead.id, :class => 'btn btn-primary btn-xs' %></td>
+					</tr>
+				<%end%>
+			<% end %>
+		</tbody>
+	</table>
+<%end%>

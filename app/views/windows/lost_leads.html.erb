@@ -1,0 +1,265 @@
+<%@header = 'Lost Leads Register'%>
+<% flash.each do |key, value| %>
+  <div class="<%= flash_class(key) %>">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Heads up!</strong> <%= value %>
+  </div>
+<% end %>
+<%= form_tag 'lost_leads' do  %>
+  <div class="row">
+    <div class="col-lg-7" style="text-align: right!important; padding-right: 50px!important;">
+      <b style="font-size: 25px!important;">Lost Leads</b>
+    </div>
+  </div>
+  <div class="row">
+    <% if current_personnel.status != 'Sales Executive' %>   
+      <div class="col-lg-2">
+        <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+      </div>
+      <div class="col-lg-2">
+        <%= select(:salesteam, :personnel, options_for_select(@sales_team, selected: @sales_person),{}, {:class => 'form-control'})  %>
+      </div>
+      <div class="col-lg-4">
+        <%= select(:salesteam, :source_category_id, options_for_select(@source_categories, selected: @source_category_selected),{}, {:class => 'form-control selectpicker', data: { live_search: true }})  %>
+      </div>
+      <div class="col-lg-2">
+        <%= select_tag 'lost[type]',options_for_select(@lead_types, selected: @type_selected), :class => 'form-control' %>
+      </div>
+    <% end %>
+    <div class="col-lg-2">
+        <!--       <%= select_tag 'lost_reason_id', options_for_select(@lost_reasons, selected: @lost_reason_selected), :class => 'form-control'%> -->
+      <%= select(:lost_reason, :selected, options_for_select(@lost_reasons, selected: params[:lost_reason].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3">
+      <%= date_field(:range, :from, :value => @from,:class => 'form-control') %>
+    </div>
+    <div class="col-lg-3">
+      <%= date_field(:range, :to, :value => @to,:class => 'form-control') %>
+    </div>
+    <div class="col-lg-2">
+      with children
+      <% if @with_children == "true"%>
+        <%= check_box_tag 'with_children', true, nil, :checked => true%>
+      <%else%>
+        <%= check_box_tag 'with_children', true, nil%>
+      <%end%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag "Refresh", name: "refresh", :class => 'btn btn-primary' %>
+    </div>
+  </div>
+  </div>
+  <table class="customers" id="lost_leads">
+    <thead>
+      <tr>
+        <th></th>
+        <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Name</th>
+        <% if current_personnel.organisation_id == 6 || current_personnel.organisation.name == 'Rajat Group' || current_personnel.email == "ayush@thejaingroup.com"%>
+          <th>Mobile</th>
+          <th>Other No.</th>
+          <th>Email</th>
+        <%end%>
+        <th>Budget From</th>
+        <th>Budget To</th>
+        <th>BHK</th>
+        <th>Source</th>
+        <th>Remarks</th>
+        <th>Status</th>
+        <th>Generated on</th>
+        <th>Generated on sort</th>
+        <th>Last Followup on</th>
+        <th>Last Followup on sort</th>
+        <th>Followup remarks</th>
+        <th>To Followup on</th>
+        <th>To Followup on sort</th>
+        <th>To Followup on search</th>
+        <th>Executive</th>
+        <th>Lost Date</th>
+        <th>Lost Date Sort</th>
+        <th>Lost Reason</th>
+        <th>Site Visited on</th>
+        <th>Followups</th>
+        <th>Score</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <td></td>
+          <% if lead.escalated==true %>
+            <td><span class="label label-danger">!</span></td>
+            <% elsif lead.escalated==false %>
+            <td><span class="label label-info">!</span></td>
+            <% else %>
+            <td></td>
+          <% end %>
+          <td><%= lead.id %></td>
+          <td><%= lead.business_unit.name %></td>
+          <td><%= lead.name %></td>
+          <% if current_personnel.organisation_id == 6 || current_personnel.organisation.name == 'Rajat Group' || current_personnel.email == "ayush@thejaingroup.com"%>
+            <td><%= lead.mobile %></td>
+            <td><%= lead.other_number %></td>
+            <td><%= lead.email %></td>
+          <%end%>
+          <td><%= lead.budget_from %></td>
+          <td><%= lead.budget_to %></td>
+          <td><%= lead.flat_type %></td>
+          <td><%= lead.source_category.heirarchy %></td>
+          <td><%= lead.customer_remarks %></td>
+          <td>Lost reason-<%= lead.lost_reason.description %></td>
+          <td><%= lead.generated_on.strftime("%d/%m/%y") %></td>
+          <td><%= lead.generated_on.strftime("%m/%d/%y") %></td>
+          <% lead_follow_ups=lead.follow_ups %> 
+          <% if lead_follow_ups != [] %>
+            <% last_follow_up=lead_follow_ups.where(last: true)[0] %>
+            <td><%= (last_follow_up.communication_time+19800).strftime("%d/%m/%y") %></td>
+            <td><%= (last_follow_up.communication_time+19800).strftime("%m/%d/%y") %></td>
+            <td><%= last_follow_up.remarks %></td>
+            <td><%= (last_follow_up.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+            <td><%= (last_follow_up.follow_up_time).strftime("%m/%d/%y") %></td>
+            <td>$<%= (last_follow_up.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+          <% else %>
+            <td>Not done</td> 
+            <td><%= (Time.now - 365.days).strftime("%m/%d/%y") %></td>
+            <td>NA</td>
+            <td>NA</td>
+            <td><%= (Time.now - 365.days).strftime("%m/%d/%y") %></td>
+            <td></td>
+          <% end %>
+          <td><%= lead.personnel.name %></td>
+          <td><%= lead.booked_on.strftime("%d/%m/%y") %></td>
+          <td><%= lead.booked_on.strftime("%m/%d/%y") %></td>
+          <td><%= lead.lost_reason.description %></td>
+          <td><%= lead.site_visited_on.try{|x| x.strftime("%d/%m/%y")} %></td>
+          <td><%= lead_follow_ups.count %></td>
+          <td><%= lead.score %></td>        
+          <td><%= submit_tag ">", name: lead.id, :class => 'btn btn-primary btn-xs' %></td>  
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<style >
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+  </style>
+  
+<script type="text/javascript">
+  $(".chosen").chosen();
+
+<% if current_personnel.organisation_id==6 || current_personnel.organisation.name=="Rajat Group" %>
+$(document).ready(function(){
+var FilterTable=$("#lost_leads").DataTable({  
+   "fixedHeader": true,   
+   "dom": '<"wrapper"lit>',
+   "bAutoWidth": false,
+   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+   "bDeferRender": true,
+   "aoColumns": [
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"iDataSort": 15},
+                              {"bVisible": false},
+                              {"iDataSort": 17},
+                              {"bVisible": false},
+                              {"bSortable": true},
+                              {"iDataSort": 20},
+                              {"bVisible": false},
+                              {"bVisible": false},
+                              {"bSortable": true},
+                              {"iDataSort": 24},
+                              {"bVisible": false},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true}
+                             ],
+    "order": [[ 24, "desc" ]]
+});
+
+$("#filterbox").keyup(function() {
+        FilterTable.search(this.value).draw();
+    });
+});
+
+<% else %>
+$(document).ready(function(){
+var FilterTable=$("#lost_leads").DataTable({  
+   "fixedHeader": true,   
+   "dom": '<"wrapper"lit>',
+   "bAutoWidth": false,
+   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+   "bDeferRender": true,
+   "aoColumns": [
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"iDataSort": 13},
+                              {"bVisible": false},
+                              {"iDataSort": 15},
+                              {"bVisible": false},
+                              {"bSortable": true},
+                              {"iDataSort": 18},
+                              {"bVisible": false},
+                              {"bVisible": false},
+                              {"bSortable": true},
+                              {"iDataSort": 22},
+                              {"bVisible": false},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true}
+                             ],
+    "order": [[ 22, "desc" ]]
+});
+
+$("#filterbox").keyup(function() {
+        FilterTable.search(this.value).draw();
+    });
+});
+
+<% end %>
+
+</script>
+

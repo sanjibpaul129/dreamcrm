@@ -1,0 +1,91 @@
+<%= form_for @whatsapp_template, url: {action: @whatsapp_template_action}, :html => {:multipart => true} do |f| %>
+  <%= hidden_field_tag "whatsapp_template_id", @whatsapp_template.id %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspWhatsapp Template</legend>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Project:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= select_tag 'whatsapp_template[business_unit_id]', options_for_select(@business_units, selected: @whatsapp_template.business_unit_id), :class => 'form-control', :required => true, :prompt => 'Select Project' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Title:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_field :title, :required => true, :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Tempalte Type:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= select_tag 'whatsapp_template[template_type]', options_for_select(@template_types, selected: @whatsapp_template.try(:template_type)), :class => 'form-control ', :required => true, :prompt => 'Select Type'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Lead Type:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= select_tag 'whatsapp_template[lead_type]', options_for_select(@lead_types, selected: @whatsapp_template.lead_type), :class => 'form-control ', :required => true, :prompt => 'Select Type'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Send After Days:</h5>
+        </div>
+        <div class="col-lg-3">
+          <%= f.number_field :send_after_days, :class => 'form-control'%>
+        </div>
+        <div class="col-lg-3">
+          <h5>Inactive:</h5>
+          <% if @whatsapp_template.inactive == true %>
+            <%= check_box_tag "whatsapp_template[inactive]", true, nil, :checked => true%>
+          <%else%>
+            <%= check_box_tag "whatsapp_template[inactive]", true, nil%>
+          <%end%>
+        </div>
+        <div class="col-lg-3">
+          <h5>Name Required:</h5>
+          <% if @whatsapp_template.name_required == true %>
+            <%= check_box_tag "whatsapp_template[name_required]", true, nil, :checked => true%>
+          <%else%>
+            <%= check_box_tag "whatsapp_template[name_required]", true, nil%>
+          <%end%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>File Name:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_area :file_name, :class => 'form-control'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>File URL:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_area :file_url, :class => 'form-control'%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-5 col-lg-offset-3">
+          <%= f.submit :class => 'btn btn-primary btn-block'%>
+        </div>
+      </div><br>
+    </div>
+  </div>
+<%end%>
+<style type="text/css">  
+@media (min-width: 1200px){
+.col-lg-offset-3 {
+    margin-left: 31%!important;
+}
+</style>

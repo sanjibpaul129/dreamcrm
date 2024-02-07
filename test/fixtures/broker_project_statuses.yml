@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  broker_id: 1
+  business_unit_id: 1
+  contacted: false
+  softcopy_collaterals_sent: false
+  hardcopy_collaterals_sent: false
+  site_visited: false
+  contract_signed: false
+
+two:
+  broker_id: 1
+  business_unit_id: 1
+  contacted: false
+  softcopy_collaterals_sent: false
+  hardcopy_collaterals_sent: false
+  site_visited: false
+  contract_signed: false

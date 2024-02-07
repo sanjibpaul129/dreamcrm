@@ -1,0 +1,3 @@
+class MaintainenceBillReceiptTag < ApplicationRecord
+	
+end

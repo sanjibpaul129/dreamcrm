@@ -1,0 +1,455 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<%= form_tag 'customer_feedback_entry', :html => {:class => 'form-horizontal'} do %>
+  <%= hidden_field_tag "lead_id", @lead.id%>
+  <div class="col-xs-12">
+    <div class="well bs-component">
+     <div class="top-background"></div>
+      <div class="row">
+        <div class="col-xs-4">
+            <% if @lead.business_unit.name == "Dream One"%>
+              <%= image_tag("Dream One - Rajarhat_Logo.png", alt: "" , class: "img-responsive form_logo") %>
+            <%elsif @lead.business_unit.name == "Dream Palazzo"%>
+              <%= image_tag("dream palazzo.jpeg", alt: "" , class: "img-responsive form_logo") %>
+            <%elsif @lead.business_unit.name == "Dream Gurukul"%>
+              <%= image_tag("dream_gurukul_logo.png", alt: "" , class: "img-responsive form_logo") %>
+            <%end%>
+        </div>
+        <div class="col-xs-7 form_heading_margin">
+          <p class ="form_heading">SITE VISIT FEEDBACK FORM</p>
+        </div>
+      </div>
+      <div class="division"></div><br>
+        <center style="margin-top: 50px;">
+        <p class="form_sub_heading">How would you rate the hospitality and refreshments provided during your visit?</p>
+      </center>
+      <div class="row">
+        <div class="col-xs-1 col-xs-offset-1">
+          <%= radio_button_tag 'hospitality_rating', '1', nil, :id => "rating1", :class => 'radio_style', data: { hospitality_rating: '1' }, :required => true %>
+          <label for="rating1" class="rating-label">1</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'hospitality_rating', '2', nil, :id => "rating2", :class => 'radio_style', data: { hospitality_rating: '2' }, :required => true %>
+          <label for="rating2" class="rating-label">2</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'hospitality_rating', '3', nil, :id => "rating3", :class => 'radio_style', data: { hospitality_rating: '3' }, :required => true %>
+          <label for="rating3" class="rating-label">3</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'hospitality_rating', '4', nil, :id => "rating4", :class => 'radio_style', data: { hospitality_rating: '4' }, :required => true %>
+          <label for="rating4" class="rating-label">4</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'hospitality_rating', '5', nil, :id => "rating5", :class => 'radio_style', data: { hospitality_rating: '5' }, :required => true %>
+          <label for="rating5" class="rating-label">5</label>
+        </div>
+      </div>
+        <center style="margin-top: 50px;">
+        <p class="form_sub_heading">Were the Site Executives approachable, knowledgeable, and courteous?</p>
+      </center>
+      <div class="row">
+        <div class="col-xs-1 col-xs-offset-1">
+          <%= radio_button_tag 'site_executive_rating', '1', nil, :id => "rating6", :class => 'radio_style', data: { site_executive_rating: '1' }, :required => true %>
+          <label for="rating6" class="rating-label">1</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'site_executive_rating', '2', nil, :id => "rating7", :class => 'radio_style', data: { site_executive_rating: '2' }, :required => true %>
+          <label for="rating7" class="rating-label">2</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'site_executive_rating', '3', nil, :id => "rating8", :class => 'radio_style', data: { site_executive_rating: '3' }, :required => true %>
+          <label for="rating8" class="rating-label">3</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'site_executive_rating', '4', nil, :id => "rating9", :class => 'radio_style', data: { site_executive_rating: '4' }, :required => true %>
+          <label for="rating9" class="rating-label">4</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'site_executive_rating', '5', nil, :id => "rating10", :class => 'radio_style', data: { site_executive_rating: '5' }, :required => true %>
+          <label for="rating10" class="rating-label">5</label>
+        </div>
+      </div>
+        <center style="margin-top: 50px;">
+        <p class="form_sub_heading">How satisfied were you with the explanations about the project's features and benefits?</p>
+      </center>
+      <div class="row">
+        <div class="col-xs-1 col-xs-offset-1">
+          <%= radio_button_tag 'project_explanation_rating', '1', nil, :id => "rating11", :class => 'radio_style', data: { project_explanation_rating: '1' }, :required => true %>
+          <label for="rating11" class="rating-label">1</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'project_explanation_rating', '2', nil, :id => "rating12", :class => 'radio_style', data: { project_explanation_rating: '2' }, :required => true %>
+          <label for="rating12" class="rating-label">2</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'project_explanation_rating', '3', nil, :id => "rating13", :class => 'radio_style', data: { project_explanation_rating: '3' }, :required => true %>
+          <label for="rating13" class="rating-label">3</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'project_explanation_rating', '4', nil, :id => "rating14", :class => 'radio_style', data: { project_explanation_rating: '4' }, :required => true %>
+          <label for="rating14" class="rating-label">4</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'project_explanation_rating', '5', nil, :id => "rating15", :class => 'radio_style', data: { project_explanation_rating: '5' }, :required => true %>
+          <label for="rating15" class="rating-label">5</label>
+        </div>
+      </div>
+        <center style="margin-top: 50px;">
+        <p class="form_sub_heading">Rate the cleanliness and upkeep of the site and its surroundings during your visit.</p>
+      </center>
+      <div class="row">
+        <div class="col-xs-1 col-xs-offset-1">
+          <%= radio_button_tag 'cleanliness_rating', '1', nil, :id => "rating16", :class => 'radio_style', data: { cleanliness_rating: '1' }, :required => true %>
+          <label for="rating16" class="rating-label">1</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'cleanliness_rating', '2', nil, :id => "rating17", :class => 'radio_style', data: { cleanliness_rating: '2' }, :required => true %>
+          <label for="rating17" class="rating-label">2</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'cleanliness_rating', '3', nil, :id => "rating18", :class => 'radio_style', data: { cleanliness_rating: '3' }, :required => true %>
+          <label for="rating18" class="rating-label">3</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'cleanliness_rating', '4', nil, :id => "rating19", :class => 'radio_style', data: { cleanliness_rating: '4' }, :required => true %>
+          <label for="rating19" class="rating-label">4</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'cleanliness_rating', '5', nil, :id => "rating20", :class => 'radio_style', data: { cleanliness_rating: '5' }, :required => true %>
+          <label for="rating20" class="rating-label">5</label>
+        </div>
+      </div>
+        <center style="margin-top: 50px;">
+        <p class="form_sub_heading">How well were you introduced to Jain Group, its values, and its commitment to quality real estate projects?</p>
+      </center>
+      <div class="row">
+        <div class="col-xs-1 col-xs-offset-1">
+          <%= radio_button_tag 'jain_group_rating', '1', nil, :id => "rating21", :class => 'radio_style', data: { jain_group_rating: '1' }, :required => true %>
+          <label for="rating21" class="rating-label">1</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'jain_group_rating', '2', nil, :id => "rating22", :class => 'radio_style', data: { jain_group_rating: '2' }, :required => true %>
+          <label for="rating22" class="rating-label">2</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'jain_group_rating', '3', nil, :id => "rating23", :class => 'radio_style', data: { jain_group_rating: '3' }, :required => true %>
+          <label for="rating23" class="rating-label">3</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'jain_group_rating', '4', nil, :id => "rating24", :class => 'radio_style', data: { jain_group_rating: '4' }, :required => true %>
+          <label for="rating24" class="rating-label">4</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'jain_group_rating', '5', nil, :id => "rating25", :class => 'radio_style', data: { jain_group_rating: '5' }, :required => true %>
+          <label for="rating25" class="rating-label">5</label>
+        </div>
+      </div>
+        <center style="margin-top: 50px;">
+        <p class="form_sub_heading">How would you rate the clarity of explanations on construction standards, raw material quality, at the Quality Tunnel during your visit?</p>
+      </center>
+      <div class="row">
+        <div class="col-xs-1 col-xs-offset-1">
+          <%= radio_button_tag 'quality_conscious_rating', '1', nil, :id => "rating26", :class => 'radio_style', data: { quality_conscious_rating: '1' }, :required => true %>
+          <label for="rating26" class="rating-label">1</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'quality_conscious_rating', '2', nil, :id => "rating27", :class => 'radio_style', data: { quality_conscious_rating: '2' }, :required => true %>
+          <label for="rating27" class="rating-label">2</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'quality_conscious_rating', '3', nil, :id => "rating28", :class => 'radio_style', data: { quality_conscious_rating: '3' }, :required => true %>
+          <label for="rating28" class="rating-label">3</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'quality_conscious_rating', '4', nil, :id => "rating29", :class => 'radio_style', data: { quality_conscious_rating: '4' }, :required => true %>
+          <label for="rating29" class="rating-label">4</label>
+        </div>
+        <div class="col-xs-1">
+          <%= radio_button_tag 'quality_conscious_rating', '5', nil, :id => "rating30", :class => 'radio_style', data: { quality_conscious_rating: '5' }, :required => true %>
+          <label for="rating30" class="rating-label">5</label>
+        </div>
+      </div><br>
+      <center style="margin-top: 50px;">
+        <p class="form_sub_heading">Kindly share any suggestion to help us improve.</p>
+      </center>
+      <div class="row">
+        <div class="text_area" style="margin-top: -41px;">
+            <%= text_area_tag "customer_feedback", "", :class => 'form-control', placeholder: "Suggestion/Comment", :required => true%>
+        </div>
+      </div><br>
+     
+      <div class="row">
+        <center class="submit-div">
+          <%= submit_tag "Submit", :class => 'btn', :style => 'background: #27303f; color: #fff; border-left: 21px solid #c8222c;' %>
+        </center>
+      </div>
+      <div class="bottom-background"></div>
+    </div>
+  </div>
+<%end%>
+<style>
+  body{
+    line-height: 1.82857143!important;
+  }
+  .top-background{
+    background-image: url(../assets/agreement_tablet_top.png);
+    height:130px;
+    width: 100%;
+    position: relative;
+    background-repeat: no-repeat;
+  }
+  .well{
+/*    background-image: url(../assets/form_background.png);
+*/    border-radius: 0px !important;
+/*    border: 5px solid red;*/
+    height: 2400px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0;
+    background-color: white;
+    margin: 2% 0;
+  }
+  .bottom-background{
+    background-image: url(../assets/agreement_mobile_top.PNG);
+    height:130px;
+    width: 96%;
+    position: absolute;
+    background-repeat: no-repeat;
+    transform: rotateZ(180deg);
+    bottom: 0;
+  }
+  .form_sub_heading{
+    text-align: left;
+  }
+  .form_heading{
+    background: transparent;
+    top: -10px;
+    text-align: left;
+  }
+  .form_heading_margin {
+    position: relative;
+    margin-top: 50px!important;
+    padding-left: 0;
+}
+  .row{
+    display: flex;
+    justify-content: left;
+    margin: 0;
+    text-align: left;
+  }
+  .text_area{
+    margin: 2%;
+    width: 96%;
+  }
+.col-xs-4 {
+    width: 30.33333333%;
+    padding: 0;
+}
+  .division{
+    border-bottom: 2px solid darkgrey;
+    margin-bottom: 5px;
+    margin-top: -10px;
+    width: 90%;
+    margin-left: 5%;
+  }
+  .form-control{
+    margin-top: 5px!important;
+  }
+  .form_logo{
+    width: 68%;
+  }
+  .form_heading{
+    color: #000!important;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
+  .form_sub_heading{
+      color: dimgray;
+      letter-spacing: 2px;
+      font-style: oblique;
+      font-weight: 700;
+      font-size: 18px;
+      padding: 25px;
+  }
+  .form_heading_margin{
+    margin-top: 50px!important;
+  }
+  #user_nav{
+    display: none!important;
+  }
+  #feedback_rating{
+    display: none;
+  }
+  .col-xs-offset-1{
+    margin-left: 0.433333% !important;
+  }
+
+  label {
+      font-weight: bold;
+  }
+  input[type="radio"] {
+    display: none!important;
+  }
+  label.rating-label {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background-color: #f0f0f0;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 70%;
+    cursor: pointer;
+    margin: 3px;
+    font-size: 15px;
+  }
+  input[type="radio"]:checked + label.rating-label {
+    background-color: #3498db;
+    color: white;
+  }
+  textarea.form-control{
+    height: 250px;
+  }
+  .bottom-right-logo {
+    position: fixed;
+    bottom: 10px;
+    right: 10px; 
+    z-index: 1000;
+
+  }
+  
+  .submit-div{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+    .bottom-background {
+        background-image: url(../assets/agreement_tablet_top.png);      
+        height:130px;
+        width: 96%;
+        position: absolute;
+        background-repeat: no-repeat;
+        transform: rotateZ(180deg);
+        bottom: 0;
+  }
+
+
+/*=================================== Mobile View ========================================*/
+
+  @media (max-width: 600px){
+
+    .top-background{
+        background-image: url(../assets/agreement_mobile_top.png);
+        height: 19vh;
+        width: 100%;
+        position: relative;
+        background-size: cover;
+        background-repeat: no-repeat;
+        mix-blend-mode: darken;
+  }
+    .well{
+/*      background-image: url(../assets/form_background_mobile.PNG);
+*/      border-radius: 0px !important;
+      height: 1595px!important;
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding: 0;   
+    }
+    .row{
+      position: relative;
+      top: -100px;
+    }
+    .division{
+      position: relative;
+      top: -100px;
+      margin-top: 0px;
+    }
+    .col-xs-1{
+      margin-right: 5%;
+    }
+    .col-xs-4{
+      width: 28%;
+    }
+    .col-xs-6{
+      width: 100%;
+      margin-bottom: 7px;
+    }
+    .form_logo{
+      width: 100%!important;
+    }
+    .form_heading{
+      font-size: 13px;
+      letter-spacing: 1px; 
+      width: 107%;  
+    }
+    .form_sub_heading{
+      position: relative;
+      top: -85px;
+      font-size: 13px;
+
+    }
+    .form_heading_margin{
+      margin-top: 48px!important;
+    }
+    center{
+      margin-top: -25px!important;
+    }
+    .footer_logo{
+      display: none;
+    }
+    font{
+      margin-left: -25px;
+    }
+    .col-xs-8 {
+      width: 71.666667%;
+    }
+    .radio_button{
+      width: 30%;
+    }
+    .second_line{
+      margin-left: 92px;
+    }
+    label.rating-label {
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      font-size: 16px;
+      margin-right: 1%;
+    }
+    .bottom-background {
+        transform: rotateZ(180deg);
+        background-image: url(../assets/agreement_mobile_top.png);
+        height: 19vh;
+        width: 92.5%;
+        position: absolute;
+        background-size: cover;
+        background-repeat: no-repeat;
+        mix-blend-mode: darken;
+    }
+  }
+  
+
+</style>
+<!-- <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const radioButtons = document.querySelectorAll('input[type="radio"][name="rating"]');  
+    radioButtons.forEach(function(radioButton) {
+      radioButton.addEventListener('change', function(event) {
+        const rating = event.target.value;
+        populateRatingReason(rating);
+      });
+    });
+  });
+
+  function populateRatingReason(rating) {
+    var ratingReasonElement = document.getElementById('feedback_data');
+    document.getElementById('feedback_rating').style.display = 'block';
+    ratingReasonElement.innerHTML = "Please tell us why you gave "+rating.toString()+" rating?"
+  }
+</script> -->

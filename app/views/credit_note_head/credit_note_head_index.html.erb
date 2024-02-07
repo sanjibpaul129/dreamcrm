@@ -1,0 +1,26 @@
+<%@header = 'Credit Notes'%>
+<h1>Credit Note Heads</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @credit_note_heads.each do |credit_note_head| %>
+      <tr>
+        <td><%= credit_note_head.description %></td>
+        <td><%= link_to 'Edit', credit_note_head_credit_note_head_edit_path(credit_note_head), :class => "edit_btn", :style => "text-decoration: none;"%></td>
+        <td><%= link_to 'Destroy', credit_note_head_credit_note_head_destroy_path(credit_note_head), :class => "dlt_btn", :style => "text-decoration: none;", data: { confirm: 'Are you sure ?'}%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Credit Note Head', credit_note_head_credit_note_head_new_path, :class => 'btn btn-primary' %>

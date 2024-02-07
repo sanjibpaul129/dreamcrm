@@ -1,0 +1,34 @@
+<%@header = 'Monthly Targets'%>
+<%= form_tag 'monthly_target_new', :html => {:class => 'form-horizontal'} do %>
+  <h1>Monthly Targets</h1>
+  <table class="customers">
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Month</th>
+        <th>Year</th>
+        <th>Leads</th>
+        <th>Bookings</th>
+        <th>Collection</th>
+        <th>Activities</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+    	<%@monthly_targets.each do |monthly_target|%>
+        <tr>
+          <td><%= monthly_target.business_unit.name%></td>
+          <td><%= Date::MONTHNAMES[monthly_target.month]%></td>
+          <td><%= monthly_target.year%></td>
+          <td><%= monthly_target.leads%></td>
+          <td><%= monthly_target.bookings%></td>
+          <td><%= monthly_target.collection%></td>
+          <td><%= monthly_target.activities%></td>
+          <td><%= link_to 'Edit', report_monthly_target_edit_path(monthly_target), :class => 'edit_btn'%></td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+<%end%></br>
+<%= link_to 'New Entry', report_monthly_target_new_path, :class => 'btn btn-primary' %>

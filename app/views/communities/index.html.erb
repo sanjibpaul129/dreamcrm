@@ -1,0 +1,25 @@
+<%@header = 'Communities'%>
+<h1>Listing communities</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @communities.each do |community| %>
+      <tr>
+        <td><%= community.description %></td>
+        <td><%= link_to 'Edit', edit_community_path(community), :class => 'edit_btn' %></td>
+        <td><%= link_to 'Destroy', community, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'dlt_btn'  %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Community', new_community_path, :class => 'btn btn-primary' %>

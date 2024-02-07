@@ -1,0 +1,2 @@
+class WeeklyFacebookExpense < ApplicationRecord
+end

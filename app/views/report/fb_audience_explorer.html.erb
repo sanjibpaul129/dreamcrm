@@ -1,0 +1,53 @@
+<h1>Fb Audience Explorer</h1>
+<%= form_tag 'fb_audience_explorer', :html => {:class => 'form-horizontal'} do %>  
+	<div class="row">
+		<div class="col-lg-2">
+			Report Type:
+		</div>
+		<div class="col-lg-2">
+			<%= select_tag "report_type", options_for_select(["Interest", "Behaviour"], selected: @report_type), :class => 'form-control', :prompt => 'Please Select', :onchange => 'populate_interest_type()' %>
+		</div>
+		<div id="interest_type">
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Name</th>
+		<th>Lower Bound</th>
+		<th>Upper Bound</th>
+		<th>Path</th>
+		<th>Description</th>
+		<% if params[:type] == nil%>
+		<%else%>
+			<th>Topic</th>
+		<%end%>
+	</thead>
+	<tbody>
+		<% @fb_audiences.each do |audience_data|%>
+			<tr>
+				<td><%= audience_data[0]%></td>
+				<td><%= audience_data[1]%></td>
+				<td><%= audience_data[2]%></td>
+				<td><%= audience_data[3]%></td>
+				<td><%= audience_data[4]%></td>
+				<% if params[:type] == nil%>
+				<%else%>
+					<td><%= audience_data[5]%></td>
+				<%end%>
+			</tr>
+		<%end%>
+	</tbody>
+</table>
+<script>
+	function populate_interest_type()
+	{
+	    var interest_type = event.target.value;
+	    console.log(interest_type);
+	    console.log("========================");
+	    $.getScript('https://www.realtybucket.com/report/populate_interest_type.js?interest_type='+interest_type);
+	}
+</script>

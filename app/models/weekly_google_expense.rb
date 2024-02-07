@@ -1,0 +1,2 @@
+class WeeklyGoogleExpense < ApplicationRecord
+end

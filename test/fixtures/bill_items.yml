@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  marketing_instance_id: 1
+  from: 2016-03-27 14:14:43
+  to: 2016-03-27 14:14:43
+  quantity: 9.99
+  status: false
+  remarks: MyString
+  bill_id: 1
+
+two:
+  marketing_instance_id: 1
+  from: 2016-03-27 14:14:43
+  to: 2016-03-27 14:14:43
+  quantity: 9.99
+  status: false
+  remarks: MyString
+  bill_id: 1

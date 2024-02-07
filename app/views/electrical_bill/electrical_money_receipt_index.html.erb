@@ -1,0 +1,58 @@
+<%@header = 'Electrical Money Receipt'%>
+<%= form_tag 'electrical_money_receipt_pdf_converter', :html => {:class => 'form-horizontal'} do %>
+<h1>Electrical Money Receipts</h1>
+<table id="customers">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Project</th>
+      <th>Customer</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th>Block</th>
+      <th>Flat</th>
+      <th>Opening Reading</th>
+      <th>Closing Reading</th>
+      <th>Amount</th>
+      <th>Payment Date</th>
+      <th>Cheque No.</th>
+      <th>Bank</th>
+      <th>Remarks</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @electrical_money_receipts.each do |electrical_money_receipt|%>
+    		<tr>
+          <td><%= check_box_tag 'electrical_money_receipt_ids[]',electrical_money_receipt.id%></td>
+          <td><%= electrical_money_receipt.flat.block.business_unit.name%></td>
+    			<td><%= electrical_money_receipt.lead.name%></td>
+          <td><%= electrical_money_receipt.lead.email%></td>
+          <td><%= electrical_money_receipt.lead.mobile%></td>
+          <td><%= electrical_money_receipt.flat.block.name%></td>
+    			<td><%= electrical_money_receipt.flat.full_name%></td>
+          <td><%= electrical_money_receipt.try(:opening_reading)%></td>
+          <td><%= electrical_money_receipt.try(:closing_reading)%></td>
+    			<td><%= electrical_money_receipt.amount%></td>
+          <td><%= electrical_money_receipt.date.try{|x| x.strftime('%d/%m/%y')}%></td>
+          <td><%= electrical_money_receipt.try(:cheque_number)%></td>
+          <td><%= electrical_money_receipt.try(:bank_name)%></td>
+          <td><%= electrical_money_receipt.try(:remarks)%></td>
+    			<td><%= link_to 'Edit', electrical_bill_electrical_money_receipt_edit_path(electrical_money_receipt),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+    			<td>
+            <% if current_personnel.email != 'ayush@thejaingroup.com' %>
+            <% else %>
+            <%= link_to 'Destroy', electrical_bill_electrical_money_receipt_destroy_path(electrical_money_receipt),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%>
+            <% end %>
+          </td>
+          <td><%= link_to 'Preview', electrical_bill_electrical_money_receipt_preview_index_path(electrical_money_receipt),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+    		</tr>
+  	<%end%>
+  </tbody>
+</table><br>
+<%= link_to 'New Entry', electrical_bill_electrical_money_receipt_new_path, :class => 'btn btn-primary' %>
+<%= submit_tag 'Send Mail',:class => 'btn btn-primary' %>
+<%end%> 

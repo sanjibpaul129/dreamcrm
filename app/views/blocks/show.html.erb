@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Business unit:</strong>
+  <%= @block.business_unit_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @block.name %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @block.number %>
+</p>
+
+<p>
+  <strong>Floors:</strong>
+  <%= @block.floors %>
+</p>
+
+<%= link_to 'Edit', edit_block_path(@block) %> |
+<%= link_to 'Back', blocks_path %>

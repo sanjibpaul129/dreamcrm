@@ -1,0 +1,59 @@
+<div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+    	<center><b><u><%= @whatsapp_template.title%></u></b></center>
+    	<% if @whatsapp_template.file_name == nil && @whatsapp_template.file_url == nil %>
+    		<% if @whatsapp_template.whatsapp_images != [] %>
+	    		<% if @whatsapp_template.whatsapp_images[0].image_content_type.include?('image') %>
+	    			<%= image_tag(@whatsapp_template.whatsapp_images[0].image.url, alt: "", class: 'whatsapp_image') %>
+	    		<% else %>
+	    			File(preview not avaialable): <%= @whatsapp_template.whatsapp_images[0].image_file_name %>
+	    			<br>	
+	    		<% end %>
+    		<% end %>	
+	    <%else%>
+	    		<b>File Name:</b> <%= @whatsapp_template.file_name%><br>
+	    		<b>File URL:</b> <%= video_tag(@whatsapp_template.file_url, alt: "", class: '')%>
+	    <%end%>	
+		<%= @final_string.html_safe%>
+		
+	</div>
+<%= form_tag 'testing_whatsapp_template_send', :html => {:class => 'form-horizontal'} do %>
+	<div class= "row">
+		<div class="col-lg-3">
+			<h5>Testing Number:</h5>
+		</div>
+		<div class="col-lg-4">
+			<%= text_field_tag 'whatsapp_number','', :class => 'form-control'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'send', :class => 'btn btn-primary col-lg-offset-2'%>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-lg-4">
+			<%= submit_tag 'Bulk Recipient Send', :class => 'btn btn-primary'%>
+		</div>
+		<div class="col-lg-4">
+			<%= link_to 'Back', marketing_automation_whatsapp_template_index_path, :class => 'btn btn-primary col-lg-offset-4' %>
+		</div>
+	</div>
+<%= hidden_field_tag :whatsapp_template_id, @whatsapp_template.id %>
+<%end%>
+</div>
+<style>
+body{
+	color: #000;
+}
+@media (min-width: 1200px){
+.col-lg-offset-3 {
+    margin-left: 31%!important;
+}
+.well{
+	background-color: #fff!important;
+}
+.whatsapp_image{
+	width: 530px!important;
+	height: auto!important;
+}
+</style>

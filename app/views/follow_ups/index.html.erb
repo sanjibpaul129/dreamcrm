@@ -1,0 +1,41 @@
+<h1>Listing follow_ups</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Lead</th>
+      <th>Remarks</th>
+      <th>Communication time</th>
+      <th>Follow up time</th>
+      <th>Personnel</th>
+      <th>Status</th>
+      <th>Business unit</th>
+      <th>Escalated</th>
+      <th>Hot</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @follow_ups.each do |follow_up| %>
+      <tr>
+        <td><%= follow_up.lead_id %></td>
+        <td><%= follow_up.remarks %></td>
+        <td><%= follow_up.communication_time %></td>
+        <td><%= follow_up.follow_up_time %></td>
+        <td><%= follow_up.personnel_id %></td>
+        <td><%= follow_up.status %></td>
+        <td><%= follow_up.business_unit_id %></td>
+        <td><%= follow_up.escalated %></td>
+        <td><%= follow_up.hot %></td>
+        <td><%= link_to 'Show', follow_up %></td>
+        <td><%= link_to 'Edit', edit_follow_up_path(follow_up) %></td>
+        <td><%= link_to 'Destroy', follow_up, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Follow up', new_follow_up_path %>

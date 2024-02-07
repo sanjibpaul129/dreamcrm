@@ -1,0 +1,20 @@
+<h1>Broker Source Category</h1>
+<table class="customers">
+	<thead>
+		<th>Source category Name</th>
+		<th>Broker Contact Name</th>
+		<th></th>
+		<th></th>
+	</thead>
+	<tbody>
+		<% @broker_source_category_tags.each do |broker_source_category_tag|%>
+			<tr>
+				<td><%= broker_source_category_tag.source_category.description %></td>
+				<td><%= broker_source_category_tag.broker_contact.try{|x| x.name} %></td>
+				<td><%= link_to 'Edit', broker_setup_broker_source_category_tag_edit_path(broker_source_category_tag),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+				<td><%= link_to 'Destroy', broker_setup_broker_source_category_tag_destroy_path(broker_source_category_tag),:class => "dlt_btn", :style => "text-decoration: none", data: { confirm: 'Are you sure ?'}%></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table><br>
+<%= link_to "New Broker Source category", broker_setup_broker_source_category_tag_new_url, :class => 'btn btn-primary'%>

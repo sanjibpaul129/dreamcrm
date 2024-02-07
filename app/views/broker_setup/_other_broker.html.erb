@@ -1,0 +1,1 @@
+<%= text_field_tag "other_broker",'',:class => 'form-control', :id => 'other_broker_'+@broker_contact_id.to_s%> <%= check_box_tag "other_broker_name_update", true, nil, :onchange => 'other_broker_name_update('+@broker_contact_id.to_s+')' %>

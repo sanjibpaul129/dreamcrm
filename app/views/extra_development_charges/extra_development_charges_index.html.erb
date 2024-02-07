@@ -1,0 +1,44 @@
+<%@header = 'Extra Development Charges'%>
+<h1>Extra Development Charges</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      
+      <th>Project</th>
+      <th>Extra Charge</th>
+      <th>Block</th>
+      <th>Percentage</th>
+      <th>Amount</th>
+      <th>rate</th>
+      <th>flat_type</th>
+
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @extra_development_charges.each do |extra_development_charge| %>
+      <tr>
+        <td><%= extra_development_charge.business_unit.name %></td>
+        <td><%= extra_development_charge.extra_charge.description %></td>
+        <td><%= extra_development_charge.block.try(:name) %></td>
+        <td><%= extra_development_charge.percentage %></td>
+        <td><%= extra_development_charge.amount %></td>
+        <td><%= extra_development_charge.rate %></td>
+        <%if extra_development_charge.flat_type == nil %>
+          <td></td>
+        <%else%>
+          <td><%= extra_development_charge.flat_type%> BHK</td>
+        <%end%>
+        <td><%= link_to 'Edit', extra_development_charges_extra_development_charges_edit_path(extra_development_charge),:class => "edit_btn", :style => "text-decoration:none;" %></td>
+        <td><%= link_to 'Destroy', extra_development_charges_extra_development_charges_destroy_path(extra_development_charge),:class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New extra_development_charge', extra_development_charges_extra_development_charges_new_path, :class => 'btn btn-primary' %>

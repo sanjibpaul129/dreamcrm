@@ -1,0 +1,16 @@
+<% @lead=Lead.find(lead_id) %>
+
+<%
+require 'barby'
+require 'barby/barcode' 
+require 'barby/barcode/qr_code'
+require 'barby/outputter/png_outputter'
+qr_code=Barby::QrCode.new('www.realtybucket.com/windows/site_visit/'+@lead.id.to_s, level: :q, size: 5)
+base64_output = Base64.encode64(qr_code.to_png({ xdim: 5 }))
+image="data:image/png;base64,#{base64_output}"
+%>
+<center>
+<p>
+<%= image_tag(image, size: "800x800") %>  
+</p>
+</center>

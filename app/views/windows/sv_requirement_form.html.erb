@@ -1,0 +1,495 @@
+<% if params[:existing_lead] == nil %>
+  <%= form_tag 'sv_requirement_form_submit', :html => {:class => 'form-horizontal'} do %>
+    <%= hidden_field_tag "lead[name]", params[:lead][:name]%>
+    <%= hidden_field_tag "lead[email]", params[:lead][:email]%>
+    <%= hidden_field_tag "lead[mobile]", params[:lead][:mobile]%>
+    <%= hidden_field_tag "dob", params[:dob]%>
+    <%= hidden_field_tag "lead[address]", params[:lead][:address]%>
+    <%= hidden_field_tag "lead[pincode]", params[:lead][:pincode]%>
+    <%= hidden_field_tag "lead[occupation_id]", params[:lead][:occupation_id]%>
+    <%= hidden_field_tag "lead[designation_id]", params[:lead][:designation_id]%>
+    <%= hidden_field_tag "lead[company]", params[:lead][:company]%>
+    <%= hidden_field_tag "lead[work_address]", params[:lead][:work_address]%>
+    <%= hidden_field_tag "lead[office_pincode]", params[:lead][:office_pincode]%>
+    <%= hidden_field_tag "source_category_id", params[:source_category_id] %>
+    <%= hidden_field_tag "broker_lead_intimation", params[:broker_lead_intimation] %>
+    <%= hidden_field_tag :signature_data, '', id: 'signature64' %>
+    <div class="col-xs-12">
+      <div class="well bs-component">
+        <div class="row">
+          <div class="col-xs-4">
+            <% if current_personnel.business_unit.name == "Dream One"%>
+              <%= image_tag("Dream One - Rajarhat_Logo.png", alt: "" , class: "img-responsive form_logo") %>
+            <%elsif current_personnel.business_unit.name == "Dream Palazzo"%>
+              <%= image_tag("dream palazzo.jpeg", alt: "" , class: "img-responsive form_logo") %>
+            <%elsif current_personnel.business_unit.name == "Dream Gurukul"%>
+                <%= image_tag("deam_gurukul_logo.png", alt: "" , class: "img-responsive form_logo") %>
+            <%end%>
+          </div>
+          <div class="col-xs-7 form_heading_margin">
+            <p class ="form_heading">SITE VISIT FORM</p>
+          </div>
+        </div>
+        <div class="division"></div><br>
+        <center style="margin-top: -10px;"><p class="form_sub_heading">Requirement Details</p></center><br>
+        <div class="row">
+          <div class="col-xs-2">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Flat Type:</font>
+          </div>
+          <div class="col-xs-2 radio_button" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            1 BHK <%= radio_button_tag 'flat_type', '1 BHK', true %>
+          </div>
+          <div class="col-xs-2 radio_button" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            2 BHK <%= radio_button_tag 'flat_type', '2 BHK', true %>
+          </div>
+          <div class="col-xs-2 radio_button second_line" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            3 BHK <%= radio_button_tag 'flat_type', '3 BHK', true %>
+          </div>
+          <div class="col-xs-2 radio_button" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            4 BHK <%= radio_button_tag 'flat_type', '4 BHK', true %>
+          </div>
+          <div class="col-xs-2 radio_button second_line" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            5 BHK <%= radio_button_tag 'flat_type', '5 BHK', true %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Budget:</font>
+          </div>
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            60-80 L <%= radio_button_tag 'budget', '60-80 L', true %>        
+          </div>
+          <div class="col-xs-3 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            80L-1Cr <%= radio_button_tag 'budget', '80 L-1 Cr', true %>
+          </div>
+          <div class="col-xs-2 radio_button_2 second_line" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            1-1.5 Cr <%= radio_button_tag 'budget', '1-1.5 Cr', true %>
+          </div>
+          <div class="col-xs-3 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            Above <%= radio_button_tag 'budget', 'Above 1.5 Cr', true %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-4 heading_text">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Purpose Of Buying:</font>
+          </div>
+          <div class="col-xs-3 radio_button_3" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            Investment: <%= radio_button_tag 'purchasing_type', 'investment', true %>
+          </div>
+          <div class="col-xs-3 radio_button_3" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            Residential: <%= radio_button_tag 'purchasing_type', 'residential', true %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-12">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Searching for property since:</font>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+              1 Month <%= radio_button_tag 'how_long', '1 Month', true %>
+          </div>
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+              3 Month <%= radio_button_tag 'how_long', '3 Month', true %>
+          </div>
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+              6 Month <%= radio_button_tag 'how_long', '6 Month', true %>
+          </div>
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+              More <%= radio_button_tag 'how_long', 'More than that', true %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-4 heading_text" style="margin-top:15px!important;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Other Project Visited:</font>
+          </div>
+          <div class="col-xs-8">
+            <%= text_field_tag "other_project", '', :class => 'form-control' %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-12">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Customer Signature:</font>
+            <div id="signatureContainer">
+              <canvas id="signatureCanvasTab" width="700" height="350"></canvas>
+              <canvas id="signatureCanvasMobile" width="360" height="180"></canvas>
+            </div>
+            <a id="clearButton" class="btn" style = 'background: #27303f; color: #fff; border-left: 11px solid #c8222c;margin-left: 78%;'>Clear</a>
+            <textarea id="signature64" name="signed" style="display: none;"></textarea>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-offset-5 col-xs-2">
+            <%= submit_tag 'Submit Form', :class => 'btn', id: 'submitBtn', :style => 'background: #27303f; color: #fff; border-left: 11px solid #c8222c;'%>
+          </div>
+        </div><br>
+      </div>
+    </div>
+  <%end%>
+<%else%>
+  <%= form_tag 'sv_requirement_form_submit', :html => {:class => 'form-horizontal'} do %>
+    <%= hidden_field_tag "lead[name]", params[:lead][:name]%>
+    <%= hidden_field_tag "lead[email]", params[:lead][:email]%>
+    <%= hidden_field_tag "lead[mobile]", params[:lead][:mobile]%>
+    <%= hidden_field_tag "dob", params[:dob]%>
+    <%= hidden_field_tag "lead[address]", params[:lead][:address]%>
+    <%= hidden_field_tag "lead[pincode]", params[:lead][:pincode]%>
+    <%= hidden_field_tag "lead[occupation_id]", params[:lead][:occupation_id]%>
+    <%= hidden_field_tag "lead[designation_id]", params[:lead][:designation_id]%>
+    <%= hidden_field_tag "lead[company]", params[:lead][:company]%>
+    <%= hidden_field_tag "lead[work_address]", params[:lead][:work_address]%>
+    <%= hidden_field_tag "lead[office_pincode]", params[:lead][:office_pincode]%>
+    <%= hidden_field_tag :signature_data, '', id: 'signature64' %>
+    <%= hidden_field_tag "existing_lead", @lead.id%>
+    <div class="col-xs-12">
+      <div class="well bs-component">
+        <div class="row">
+          <div class="col-xs-4">
+            <% if current_personnel.business_unit.name == "Dream One"%>
+              <%= image_tag("Dream One - Rajarhat_Logo.png", alt: "" , class: "img-responsive form_logo") %>
+            <%elsif current_personnel.business_unit.name == "Dream Palazzo"%>
+              <%= image_tag("dream palazzo.jpeg", alt: "" , class: "img-responsive form_logo") %>
+            <%end%>
+          </div>
+          <div class="col-xs-7 form_heading_margin">
+            <p class ="form_heading">SITE VISIT FORM</p>
+          </div>
+        </div>
+        <div class="division"></div><br>
+        <center style="margin-top: -10px;"><font style="color: dimgray; letter-spacing: 2px; font-style: oblique; font-weight: 700;">Requirement Details</font></center><br>
+        <div class="row">
+          <div class="col-xs-2">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Flat Type:</font>
+          </div>
+          <div class="col-xs-2 radio_button " style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            1 BHK <%= radio_button_tag 'flat_type', '1 BHK', @lead.flat_type == 1 %>
+          </div>
+          <div class="col-xs-2 radio_button " style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            2 BHK <%= radio_button_tag 'flat_type', '2 BHK', @lead.flat_type == 2 %>
+          </div>
+          <div class="col-xs-2 radio_button second_line" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            3 BHK <%= radio_button_tag 'flat_type', '3 BHK', @lead.flat_type == 3 %>
+          </div>
+          <div class="col-xs-2 radio_button " style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            4 BHK <%= radio_button_tag 'flat_type', '4 BHK', @lead.flat_type == 4 %>
+          </div>
+          <div class="col-xs-2 radio_button second_line" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            5 BHK <%= radio_button_tag 'flat_type', '5 BHK', @lead.flat_type == 5 %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-2">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Budget:</font>
+          </div>
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            60-80 L <%= radio_button_tag 'budget', '60-80 L', @lead.budget_to == 80 %>
+          </div>
+          <div class="col-xs-3 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            80L-1Cr <%= radio_button_tag 'budget', '80 L-1 Cr', @lead.budget_to == 1 %>
+          </div>
+          <div class="col-xs-2 radio_button_2 second_line" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            1-1.5 Cr <%= radio_button_tag 'budget', '1-1.5 Cr', @lead.budget_to == 2 %>
+          </div>
+          <div class="col-xs-3 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            Above <%= radio_button_tag 'budget', 'Above 1.5 Cr', @lead.budget_to == 3 %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-4 heading_text">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Purpose Of Buying:</font>
+          </div>
+          <div class="col-xs-3 radio_button_3" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            Investment: <%= radio_button_tag 'purchasing_type', 'investment', @lead.investment == true %>
+          </div>
+          <div class="col-xs-3 radio_button_3" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+            Residential: <%= radio_button_tag 'purchasing_type', 'residential', @lead.investment == false %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-12">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Searching for property since:</font>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+              1 Month <%= radio_button_tag 'how_long', '1 Month', @lead.searching_since == "1 Month" %>
+          </div>
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+              3 Month <%= radio_button_tag 'how_long', '3 Month', @lead.searching_since == "3 Month" %>
+          </div>
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+              6 Month <%= radio_button_tag 'how_long', '6 Month', @lead.searching_since == "6 Month" %>
+          </div>
+          <div class="col-xs-2 radio_button_2" style="font-weight: 500; letter-spacing: 1px; color: #5c5858;">
+              More <%= radio_button_tag 'how_long', 'More than that', @lead.searching_since == "More than 6 month" %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-4 heading_text" style="margin-top:15px!important;">
+            <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Other Project Visited:</font>
+          </div>
+          <div class="col-xs-8">
+            <%
+              other_project = ""
+              if OtherProjectTag.find_by_lead_id(@lead.id) == nil
+              else
+                other_project = OtherProjectTag.find_by_lead_id(@lead.id).other_project.name
+              end
+            %>
+            <%= text_field_tag "other_project", other_project, :class => 'form-control' %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-12">
+            <div id="signatureContainer">
+              <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600;">Customer Signature:</font>
+              <canvas id="signatureCanvasTab" width="700" height="350"></canvas>
+              <canvas id="signatureCanvasMobile" width="360" height="180"></canvas>
+            </div>
+            <a id="clearButton" class="btn" style = 'background: #27303f; color: #fff; border-left: 11px solid #c8222c;margin-left: 78%;'>Clear</a>
+            <textarea id="signature64" name="signed" style="display: none;"></textarea>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-xs-offset-5 col-xs-2">
+            <%= submit_tag 'Submit Form', :class => 'btn', id: 'submitBtn', :style => 'background: #27303f; color: #fff; border-left: 11px solid #c8222c;'%>
+          </div>
+        </div><br>
+      </div>
+    </div>
+  <%end%>
+<%end%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+<style>
+  @media (max-width: 768px) {
+  canvas{
+    /*width: 370px!important;
+    height: 150px!important;*/
+  }
+}
+  canvas{
+    box-shadow: 0px 0px 20px 2px grey;
+  }
+/* Styles for signature plugin v1.2.0. */
+.kbw-signature {
+  display: inline-block;
+  border: 1px solid #a0a0a0;
+  -ms-touch-action: none;
+}
+.kbw-signature-disabled {
+  opacity: 0.35;
+}
+</style>
+<style>
+  .kbw-signature { width: 400px; height: 200px; }
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Get the canvas elements
+    var canvasTab = document.getElementById('signatureCanvasTab');
+    var canvasMobile = document.getElementById('signatureCanvasMobile');
+
+    // Set up signature pads with options
+    var signaturePadTab = new SignaturePad(canvasTab, {
+      backgroundColor: '#fff',
+      penColor: '#000',
+      minWidth: 2,
+      maxWidth: 2,
+    });
+
+    var signaturePadMobile = new SignaturePad(canvasMobile, {
+      backgroundColor: '#fff',
+      penColor: '#000',
+      minWidth: 2,
+      maxWidth: 2,
+    });
+
+    // Function to clear both signature pads
+    function clearSignature() {
+      signaturePadTab.clear();
+      signaturePadMobile.clear();
+      $('#signature64').val(''); // Clear the hidden input field too
+    }
+
+    // Event listener for the "Clear Signature" button
+    $('#clearButton').click(function () {
+      clearSignature();
+    });
+
+    // Event listener for the form submission
+    $('#submitBtn').click(function (event) {
+      // Prevent the default form submission
+      event.preventDefault();
+
+      // Choose the appropriate signature pad based on the view (tab or mobile)
+      var signaturePad = window.innerWidth >= 600 ? signaturePadTab : signaturePadMobile;
+      
+      // Get the signature data from the signature pad
+      var signatureData = signaturePad.toDataURL();
+      
+      // Add the signature data to the form data
+      // $('textarea[name="signed"]').val(signatureData);
+       $('#signature64').val(signatureData);
+
+      // Submit the form
+      $('form').submit();
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    // Get the canvas element
+    var canvas = document.getElementById('signatureCanvasTab');
+    var signatureData = '<%= @lead.try(:sv_form_signature) %>'; // Get the signature data from Ruby variable
+
+    if (signatureData !== '') {
+      // If signature data is present, convert it to an image and display on the canvas
+      var image = new Image();
+      image.onload = function() {
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+      image.src = signatureData;
+    }
+  });
+  $(document).ready(function() {
+    // Get the canvas element
+    var canvas = document.getElementById('signatureCanvasMobile');
+    var signatureData = '<%= @lead.try(:sv_form_signature) %>'; // Get the signature data from Ruby variable
+
+    if (signatureData !== '') {
+      // If signature data is present, convert it to an image and display on the canvas
+      var image = new Image();
+      image.onload = function() {
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+      image.src = signatureData;
+    }
+  });
+</script>
+<style>
+  body{
+    line-height: 1.82857143!important;
+  }
+  .well{
+    background-image: url(../assets/form_background.png);
+    border-radius: 0px !important;
+/*    border: 5px solid red;*/
+    height: 100vh!important;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .division{
+    border-bottom: 2px solid darkgrey;
+    margin-top: -22px;
+    margin-bottom: 5px;
+    width: 90%;
+  }
+  .form-control{
+    margin-top: 5px!important;
+  }
+  .form_logo{
+    width: 68%;
+  }
+  .form_heading{
+    color: #000!important;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
+  .form_heading{
+    color: #000!important;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
+  .form_heading_margin{
+    margin-top: 50px!important;
+  }
+  #user_nav{
+    display: none!important;
+  }
+  .form_sub_heading{
+      color: dimgray;
+      letter-spacing: 2px;
+      font-style: oblique;
+      font-weight: 700;
+      font-size: 18px;
+  }
+  @media (max-width: 500px){
+    .well{
+      padding: 10px!important;
+      background-image: url(../assets/form_background_mobile.PNG);
+      border-radius: 0px !important;
+      height: 150vh!important;
+      background-repeat: no-repeat;
+      background-size: cover;   
+    }
+    .division{
+      margin-top: 0px;
+    }
+    .col-xs-6{
+      width: 100%;
+      margin-bottom: 7px;
+    }
+    .form_logo{
+      width: 100%!important;
+    }
+    .form_heading{
+      font-size: 13px;
+      letter-spacing: 1px;   
+    }
+    .form_sub_heading{
+      font-size: 13px;
+    }
+    .form_heading_margin{
+      margin-top: 48px!important;
+    }
+    center{
+      margin-top: -25px!important;
+    }
+    .footer_logo{
+      display: none;
+    }
+    /*font{
+      margin-left: -25px;
+    }*/
+    .col-xs-8 {
+/*      width: 71.666667%;*/
+      width: 100%;
+    }
+    .col-xs-2 {
+      width: 30.666667%;
+    }
+    .radio_button{
+      width: 30%;
+    }
+    .second_line{
+      margin-left: 31%;
+    }
+    #signatureCanvasTab{
+      display: none;
+    }
+    #signatureCanvasMobile{
+      display: block;
+    }
+    .radio_button_2{
+      width: 33%;
+    }
+    .radio_button_3{
+      width: 45%;
+    }
+    .heading_text{
+      width: 100%;
+    }
+
+  }
+  @media (min-width: 600px){
+    #signatureCanvasMobile{
+      display: none;
+    } 
+  }
+</style>

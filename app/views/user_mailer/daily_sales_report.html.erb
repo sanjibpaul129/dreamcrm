@@ -1,0 +1,84 @@
+<p>Dear Sir,</p>
+<h1>Project Wise Leads Generated</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Leads</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @project_wise_leads_generated.each do |key,value| %>
+      <tr>
+        <td><%= BusinessUnit.find(key).name %></td>
+        <td><%= value %></td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>
+
+<h1>Source Wise Leads Generated</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Leads</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @source_wise_leads_generated.each do |key,value| %>
+      <tr>
+        <td><%= SourceCategory.find(key).description %></td>
+        <td><%= value %></td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>
+
+<h1>Site Visits</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Executive</th>
+      <th>Leads</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @site_visits.each do |key,value| %>
+      <tr>
+        <td><%= BusinessUnit.find(key[0]).name %></td>
+        <td><%= Personnel.find(key[1]).name %></td>
+        <td><%= value %></td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>
+
+<h1>Bookings</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Executive</th>
+      <th>Leads</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bookings.each do |key,value| %>
+      <tr>
+        <td><%= BusinessUnit.find(key[0]).name %></td>
+        <td><%= Personnel.find(key[1]).name %></td>
+        <td><%= value %></td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>

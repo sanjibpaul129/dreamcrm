@@ -1,0 +1,29 @@
+<p>Dear <%=@lead.name%>,</p>
+<p>
+Your flat <%= @flat.full_name %> in <%= @flat.block.name %> of area <%= @flat.SBA %> sq ft, in our project - <%= @flat.block.business_unit.name %>, being charged @ <%= ElectricalCharge.find_by_business_unit_id(@flat.block.business_unit_id).rate %>/unit, has a total outstanding amount of Rs. <%= @flat.electrical_outstanding %>/-</p>
+<p>
+This is a computer generated mail, kindly ignore if already paid.
+</p>
+<p>
+Kindly clear the dues as stated above within next 3 days.
+<br>
+Delay in payment of these dues results in degradation of electrical services in your own complex. Hence it is our humble request to clear the same at the earliest.
+<br>
+As per our records, current delay charges for your account have not yet been added to your account till date. However,after next 3 days the same will be added with your outstanding amount.
+<br>
+The Details of Bank Account is :
+<br>
+HDFC BANK LTD<br>
+Bank Branch Add : 72 SARAT BOSE ROAD<br>
+Kolkata : 700025<br>
+Bank A/C No : 50200026846903<br>
+IFSC : HDFC0001404<br><br>
+<i>You can also pay the amount through the UPI ID <b>palanharemaintenance.99712537@hdfcbank</b> or by scanning the QR-Code attached below.</i>
+</p>
+In case of any clarification, disputes please feel free to call.
+<br>
+<p>
+Regards,<br>
+Sarnali Halder<br>
++91 9007576657<br>
+</p>

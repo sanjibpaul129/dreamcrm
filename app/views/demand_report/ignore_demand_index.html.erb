@@ -1,0 +1,57 @@
+<%@header = 'Ignored Demands'%>
+<%= form_tag 'restore_demands', :html => {:class => 'form-horizontal'} do %>    
+  <h1>Ignored Demands</h1>
+  <table  id="customers" >
+  <thead>
+    <tr>
+      <th id="check_all" style="cursor: pointer!important;"></th>
+      <th>Project</th>
+      <th>Block</th>
+      <th>Customer</th>
+      <th>Mobile</th>
+      <th>Email</th>
+      <th></th>
+      <th>Flat</th>
+      <th>Ignore</th>
+      <th style="text-align: right!important;">Outstanding</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% grand_total=0%>
+    <% @bookings.each do |booking|%>
+      <tr>
+        <td><%= check_box_tag 'booking_ids[]',booking.id%></td>
+        <td><%= booking.cost_sheet.flat.block.business_unit.name%></td>
+        <td><%= booking.cost_sheet.flat.block.name%></td>
+        <td><%= booking.cost_sheet.lead.name%></td>
+        <td><%= booking.cost_sheet.lead.try(:mobile)%></td>
+        <td><%= booking.cost_sheet.lead.try(:email)%></td>
+        <td style="text-align: right!important;"><%= link_to 'Edit', edit_lead_path(booking.cost_sheet.lead),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+        <td><%= booking.cost_sheet.flat.full_name%></td>
+        <td><%= booking.ignore%></td>
+        <% if booking.ignore==true %>
+        <td style="text-align: right!important;"><s><%= booking.demand_outstanding%></s></td>
+        <% else %>
+        <td style="text-align: right!important;"><%= booking.demand_outstanding%></td>
+        <% end %>
+        <% if booking.ignore == true
+            else
+              grand_total += booking.demand_outstanding
+        end %>
+      </tr>
+    <%end%>
+    <tr>
+      <td><b>Grand Total:</b></td><td></td>
+      <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      <td style="text-align: right!important;"><%= grand_total%></td>
+    </tr>
+  	</tbody>
+  </table>
+  <br>
+  <div class="row">  
+    <div class="col-lg-2">
+      <%= submit_tag 'Restore Demands', :class => 'btn btn-primary'%>
+    </div>
+  </div>
+<%end%>

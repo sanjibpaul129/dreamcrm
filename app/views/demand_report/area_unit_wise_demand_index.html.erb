@@ -1,0 +1,41 @@
+<%@header = 'Area-Unit Wise Report'%>
+<h1>Area Wise Demanded Till Date</h1>
+<table class="customers">
+	<thead>
+		<th>Project</th>
+		<th>Total Area</th>
+		<th>Sold Area</th>
+		<th>UnSold Area</th>
+		<th>Sold %</th>
+	</thead>
+	<tbody>
+		<%@area_wise_data.each do |key, value|%>
+			<tr>
+				<td><%= key%></td>
+				<%value.each do |key_one, value_one|%>
+					<td><%= value_one%></td>
+				<%end%>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<h1>Unit Wise Demanded Till Date</h1>
+<table class="customers">
+	<thead>
+		<th>Project</th>
+		<th>Total Unit</th>
+		<th>Sold Unit</th>
+		<th>UnSold Unit</th>
+		<th>Sold %</th>
+	</thead>
+	<tbody>
+		<%@unit_wise_data.each do |key, value|%>
+			<tr>
+				<td><%= key%></td>
+				<%value.each do |key_one, value_one|%>
+					<td><%= value_one%></td>
+				<%end%>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

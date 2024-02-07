@@ -1,0 +1,152 @@
+<%@header = 'Access tag to Personnel'%>
+<%= form_tag 'access_point_submit' do %> 
+<center><h1>Access Point With Personnel</h1></center>
+	<div class="row">
+		<div class="col-lg-1">
+			<h4>Personnel:</h4>
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag 'personnel_id', options_for_select(@personnels, selected: @selected_personnel_id), :class => 'form-control selectpicker', data: { live_search: true }, :prompt => 'Please Select', :required => true  %>
+		</div>
+		<div class='col-lg-2'>
+			<%= submit_tag 'view details' , :class => 'btn btn-primary' %>
+		</div>
+    </div>
+    <%@all_access_points=[]%>
+	<table class="customers">
+		<thead>
+			<tr>
+				<th colspan="8" style="text-align: center !important;">Setup Links</th>
+			</tr>
+		    <tr>
+		      <th></th>
+		      <th>Action</th>
+		      <th>Controller</th>
+		      <th>Menu</th>
+		      <th>Sub Menu</th>
+		      <th>Order</th>
+		      <th>Name</th>
+		      <th>Method</th>
+		    </tr>
+		</thead>
+
+		<tbody>
+		<% @setup_access_points.each do |setup_access_point| %>
+			<tr>
+				<% access_point_personnels = AccessPointPersonnel.where(access_point_id: setup_access_point.id)%>
+				<%if access_point_personnels == []%>
+					<td><%= check_box_tag "setup_access_point_ids[]" , setup_access_point.id %></td>
+				<%else%>
+					<% if access_point_personnels.where(personnel_id: @selected_personnel_id.to_i) == [] %>
+						<td><%= check_box_tag "setup_access_point_ids[]" , setup_access_point.id%></td>
+					<%else%>
+						<td><%= check_box_tag "setup_access_point_ids[]" , setup_access_point.id, :checked => true %></td>
+						<%@all_access_points+=[setup_access_point.id]%>
+					<%end%>
+				<%end%>
+				<td><%= setup_access_point.action %></td>
+		        <td><%= setup_access_point.controller %></td>
+		        <td><%= setup_access_point.menu %></td>
+		        <td><%= setup_access_point.submenu %></td>
+		        <td><%= setup_access_point.order %></td>
+		        <td><%= setup_access_point.name %></td>
+		        <td><%= setup_access_point.method %></td>
+			</tr>
+		<% end %>
+		</tbody>
+	</table>
+
+	<table class="customers">
+		<thead>
+			<tr>
+				<th colspan="8" style="text-align: center !important;">Transaction Links</th>
+			</tr>
+		    <tr>
+		      <th></th>
+		      <th>Action</th>
+		      <th>Controller</th>
+		      <th>Menu</th>
+		      <th>Sub Menu</th>
+		      <th>Order</th>
+		      <th>Name</th>
+		      <th>Method</th>
+		    </tr>
+		</thead>
+
+		<tbody>
+		<% @transaction_access_points.each do |transaction_access_point| %>
+			<tr>
+				<% access_point_personnels = AccessPointPersonnel.where(access_point_id: transaction_access_point.id)%>
+				<%if access_point_personnels == []%>
+					<td><%= check_box_tag "transaction_access_point_ids[]" , transaction_access_point.id %></td>
+				<%else%>
+					<% if access_point_personnels.where(personnel_id: @selected_personnel_id.to_i) == [] %>
+						<td><%= check_box_tag "transaction_access_point_ids[]" , transaction_access_point.id%></td>
+					<%else%>
+						<td><%= check_box_tag "transaction_access_point_ids[]" , transaction_access_point.id, :checked => true %></td>
+						<%@all_access_points+=[transaction_access_point.id]%>
+					<%end%>
+				<%end%>
+				<td><%= transaction_access_point.action %></td>
+		        <td><%= transaction_access_point.controller %></td>
+		        <td><%= transaction_access_point.menu %></td>
+		        <td><%= transaction_access_point.submenu %></td>
+		        <td><%= transaction_access_point.order %></td>
+		        <td><%= transaction_access_point.name %></td>
+		        <td><%= transaction_access_point.method %></td>
+			</tr>
+		<% end %>
+		</tbody>
+	</table>
+
+	<table class="customers">
+		<thead>
+			<tr>
+				<th colspan="8" style="text-align: center !important;">Report Links</th>
+			</tr>
+		    <tr>
+		      <th></th>
+		      <th>Action</th>
+		      <th>Controller</th>
+		      <th>Menu</th>
+		      <th>Sub Menu</th>
+		      <th>Order</th>
+		      <th>Name</th>
+		      <th>Method</th>
+		    </tr>
+		</thead>
+
+		<tbody>
+		<% @report_access_points.each do |report_access_point| %>
+			<tr>
+				<% access_point_personnels = AccessPointPersonnel.where(access_point_id: report_access_point.id)%>
+				<%if access_point_personnels == []%>
+					<td><%= check_box_tag "report_access_point_ids[]" , report_access_point.id %></td>
+				<%else%>
+					<% if access_point_personnels.where(personnel_id: @selected_personnel_id.to_i) == [] %>
+						<td><%= check_box_tag "report_access_point_ids[]" , report_access_point.id%></td>
+					<%else%>
+						<td><%= check_box_tag "report_access_point_ids[]" , report_access_point.id, :checked => true %></td>
+						<%@all_access_points+=[report_access_point.id]%>
+					<%end%>
+				<%end%>
+				<td><%= report_access_point.action %></td>
+		        <td><%= report_access_point.controller %></td>
+		        <td><%= report_access_point.menu %></td>
+		        <td><%= report_access_point.submenu %></td>
+		        <td><%= report_access_point.order %></td>
+		        <td><%= report_access_point.name %></td>
+		        <td><%= report_access_point.method %></td>
+
+			</tr>
+		<% end %>
+		</tbody>
+	</table>
+	<%= hidden_field_tag :all_access_points, @all_access_points%>
+	<%= hidden_field_tag :selected_personnel_id, @selected_personnel_id%>
+	<br>
+	<%= submit_tag "Tag Personnel", :class => "btn btn-primary" %>
+<% end %>
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>

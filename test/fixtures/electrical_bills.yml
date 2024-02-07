@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  serial: 1
+  flat_id: 1
+  lead_id: 1
+  date: 2020-07-31 19:33:34
+  from: 2020-07-31 19:33:34
+  to: 2020-07-31 19:33:34
+  unit: 9.99
+  opening_reading: 9.99
+  closing_reading: 9.99
+  amount: 9.99
+  mailed_on: 2020-07-31 19:33:34
+  manually_mailed_on: 2020-07-31 19:33:34
+
+two:
+  serial: 1
+  flat_id: 1
+  lead_id: 1
+  date: 2020-07-31 19:33:34
+  from: 2020-07-31 19:33:34
+  to: 2020-07-31 19:33:34
+  unit: 9.99
+  opening_reading: 9.99
+  closing_reading: 9.99
+  amount: 9.99
+  mailed_on: 2020-07-31 19:33:34
+  manually_mailed_on: 2020-07-31 19:33:34

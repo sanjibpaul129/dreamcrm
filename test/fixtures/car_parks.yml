@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nature_id: 1
+  rate: 1
+  block_id: 1
+  date: 2016-03-27 12:55:51
+
+two:
+  nature_id: 1
+  rate: 1
+  block_id: 1
+  date: 2016-03-27 12:55:51

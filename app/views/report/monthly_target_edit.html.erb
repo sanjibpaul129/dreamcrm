@@ -1,0 +1,80 @@
+<%@header = 'Monthly Targets Edit'%>
+<%= form_tag 'monthly_target_update', :html => {:class => 'form-horizontal'} do %>  
+  <%= hidden_field_tag 'monthly_target_id', @monthly_target.id%>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspMonthly Target</legend>
+      <div class="row">
+        <div class="col-lg-2">
+          <%= label_tag :'Project' %>
+        </div>
+        <div class="col-lg-10">
+          <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @monthly_target.business_unit_id),{}, {:class => 'form-control'}) %>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-2">
+          <%= label_tag :'Month' %>
+        </div>
+        <div class="col-lg-4">
+            <%= select_month((@monthly_target.month),{},{:class => "form-control"}) %>
+        </div>
+        <div class="col-lg-2">
+          <%= label_tag :'Year' %>
+        </div>      
+        <div class="col-lg-4">
+            <%= select_year @monthly_target.year,{:start_year => (Date.today+2.year).year, :end_year => -3.year.from_now.year}, :class => "form-control" %>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-2">
+          <%= label_tag :'Leads' %>
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'monthly_target[leads]',@monthly_target.leads, :class => 'form-control'%>
+        </div>    
+        <div class="col-lg-2">
+          <%= label_tag :'Bookings' %>
+        </div>
+        <div class="col-lg-4">
+           <%= text_field_tag 'monthly_target[booking]',@monthly_target.bookings, :class => 'form-control'%>
+        </div>
+      </div>
+      <br> 
+      <div class="row">
+        <div class="col-lg-2">
+          <%= label_tag :'Collection' %>
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'monthly_target[collection]',@monthly_target.collection, :class => 'form-control'%>
+        </div>
+        <div class="col-lg-2">
+          <%= label_tag :'Activities' %>
+        </div>
+        <div class="col-lg-4">
+          <%= text_field_tag 'monthly_target[activity]',@monthly_target.activities, :class => 'form-control'%>
+        </div>
+      </div>  
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= submit_tag 'Update',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

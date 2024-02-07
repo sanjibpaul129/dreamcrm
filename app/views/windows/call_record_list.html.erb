@@ -1,0 +1,53 @@
+<% flash.each do |key, value| %>
+<div class="<%= flash_class(key) %>">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Heads up!</strong> <%= value %>
+</div>
+<% end %>
+
+<%= form_tag 'call_record_list', :authenticity_token => true, :html => {:class => 'form-horizontal', :multipart => true} do  %>
+
+
+<div align="center"><h3><b>Call Record History</b></h3></div>
+<br>
+<div align="center">
+  <%= date_field(:range, :from, :value => @from,:style=>"line-height:19px;") %>
+  To:<%= date_field(:range, :to, :value => @to,:style=>"line-height:19px;") %>
+  <%= submit_tag "Refresh", name: "refresh", :class => 'btn btn-primary btn-xs' %>      
+</div>
+  <br>
+
+  <table class="table table-striped table-hover" id="call_records">
+    <thead>
+      <tr>
+        <th></th> 
+        <th>Contact Name</th>
+        <th>At</th>
+        <th>Number</th>
+        <th>Lead Name</th>
+        <th>Length</th>
+        <th>By</th> 
+        <th>Type</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+        <% @call_records.each do |record| %>
+          <tr class="table-secondary">
+            <td><%= check_box_tag 'call_records[]', record.lead_id %></td>
+            <td><%= record.contact_name %></td>
+            <td><%= record.occurred_at.strftime("%d/%m/%y ") %> -- <%= record.occurred_at.strftime("%H:%M:%S") %></td>
+            <td><%= record.number %></td>
+            <td><%= record.lead.try(:name) %></td>
+            <td><%= record.call_length %></td>        
+            <td><%= record.caller %></td>
+            <td><%= record.status %></td>        
+            <td></td>
+          </tr>
+        <% end %>
+    </tbody>
+  </table>
+
+
+<% end %>

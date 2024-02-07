@@ -1,0 +1,257 @@
+<%@header = 'Customer Report'%>
+<center><h1>Customer Report</h1></center>
+<%= form_tag 'customer_report', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			<h4>Projects:</h4>
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag 'business_unit_id', options_for_select(@business_units, selected: @selected_business_unit_id), :class => 'form-control', :prompt => 'Please Select', :required => true  %>
+		</div>
+		<div class="col-lg-1">
+			<h4>From</h4>
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag 'from', @from.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			<h4>To</h4>
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag 'to', @to.to_date, :class => 'form-control'%>
+		</div>
+	</div><br>
+	<div class="row">
+		<div class="col-lg-1">
+      		<h4>Parameters:</h4>
+      	</div>
+		<div class="col-lg-3">
+			<%= select_tag 'selected_parameters[]', options_for_select(@parameters, selected: @selected_parameters), :class => 'form-control multi_select_style', multiple: true, :style => 'width:276px !important;' %>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag 'view report' , :class => 'btn btn-primary' %>
+		</div>
+    </div>
+<%end%><br>
+<div class="col-lg-offset-2 col-lg-8">
+	<%if request.post?%>
+		<% @selected_parameters.each do |parameter|%>
+			<%if parameter == 'Occupation'%>
+				<table class="customers">
+					<thead>
+						<tr>
+							<th colspan="5" style="text-align: center!important;">Occupation Wise Report</th>
+						</tr>
+						<tr>
+							<th></th>
+							<th>Leads</th>
+							<th>Qualified</th>
+							<th>Site Visited</th>
+							<th>Booked</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% grand_total={"leads" => 0, "qualified" => 0, "site visit" => 0, "booked" => 0}%>
+						<% @occupation_wise_reports.each do |occupation|%>
+							<tr>
+								<% occupation.each do |key, value|%>
+									<% if key == "qualified"%>
+										<% grand_total["qualified"] = (grand_total["qualified"].to_i+value.to_i).to_s%>
+									<% elsif key == "site visit"%>
+										<%grand_total["site visit"] = (grand_total["site visit"].to_i+value.to_i).to_s%>
+									<%elsif key == "booked"%>
+										<%grand_total["booked"] = (grand_total["booked"].to_i+value.to_i).to_s%>
+									<%else%>
+										<td><%= key%></td>
+										<% grand_total["leads"] = (grand_total["leads"].to_i+value.to_i).to_s%>
+									<%end%>
+									<% if value == ""%>
+										<td>0</td>
+									<%else%>
+										<td><%= value%></td>
+									<%end%>							
+								<%end%>
+							</tr>
+						<%end%>
+						<tr>
+							<td>Unselected</td>
+							<%@unselected_occupations.each do |key, value|%>
+								<% grand_total[key]= (grand_total[key].to_i+value.to_i).to_s%>	
+								<td><%= value%></td>
+							<%end%>
+						</tr>
+						<tr>
+							<td><b>Grand Total</b></td>
+							<td><b><%= grand_total["leads"]%></b></td>
+							<td><b><%= grand_total["qualified"]%></b></td>
+							<td><b><%= grand_total["site visit"]%></b></td>
+							<td><b><%= grand_total["booked"]%></b></td>
+						</tr>
+					</tbody>
+				</table><br>
+			<% elsif parameter == 'Area'%>
+				<table class="customers">
+					<thead>
+						<tr>
+							<th colspan="5" style="text-align: center!important;">Area Wise Report</th>
+						</tr>
+						<tr>
+							<th></th>
+							<th>Leads</th>
+							<th>Qualified</th>
+							<th>Site Visited</th>
+							<th>Booked</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% grand_total={"leads" => 0, "qualified" => 0, "site visit" => 0, "booked" => 0}%>
+						<% @area_wise_reports.each do |area|%>
+							<tr>
+								<% area.each do |key, value|%>
+									<% if key == "qualified"%>
+										<% grand_total["qualified"] = (grand_total["qualified"].to_i+value.to_i).to_s%>
+									<% elsif key == "site visit"%>
+										<%grand_total["site visit"] = (grand_total["site visit"].to_i+value.to_i).to_s%>
+									<%elsif key == "booked"%>
+										<%grand_total["booked"] = (grand_total["booked"].to_i+value.to_i).to_s%>
+									<%else%>
+										<td><%= key%></td>
+										<% grand_total["leads"] = (grand_total["leads"].to_i+value.to_i).to_s%>
+									<%end%>
+									<% if value == ""%>
+										<td>0</td>
+									<%else%>
+										<td><%= value%></td>
+									<%end%>							
+								<%end%>
+							</tr>
+						<%end%>
+						<tr>
+							<td>Unselected</td>
+							<%@unselected_areas.each do |key, value|%>
+								<% grand_total[key]= (grand_total[key].to_i+value.to_i).to_s%>	
+								<td><%= value%></td>
+							<%end%>
+						</tr>
+						<tr>
+							<td><b>Grand Total</b></td>
+							<td><b><%= grand_total["leads"]%></b></td>
+							<td><b><%= grand_total["qualified"]%></b></td>
+							<td><b><%= grand_total["site visit"]%></b></td>
+							<td><b><%= grand_total["booked"]%></b></td>
+						</tr>
+					</tbody>
+				</table><br>
+			<% elsif parameter == 'Work Area'%>				
+				<table class="customers">
+					<thead>
+						<tr>
+							<th colspan="5" style="text-align: center!important;">Work Area Wise Report</th>
+						</tr>
+						<tr>
+							<th></th>
+							<th>Leads</th>
+							<th>Qualified</th>
+							<th>Site Visited</th>
+							<th>Booked</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% grand_total={"leads" => 0, "qualified" => 0, "site visit" => 0, "booked" => 0}%>
+						<% @work_area_wise_reports.each do |work_area|%>
+							<tr>
+								<% work_area.each do |key, value|%>
+									<% if key == "qualified"%>
+										<% grand_total["qualified"] = (grand_total["qualified"].to_i+value.to_i).to_s%>
+									<% elsif key == "site visit"%>
+										<%grand_total["site visit"] = (grand_total["site visit"].to_i+value.to_i).to_s%>
+									<%elsif key == "booked"%>
+										<%grand_total["booked"] = (grand_total["booked"].to_i+value.to_i).to_s%>
+									<%else%>
+										<td><%= key%></td>
+										<% grand_total["leads"] = (grand_total["leads"].to_i+value.to_i).to_s%>
+									<%end%>
+									<% if value == ""%>
+										<td>0</td>
+									<%else%>
+										<td><%= value%></td>
+									<%end%>							
+								<%end%>
+							</tr>
+						<%end%>
+						<tr>
+							<td>Unselected</td>
+							<%@unselected_work_areas.each do |key, value|%>
+								<% grand_total[key]= (grand_total[key].to_i+value.to_i).to_s%>	
+								<td><%= value%></td>
+							<%end%>
+						</tr>
+						<tr>
+							<td><b>Grand Total</b></td>
+							<td><b><%= grand_total["leads"]%></b></td>
+							<td><b><%= grand_total["qualified"]%></b></td>
+							<td><b><%= grand_total["site visit"]%></b></td>
+							<td><b><%= grand_total["booked"]%></b></td>
+						</tr>
+					</tbody>
+				</table><br>
+			<% elsif parameter == 'Age'%>
+				<table class="customers">
+					<thead>
+						<tr>
+							<th colspan="5" style="text-align: center!important;">Age Wise Report</th>
+						</tr>
+						<tr>
+							<th></th>
+							<th>Leads</th>
+							<th>Qualified</th>
+							<th>Site Visited</th>
+							<th>Booked</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% grand_total={"leads" => 0, "qualified" => 0, "site visit" => 0, "booked" => 0}%>
+						<% @all_dobs.each do |dob_hash|%>
+							<tr>
+								<% dob_hash.each do |key, value|%>
+									<% if key == "qualified"%>
+										<% grand_total["qualified"] = (grand_total["qualified"].to_i+value.to_i).to_s%>
+									<% elsif key == "site visit"%>
+										<%grand_total["site visit"] = (grand_total["site visit"].to_i+value.to_i).to_s%>
+									<%elsif key == "booked"%>
+										<%grand_total["booked"] = (grand_total["booked"].to_i+value.to_i).to_s%>
+									<%else%>
+										<td><%= key%></td>
+										<% grand_total["leads"] = (grand_total["leads"].to_i+value.to_i).to_s%>
+									<%end%>
+									<% if value == ""%>
+										<td>0</td>
+									<%else%>
+										<td><%= value%></td>
+									<%end%>							
+								<%end%>
+							</tr>
+						<%end%>
+						<tr>
+							<td><b>Grand Total</b></td>
+							<td><b><%= grand_total["leads"]%></b></td>
+							<td><b><%= grand_total["qualified"]%></b></td>
+							<td><b><%= grand_total["site visit"]%></b></td>
+							<td><b><%= grand_total["booked"]%></b></td>
+						</tr>
+					</tbody>
+				</table><br>
+			<%end%>
+		<%end%>
+	<%end%>
+</div>
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>
+<script>
+$(document).ready(function() {
+$(".multi_select_style").multiselect().multiselectfilter();
+$(".ui-multiselect-all").hide();
+$(".ui-multiselect-none").hide()
+});
+</script>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Block:</strong>
+  <%= @flc_charge.block_id %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @flc_charge.rate %>
+</p>
+
+<p>
+  <strong>From floor:</strong>
+  <%= @flc_charge.from_floor %>
+</p>
+
+<%= link_to 'Edit', edit_flc_charge_path(@flc_charge) %> |
+<%= link_to 'Back', flc_charges_path %>

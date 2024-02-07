@@ -1,0 +1,58 @@
+<%= form_tag 'broker_update', :html => {:class => 'form-horizontal'} do %>
+  <%= hidden_field_tag "broker_id", @broker.id%>  
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspEdit Broker</legend>
+      <div class="row">
+        <div class="col-lg-2">
+          Name:
+        </div>
+        <div class="col-lg-10">
+          <%= text_field_tag "name", @broker.name, :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Landline:
+        </div>
+        <div class="col-lg-10">
+          <%= text_field_tag "landline", @broker.try(:landline), :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-6">
+          Firm:
+          <% if @broker.firm == true%>
+            <%= check_box_tag "firm", true, nil, :checked => true%>
+          <%else%>
+            <%= check_box_tag "firm", true, nil%>
+          <%end%>
+        </div>
+        <div class="col-lg-6">
+          Premium:
+          <% if @broker.premium == true%>
+            <%= check_box_tag "premium", true, nil, :checked => true%>
+          <%else%>
+            <%= check_box_tag "premium", true, nil%>
+          <%end%>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2">
+          Address:
+        </div>
+        <div class="col-lg-10">
+          <%= text_area_tag "address", @broker.try(:address), :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-2 col-lg-offset-4">
+          <%= submit_tag 'Update Broker',:class => 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

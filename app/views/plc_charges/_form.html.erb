@@ -1,0 +1,59 @@
+<%= form_for(@plc_charge) do |f| %>
+  <% if @plc_charge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@plc_charge.errors.count, "error") %> prohibited this plc_charge from being saved:</h2>
+
+      <ul>
+      <% @plc_charge.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Plc Charge</legend>
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Block', :class => 'col-lg-2 control-label' %>
+          <div class="col-lg-10">
+           <%= select(:plc_charge, :block_id, options_for_select(@blocks, selected: @plc_charge.block_id),{}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Plc', :class => 'col-lg-2 control-label' %>
+          <div class="col-lg-4">
+           <%= select(:plc_charge, :plc_id, options_for_select(@plcs, selected: @plc_charge.plc_id),{}, {:class => 'form-control'}) %>
+          </div>
+          <%= f.label :Rate, :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-3">
+            <%= f.number_field :rate, :class => 'form-control'%>
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="form-group">
+          <%= f.label :Floor, :class => 'col-lg-2 control-label' %>
+          <div class="col-lg-4">
+            <%= f.number_field :floor, :class => 'form-control'%>
+          </div>
+          <%= f.label :'Flat name', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-3">
+           <%= f.select(:flat_name,options_for_select(@flat_names),{}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-6 col-lg-offset-4">
+          <br>
+          <%= f.submit :class => 'btn btn-primary btn-block btn_width'%>
+        </div>
+      </div>
+
+  <!-- <div class="actions">
+    <%= f.submit %>
+  </div> -->
+<% end %>

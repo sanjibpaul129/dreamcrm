@@ -1,0 +1,26 @@
+<%@header = 'Designations'%>
+<h1>Listing designations</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @designations.each do |designation| %>
+      <tr>
+        <td><%= designation.description %></td>
+        <td><%= link_to 'Edit', edit_designation_path(designation), :class => 'edit_btn' %></td>
+        <td><%= link_to 'Destroy', designation, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'dlt_btn' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New designation', new_designation_path, :class => 'btn btn-primary' %>

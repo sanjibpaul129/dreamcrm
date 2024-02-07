@@ -1,0 +1,91 @@
+<h1>Telecaller Auditing</h1>
+<%= form_tag 'telecaller_lead_auditing', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			Executive:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "personnel_id", options_for_select(@telecallers, selected: @executive.id), :class => 'form-control' %>
+		</div>
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "from", @from.to_date, :class => 'form-control' %>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "to", @to.to_date, :class => 'form-control' %>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-2">
+			Call Duration:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "duration", options_for_select(["Any Duration", "Less than 30 sec", "Greater than 30 sec"], selected: @duration), :class => 'form-control'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => "btn btn-primary" %>
+		</div>
+	</div>
+<%end%>
+<table class="customers" id="telecaller_lead_auditing">
+	<thead>
+		<th>Lead Id</th>
+		<th>Name</th>
+		<th>Genereated On</th>
+		<th>Call Id</th>
+		<th>Start Time</th>
+		<th>Duration</th>
+		<th>Recording</th>
+	</thead>
+	<tbody>
+		<% @telephony_calls.each do |telephony_call| %>
+			<% if telephony_call.recording_url == "None" %>
+			<%else%>
+				<tr>
+					<td><%= telephony_call.lead_id%></td>
+					<td><%= telephony_call.lead.name%></td>
+					<td><%= (telephony_call.lead.generated_on+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>
+					<td><%= telephony_call.id%></td>
+					<td><%= telephony_call.start_time.try{|x| x.strftime("%d/%m/%y-%H:%M")}%></td>
+					<td><%= telephony_call.duration.to_f%></td>
+					<td><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), telephony_call.recording_url%></td>
+				</tr>
+			<%end%>
+		<% end %>
+	</tbody>
+</table>
+<style>
+	.play_btn{
+      width: 30px!important;
+      height: auto;
+    }
+</style>
+<script>
+	$(document).ready(function(){
+	var FilterTable=$("#telecaller_lead_auditing").DataTable({  
+	   "fixedHeader": true,   
+	   "dom": '<"wrapper"lit>',
+	   "bAutoWidth": false,
+	   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+	   "bDeferRender": true,
+	   "aoColumns": [
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true}
+	                             ]
+	});
+
+	$("#filterbox").keyup(function() {
+	        FilterTable.search(this.value).draw();
+	    });
+	});
+</script>

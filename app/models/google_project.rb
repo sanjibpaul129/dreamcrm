@@ -1,0 +1,2 @@
+class GoogleProject < ApplicationRecord
+end

@@ -1,0 +1,95 @@
+<%@header = 'wish To Customer edit'%>
+<%= form_for @wish_to_customer, url: {action: @wish_to_customer_action} do |f| %>
+
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbsp wish to customer</legend>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Name:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_field :name, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Email:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_field :email, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Mobile:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.number_field :mobile, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>DOB:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.date_field :dob, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>DOA:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.date_field :doa, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Field one:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_area :field_one, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Field two:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_area :field_two, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <h5>Field Three:</h5>
+        </div>
+        <div class="col-lg-9">
+          <%= f.text_area :field_three, :required => true,:class => 'form-control'%>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-5 col-lg-offset-3">
+          <%= f.submit  :class => 'btn btn-primary btn-block'%>
+        </div>
+      </div><br>
+  </div>
+</div>
+<%= hidden_field_tag :wish_to_customer_id, @wish_to_customer.id%>
+<%end%>
+<style type="text/css">
+  
+@media (min-width: 1200px){
+.col-lg-offset-3 {
+    margin-left: 31%!important;
+}
+</style>

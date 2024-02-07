@@ -1,0 +1,2 @@
+class AllLeadExport < ApplicationRecord
+end

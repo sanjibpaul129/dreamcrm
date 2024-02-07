@@ -1,0 +1,62 @@
+<div class="col-lg-4 col-lg-offset-4">
+    <div class="well bs-component">
+<legend>&nbspGenerate Source Category(Plz remove (.) from description)</legend>
+
+
+<%= form_for @source_category, :html => {:class => 'form-horizontal'} do |f| %>
+  <% if @source_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@source_category.errors.count, "error") %> prohibited this source_category from being saved:</h2>
+
+      <ul>
+      <% @source_category.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="form-group">
+     <%= f.label :Predecessor_Source, :class => "col-lg-3 control-label" %>
+     
+    <div class="col-lg-8">
+
+     <%= f.text_field :source_category_description, :class => "form-control", disabled: true, value: @source_category_description %>
+  
+  </div>
+  </div>
+ <%= f.hidden_field :predecessor, value: @source_category_id %>
+ <div class="form-group">
+    <%= f.label :description, :class => "col-lg-3 control-label" %>
+    
+   <div class="col-lg-8">
+
+    <%= f.text_field :description, :class => "form-control" %>
+ 
+ </div>
+</div>
+<% if @source_category.persisted? %>
+  <div class="form-group">
+     <div class="col-lg-8">
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<%= f.check_box :inactive, {}, 'true', 'false'%>&nbsp&nbsp&nbsp Inactive
+     </div>
+  </div>
+<% end %>
+
+  <div class="form-group">
+      <div class="col-lg-8 col-lg-offset-3">
+     
+    <%= f.submit :class => 'btn btn-primary btn-block' %>
+ </div>
+    </div>
+   
+  </div>
+</div>
+<% end %>
+
+
+<br>
+
+
+

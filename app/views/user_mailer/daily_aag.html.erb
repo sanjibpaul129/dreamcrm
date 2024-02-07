@@ -1,0 +1,142 @@
+<h1>Source Wise Leads Funnel & Absolute</h1>
+<table class="customers" border="1" style="border-collapse:collapse;">
+  <thead>
+    <tr>      
+      <th rowspan="2" style="background: #0083ff!important;">Source</th>
+      <th rowspan="2" style="background: #0083ff!important;">Generated</th>
+        <th colspan="5" style="background: #0083ff!important;"><u>Funnel out of leads generated<span id="popoverData" data-content="Out of the leads generated during the period, till the end of the leads lifecycle as on today" rel="popover" data-placement="top" data-trigger="hover"><i style="cursor:pointer;" class="glyphicon glyphicon-question-sign"></i></span></u></th>
+        <th colspan="3" style="background: red!important;"><u>Absolute During the Period</u></th>
+    </tr>
+    <tr>
+      <th style="background: #0083ff!important;">Qualified(%)</th>
+      <th style="background: #0083ff!important;">ISV</th>
+      <th style="background: #0083ff!important;">Visit</th>
+        <th style="background: #0083ff!important;">Booking</th>
+      <th style="background: #0083ff!important;">Lost</th>
+      <th style="background: red!important;">Visit</th>
+        <th style="background: red!important;">Booking</th>
+      <th style="background: red!important;">Lost</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <% @source_tree.each do |key,value| %>
+		<% if value[2]=={} %>
+    	<tr>  
+        <td><%= SourceCategory.find(key).description%></td>  
+        <td><%= link_to value[0], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+        <%
+          generated_leads = value[0]
+          qualified = value[15]
+          if generated_leads == 0
+            qualified_percentage = 0
+          else
+            qualified_percentage = ((qualified*100)/generated_leads)
+          end
+        %>
+        <td><%= link_to value[15], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Qualified', "with_children" => "true"),  method: :post%> (<%= qualified_percentage%>)</td>
+        <td><%= link_to value[17], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Interested in Site Visit', "with_children" => "true"),  method: :post%></td>
+        <td><%= link_to value[9], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Site Visit', "with_children" => "true"),  method: :post %></td>
+          <td><%= link_to value[11], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Booked', "with_children" => "true"),  method: :post %></td>
+        <td><%= link_to value[13], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Lost', "with_children" => "true"),  method: :post %></td>
+        <td><%= link_to value[3], windows_site_visited_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+          <td><%= link_to value[5], windows_booked_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+        <td><%= link_to value[7], windows_lost_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>  
+    	</tr>
+		<% else %>
+    	<tr class="great_grand_parent" id=<%= key %> title="Click to expand/collapse" style="cursor: pointer;">  
+        <td><%= SourceCategory.find(key).description%></td>  
+        <td><%= link_to value[0], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+        <%
+          generated_leads = value[0]
+          qualified = value[15]
+          if generated_leads == 0
+            qualified_percentage = 0
+          else
+            qualified_percentage = ((qualified*100)/generated_leads)
+          end
+        %>
+        <td><%= link_to value[15], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Qualified', "with_children" => "true"),  method: :post %> (<%= qualified_percentage%>%)</td>
+        <td><%= link_to value[17], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Interested in Site Visit', "with_children" => "true"),  method: :post %></td>
+        <td><%= link_to value[9], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Site Visit', "with_children" => "true"),  method: :post %></td>
+        <td><%= link_to value[11], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Booked', "with_children" => "true"),  method: :post %></td>
+        <td><%= link_to value[13], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Lost', "with_children" => "true"),  method: :post %></td>
+        <td><%= link_to value[3], windows_site_visited_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+          <td><%= link_to value[5], windows_booked_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+        <td><%= link_to value[7], windows_lost_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>  
+    	</tr>
+    	<% if value[1] != 0 && value[1] != value[0] %> 
+    	<tr class=<%= "grand_parent_"+(key.to_s) %> title="Click to expand/collapse" style="cursor: pointer;">  
+            <td style="padding-left: 20px!important;"><i><%=(SourceCategory.find(key).description)%>(Self)</i></td>  
+            <td style="padding-left: 10px!important;"><i>(<%= link_to value[1], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post %>)</i></td>
+            <%
+              generated_leads = value[1]
+              qualified = value[16]
+              if generated_leads == 0
+                qualified_percentage = 0
+              else
+                qualified_percentage = ((qualified*100)/generated_leads)
+              end
+            %>
+            <td style="padding-left: 10px!important;"><%= link_to value[16], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Qualified'),  method: :post%>  (<%= qualified_percentage%>%)</td>
+            <td style="padding-left: 10px!important;"><%= link_to value[18], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Interested in Site Visit'),  method: :post%></td>
+            <td style="padding-left: 10px!important;"><i>(<%= link_to value[10], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Site Visit'),  method: :post %>)</i></td>
+              <td style="padding-left: 10px!important;"><%= link_to value[12], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Booked'),  method: :post %></td>            
+            <td style="padding-left: 10px!important;"><%= link_to value[14], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Lost'),  method: :post %></td>
+            <td style="padding-left: 10px!important;"><i>(<%= link_to value[4], windows_site_visited_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post %>)</i></td>
+              <td style="padding-left: 10px!important;"><i>(<%= link_to value[6], windows_booked_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post %>)</i></td>
+            <td style="padding-left: 10px!important;"><i>(<%= link_to value[8], windows_lost_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post %>)</i></td>  
+    	</tr>
+    	<% end %>
+    	<% Hash[value[2].sort_by{|k, v| v[0]}.reverse].keys.each do |grand_parent| %>
+        <tr class=<%= "grand_parent_"+(key.to_s) %> id=<%= grand_parent %> title="Click to expand/collapse" style="cursor: pointer;">  
+            <td style="padding-left: 20px!important;"><%=(SourceCategory.find(grand_parent).description)%> <b><%= '' if value[2][grand_parent][2] != {} %></b></td>  
+            <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][0], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+            <%
+              generated_leads = value[2][grand_parent][0]
+              qualified = value[2][grand_parent][15]
+              if generated_leads == 0
+                qualified_percentage = 0
+              else
+                qualified_percentage = ((qualified*100)/generated_leads)
+              end
+            %>
+            <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][15], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Qualified', "with_children" => "true"),  method: :post %> (<%= qualified_percentage%>%)</td>
+            <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][17], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Interested in Site Visit', "with_children" => "true"),  method: :post %></td>
+            <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][9], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Site Visit', "with_children" => "true"),  method: :post %></td>
+              <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][11], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Booked', "with_children" => "true"),  method: :post %></td>
+            <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][13], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} , "lead_type" => 'Lost', "with_children" => "true"),  method: :post %></td> 
+            <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][3], windows_site_visited_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+              <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][5], windows_booked_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>
+            <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][7], windows_lost_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}, "with_children" => "true"),  method: :post %></td>  
+        	</tr>    
+            <% if value[2][grand_parent][1] != 0 && value[2][grand_parent][1] != value[2][grand_parent][0] %> 
+            <tr class=<%= "parent_"+(grand_parent.to_s) %> title="Click to expand/collapse" style="cursor: pointer;">  
+                    <td style="padding-left: 20px!important;"><i><%=(SourceCategory.find(grand_parent).description)%>(Self)</i></td>  
+                    <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][1], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post %></td>
+                    <%
+                      generated_leads = value[2][grand_parent][1]
+                      qualified = value[2][grand_parent][16]
+                      if generated_leads == 0
+                        qualified_percentage = 0
+                      else
+                        qualified_percentage = ((qualified*100)/generated_leads)
+                      end
+                    %>
+                    <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][16], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Qualified'),  method: :post%> (<%= qualified_percentage%>%)</td>
+                    <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][18], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Interested in Site Visit'),  method: :post%></td>
+                    <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][10], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Site Visit'),  method: :post %></td>
+                      <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][12], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Booked'),  method: :post %></td>
+                    <td style="padding-left: 10px!important;"><%= link_to value[2][grand_parent][14], windows_all_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=>SourceCategory.find(grand_parent).id.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s} ,"lead_type" => 'Lost'),  method: :post %></td> 
+                    <td style="padding-left: 10px!important;"><i>(<%= link_to value[2][grand_parent][4], windows_site_visited_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post%>)</i></td>
+                      <td style="padding-left: 10px!important;"><i>(<%= link_to value[2][grand_parent][6], windows_booked_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post%>)</i></td>
+                    <td style="padding-left: 10px!important;"><i>(<%= link_to value[2][grand_parent][8], windows_lost_leads_url("project"=>{"selected"=>@business_unit_id.to_s}, "salesteam"=>{"personnel"=>@executive.to_s, "source_category_id"=> key.to_s}, "range"=>{"from"=>@from.to_s, "to"=>@to.to_s}),  method: :post%>)</i></td>  
+            </tr>
+            <% end %>
+    <% end %>
+        
+<% end %>
+<% end %>           
+
+      </tbody>
+</table>

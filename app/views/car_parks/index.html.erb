@@ -1,0 +1,38 @@
+<%@header ='Car Parks'%>
+<h1>Listing Car Parks</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Nature</th>
+      <th>Rate</th>
+      <th>Block</th>
+      <th>Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @car_parks.each do |car_park| %>
+      <tr>
+        <td><%= car_park.business_unit.name%></td>
+        <td><%= car_park.car_park_nature.description %></td>
+        <td><%= car_park.rate %></td>
+        <% if car_park.block_id == -1 %>
+        <td>All</td>
+        <%else%>
+        <td><%= car_park.block.name %></td>
+        <%end%>
+        <td><%= car_park.date %></td>
+        <td><%= link_to 'Show', car_park, :class => "link_btn" %></td>
+        <td><%= link_to 'Edit', edit_car_park_path(car_park), :class => "edit_btn", :style => "text-decoration:none;" %></td>
+        <td><%= link_to 'Destroy', car_park, method: :delete, :class => "dlt_btn", :style => "text-decoration:none;", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Car park', new_car_park_path,:class => "btn btn-primary", :style => "text-decoration:none;" %>

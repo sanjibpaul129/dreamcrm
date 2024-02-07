@@ -1,0 +1,15 @@
+<h1>Whatsapp Images</h1>
+<table id="customers" >
+	<thead>
+		<th>whatsapp Template</th>
+		<th>URL</th>
+	</thead>
+	<tbody>
+		<% @whatsapp_images.each do |whatsapp_image| %>
+			<tr>
+				<td><%= whatsapp_image.whatsapp_template.title%></td>
+				<td><%= whatsapp_image.url %></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

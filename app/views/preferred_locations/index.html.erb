@@ -1,0 +1,25 @@
+<%@header = 'Preferred Locations'%>
+<h1>Listing Preferred Locations</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @preferred_locations.each do |preferred_location| %>
+      <tr>
+        <td><%= preferred_location.description %></td>
+        <td><%= link_to 'Edit', edit_preferred_location_path(preferred_location), :class => 'edit_btn' %></td>
+        <td><%= link_to 'Destroy', preferred_location, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'dlt_btn' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Preferred location', new_preferred_location_path, :class => 'btn btn-primary' %>

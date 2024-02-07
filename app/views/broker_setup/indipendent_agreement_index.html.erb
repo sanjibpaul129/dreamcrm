@@ -1,0 +1,449 @@
+<center><p class ="form_heading">Channel Partner Registration</p></center><br><br>
+<%= form_tag 'indipendent_agreement_index', :html => {:class => 'form-horizontal'} do %>
+	<%= hidden_field_tag :signature_data, '', id: 'signature64' %>
+	<div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+			<div class="row">
+				<div class="col-lg-2">
+					Company:
+				</div>
+				<div class="col-lg-10">
+					<%= text_field_tag "broker_name", "Individual Broker", :class => 'form-control', :placeholder => "Other Broker Name", :id => "broker_name_input"%>
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-lg-2">
+					Name:
+				</div>
+				<div class="col-lg-10">
+					<%= text_field_tag "name", "", :class => 'form-control', :required => true%>
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-lg-2">
+					Email:
+				</div>
+				<div class="col-lg-10">
+					<%= text_field_tag "email", "", :class => 'form-control'%>
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-lg-2">
+					Mobile:
+				</div>
+				<div class="col-lg-10">
+					<%= text_field_tag "mobile_one", "", :class => 'form-control', :required => true%>
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-lg-2">
+					Other Number:
+				</div>
+				<div class="col-lg-10">
+					<%= text_field_tag "mobile_two", "", :class => 'form-control'%>
+				</div>
+			</div><br>
+		</div>
+	</div><br>
+	<div class="row">
+		<div class="col-lg-6 col-lg-offset-3">
+		  <div class= "agreement">
+		    <div class= "header"></div>
+	      <div class="col-xs-6 header-logo">
+	        <img alt="" class="img-responsive form_logo" src="/assets/sv_form_logo.png">
+	      </div>
+	      <div class="well">
+	        <div class="row" style="margin-top: 8%!important;">
+	          <center><p class ="form_heading">CHANNEL PARTNER CONTRACT</p></center>
+	        </div>
+          <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600; font-size: 16px;">The following Channel Partner Accelaration Scheme is applicable till 60 days from signing of contract:</font><br><br>
+          <div class= "row">
+            <div class="col-xs-6">
+              <table class="table table-bordered"  >
+                <thead>
+                  <th>Booking</th>
+                  <th>Commission*</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td> 1-3 </td>
+                    <td> 2% </td>
+                  </tr>
+                  <tr>
+                    <td> 4-7 </td>
+                    <td> 3% </td>
+                  </tr>
+                  <tr>
+                    <td> >=8 </td>
+                    <td> 4%  </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="form_sub_heading" style="font-size: 14px">
+            *Please note the commission will be calculated on Basic Flat value + Car Parking.</p>
+          <p class="form_sub_heading" style= "font-size: 14px">
+            To facilitate the timely processing of invoices, we kindly request you to submit them to our email
+            address at cpcare@thejaingroup.com.<br>
+          </p>
+          <p class="form_sub_heading" style="font-size: 14px">
+            After expiry of the above period, Channel Partner is required to renew their agreement by writing a mail to <b>cpcare@thejaingroup.com.</b> Please note that the contract period is not auto renewed.
+          </p>
+          <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600; font-size: 14px;">Representation:</font> 
+          <p class="form_sub_heading" style="font-size: 14px">
+            The Channel Partner confirms that he/she/they will not represent that they belong to Jain Group and/or are employed with The Group.<br><br>
+            The Channel Partner confirms that he/she/they has/have no authority to issue any statement or make any written communication on behalf of Jain Group and/or any of its projects. All bookings shall be solely governed by the terms of the application form and/or agreement signed between the company and the customer.
+          </p>
+          <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600; font-size: 14px;">Occupation:</font>
+          <p class="form_sub_heading" style="font-size: 14px">
+            Brokerage/commission shall be paid as per the applicable rules framed by the company. Brokerage/commission shall be paid upon payment of 20% of the total consideration of the unit, by the customer and upon successful execution of sale agreement at the discretion of customer. Channel partner to raise the invoice post such payment being made by the customer and Jain Group shall make payment of brokerage/commission within 30 working days thereafter.
+          </p>
+          <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600; font-size: 14px;">Cancellation Clause:</font>
+          <p class="form_sub_heading" style="font-size: 14px">
+            In the event that the booking is cancelled/terminated, channel partner will have 30 calendar days to replace it with a new booking. If it does not get replaced, channel partner shall refund all brokerage/commission paid by the company within 60 days. If such amount is not refunded, Jain Group will raise a debit note & adjust such refund against any amount payable in future. Jain Group reserves the right to collect payment with appropriate delay charges if such refund is not made within due date.
+          </p>
+          <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600; font-size: 14px;">Lead Protection Plan:</font>
+          <p class="form_sub_heading" style= "font-size: 14px">
+            Customers will be tagged for 90 days from the 1st site visit done with that channel partner who accompanied the customer for a particular site visit. In this 90 days if the customer books by any other source the booking credit will go to the first channel partner. The same will be applicable for site visit conducted by Jain Group sales team.<br><br>
+            In case, presence of two or multiple CPs for a particular client at the time of the visit sharing will be applied after validation. Jain Group will study case history of that particular customer and will decide accordingly.        In these cases, the decision of Jain Group shall be final and binding and Channel Partner hereby consents to the same.<br><br>CP is required to send a site visit intimation through form link of which will be shared post CP registration, Please ensure a 24-hour advance notice prior to any customer visits. To maintain privacy and security, the lead's mobile number will be included with the final two digits concealed. Importantly, the lead's name will not be disclosed in the email. All correspondences regarding this matter should be directed to cpcare@thejaingroup.com, in order to maintain confidentiality and professionalism.<br><br>
+            If lead exists in Jain Group crm and CP makes visit of the customer without any prior intimation, then credit will go to Jain Group.<br><br>
+            If lead exists in Jain Group crm and Site visit is already scheduled but CP gives prior intimation about the visit and customer visits with that particular CP, then credit will be given to Channel Partner after looking at the case history.
+          </p>
+          <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600; font-size: 14px;">Offer & Cashback:</font>
+          <p class="form_sub_heading" style="font-size: 14px">
+            Channel Partners are not authorized to provide any cashback/offers/gifts to the prospective clients in any of the project of the Jain Group.<br><br>
+            If the channel partners plan to run any scheme they have to take written authorization from the Sales HOD.
+          </p>
+          <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600; font-size: 14px;">Non Disclosure Clause:</font>
+          <p class="form_sub_heading" style="font-size: 14px">
+            The Channel Partner acknowledges that, in the course of this agreement, they may have access to confidential information and proprietary data of Jain Group, including but not limited to commission structures and business practices. The Channel Partner agrees to maintain the strict confidentiality of all such information and not to disclose, directly or indirectly, any of this information to any third party without the prior written consent of Jain Group. This obligation of confidentiality shall extend beyond the termination of this agreement, and the Channel Partner shall take all necessary precautions to prevent the unauthorized disclosure of such information. Jain Group reserves the right to seek legal remedies for any breach of this non-disclosure clause.
+          </p>
+          <br>
+          <div class="row">
+            <div class="col-lg-4">
+              <font style="color: dimgray; letter-spacing: 1px; font-style: oblique; font-weight: 600; font-size: 14px;">Channel Partner Signature:</font>
+            </div>
+            <br>
+            <div class="col-lg-8">
+              <div id="signatureContainer">
+                <canvas id="signatureCanvasTab" width="733" height="350"></canvas>
+                <canvas id="signatureCanvasMobile" width="360" height="180"></canvas>
+              </div>
+              <a id="clearButton" class="btn btn-xs clear_btn">Clear</a>
+              <textarea id="signature64" name="signed" style="display: none;"></textarea>
+            </div><br>
+          </div>
+	      </div>
+	      <div class="col-xs-offset-6 col-xs-6 footer-logo">
+	        <img alt="" class="img-responsive form_logo" src="/assets/deam_gurukul_logo.png" style="width: 90%;">
+	      </div>
+	    	<div class="footer"></div>
+		  </div>
+		</div>
+	</div>
+	<div class="row">
+		<center>
+      <%= submit_tag "Submit", :class => 'btn btn-primary', id: 'submitBtn'%>
+    </center>
+	</div>
+<%end%>
+<script>
+  $("table").on('click',"input.tr_clone_duplicate" , function() {
+      var tr    = $(this).closest('.tr_clone');
+      var clone = tr.clone();
+      tr.after(clone);
+  });  
+
+  $("table").on('click',"input.tr_clone_remove" , function() {
+      $(this).closest('tr').remove();
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+  <style>
+  	canvas{
+  		box-shadow: 0px 0px 20px 2px grey;
+  	}
+  	.kbw-signature {
+  	  display: inline-block;
+  	  border: 1px solid #a0a0a0;
+  	  -ms-touch-action: none;
+  	}
+  	.kbw-signature-disabled {
+  	  opacity: 0.35;
+  	}
+    body{
+      line-height: 1.3!important;
+    }
+    .well{
+      background: transparent;
+      padding:20px;
+      margin-top: -10%;
+      border-radius: 0px!important;
+      box-shadow: none!important;
+    }
+    .clear_btn{
+      background: #27303f;
+      color: #fff;
+      border-left: 7px solid #c8222c;
+      margin-left: 89%;
+    }
+    .form-control{
+      margin-top: 5px!important;
+    }
+    .form_sub_heading{
+        color: dimgray;
+        letter-spacing: 1px;
+        font-style: oblique;
+        font-weight: 300;
+        font-size: 10px;
+    }
+    .form_heading{
+      color: #000!important;
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    .header{
+      background-image: url(../assets/agreement_mobile_top.png);
+      height: 20vh;
+      width: 100%;
+      background-repeat: no-repeat;
+      background-position: top;
+      background-size: cover;
+    }
+    .footer{
+      background-image: url(../assets/agreement_mobile_down.png);
+      height: 18vh;
+      width: 100%;
+      background-repeat: no-repeat;
+      background-position: bottom;
+      background-size: contain;
+      margin-top: -30%;
+    }
+    .agreement{
+      background: #fff;
+      border-radius: 0px !important;
+      background-repeat: no-repeat;
+      background-size: cover;
+      box-shadow: 0px 0px 20px 2px grey;
+    }
+    .header-logo{
+      margin-top: -25%;
+    }
+    .footer-logo{
+      display: none;
+    }
+    table, .table {
+      color: dimgray;
+      font-style: italic;
+    }
+    #submitBtn {
+      background: #27303f;
+      color: #fff;
+      border-left: 11px solid #c8222c;
+    }
+
+    #user_nav
+    {
+      display: none!important;
+    }
+
+  	.kbw-signature { width: 400px; height: 200px; }
+
+  	@media (max-width: 500px){
+  		#signatureCanvasTab
+      {
+  	      display: none;
+  	    }
+  	    #signatureCanvasMobile
+        {
+  	      display: block;
+          margin-left: -10px;
+  	    }
+  	}
+  	@media (min-width: 600px){
+  	    #signatureCanvasMobile
+        {
+  	      display: none;
+  	    }
+        .header{
+          background-image: url(../assets/agreement_tablet_top.png);
+          height: 22vh;
+          width: 100%;
+          background-repeat: no-repeat;
+          background-position: top;
+          background-size: cover;
+        }
+        .footer {
+          background-image: url(../assets/agreement_tablet_down.png);
+          height: 32vh;
+          width: 100%;
+          background-repeat: no-repeat;
+          background-position: bottom;
+          background-size: contain;
+          margin-top: -30%;
+        }
+        .header-logo{
+          margin-top: -20%;
+          max-width: 40%;
+        }
+        .footer-logo{
+          margin-top: -4%;
+          max-width: 40%;
+          margin-left: 60%;
+          display: block;
+        }
+        .clear_btn{
+          background: #27303f;
+          color: #fff;
+          border-left: 7px solid #c8222c;
+          margin-left: 95%;
+        }
+        .form_heading{
+          font-size: 24px;
+        }
+  	}
+    @media (min-width: 1200px){
+  	    #signatureCanvasMobile
+        {
+  	      display: none;
+  	    }
+        .header{
+          background-image: url(../assets/agreement_tablet_top.png);
+          height: 32vh;
+          width: 100%;
+          background-repeat: no-repeat;
+          background-position: top;
+          background-size: cover;
+        }
+        .footer {
+          background-image: url(../assets/agreement_tablet_down.png);
+          height: 50vh;
+          width: 100%;
+          background-repeat: no-repeat;
+          background-position: bottom;
+          background-size: contain;
+          margin-top: -30%;
+        }
+        .header-logo{
+          margin-top: -20%;
+          max-width: 40%;
+        }
+        .footer-logo{
+          margin-top: -4%;
+          max-width: 40%;
+          margin-left: 60%;
+          display: block;
+        }
+        .clear_btn{
+          background: #27303f;
+          color: #fff;
+          border-left: 7px solid #c8222c;
+          margin-left: 127%;
+        }
+        .form_heading{
+          font-size: 24px;
+        }
+        #submitBtn {
+          background: #27303f;
+          color: #fff;
+          border-left: 11px solid #c8222c;
+          margin-top: 46%; 
+          margin-left: -72%;
+        }
+      }
+  </style>
+  <script>
+    $(document).ready(function () {
+      // Get the canvas elements
+      var canvasTab = document.getElementById('signatureCanvasTab');
+      var canvasMobile = document.getElementById('signatureCanvasMobile');
+
+      // Set up signature pads with options
+      var signaturePadTab = new SignaturePad(canvasTab, {
+        backgroundColor: '#fff',
+        penColor: '#000',
+        minWidth: 2,
+        maxWidth: 2,
+      });
+
+      var signaturePadMobile = new SignaturePad(canvasMobile, {
+        backgroundColor: '#fff',
+        penColor: '#000',
+        minWidth: 2,
+        maxWidth: 2,
+      });
+
+      // Function to clear both signature pads
+      function clearSignature() {
+        signaturePadTab.clear();
+        signaturePadMobile.clear();
+        $('#signature64').val(''); // Clear the hidden input field too
+      }
+
+      // Event listener for the "Clear Signature" button
+      $('#clearButton').click(function () {
+        clearSignature();
+      });
+
+      // Event listener for the form submission
+      $('#submitBtn').click(function (event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        // Choose the appropriate signature pad based on the view (tab or mobile)
+        var signaturePad = window.innerWidth >= 600 ? signaturePadTab : signaturePadMobile;
+
+        // Get the signature data from the signature pad
+        var signatureData = signaturePad.toDataURL();
+
+        // Add the signature data to the form data
+        // $('textarea[name="signed"]').val(signatureData);
+         $('#signature64').val(signatureData);
+
+        // Submit the form
+        $('form').submit();
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function() {
+      // Get the canvas element
+      var canvas = document.getElementById('signatureCanvasTab');
+      var signatureData = '<%= @broker.try(:contract_signature) %>'; // Get the signature data from Ruby variable
+
+      if (signatureData !== '') {
+        // If signature data is present, convert it to an image and display on the canvas
+        var image = new Image();
+        image.onload = function() {
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        };
+        image.src = signatureData;
+      }
+    });
+    $(document).ready(function() {
+      // Get the canvas element
+      var canvas = document.getElementById('signatureCanvasMobile');
+      var signatureData = '<%= @broker.try(:contract_signature) %>'; // Get the signature data from Ruby variable
+
+      if (signatureData !== '') {
+        // If signature data is present, convert it to an image and display on the canvas
+        var image = new Image();
+        image.onload = function() {
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        };
+        image.src = signatureData;
+      }
+    });
+  </script>
+<script>
+  $(document).ready(function () {
+    $("#broker_name_input").autocomplete({
+      source: "/broker_names",
+      minLength: 2 // Minimum characters before making a request
+    });
+  });
+</script>

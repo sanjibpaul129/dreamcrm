@@ -1,0 +1,51 @@
+<%@header= 'Unconfirmed Cost Sheets'%>
+<%= form_tag 'confirm_booking_submit', :html => {:class => 'form-horizontal'} do %>
+
+<h1>Unconfirmed Cost Sheets</h1>
+<table id="customers">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Project</th>
+      <th>Customer</th>
+      <th>Block</th>
+      <th>Flat</th>
+      <th>Area</th>
+      <th>Payment Plan</th>
+      <th>Final</th>
+      <th>Created at</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @unconfirmed_cost_sheets.each do |unconfirmed_cost_sheet|%>
+      
+      		<tr>
+            <td><%= check_box_tag 'cost_sheet_ids[]', unconfirmed_cost_sheet.id %></td>
+            <td><%= unconfirmed_cost_sheet.flat.block.business_unit.name%></td>
+            <td><%= unconfirmed_cost_sheet.lead.name%></td>
+            <td><%= unconfirmed_cost_sheet.flat.block.name %></td>
+            <td><%= unconfirmed_cost_sheet.flat.full_name %></td>
+            <td><%= unconfirmed_cost_sheet.flat.SBA%></td>
+            <td><%= unconfirmed_cost_sheet.payment_plan.description %></td>
+            <td><%= unconfirmed_cost_sheet.try(:final)%></td>
+            <td><%= unconfirmed_cost_sheet.created_at.strftime("%d/%m/%y") %></td>
+      		</tr>
+  	<%end%>
+  </tbody>
+</table><br>
+<div class="row col-lg-offset-4">
+  <div class="col-lg-3">
+    <%= date_field(:booking, :date, :class => "form-control", :value => ((Time.now)+86400).strftime('%Y-%m-%d')) %>
+  </div>
+  <div class="col-lg-3">
+    <%= submit_tag 'Booking Confirmed', name: 'booking_confirmed', :class => 'btn btn-primary' %>
+  </div>
+  <div class="col-lg-3">
+    <%= submit_tag 'Booking Form', name: 'booking_form', :class => 'btn btn-primary' %>
+  </div>
+  <div class="col-lg-3">
+    <%= submit_tag 'Useless', name: 'booking_confirmed', :class => 'btn btn-primary' %>
+  </div>
+</div><br>
+<% end %>

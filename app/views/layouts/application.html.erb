@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-141669853-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-141669853-2');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">  
+    <% if @header==nil %>
+      <% @header='Pre Sales' %>
+    <% end %>
+    <title><%= @header %></title>
+    <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= javascript_include_tag "autocomplete-rails.js", "highcharts" %>
+    <%= csrf_meta_tags %>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" ></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature-pad.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    <style><%= yield :stylesheets %></style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body>
+    <div id="user_nav">  
+      <% if current_personnel %>
+        <script src="//js.pusher.com/2.2/pusher.min.js"></script>
+        <script>
+          var pusher = new Pusher('<%= Pusher.key %>'); // uses your APP KEY
+          var channel = pusher.subscribe('test_channel');
+          var channel_2 = pusher.subscribe('telephony_channel');
+          var channel_3 = pusher.subscribe('incoming_call_update');
+          channel.bind('greet', function(data) {
+            if (data.personnel_id[0] == '<%= current_personnel.id.to_s %>'){
+              Push.create(data.greeting);
+            }
+          });
+          channel_2.bind('push_telephony_call_id', function(data) {
+            if (data.personnel_id[0] == '<%= current_personnel.id.to_s %>'){
+              document.getElementById("telephony_call").value = data.telephony_call_id;
+              document.getElementById('follow_up_update').disabled = false;
+            }
+          });
+          channel_3.bind('push_incoming_call_data', function(data) {
+            if (data.personnel_id[0] == '<%= current_personnel.id.to_s %>'){
+              lead_details = data.url;
+              var followup_link = document.getElementById("lead_details");
+              var lead_name = data.name[0];
+              var textBox = document.getElementById("followup_lead_name");
+              textBox.value = lead_name;
+              followup_link.href = lead_details;
+              document.getElementById('myModalfollowup').style.display = "block";
+            }
+          });
+        </script>
+        <%=notice %>&nbsp
+  	    <% link_to "Home", 'home' -%>
+  	    <%= link_to 'Home', {controller: 'leads', action: 'home'}, {method: :post} %>  <%= current_personnel.email %> at PreCRM  <%= link_to "Logout", log_out_path %>
+  	    <div class="navbar navbar-inverse">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse navbar-inverse-collapse">
+            <% if current_personnel.email == 'mitul@ursdigitally.com'%>
+              <ul class="nav navbar-nav">
+                <li><%= link_to 'Source Wise Leads Expandable', {controller: 'windows', action: 'source_wise_leads_expandable'}, {method: :post} %></li>
+              </ul>
+            <%else%>
+              <ul class="nav navbar-nav">
+                <% if current_personnel.email == "riddhi.gadhiya@beyondwalls.com" || current_personnel.email == "rima.bhadra@techshu.in"  %>
+                <%else%>
+                  <li><%= link_to 'Setup', {controller: 'setup', action: 'index'}, {method: :get} %></li>
+                  <li><%= link_to 'Transactions', {controller: 'transaction', action: 'index'}, {method: :get} %></li>
+                  <li style="top: 6.5px;">
+                    <form class="navbar-form navbar-left" role="search">
+                     <div class="form-group" style="">
+                       <input type="text" placeholder="Search" id="filterbox" class="form-control" style="border-radius: 20px!important;">
+                     </div>               
+                    </form>
+                  </li>
+                  <li><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="border-radius: 10px!important;">Open Notes</button></li>
+                <%end%>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <% if current_personnel.organisation_id == 1%>
+                  <li>
+                    <div class="ringBell">
+                      <span class="-count"><%= Lead.where(personnel_id: current_personnel.id, booked_on: nil, lost_reason_id: nil).where.not(reengaged_on: nil).count%></span>
+                    </div>
+                  </li>
+                <%end%>
+                <li><%= link_to 'Reports', {controller: 'report', action: 'index'}, {method: :get} %></li>  
+              </ul>
+            <%end%>
+          </div>
+        </div>
+      <% else %>
+        
+        <%= notice %>
+      <%end %>
+    </div>
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">This space is provided to keep notes</h4>
+          </div>
+          <div class="modal-body">
+            <%= form_tag :controller => 'transaction', :action => 'personnel_notes', :method => 'post' do %>  
+              <%= text_area_tag 'notes', current_personnel.try(:notes), :class => 'notepad_area'%>
+              <center><%= submit_tag 'save', :style => 'color: #ffffff; padding:8px; border-radius: 5px; background-image: linear-gradient(40deg,#006c00 0,#00bf00 100%); border-color: transparent; width:100px!important; height:auto!important;' %></center>
+            <%end%>  
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="myModalfollowup" class="modal-followup">
+      <div class="modal-content-followup">
+        <span class="closefollowup">&times;</span>
+        <b>Name:</b> <%= text_field_tag "name", "", :class => 'form-control', :id => 'followup_lead_name', :readonly => true %><br>
+        <%= link_to "Click here to see the incoming call details", "#", id: "lead_details", target: "_blank", method: :post%>
+      </div>
+    </div>
+    <div id="flash_container">
+      <% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %>">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Heads up!</strong> <%= value %>
+        </div>
+      <% end %>
+    </div>  
+    <div id="content"><%= content_for?(:content) ? yield(:content) : yield %></div>
+    <style>
+      .ringBell, .ringBell:after {
+        width: 30px;
+        height: 33px;
+      }
+
+      .-count, .-count:before, .ringBell:after {
+        position: absolute;
+      }
+
+      .-count, .-count:before {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+
+      .ringBell {
+        margin-right: 25px;
+        margin-top: 10px;
+        cursor: pointer;
+        <% if current_personnel%>
+          <% if Lead.where(personnel_id: current_personnel.id, booked_on: nil, lost_reason_id: nil).where.not(reengaged_on: nil).count == 0%>
+          <%else%>
+            animation: ring .16s ease-in-out 10;
+          <%end%>
+        <%end%>
+      }
+
+      .ringBell:after {
+        content: '';
+        transform-origin: top;
+        background-image: url(../assets/notification.png);
+        background-size: cover;
+      }
+      @keyframes ring {
+        0% {
+          transform: rotate(18deg);
+        }
+        50% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(-18deg);
+        }
+      }
+      .-count {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+        background-color: red;
+        margin: -9px 0 0 16px;
+        font-family: monospace;
+        font-size: 15px;
+        font-weight: bold;
+        z-index: 90;
+        color: white;
+      }
+
+      .-count:before {
+        content: '';
+        box-sizing: border-box;
+        border: 1.5px solid red;
+      }
+
+      .ringBell .-count:before {
+        <% if current_personnel%>
+          <% if Lead.where(personnel_id: current_personnel.id, booked_on: nil, lost_reason_id: nil).where.not(reengaged_on: nil).count == 0%>
+          <%else%>
+            animation: pulse .6s ease-out infinite;
+          <%end%>
+        <%end%>
+      }
+
+      @keyframes pulse {
+        from {
+          opacity: 1;
+          transform: scale(.8);
+        }
+        to {
+          opacity: 0;
+          transform: scale(2);
+        }
+      }
+
+      .notepad_area{
+        width: 100%;
+        height: 450px;
+        background: #d6ebff;
+        border: 1px solid #0083ff;
+        border-radius: 10px;
+        padding: 10px;
+        font-style: italic;
+        line-height: 1.2;
+      }
+      .modal-followup {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      }
+      .modal-content-followup {
+        border-radius: 20px;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #888;
+        width: 30%;
+      }
+      .closefollowup {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      .closefollowup:hover,
+      .closefollowup:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+      var modal = document.getElementById("myModalfollowup");
+      var btn = document.getElementById("myBtnfollowup");
+      var span = document.getElementsByClassName("closefollowup")[0];
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    </script>
+    <script>
+      $(document).ready(function() {
+        $('.selectpicker').selectpicker();
+      });
+    </script>
+    <style>
+      .btn-default {
+        background-color: transparent !important;
+        border-color: darkgrey !important;
+        border-radius: 5px !important;
+        color: #000 !important;
+      }
+      .btn-default:hover{
+        background-color: transparent !important;
+        border-radius: 5px !important; 
+      }
+      .dropdown-menu {
+        background-color: #fff !important;
+        border: 1px solid darkgrey !important;
+        border-radius: 0px 0px 0px 0px !important;
+      }
+    </style>
+  </body>
+</html>

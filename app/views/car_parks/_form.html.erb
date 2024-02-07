@@ -1,0 +1,68 @@
+
+<%= form_for(@car_park) do |f| %>
+  <% if @car_park.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@car_park.errors.count, "error") %> prohibited this car_park from being saved:</h2>
+
+      <ul>
+      <% @car_park.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Car Parks</legend>
+      <div class="row">
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <%= f.label :'Nature', :class => 'control-label'%>
+          </div>
+          <div class="col-lg-9">
+            <%= select(:car_park, :car_park_nature_id, options_for_select(@car_park_natures, selected: @car_park.car_park_nature_id),{}, {:class => 'form-control'})%>    
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group">  
+          <%= f.label :Rate, :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-3">
+            <%= f.number_field :rate, :class => 'form-control'%>
+          </div>
+          <%= f.label :'Block', :class => 'col-lg-2 control-label'%>
+          <div class="col-lg-4">
+           <%= select(:car_park, :block_id, options_for_select(@blocks, selected: @car_park.block_id),{}, {:class => 'form-control'}) %>
+          </div>
+        </div>
+      </div><br>
+      <div class="form-group row">
+        <div class="col-lg-3">  
+          <%= f.label :'business_units', :class => 'control-label'%>
+        </div>
+          <div class="col-lg-9">
+           <%= select(:car_park, :business_unit_id, options_for_select(@business_units),{}, {:class => 'form-control'}) %>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <%= f.label :'Date', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-9">
+            <%= f.date_field :date, :class => 'form-control'%>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-6 col-lg-offset-4">
+          <br>
+          <%= f.submit :class => 'btn btn-primary btn-block btn_width'%>
+        </div>
+      </div>
+    </div>
+  </div>
+<%end%>
+
+
+

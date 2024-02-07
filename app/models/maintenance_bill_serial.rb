@@ -1,0 +1,2 @@
+class MaintenanceBillSerial < ApplicationRecord
+end

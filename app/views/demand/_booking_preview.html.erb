@@ -1,0 +1,267 @@
+<%@booking = Booking.find(booking_id.to_i)%>
+  <html>
+    <head>
+      <style>
+      * { margin: 0; padding: 0; }
+      /**/
+            body { font-family: Arial, Helvetica, sans-serif; }
+      #page-wrap { width: 850px; height: 455px; margin: 0 auto; background: #fff !important; border: 2px solid #000; }
+
+      textarea { border: 0; font: 14px Times, Serif; overflow: hidden; resize: none; }
+     
+      .delivery_to { border: 0; font: 14px Times, Serif; height:130px;width:240px; resize: none; }
+
+      table { border-collapse: collapse; width: 848px;}
+      table td, table th { border: 1px solid black !important; padding: 2px; background: #fff !important; color: #584d4d!important;}
+
+      #header { height: 100px; width: 100%; margin: 10px 0; background: #fff; text-align: center; color: #584d4d;font: bold;text-decoration: uppercase;  padding: 4px 0px; }
+
+      .customeraddress { margin: 0 10px 0 0; width: 220px; height: 300px; float: left; }
+      /**/
+      .cc_mail_box{width: 200px; height: 25px; font: 14px Times, Serif; }
+      #attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; position: relative; top: 61px; }
+      #attachment_else_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; right: 370px; position: relative; top: 61px; }
+      #regular_attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none;float:left; position: relative; bottom: 140px; left: 720px}
+      #found_ok {width: 25em;  height: 5em; float: center; position: relative; bottom: -57px; left: 235px}
+      #customer { overflow: hidden; }
+      #button { width: 250px; height: 50px; float: right; }
+      #smallbutton {width: 125px; height: 50px; float: right; }
+      #sidesmallbutton {width: 125px; height: 50px; float: right;}
+      #leftsmallbutton { width: 125px; height: 50px; float: left; }
+      #logo { text-align: right; float: right; position: relative; margin-top: 0px; margin-right: 60px; border: 1px solid #fff; max-width: 540px; max-height: 150px; overflow: hidden; float:center; }
+      #logoctr { display: none; }
+      #logo:hover #logoctr, #logo.edit #logoctr { display: block; text-align: right; line-height: 25px; background: #22222263; padding: 0 5px; }
+      #logohelp { text-align: left; display: none; font-style: italic; padding: 10px 5px;}
+      #logohelp input { margin-bottom: 5px; }
+      .edit #logohelp { display: block; }
+      .edit #save-logo, .edit #cancel-logo { display: inline; }
+      .edit #image, #save-logo, #cancel-logo, .edit #change-logo, .edit #delete-logo { display: none; }
+      #customer-title { font-size: 15px; font-weight: bold; }
+
+      #meta { margin-top: 1px; width: 845px; float: right; }
+
+      #meta td.meta-head { width: 200px; text-align: left; background: #22222263; }
+      #meta td textarea { width: 700px; text-align: left; }
+
+      #metadata { margin-top: 1px; width: 845px; float: left; }
+      #metadata td { text-align: left;  }
+      #metadata td.meta-head { width: 20px; text-align: left; background: #22222263; }
+      #metadata td textarea { height: 20px; text-align: left; width: 200px; }
+
+      #items { clear: both; width: 100%; margin: 30px 0 0 0 }
+      #items th { background: #c85e17; }
+      #items th.quantity { text-align: right; }
+      #items textarea { width: 80px; height: 50px; }
+      #items tr.item-row td { border-width: 0px; border-bottom: 1px solid black; vertical-align: top; }
+      #items td.description { width: 300px; }
+      #items td.item-name { width: 175px; }
+      #items td.description textarea, #items td.item-name textarea { width: 100%; }
+      #items td.total-line { border-right: 0; text-align: right; }
+      #items td.reg-nos { border-right: 0; text-align: center; text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 5px; }
+      #items td.quantity { text-align: right; }
+      #items td.quantity_centre { text-align: center; }
+
+      #items td.total-value { border-left: 0; padding: 10px; text-align: right; }
+      #items td.total-value textarea { height: 20px; background: none; }
+      #items td.balance { background: #c85e17; }
+      #items td.blank { border: 0; }
+      .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+
+      #terms { text-align: left; margin: 8px 0 0 0; }
+      #terms h5 { text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 10px; border-bottom: 1px solid black; padding: 0 0 4px 0; margin: 0 0 8px 0; }
+      #terms h3 { text-align: center; font: 10px Helvetica, Sans-Serif; letter-spacing: 4px; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+      #terms h4 { text-align: center; font: 15px Helvetica, Sans-Serif; letter-spacing: 4px; border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+
+      #terms textarea { width: 100%; text-align: left;}
+
+      .auto-textarea{height:auto; width:auto;}
+      .quatation_details{width:100px;}
+      .item_details{width:770px;text-align:justify;text-justify:inter-word;}
+      .delete-wpr { position: relative; }
+      .delete { display: block; color: #000; text-decoration: none; position: absolute; background: #EEEEEE; font-weight: bold; padding: 0px 3px; border: 1px solid; top: -6px; left: -22px; font-family: Verdana; font-size: 12px; }
+
+      .address { margin: 0 10px 10px 0; width: 200px; height: 120px; float: right;text-align: left; }
+      .customer_address {  border: 0; font: 14px Times, Serif; width:200px; text-align:left; float: right; }
+      .company_address { border: 0; font: 14px Times, Serif; width:240px; resize: none; text-align: left; float: left;   }
+      </style>
+    </head>
+
+    <body>
+      <table class="table table-striped table-hover metadata">
+        <tbody>
+          <tr>
+            <td colspan="3"><center><%= image_tag(@booking.cost_sheet.lead.personnel.organisation.group_logo, alt: "", class: "ledger-logo") %></center></td>
+            <td colspan="3"><center><p><b>JSB Infrasctructures</b><br><U>Dibrugarh: 786001, Assam</U><br><U><b>Booking Form</b></U><br></p></center></td>
+            <td colspan="3"><center><%= image_tag(@booking.cost_sheet.flat.block.business_unit.logo, alt: "", class: "ledger-logo") %></center></td>
+          </tr>
+          <tr>
+            <td colspan="9" style="text-align: right!important;">Booking Date: <b><%= Date.today.strftime('%d/%m/%Y')%></b></td>
+          </tr>
+          <tr>
+            <td colspan="9" style="background-color: #0083ff!important; text-align: center!important;"><B style="color: #fff!important;">FLAT CHOICE</B></td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Project: </b><%= @booking.cost_sheet.flat.block.business_unit.name%></td>
+            <td colspan="3"><b>Address: </b><%= @booking.cost_sheet.flat.block.business_unit.address_1+','+ @booking.cost_sheet.flat.block.business_unit.address_2+','+ @booking.cost_sheet.flat.block.business_unit.address_3%></td>
+            <td colspan="3"><b>SBA: </b><%= @booking.cost_sheet.flat.SBA%> Sq.ft.</td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Block: </b><%= @booking.cost_sheet.flat.block.name%></td>
+            <td><b>Flat: </b><%= @booking.cost_sheet.flat.full_name%></td>
+            <td><b>Floor: </b><%= @booking.cost_sheet.flat.floor%></td>
+            <td><b>BHK: </b><%= @booking.cost_sheet.flat.BHK%></td>
+            <td colspan="3"><b>Carpet Area: </b><%= @booking.cost_sheet.flat.carpet_area%> Sq.ft.</td>
+          </tr>
+          <tr>
+            <td colspan="9" style="background-color: #0083ff!important; text-align: center!important;"><B style="color: #fff!important;">FIRST/SOLE APPLICANT</B></td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Name: </b><%= @booking.cost_sheet.lead.name%></td>
+            <td colspan="3"><b>Father's name: </b><%= @booking.cost_sheet.lead.try(:first_applicant_father)%></td>
+            <td colspan="3"><b>Mother's name: </b><%= @booking.cost_sheet.lead.try(:first_applicant_mother)%></td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Date-of-Birth: </b><%= @booking.cost_sheet.lead.dob.try{|x| x.strftime('%d/%m/%Y')}%></td>
+            <td colspan="3"><b>Spouse name: </b><%= @booking.cost_sheet.lead.try(:spouse_name)%></td>
+            <td colspan="3"><b>Marriage-anniversary: </b><%= @booking.cost_sheet.lead.doa.try{|x| x.strftime('%d/%m/%Y')}%></td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>PAN: </b><%= @booking.cost_sheet.lead.try(:pan)%></td>
+            <td colspan="3"><b>Qualification: </b><%= @booking.cost_sheet.lead.try(:qualification_of_first_applicant)%></td>
+            <td colspan="3"><b>Country: </b><%= @booking.cost_sheet.lead.nationality.try{|x| x.description}%></td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Email: </b><%= @booking.cost_sheet.lead.try(:email)%></td>
+            <td colspan="3"><b>Mobile: </b><%= @booking.cost_sheet.lead.try(:mobile)%></td>
+            <td colspan="3"><b>Aadhar: </b><%= @booking.cost_sheet.lead.try(:first_applicant_aadhar)%></td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Occupation: </b><%= @booking.cost_sheet.lead.occupation.try{|x| x.description}%></td>
+            <td colspan="3"><b>Designation: </b><%= @booking.cost_sheet.lead.designation.try{|x| x.description}%></td>
+            <td colspan="3"><b>Company: </b><%= @booking.cost_sheet.lead.try(:company)%></td>
+          </tr>
+          <% if @booking.cost_sheet.lead.second_applicant == nil || @booking.cost_sheet.lead.second_applicant == ''%>
+          <%else%>
+            <tr>
+              <td colspan="9" style="background-color: #0083ff!important; text-align: center!important;"><B style="color: #fff!important;">SECOND/JOINT APPLICANT</B></td>
+            </tr>
+            <tr>
+              <td colspan="3"><b>Name: </b><%= @booking.cost_sheet.lead.second_applicant%></td>
+              <td colspan="3"><b>Father's name: </b><%= @booking.cost_sheet.lead.try(:Second_applicant_father)%></td>
+              <td colspan="3"><b>Mother's name: </b><%= @booking.cost_sheet.lead.try(:Second_applicant_mother)%></td>
+            </tr>
+            <tr>
+              <td colspan="3"><b>Date-of-Birth: </b><%= @booking.cost_sheet.lead.second_applicant_DOB.try{|x| x.strftime('%d/%m/%Y')}%></td>
+              <td colspan="2"><b>Spouse name: </b><%= @booking.cost_sheet.lead.try(:second_applicant_spouse_name)%></td>
+              <td><b>PAN: </b><%= @booking.cost_sheet.lead.try(:second_applicant_pan)%></td>
+              <td colspan="3"><b>Qualification: </b><%= @booking.cost_sheet.lead.try(:qualification_of_second_applicant)%></td>
+            </tr>
+            <tr>
+              <td colspan="3"><b>Email: </b><%= @booking.cost_sheet.lead.try(:second_applicant_email)%></td>
+              <td colspan="3"><b>Mobile: </b><%= @booking.cost_sheet.lead.try(:second_applicant_mobile)%></td>
+              <td colspan="3"><b>Aadhar: </b><%= @booking.cost_sheet.lead.try(:second_applicant_aadhar)%></td>
+            </tr>
+            <tr>
+              <td colspan="3"><b>Occupation: </b><%= Occupation.find(@booking.cost_sheet.lead.second_applicant_occupation_id).description%></td>
+              <td colspan="3"><b>Designation: </b><%= Designation.find(@booking.cost_sheet.lead.second_applicant_designation_id).description%></td>
+              <td colspan="3"><b>Company: </b><%= @booking.cost_sheet.lead.try(:second_applicant_company)%></td>
+            </tr>
+          <%end%>
+          <tr>
+            <td colspan="3"><b>Permanent Address: </b><%= @booking.cost_sheet.lead.try(:address)%></td>
+            <td colspan="3"><b>Correspondence Address: </b><%= @booking.cost_sheet.lead.try(:current_address)%></td>
+            <td colspan="3"><b>Source: </b><%= @booking.cost_sheet.lead.source_category.description%></td>
+          </tr>
+          <% if MultipleChild.where(lead_id: @booking.cost_sheet.lead_id) == [] %>
+          <%else%>
+            <tr>
+              <td colspan="9" style="background-color: #0083ff!important; text-align: center!important;"><B style="color: #fff!important;">CHILDREN DETAILS</B></td>
+            </tr>
+            <tr>
+              <th colspan="5">Name</th>
+              <th colspan="4">DOB</th>
+            </tr>
+            <%MultipleChild.where(lead_id: @booking.cost_sheet.lead_id).each do |child|%>
+              <tr>
+                <td colspan="5"><%= child.name%></td>
+                <td colspan="4"><%= child.dob.strftime('%d/%m/%Y')%></td>
+              </tr>
+            <%end%>
+          <%end%>
+          <% if ReferredLead.where(lead_id: @booking.cost_sheet.lead_id) == [] %>
+          <%else%>
+            <tr>
+              <td colspan="9" style="background-color: #0083ff!important; text-align: center!important;"><B style="color: #fff!important;">REFERENCE DETAILS</B></td>
+            </tr>
+            <tr>
+              <th colspan="3">Name</th>
+              <th colspan="3">Email</th>
+              <th colspan="3">Mobile</th>
+            </tr>
+            <% ReferredLead.where(lead_id: @booking.cost_sheet.lead_id).each do |referred_lead|%>
+              <tr>
+                <td colspan="3"><%= referred_lead.wish_to_custmer.name%></td>
+                <td colspan="3"><%= referred_lead.wish_to_custmer.email%></td>
+                <td colspan="3"><%= referred_lead.wish_to_custmer.mobile%></td>
+              </tr>
+            <%end%>
+          <%end%>
+          <% if @demand_money_receipt == nil %>
+          <%else%>
+            <tr>
+              <td colspan="9" style="background-color: #0083ff!important; text-align: center!important;"><B style="color: #fff!important;">PAYMENT DETAILS</B></td>
+            </tr>
+            <tr>
+              <td colspan="2"><b>Booking Amount: </b>₹ <%= comma_separated(@booking.cost_sheet.milestone_amount(Milestone.where(payment_plan_id: @booking.cost_sheet.payment_plan_id).sort_by{|x| x.order}.first.id))%></td>
+              <td colspan="3"><b>Total Flat Value: </b>₹ <%= comma_separated(@booking.cost_sheet.total_flat_value.round)%></td>
+              <td colspan="2"><b>Paid Amount: </b>₹ <%= comma_separated(@demand_money_receipt.amount.round)%></td>
+              <td colspan="2"><b>Payment Mode: </b><%= @demand_money_receipt.payment_mode%></td>
+            </tr>
+            <tr>
+              <td colspan="2"><b>Drawn on: </b><%= @demand_money_receipt.bank_name%></td>
+              <td colspan="2"><b>Payment Date: </b><%= @demand_money_receipt.date.to_date.strftime('%d/%m/%Y')%></td>
+              <td colspan="2"><b>Cheque No.: </b><%= @demand_money_receipt.cheque_number%></td>
+              <td colspan="3"><b>Cheque/RTGS date: </b><%= @demand_money_receipt.instrument_date.try{|x| x.strftime('%d/%m/%Y')}%></td>
+            </tr>
+          <%end%>
+          <tr>
+            <% if @booking.cost_sheet.lead.second_applicant == nil || @booking.cost_sheet.lead.second_applicant == ''%>
+              <td colspan="9">
+                <u><b>Signature of First Applicant</b></u>
+              </td>
+            <%else%>
+              <td colspan="5">
+                <u><b>Signature of First Applicant</b></u>
+              </td>
+              <td colspan="4">
+                <b><u>Signature of second Applicant</u></b>
+              </td>
+            <%end%>
+          </tr>
+        </tbody>
+      </table>
+      <style type="text/css">
+        .ledger-logo{
+          width: 150px!important;
+          height: auto!important;
+        }
+        
+        .signature{
+          width: 120px;
+          height: auto;
+        }
+
+        .table > thead > tr > th,
+        .table > tbody > tr > th,
+        .table > tfoot > tr > th,
+        .table > thead > tr > td,
+        .table > tbody > tr > td,
+        .table > tfoot > tr > td {
+          padding: 12px!important;
+          line-height: 1.42857143;
+          vertical-align: middle!important;
+          /*border-top: 1px solid transparent;*/
+        }
+      </style> 
+    </body>
+  </html>

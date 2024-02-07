@@ -1,0 +1,68 @@
+
+
+<div class="col-lg-8 col-lg-offset-1">
+<h1>Maintenance Bill Report</h1>
+	<table id="customers" >
+	  <thead>
+	    <th>Date</th>
+	    <th>Description</th>
+	    <th style="text-align: right!important;">Amount</th>
+	    <th style="text-align: right!important;">Balance</th>
+	    <th></th>
+	  </thead>
+
+	  	  <tbody>
+	  	<% maintainance_bill_amount=0
+	  		money_receipt_amount=0
+	  		balance=0
+	  		%>
+	  	<% if @customer.try(:opening_balance) != nil %>
+	  			<tr>
+	  				<td>22.06.20</td>
+	  				<td>Opening Balance: </td>
+	  				<td style="text-align: right!important;"><%= @customer.opening_balance %></td>
+	  				<% balance += @customer.opening_balance %>
+	  				<td style="text-align: right!important;"><%= balance %></td>
+	  				<td></td>
+	  			</tr>
+	  	<% end %>
+	  	<% @both_documents.each do |both_document|%>
+	  		<%if both_document.class == MaintainenceBill%>
+	  			<tr>
+	  				<td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+	  				<td>Maintenance Bill-Period: <%= both_document.from.to_date.strftime('%d.%m.%y')%>to <%= both_document.to.to_date.strftime('%d.%m.%y')%>-Rate: <%= both_document.rate%></td>
+	  				<td style="text-align: right!important;"><%= both_document.amount%></td>
+	  				<% balance += both_document.amount %>
+	  				<td style="text-align: right!important;"><%= balance %></td>
+	  				<td><%= link_to 'Preview', maintainance_bill_maintainance_bill_preview_index_path(both_document),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+	  			</tr>
+	  		<%elsif both_document.class == MoneyReceipt%>
+	  			<tr>
+	  				<td><%= both_document.date.to_date.strftime('%d.%m.%y')%></td>
+	  				<td>Money Receipt-Customer: <%= both_document.lead.name%>-Flat: <%= both_document.flat.name%></td>
+	  				<td style="text-align: right!important;">-<%= both_document.amount%></td>
+	  				<% balance = balance-both_document.amount %>
+	  				<td style="text-align: right!important;"><%= balance %></td>
+	  				<td><%= link_to 'Preview', maintainance_bill_money_receipt_preview_index_path(both_document),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+	  			</tr>
+	  		<%end%>
+	  	<%end%>
+	  	
+	  </tbody>
+	</table>
+</div>
+<style>
+ .col-lg-offset-1 {
+    margin-left: 16.333333% !important;
+}
+  .link_btn{
+    color: #ffffff;
+    padding:3px;
+    border-radius: 10%;
+      background-color: #ff8c00;
+      border-color: #ff8c00;
+      
+    width: 40px!important;
+    height:auto!important;
+  }
+</style>

@@ -1,0 +1,75 @@
+<%@header = 'Facebook Costing Report'%>
+<%= form_tag 'facebook_costing_report', :authenticity_token => true do %>
+  <div class="col-lg-8 col-lg-offset-4">
+    <div class="row"> 
+      <div class="col-lg-1">
+        <%= label_tag 'Project'  %>
+      </div>
+      <div class="col-lg-4">
+        <%= select(:project, :selected, options_for_select(@projects, selected: @business_unit_id),{}, {:class => 'form-control'})  %>
+      </div> 
+    </div> 
+    <div class="row">
+      <div class="col-lg-1">
+        <%= label_tag 'From'  %>
+      </div>
+      <% if @beginning_of_period==nil %>
+        <div class="col-lg-2">
+          <%= select_month(Date.today-1.month, field_name: 'from_month', :class => "form-control") %>
+        </div>
+        <div class="col-lg-2">
+          <%= select_year(Date.today, field_name: 'from_year', :start_year => Date.today.year, :end_year => -3.year.from_now.year, :class => "form-control") %>
+        </div>
+      <% else %>
+        <div class="col-lg-2">
+          <%= select_month(@beginning_of_period, field_name: 'from_month', :class => "form-control") %>
+        </div>
+        <div class="col-lg-2">
+          <%= select_year(@beginning_of_period, field_name: 'from_year', :start_year => Date.today.year, :end_year => -3.year.from_now.year, :class => "form-control") %>
+        </div>
+      <% end %>  
+    </div>
+    <div class="row">
+      <div class="col-lg-1">
+        <%= label_tag 'To'  %>
+      </div>
+      <% if @end_of_period==nil %>
+        <div class="col-lg-2">
+          <%= select_month(Date.today-1.month, field_name: 'to_month', :class => "form-control") %>
+        </div>
+        <div class="col-lg-2">
+          <%= select_year(Date.today, field_name: 'to_year', :start_year => Date.today.year, :end_year => -3.year.from_now.year, :class => "form-control") %>
+        </div>
+      <% else %>
+        <div class="col-lg-2">
+          <%= select_month(@end_of_period, field_name: 'to_month', :class => "form-control") %>
+        </div>
+        <div class="col-lg-2">
+          <%= select_year(@end_of_period, field_name: 'to_year', :start_year => Date.today.year, :end_year => -3.year.from_now.year, :class => "form-control") %>
+        </div>
+      <% end %>
+    </div>
+    <div class="row">
+      <div class="col-lg-2">
+        <%= submit_tag 'Pick', :class => 'btn btn-primary btn-sm' %> 
+      </div>
+    </div>
+  </div>
+<% end %>
+<table class="customers " id="costing">
+  <thead>
+    <tr>      
+      <th>Sources</th>
+      <th>Planned</th>
+      <th>Amount</th>
+      <th>Leads</th>
+      <th>Site Visits</th>
+      <th>Bookings</th>
+      <th>Cost/Lead</th>
+      <th>Cost/Site Visit</th>
+      <th>Cost/Booking</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>

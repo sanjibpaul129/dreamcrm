@@ -1,0 +1,45 @@
+<p>Dear Sir,</p>
+<h1>Lead Import Errors</h1>
+
+<h3>Total leads:<%= @errors.count+@leads_imported %>, Leads imported:<%= @leads_imported %>, Errors:<%= @errors.count %>  
+
+<table border="1">
+  <thead>
+    <tr>
+        <th>First Name</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Error</th>
+        <th>Id if duplicate</th>
+        <th>Project</th>
+        <th>Source</th>
+        <th>Executive</th>
+        <th>Generated On</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @errors.each do |error| %>
+      <tr>
+        <td><%= error[1]['Name'] %></td>
+        <td><%= error[1]['Email_ID'] %></td>
+        <td><%= error[1]['Mobile_No'] %></td>
+        <td><%= error[0] %></td>
+        <% if error[0]=='Duplicate Mobile' %>
+        <td><%= error[2].id %></td>
+        <td><%= error[2].business_unit.name %></td>
+        <td><%= error[2].source_category.description %></td>
+        <td><%= error[2].personnel.name %></td>
+        <td><%= error[2].generated_on.try{|x| x.strftime("%d/%m/%y")} %></td>
+        <% else %>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

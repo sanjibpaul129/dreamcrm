@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  broker_id: 1
+  source_category_id: 1
+
+two:
+  broker_id: 1
+  source_category_id: 1

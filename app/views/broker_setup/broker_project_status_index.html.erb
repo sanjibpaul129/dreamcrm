@@ -1,0 +1,174 @@
+<h1>Broker Project Status List</h1>
+<%= form_tag 'broker_project_status_index', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			Statuses:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "status", options_for_select(['All', 'Contacted', 'Softcopy Sent', 'Hardcopy Sent', 'Site Visited', 'Contract Signed']), :class => 'form-control'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Name</th>
+		<th>Broker</th>
+		<th>Mob1</th>
+		<th>Mob2</th>
+		<th>LandLine</th>
+		<th>Reference</th>
+		<th>Sft Cpy Sent</th>
+		<th>Contacted</th>
+		<th>hrd Cpy sent</th>
+		<th>Site Visited</th>
+		<th>Contract Signed</th>
+	</thead>
+	<tbody>
+		<% @broker_contacts.each do |broker_contact| %>
+			<tr>
+				<td>
+					<div id="populate_broker_contact_<%= broker_contact.id.to_s %>">
+						<%= broker_contact.name %> <a onclick="populate_broker_contact_name(<%= broker_contact.id%>)">🖊️</a>
+					</div>
+				</td>
+				<td>
+					<div id="populate_broker_<%= broker_contact.id.to_s %>">
+						<%= broker_contact.broker.name %> <a onclick="populate_broker_name(<%= broker_contact.id%>)" style="cursor: pointer;">🖊️</a>
+					</div>
+				</td>
+				<td><%= broker_contact.try(:mobile_one) %></td>
+				<td><%= broker_contact.try(:mobile_two) %></td>
+				<td><%= broker_contact.broker.try(:landline) %> </td>
+				<td><%= broker_contact.try(:reference) %></td>
+				<%
+					broker_project_status = BrokerProjectStatus.find_by_broker_id(broker_contact.broker_id)
+				%>
+				<td>
+					<% if broker_project_status.softcopy_collaterals_sent == true %>
+						<%= check_box_tag "softcopy_collaterals_sent", true, nil, :checked => true, :onchange => 'sft_cpy_sent_uncheck('+broker_project_status.id.to_s+')' %>
+					<%else%>
+						<%= check_box_tag "softcopy_collaterals_sent", true, nil, :onchange => 'sft_cpy_sent_update('+broker_project_status.id.to_s+')' %>
+					<%end%>
+						
+				</td>
+				<td>
+					<% if broker_project_status.contacted == true%>
+						<%= check_box_tag "contacted", true, nil, :checked => true, :onchange => 'contacted_uncheck('+broker_project_status.id.to_s+')' %>
+					<%else%>
+						<%= check_box_tag "contacted", true, nil, :onchange => 'contacted_update('+broker_project_status.id.to_s+')' %>
+					<%end%>
+				</td>
+				<td>
+					<% if broker_project_status.hardcopy_collaterals_sent == true %>
+						<%= check_box_tag "hardcopy_collaterals_sent", true, nil, :checked => true, :onchange => 'hrd_cpy_sent_uncheck('+broker_project_status.id.to_s+')' %>
+					<%else%>
+						<%= check_box_tag "hardcopy_collaterals_sent", true, nil, :onchange => 'hrd_cpy_sent_update('+broker_project_status.id.to_s+')' %>
+					<%end%>
+				</td>
+				<td>
+					<% if broker_project_status.site_visited == true%>
+						<%= check_box_tag "site_visited", true, nil, :checked => true, :onchange => 'sv_uncheck('+broker_project_status.id.to_s+')' %></td>
+					<%else%>
+						<%= check_box_tag "site_visited", true, nil, :onchange => 'sv_update('+broker_project_status.id.to_s+')' %></td>
+					<%end%>
+            	<td>
+            		<% if broker_project_status.contract_signed == true%>
+            			<%= check_box_tag "contract_signed", true, nil, :checked => true, :onchange => 'contract_signed_uncheck('+broker_project_status.id.to_s+')' %></td>
+            		<%else%>
+            			<%= check_box_tag "contract_signed", true, nil, :onchange => 'contract_signed_update('+broker_project_status.id.to_s+')' %>
+            		<%end%>
+            	</td>
+			</tr>
+		<%end%>
+	</tbody>
+</table><br>
+<script>
+	function populate_broker_name(broker_contact_id) {
+  		var data = broker_contact_id;
+  		$.getScript('https://www.realtybucket.com/broker_setup/populate_broker_name.js?id='+data.toString());
+	}
+	function populate_broker_contact_name(broker_contact_id) {
+  		var data = broker_contact_id;
+  		$.getScript('https://www.realtybucket.com/broker_setup/populate_broker_contact_name.js?id='+data.toString());
+	}
+	function contacted_update(broker_project_status_id)
+	{
+		var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/contacted_update.js?id='+data.toString());
+	}
+	function sft_cpy_sent_update(broker_project_status_id)
+	{
+		var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/sft_cpy_sent_update.js?id='+data.toString());		
+	}
+	function hrd_cpy_sent_update(broker_project_status_id)
+	{
+		var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/hrd_cpy_sent_update.js?id='+data.toString());		
+	}
+	function sv_update(broker_project_status_id)
+	{
+		var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/sv_update.js?id='+data.toString());		
+	}
+	function contract_signed_update(broker_project_status_id)
+	{
+		var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/contract_signed_update.js?id='+data.toString());		
+	}
+	function broker_name_update(broker_contact_id)
+    {
+        var data = broker_contact_id;
+        var broker_id = document.getElementById("broker_dropdown_"+data.toString()).value;
+        $.getScript('https://www.realtybucket.com/broker_setup/broker_name_update.js?broker_contact_id='+data.toString()+'&broker_id='+broker_id.toString());
+    }
+    function broker_contact_name_update(broker_contact_id)
+    {
+        var data = broker_contact_id;
+        var broker_contact_name = document.getElementById("broker_contact_textbox_"+data.toString()).value;
+        $.getScript('https://www.realtybucket.com/broker_setup/broker_contact_name_update.js?broker_contact_id='+data.toString()+'&broker_contact_name='+broker_contact_name);
+    }
+    function populate_other_broker(broker_contact_id){
+    	var broker_contact_id = broker_contact_id;
+    	var selected_broker = event.target.innerHTML;
+    	if (selected_broker == "Others")
+    	{
+    		console.log("Inserting");
+    		$.getScript('https://www.realtybucket.com/broker_setup/populate_other_broker.js?broker_contact_id='+broker_contact_id.toString());	
+    	}
+    }
+    function other_broker_name_update(broker_contact_id)
+    {
+        var data = broker_contact_id;
+        var broker_name = document.getElementById("other_broker_"+data.toString()).value;
+        $.getScript('https://www.realtybucket.com/broker_setup/other_broker_name_update.js?broker_contact_id='+data.toString()+'&broker_name='+broker_name);
+    }
+    function contacted_uncheck(broker_project_status_id)
+    {
+    	var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/contacted_uncheck.js?id='+data.toString());
+    }
+    function sft_cpy_sent_uncheck(broker_project_status_id)
+    {
+    	var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/sft_cpy_sent_uncheck.js?id='+data.toString());
+    }
+    function hrd_cpy_sent_uncheck(broker_project_status_id)
+    {
+    	var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/hrd_cpy_sent_uncheck.js?id='+data.toString());
+    }
+    function sv_uncheck(broker_project_status_id)
+    {
+    	var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/sv_uncheck.js?id='+data.toString());
+    }
+    function contract_signed_uncheck(broker_project_status_id)
+    {
+    	var data = broker_project_status_id;
+		$.getScript('https://www.realtybucket.com/broker_setup/contract_signed_uncheck.js?id='+data.toString());
+    }
+</script>

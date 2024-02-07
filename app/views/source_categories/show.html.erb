@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @source_category.description %>
+</p>
+
+<p>
+  <strong>Organisation:</strong>
+  <%= @source_category.organisation_id %>
+</p>
+
+<p>
+  <strong>Predecessor:</strong>
+  <%= @source_category.predecessor %>
+</p>
+
+<%= link_to 'Edit', edit_source_category_path(@source_category) %> |
+<%= link_to 'Back', source_categories_path %>

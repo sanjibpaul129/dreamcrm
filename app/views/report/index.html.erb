@@ -1,0 +1,481 @@
+<%@header = 'Reports'%>
+<% if AccessPointPersonnel.includes(:access_point).where(:access_points => {menu: "Report"}, personnel_id: current_personnel.id) == [] %>
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Others</h3>
+        </div>
+        <div class="panel-body">
+          <legend>&nbspAreas</legend>
+          <ul class="list-group">
+            <% if current_personnel.email=='ayush@thejaingroup.com'%>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Last 6 months Leads Barchart', {controller: 'windows', action: 'project_wise_source_wise_bar_chart'}, {method: :post} %></a>
+              </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Facebook Report', {controller: 'report', action: 'facebook_expandable'}, {method: :get} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Digital Report', {controller: 'report', action: 'digital_report'}, {method: :get} %></a>
+            </li>
+            <% end %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Executive Wise Leads as on date', {controller: 'windows', action: 'personnel_wise_leads'}, {method: :post} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Executive Wise Activity Report', {controller: 'windows', action: 'daily_entries'}, {method: :post} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Daily Calling Report', {controller: 'windows', action: 'daily_calling_report'}, {method: :get} %></a>
+            </li>
+            <% if current_personnel.organisation_id == 1 %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Audit Calling Report', {controller: 'report', action: 'call_audit_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'EM Report', {controller: 'report', action: 'em_report_index'}, {method: :get} %></a>
+              </li>
+            <% end %>
+            <% if current_personnel.view_only==true || current_personnel.organisation.name=='Oswal Group' %>
+            <% else %>  
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'MIS Report', {controller: 'windows', action: 'mis'}, {method: :post} %></a>
+              </li> 
+            <% end %>
+            <% if current_personnel.status != 'Marketing' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Daily Stats for a month for an executive', {controller: 'windows', action: 'daily_entries_in_a_month'}, {method: :post} %></a>
+              </li> 
+            <% end %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Source Wise Leads for a month', {controller: 'windows', action: 'source_wise_leads'}, {method: :post} %></a>
+            </li>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span>
+            <% if current_personnel.organisation_id == 1 %>
+              <%= link_to 'Source Wise Leads Expandable', {controller: 'windows', action: 'source_wise_leads_expandable_pure'}, {method: :post} %>
+            <% else %>   
+              <%= link_to 'Source Wise Leads Expandable', {controller: 'windows', action: 'source_wise_leads_expandable'}, {method: :post} %>
+            <% end %>  
+            </a>
+            </li> 
+            <% if current_personnel.status != 'Marketing' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Lost Reason Wise Leads for a month', {controller: 'windows', action: 'lost_reason_wise_leads'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Qualified Leads Register', {controller: 'windows', action: 'qualified_leads_register'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Site Visit Register', {controller: 'windows', action: 'site_visited_leads'}, {method: :post} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Repeat Site Visit Register', {controller: 'windows', action: 'repeat_site_visit_register'}, {method: :post} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Field Visit Register', {controller: 'windows', action: 'field_visit_register'}, {method: :post} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Booked Leads Register', {controller: 'windows', action: 'booked_leads'}, {method: :post} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Lost Leads Register', {controller: 'windows', action: 'lost_leads'}, {method: :post} %></a>
+              </li>
+            <% end %>
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Team Lead' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Monthly Source Wise Leads', {controller: 'windows', action: 'monthly_source_wise_leads'}, {method: :post} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Weekly Source Wise Leads', {controller: 'windows', action: 'weekly_source_wise_leads'}, {method: :post} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'All Leads Register', {controller: 'windows', action: 'all_leads'}, {method: :post} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Communicated through wise google report', {controller: 'report', action: 'communicated_through_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'All Followups Register', {controller: 'windows', action: 'all_followups'}, {method: :post} %></a>
+              </li>
+            <% end %>
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Team Lead' || current_personnel.status=='Marketing' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Costing Report', {controller: 'windows', action: 'costing'}, {method: :post} %></a>
+              </li>
+            <% end %>
+            <li class="list-group-item">
+              <span class="badge"><%=  %></span>
+              <a><span class="glyphicon glyphicon-check"></span> 
+              <%= link_to 'Flat Availability', {controller: 'windows', action: 'flat_availability'}, {method: :post} %></a>
+            </li>
+            <% if current_personnel.access_right == 0 || current_personnel.email=='tausif@alcoverealty.in' || current_personnel.email=='rsoumyo@rajathomes.com' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Whatsapp Responsiveness Report', {controller: 'windows', action: 'whatsapp_responsiveness_report'}, {method: :get} %></a>
+              </li>
+            <%end%>
+            <% if current_personnel.email=='ayush@thejaingroup.com' %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Customer Report', {controller: 'windows', action: 'customer_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Google Lead Details', {controller: 'windows', action: 'google_lead_details'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Connected Calls Report', {controller: 'report', action: 'connected_calls'}, {method: :get} %></a>
+              </li>
+            <%end%>
+            <% if current_personnel.organisation_id == 1 %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Organic Lead report', {controller: 'report', action: 'organic_lead_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Creative wise google report', {controller: 'report', action: 'google_expandable_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Keyword wise google report', {controller: 'report', action: 'keyword_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Device wise google report', {controller: 'report', action: 'device_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Placement wise google report', {controller: 'report', action: 'placement_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Network wise google report', {controller: 'report', action: 'network_wise_google_report'}, {method: :get} %></a>
+              </li><!-- 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Targat wise google report', {controller: 'report', action: 'target_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Extention wise google report', {controller: 'report', action: 'extention_wise_google_report'}, {method: :get} %></a>
+              </li> -->
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Location wise google report', {controller: 'report', action: 'location_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Target Id wise google report', {controller: 'report', action: 'target_id_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Device Model wise google report', {controller: 'report', action: 'device_model_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Communicated through wise google report', {controller: 'report', action: 'communicated_through_wise_google_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Turn Around Time report', {controller: 'report', action: 'tat_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Fb Insta Lead Report', {controller: 'report', action: 'fb_insta_lead_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Fb Audience Explorer', {controller: 'report', action: 'fb_audience_explorer'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'SR Call Report', {controller: 'report', action: 'sr_call_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Telecaller Wise Calling Report', {controller: 'report', action: 'telecaller_calling_report'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Followup Frequency Report', {controller: 'report', action: 'not_connected_calling_gap'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Site Visit Form Report', {controller: 'report', action: 'site_visit_form_register'}, {method: :get} %></a>
+              </li>
+            <%end%>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Maintenance</h3>
+        </div>
+        <div class="panel-body">
+          <legend>&nbspAreas</legend>
+          <ul class="list-group">
+            <% if current_personnel.organisation.name == 'Oswal Group' || current_personnel.organisation.name == 'Rajat Group' %>
+            <% else %>  
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Maintenance Outstanding Report', {controller: 'report', action: 'outstanding_report_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Maintenence Customer ledger', {controller: 'report', action: 'maintainance_bill_report_index'}, {method: :get} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Maintenance Reminder logs', {controller: 'report', action: 'reminder_log_index'}, {method: :get} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Maintenance bill register', {controller: 'report', action: 'maintenance_bill_register'}, {method: :get} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Maintenance Money Receipt register', {controller: 'report', action: 'money_receipt_register'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Credit Note Register', {controller: 'report', action: 'credit_note_register'}, {method: :get} %></a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Electrical</h3>
+        </div>
+        <div class="panel-body">
+          <legend>&nbspAreas</legend>
+          <ul class="list-group">
+            <% if current_personnel.organisation.name == 'Oswal Group' || current_personnel.organisation.name == 'Rajat Group' %>
+            <% else %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Electrical Outstandings and Ledger', {controller: 'electrical_report', action: 'outstanding_electric_bill_index'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Electrical Reminder Logs', {controller: 'electrical_report', action: 'electrical_reminder_log_index'}, {method: :get} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Electric Bill Register', {controller: 'electrical_report', action: 'electrical_bill_register'}, {method: :get} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Electric Money Receipt Register', {controller: 'electrical_report', action: 'electrical_money_receipt_register'}, {method: :get} %></a>
+              </li>
+            <%end%>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Demand</h3>
+        </div>
+        <div class="panel-body">
+          <legend>&nbspAreas</legend>
+          <ul class="list-group"> 
+            <% if current_personnel.organisation.name == 'Oswal Group' || current_personnel.organisation.name == 'Rajat Group' %>
+            <% else %>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Demand Outstandings and Ledger', {controller: 'demand_report', action: 'demand_outstanding_report'}, {method: :post} %></a>
+              </li> 
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Demand Bill Register', {controller: 'demand_report', action: 'demand_bill_register'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Demand Money Receipt register', {controller: 'demand_report', action: 'demand_money_receipt_register'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Adhoc Charge Register', {controller: 'adhoc_charge', action: 'adhoc_charge_register'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Credit Note Register', {controller: 'credit_note_head', action: 'credit_note_register'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Demand Reminder Logs', {controller: 'demand_report', action: 'demand_reminder_log_index'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Demand Register', {controller: 'demand_report', action: 'ledger_entry_header_index'}, {method: :get} %></a>
+              </li>
+              <% if current_personnel.email == 'ayush@thejaingroup.com'%>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Future Demand Register', {controller: 'demand_report', action: 'future_demand_index'}, {method: :get} %></a>
+                </li>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to 'Demand Accrued Interest', {controller: 'demand_report', action: 'demand_accrued_interest'}, {method: :get} %></a>
+                </li>
+              <%end%>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Ignored Demands', {controller: 'demand_report', action: 'ignore_demand_index'}, {method: :get} %></a>
+              </li>
+              <li class="list-group-item">
+                <span class="badge"><%=  %></span>
+                <a><span class="glyphicon glyphicon-check"></span> 
+                <%= link_to 'Area-Unit Wise Report', {controller: 'demand_report', action: 'area_unit_wise_demand_index'}, {method: :get} %></a>
+              </li>
+            <% end %>                  
+          </ul>  
+        </div>
+      </div>
+    </div>
+  </div>
+<%else%>
+  <div class="row">
+    <% 
+      submenues = AccessPoint.where(menu: "Report").pluck(:submenu).uniq 
+      submenues.each do |submenu|
+        if AccessPointPersonnel.includes(:access_point, :personnel).where(:access_points => {menu: "Report", submenu: submenu}, personnel_id: current_personnel.id) == []
+          submenues -= [submenu]
+        end
+      end
+    %>
+    <% submenues.each do |submenu| %>
+      <% if submenues.count == 1%>
+        <div class="col-lg-4 col-lg-offset-4">
+      <%else%>
+        <div class="col-lg-3">
+      <%end%>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= submenu%></h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <% AccessPointPersonnel.includes(:access_point, :personnel).where(:access_points => {menu: "Report", submenu: submenu}, personnel_id: current_personnel.id).sort_by{|x| x.access_point.order}.each do |access_point_personnel| %>
+                <li class="list-group-item">
+                  <span class="badge"><%=  %></span>
+                  <a><span class="glyphicon glyphicon-check"></span> 
+                  <%= link_to access_point_personnel.access_point.name, {controller: access_point_personnel.access_point.controller, action: access_point_personnel.access_point.action} %></a>
+                </li>
+              <%end%>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <%end%>
+  </div>
+<%end%>
+<style type="text/css">
+	.list-group-item {
+		background-color: #0083ff1c!important;
+		border-radius: 5px!important;
+	}
+</style>

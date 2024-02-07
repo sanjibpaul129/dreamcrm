@@ -1,0 +1,667 @@
+<%@header = 'Weekly Source Wise Leads'%>
+<% if current_personnel.business_unit.organisation_id == 1%>
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart"
+            },
+            title: {
+                text: 'All Sources'
+            },
+            xAxis: {
+                categories: <%= @weeks %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @series_1 %>
+           
+        });
+    });
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_two"
+            },
+            title: {
+                text: 'All Sources'
+            },
+            xAxis: {
+                categories: <%= @weeks %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @series_2 %>
+           
+        });
+    });
+  </script>
+
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_online"
+            },
+            title: {
+                text: 'Source: Online'
+            },
+            xAxis: {
+                categories: <%= @weeks %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @online_series_1 %>
+           
+        });
+    });
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_online_two"
+            },
+            title: {
+                text: 'Source: Online'
+            },
+            xAxis: {
+                categories: <%= @weeks %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @online_series_2 %>
+           
+        });
+    });
+  </script>
+
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_facebook"
+            },
+            title: {
+                text: 'Source: Facebook'
+            },
+            xAxis: {
+                categories: <%= @weeks %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @facebook_series_1 %>
+           
+        });
+    });
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_facebook_two"
+            },
+            title: {
+                text: 'Source: Facebook'
+            },
+            xAxis: {
+                categories: <%= @weeks %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @facebook_series_2 %>
+           
+        });
+    });
+  </script>
+
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_google"
+            },
+            title: {
+                text: 'Source: Google'
+            },
+            xAxis: {
+                categories: <%= @weeks %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @google_series_1 %>
+           
+        });
+    });
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: '.',
+        thousandsSep: ','
+      }
+    });
+
+    $(function () {
+        // Create the chart
+       new Highcharts.Chart({
+            chart: {
+                type: 'line',
+                renderTo: "consumption_chart_google_two"
+            },
+            title: {
+                text: 'Source: Google'
+            },
+            xAxis: {
+                categories: <%= @weeks %>,
+                crosshair: true
+                },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+              line: {
+                dataLabels: {
+                  enabled: true
+                },
+                enableMouseTracking: false
+              }
+            },
+
+            tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+            },
+
+            series: <%= @google_series_2 %>
+           
+        });
+    });
+  </script>
+  <%= form_tag 'weekly_source_wise_leads' do  %>
+    <div class="row">
+      <div class="col-lg-1">
+        Project:
+      </div>
+      <div class="col-lg-3">
+        <%= select(:project, :selected, options_for_select(@projects, selected: @project_selected),{}, {:class => 'form-control'})  %>
+      </div>
+      <div class="col-lg-2">
+        <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  <%end%>
+  <div class="jumbotron">
+    <div id="consumption_chart"></div>
+  </div>
+  <div class="jumbotron">
+    <div id="consumption_chart_two"></div>
+  </div>
+
+  <div class="jumbotron">
+    <div id="consumption_chart_online"></div>
+  </div>
+  <div class="jumbotron">
+    <div id="consumption_chart_online_two"></div>
+  </div>
+
+  <div class="jumbotron">
+    <div id="consumption_chart_facebook"></div>
+  </div>
+  <div class="jumbotron">
+    <div id="consumption_chart_facebook_two"></div>
+  </div>
+
+  <div class="jumbotron">
+    <div id="consumption_chart_google"></div>
+  </div>
+  <div class="jumbotron">
+    <div id="consumption_chart_google_two"></div>
+  </div>
+<%else%>
+<center><h1>Weekly Source Wise Leads</h1></center>
+<p><%= link_to 'Weekly Source Wise Leads with Opening', {controller: 'windows', action: 'weekly_source_wise_leads_with_opening'}, {method: :post} %></p>
+
+<%= form_tag 'weekly_source_wise_leads' do  %>
+  <div class="row">
+    <div class="col-lg-3">
+      <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:site_executive, :picked, options_for_select(@site_executives, selected: @executive), {}, {:class => 'form-control'})   %>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Refresh', name: 'refreshnow', :class => 'btn btn-primary' %>
+    </div>
+  </div>
+  <% 12.times do |count| %>
+    <%
+    @from=((Time.now-(count.weeks)).beginning_of_week)-1.day
+    @to=((Time.now-(count.weeks)).end_of_week)
+
+    if @executive==-1 
+      @leads_generated=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @opening_leads=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected).where('leads.generated_on < ? and (booked_on is ? or booked_on >= ?)',@from.to_date.to_datetime, nil,@from.to_date.to_datetime).group("leads.source_category_id").count
+      @site_visited_during_the_period=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected).where.not(site_visited_on: nil).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).where('leads.site_visited_on >= ? AND leads.site_visited_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @site_visited_opening=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected).where.not(site_visited_on: nil).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.site_visited_on >= ? AND leads.site_visited_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @booked_during_the_period=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected, lost_reason_id: nil, status: true).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).where('leads.booked_on >= ? AND leads.booked_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @booked_opening=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected, lost_reason_id: nil, status: true).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.booked_on >= ? AND leads.booked_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @leads_lost_during_the_period=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected, status: true).where.not(lost_reason_id: nil).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).where('leads.booked_on >= ? AND leads.booked_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @leads_lost_opening=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected, status: true).where.not(lost_reason_id: nil).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.booked_on >= ? AND leads.booked_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @qualified_during_the_period=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected, site_visited_on: nil).where('leads.qualified_on is not ?', nil).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @qualified_opening=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected, site_visited_on: nil).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.qualified_on is not ?', nil).group("leads.source_category_id").count
+      @isv_during_the_period=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected).where('leads.interested_in_site_visit_on is not ?', nil).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @isv_opening=Lead.includes(:personnel).where(:personnels => {organisation_id: current_personnel.organisation_id}, business_unit: @project_selected).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.interested_in_site_visit_on is not ?', nil).group("leads.source_category_id").count
+    else
+      @leads_generated=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @opening_leads=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected).where('leads.generated_on < ? and (booked_on is ? or booked_on >= ?)',@from.to_date.to_datetime, nil,@from.to_date.to_datetime).group("leads.source_category_id").count
+      @site_visited_during_the_period=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected).where.not(site_visited_on: nil).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).where('leads.site_visited_on >= ? AND leads.site_visited_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @site_visited_opening=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected).where.not(site_visited_on: nil).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.site_visited_on >= ? AND leads.site_visited_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @booked_during_the_period=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected, lost_reason_id: nil, status: true).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).where('leads.booked_on >= ? AND leads.booked_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @booked_opening=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected, lost_reason_id: nil, status: true).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.booked_on >= ? AND leads.booked_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @leads_lost_during_the_period=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected, status: true).where.not(lost_reason_id: nil).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).where('leads.booked_on >= ? AND leads.booked_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @leads_lost_opening=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected, status: true).where.not(lost_reason_id: nil).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.booked_on >= ? AND leads.booked_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @qualified_during_the_period=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected, site_visited_on: nil).where('leads.qualified_on is not ?', nil).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @qualified_opening=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected, site_visited_on: nil).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.qualified_on is not ?', nil).group("leads.source_category_id").count
+      @isv_during_the_period=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected).where('leads.interested_in_site_visit_on is not ?', nil).where('leads.generated_on >= ? AND leads.generated_on < ?',@from.to_date.to_datetime, @to.to_date.to_datetime).group("leads.source_category_id").count
+      @isv_opening=Lead.includes(:personnel).where(:personnels => {id: @executive}, business_unit: @project_selected).where('leads.generated_on < ?',@from.to_date.to_datetime).where('leads.interested_in_site_visit_on is not ?', nil).group("leads.source_category_id").count
+    end
+    %>
+
+    <h1>Week: #<%= (Time.now-(count.weeks)).strftime("%U") %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp(<%=((Time.now-(count.weeks)).beginning_of_week-1.day).strftime("%d/%m/%y") %>-<%=((Time.now-(count.weeks)).end_of_week-1.day).strftime("%d/%m/%y") %>)</h1>
+
+    <table class="customers " id="orderedtasks">
+      <thead>
+        <tr>
+          
+          <th>Source</th>
+          <th>Opening Live Leads</th>
+          <th>Leads Generated</th>
+          <th>Qualified</th>
+          <th>Interested In Site Visit</th>
+          <th>Leads Lost</th>
+          <th>Site Visits</th>
+          <th>Bookings</th>
+          <th>Closing Live Leads</th>
+          <th>Lost(%)</th>
+          <th>Site Visit(%)</th>
+          <th>Open(%)</th>
+        </tr>
+      </thead>
+
+      <tbody>
+          <% @sources.each do |source| %>
+            <% if @leads_generated[source.id]==nil && @opening_leads[source.id]==nil && @site_visited_during_the_period[source.id]==nil && @site_visited_opening[source.id]==nil && @booked_during_the_period[source.id]==nil && @booked_opening[source.id]==nil && @leads_lost_opening[source.id]==nil && @leads_lost_during_the_period[source.id]==nil %>
+            <% else %>
+            <tr>
+             <td><%= source.heirarchy %></td>
+             <td><%= @opening_leads[source.id] %></td>
+             <td><%= @leads_generated[source.id] %></td>
+             <% if @leads_generated[source.id]==nil 
+              leads_generated=0
+              else
+              leads_generated=@leads_generated[source.id]
+              end
+             %><% if @opening_leads[source.id]==nil 
+              opening_leads=0
+              else
+              opening_leads=@opening_leads[source.id]
+              end
+             %>
+             <% if @leads_lost_during_the_period[source.id]==nil 
+              leads_lost_during_the_period=0
+              else
+              leads_lost_during_the_period=@leads_lost_during_the_period[source.id]
+              end
+             %>
+             <% if @leads_lost_opening[source.id]==nil 
+              leads_lost_opening=0
+              else
+              leads_lost_opening=@leads_lost_opening[source.id]
+              end
+             %>
+             <% if @booked_during_the_period[source.id]==nil 
+              booked_during_the_period=0
+              else
+              booked_during_the_period=@booked_during_the_period[source.id]
+              end
+             %>
+             <% if @booked_opening[source.id]==nil 
+              booked_opening=0
+              else
+              booked_opening=@booked_opening[source.id]
+              end
+             %>
+             <% if @site_visited_during_the_period[source.id]==nil 
+              site_visited_during_the_period=0
+              else
+              site_visited_during_the_period=@site_visited_during_the_period[source.id]
+              end
+             %>
+             <% if @site_visited_opening[source.id]==nil 
+              site_visited_opening=0
+              else
+              site_visited_opening=@site_visited_opening[source.id]
+              end
+             %>   
+             <% if @qualified_during_the_period[source.id]==nil 
+                qualified_during_the_period=0
+              else
+                qualified_during_the_period=@qualified_during_the_period[source.id]
+              end
+             %>
+             <% if @qualified_opening[source.id]==nil 
+                qualified_opening=0
+              else
+                qualified_opening=@qualified_opening[source.id]
+              end
+             %>
+             <% if @isv_during_the_period[source.id]==nil 
+                interested_during_the_period=0
+              else
+                interested_during_the_period=@isv_during_the_period[source.id]
+              end
+             %>
+             <% if @isv_opening[source.id]==nil 
+                interested_opening=0
+              else
+                interested_opening=@isv_opening[source.id]
+              end
+             %>   
+             <td><%= qualified_during_the_period+qualified_opening%></td>
+             <td><%= interested_during_the_period+interested_opening%></td>
+             <td><%= leads_lost_during_the_period+leads_lost_opening %></td>
+             <td><%= site_visited_during_the_period+site_visited_opening %></td>
+             <td><%= booked_during_the_period+booked_opening %></td>
+             <td><%= leads_generated+opening_leads-leads_lost_during_the_period-leads_lost_opening-booked_during_the_period-booked_opening %></td>
+             
+             <% if leads_generated+opening_leads==0 %>
+             <td></td>
+             <td></td>
+             <td></td>
+             <% else %>
+             <td><%= (((leads_lost_during_the_period+leads_lost_opening).to_f/(leads_generated+opening_leads).to_f)*100).round %></td>
+             <td><%= ((((site_visited_during_the_period+site_visited_opening).to_f)/((leads_generated+opening_leads).to_f))*100).round %></td> 
+             <td><%= ((((leads_generated+opening_leads-leads_lost_during_the_period-leads_lost_opening-booked_during_the_period-booked_opening).to_f)/(leads_generated+opening_leads).to_f)*100).round %></td>
+             <% end %> 
+            </tr>
+            <% end %>  
+          <% end %>
+          <tfoot>
+          <tr>
+            <td><b>TOTAL</b></td>
+            <td><b><%= @opening_leads.sum{|key,value| value} %></b></td>
+            <td><b><%= @leads_generated.sum{|key,value| value} %></b></td>
+            <td><b><%= (@qualified_during_the_period.sum{|key,value| value})+(@qualified_opening.sum{|key,value| value}) %></b></td>
+            <td><b><%= (@isv_during_the_period.sum{|key,value| value})+(@isv_opening.sum{|key,value| value}) %></b></td>
+            <td><b><%= (@leads_lost_during_the_period.sum{|key,value| value}) + (@leads_lost_opening.sum{|key,value| value}) %></b></td>
+            <td><b><%= (@site_visited_during_the_period.sum{|key,value| value})+(@site_visited_opening.sum{|key,value| value}) %></b></td>
+            <td><b><%= (@booked_during_the_period.sum{|key,value| value})+(@booked_opening.sum{|key,value| value}) %></b></td>
+            <td><b><%= (@leads_generated.sum{|key,value| value})+(@opening_leads.sum{|key,value| value})-(@leads_lost_during_the_period.sum{|key,value| value})-(@leads_lost_opening.sum{|key,value| value})-(@booked_during_the_period.sum{|key,value| value})-(@booked_opening.sum{|key,value| value})%></b></td>
+            <td></td>
+            <td></td>
+            <td></td> 
+          </tr>
+          </tfoot>
+          </tbody>
+    </table>
+  <% end %>
+<% end %>
+<% end %>

@@ -1,0 +1,63 @@
+<%@header = 'Maintainence Customer List'%>
+<h1>Customer's List with their flats</h1>
+<%= form_tag 'customer_with_flat_index', :html => {:class => 'form-horizontal'} do %>
+  <div class="row form-group">
+    <div class="col-lg-1">
+      <b><%= label_tag :'Projects:' %></b>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:business_unit, :business_unit_id, options_for_select(@business_units, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+    </div>
+    <div class=" col-lg-3">
+      <%= submit_tag 'View Details',:class => 'btn btn-primary' %>    
+    </div>
+  </div>
+<%end%>
+<%= form_tag 'individual_marking', :html => {:class => 'form-horizontal'} do %>
+<table class="customers" id="customer_with_flat_index" >
+  <thead>
+    <tr>
+      <th>Mark individuals</th>
+      <th>Project</th>
+      <th>Lead ID</th>
+      <th>Customer</th>
+      <th>Block</th>
+      <th>Flat</th>
+      <th>Bulk</th>
+      <th>Individual</th>
+      <th>Remarks</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @flats.each do |flat| %>
+          <tr>
+            <td><%= check_box_tag 'flat_ids[]',flat.id%></td>
+            <td><%= flat.block.business_unit.name %></td>
+            <td><%= flat.lead_id %></td>
+            <td><%= flat.lead.name %></td>
+            <td><%= flat.block.name%></td>
+            <td><%= flat.full_name %></td>
+            <% if flat.individual_bill_generation == false %>
+              <td>true</td>
+            <%else%>
+              <td></td>
+            <%end%>
+            <% if flat.individual_bill_generation == true %>
+              <td>true</td>
+            <%else%>
+              <td></td>
+            <%end%>
+            <td><%= flat.try(:remarks)%></td>
+            <td><%= link_to 'Put Remarks', maintainance_bill_individual_remarks_path(flat),:class => 'link_btn ', :style => "text-decoration: none"%></td>
+          </tr>
+    <% end %>
+  </tbody>
+</table><br>
+<%= submit_tag 'Individual',:class => 'btn btn-primary' %>
+<%= submit_tag 'Bulk',:class => 'btn btn-primary' %>
+
+
+<%end%>          
+  

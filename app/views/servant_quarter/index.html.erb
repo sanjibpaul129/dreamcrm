@@ -1,0 +1,33 @@
+<%@header = 'Servant Quarter'%>
+<h1>Servant Quarter</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      
+      <th>Date</th>
+      <th>Project</th>
+      <th>Rate</th>
+      
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @servant_quarters.each do |servant_quarter| %>
+      <tr>
+        <td><%= servant_quarter.date %></td>
+        <td><%= servant_quarter.business_unit.name %></td>
+        <td><%= servant_quarter.rate %></td>
+        
+        <td><%= link_to 'Edit', servant_quarter_edit_path(servant_quarter), :class => "edit_btn", :style => "text-decoration:none;"%></td>
+        <td><%= link_to 'Destroy', servant_quarter_destroy_path(servant_quarter),:class => "dlt_btn", :style => "text-decoration:none;",data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New servant_quarter', servant_quarter_new_path, :class => 'btn btn-primary' %>

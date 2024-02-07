@@ -1,0 +1,463 @@
+<% if current_personnel.business_unit.organisation_id == 1 %>
+  <%@header = 'Followup Due'%>
+  <% flash.each do |key, value| %>
+    <div class="<%= flash_class(key) %>">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Heads up!</strong> <%= value %>
+    </div>
+  <% end %>
+  <div align="center"><h3><b>Follow ups due</b></h3></div>
+  <%= form_tag 'followup_entry' do %>
+    <% if current_personnel.status == 'Admin' %>
+      <div class="row">
+        <div class="col-lg-1">
+          <i>  Executive </i>
+        </div>
+        <div class="col-lg-3">
+          <%= select(:site_executive, :picked, options_for_select(@executives, selected: @executive), {}, {:class => 'form-control'}) %>
+        </div>
+        <div class="col-lg-2">
+          <% if current_personnel.organisation_id == 1 %>
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Team Lead' %> 
+              <%= submit_tag 'Refresh', name: 'Refresh', :class => 'btn btn-primary' %>
+            <%else%>
+            <%end%>
+          <%else%>
+            <%= submit_tag 'Refresh', name: 'Refresh', :class => 'btn btn-primary' %>
+          <%end%>  
+        </div>
+      </div>
+    <% end %>
+  <% end %><br>
+  <%= form_tag 'followup_history', :html => {:class => 'form-horizontal'} do %>
+    <table class="customers" id="followup_due" style="width: 100% height:100%">
+      <thead>
+        <tr>
+          <% if current_personnel.email == "ayush@thejaingroup.com"%>
+            <th><%= check_box_tag "selectAll", "selectAll" %></th>
+          <%end%>
+          <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+          <th>Lead id</th>
+          <th>Project</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Src</th>
+          <th>Status</th>
+          <th>Generated on</th>
+          <th>To Followup on</th>
+          <th>Followup remarks</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @leads.each do |lead| %>
+          <% google_lead_detail = GoogleLeadDetail.find_by_lead_id(lead.id)%>
+          <% if google_lead_detail == nil %>
+            <tr>
+          <% elsif (google_lead_detail.campaignid == nil && google_lead_detail.adgroupid == nil && google_lead_detail.creative == nil && google_lead_detail.utm_source == nil) || (google_lead_detail.campaignid == "" && google_lead_detail.adgroupid == "" && google_lead_detail.creative == "" && google_lead_detail.utm_source == "")%>
+            <tr style="background: #9999ff!important;">
+          <%else%>
+            <tr>
+          <%end%>
+            <% if current_personnel.email == "ayush@thejaingroup.com" %>
+              <td><%= check_box_tag 'lead_id[]' , lead.id %></td>
+            <%end%>
+            <% if lead.escalated==true %>
+              <td><span class="label label-danger" title="Escalated">!</span></td>
+            <% elsif lead.escalated==false %>
+              <td><span class="label label-info">!</span></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            <td><%= lead.id %></td>
+            <td><%= lead.business_unit.name %></td>
+            <% if lead.anticipation=='Hot'%>
+              <td style="background-color: #ffd0d0!important">Hot</td> 
+            <% elsif lead.anticipation=='Good'%>
+              <td style="background-color: #aae5aa6e!important">Good</td> 
+            <% else %>
+              <td></td>
+            <%end%>
+            <td><%= lead.name %></td>
+            <td><%= lead.source_category.description %></td>
+            <%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+              <td>Qualified</td>
+            <%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+              <td>Interested In Site Visit</td>
+            <% elsif lead.osv == true %>
+              <td>OV</td>
+            <% elsif lead.osv== false && lead.status== nil %>
+              <td>Negotiation</td>
+            <% elsif lead.osv==nil  && lead.status==nil %>
+              <td>In Follow Up</td>
+            <% elsif lead.virtually_visited_on != nil %>
+              <td>Virtually Visited</td>
+            <% elsif lead.osv==nil && lead.status==false %>
+              <td>Site Visited</td>
+            <% elsif lead.osv== false && lead.status== false %>
+              <td>Field Visited</td>
+            <% elsif lead.lost_reason_id != nil %>
+              <td>Lost</td>
+            <% end %>
+            <td><%= lead.generated_on.try{|x| x.strftime("%d/%m/%y")} %></td>
+            <% if lead.follow_ups != [] %>
+              <td><%= (lead.follow_ups.last.follow_up_time).strftime("%d/%m/%y") %></td>
+              <% if current_personnel.expanded == true %>
+                <td>
+                  <% if lead.follow_ups.last.remarks == nil || lead.follow_ups.last.remarks == '' %>
+                  <%else%>
+                    <%= lead.follow_ups.last.remarks%>
+                  <%end%>
+                </td>
+              <%else%>
+                <td>
+                  <% if lead.follow_ups.last.remarks == nil || lead.follow_ups.last.remarks == '' %>
+                  <%else%>
+                    <span class="popoverData" data-content="<%= lead.follow_ups.last.remarks%>" rel="popover" data-placement="top" data-trigger="hover">[...]</span>
+                  <%end%>
+                </td>     
+              <%end%>
+            <% else %>
+              <td><%= (Time.now - 365.days).strftime("%m/%d/%y") %></td>
+              <td>NA</td>
+            <% end %>
+            <td><%= submit_tag "Call 1", :name => "call_1[#{lead.id}]" %></td>
+            <td><%= submit_tag "Call 2", :name => "call_2[#{lead.id}]" %></td>
+            <% if lead.other_number == "" || lead.other_number == nil%>
+              <td></td>
+            <%else%>
+              <% if lead.other_number == lead.mobile%>
+                <td></td>
+              <%else%>
+                <td><%= submit_tag "Call Other No.", :name => "call_other[#{lead.id}]" %></td>
+              <%end%>
+            <%end%>
+            <td><%= link_to ">", windows_conversation_history_path(lead), :class => 'btn btn-primary btn-xs' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if current_personnel.email == "ayush@thejaingroup.com" %>
+      <%= render 'followup_update' %>
+    <%end%>
+  <% end %>
+  <style >
+    .dataTables_scrollHead{
+      height: 40px;
+    }
+    .dataTables_info{
+      display:inline-block;
+      float:left;
+    }
+    .dataTables_length{
+      display:inline-block;
+      float:right;
+    }
+    .fixedHeader-floating th { background-color: #2b3e50; }
+    .edit_btn{
+      width: 30px!important;
+    }
+  </style>
+  <script>
+    $('.popoverData').popover();
+  </script>
+  <script>
+    $(document).ready(function(){
+    var FilterTable=$("#followup_due").DataTable({  
+       "fixedHeader": true,   
+       "dom": '<"wrapper"lit>',
+       "bAutoWidth": false,
+       "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+       "bDeferRender": true,
+       "aoColumns": [
+                                  <% if current_personnel.email == "ayush@thejaingroup.com" %>
+                                    {"bSortable": true},
+                                  <%end%>
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                  {"bSortable": true}
+                                 ],
+        "order": [[ 2, "desc" ]]
+    });
+
+    $("#filterbox").keyup(function() {
+            FilterTable.search(this.value).draw();
+        });
+    });
+  </script>
+<%else%>
+  <%@header = 'Followup Due'%>
+  <% flash.each do |key, value| %>
+    <div class="<%= flash_class(key) %>">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Heads up!</strong> <%= value %>
+    </div>
+  <% end %>
+  <div align="center"><h3><b>Follow ups due</b></h3></div>
+  <%= form_tag 'followup_entry' do  %>
+    <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status=='Marketing' %>
+      <div class="row">
+        <div class="col-lg-1">
+          <i>  Executive </i>
+        </div>
+        <div class="col-lg-3">
+          <%= select(:site_executive, :picked, options_for_select(@executives, selected: @executive), {}, {:class => 'form-control'}) %>
+        </div>
+        <div class="col-lg-2">
+          <% if current_personnel.organisation_id == 1 %>
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Team Lead' %> 
+              <%= submit_tag 'Refresh', name: 'Refresh', :class => 'btn btn-primary' %>
+            <%else%>
+            <%end%>
+          <%else%>
+            <%= submit_tag 'Refresh', name: 'Refresh', :class => 'btn btn-primary' %>
+          <%end%>  
+        </div>
+      </div>
+    <% end %>
+    <br>
+    <table class="customers" id="pending_followups" style="width: 100% height:100%">
+      <thead>
+        <tr>
+          <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' %>
+            <th><%= check_box_tag "selectAll", "selectAll" %></th>
+          <% else %>
+            <th></th>
+          <% end %>
+          
+          <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+          <th>Lead id</th>
+          <th>Project</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <% if current_personnel.organisation_id != 6 %>
+            <th>Other No.</th>
+            <th>Email</th>
+          <%end%>
+          <th>Budget</th>
+          <th>BHK</th>
+          <th>Src</th>
+          <th>Remarks</th>
+          <th>Status</th>
+          <th>Generated on</th>
+          <th>Generated on sort</th>
+          <th>Last Followup on</th>
+          <th>Last Followup on sort</th>
+          <th>Followup remarks</th>
+          <th>To Followup on</th>
+          <th>To Followup on sort</th>
+          <th>To Followup on search</th>
+          <% if current_personnel.organisation_id != 6 %>
+            <th>Score</th>
+          <%end%>
+          
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @leads.each do |lead| %>
+          <tr>
+            <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' || current_personnel.status == "Audit" %>
+              <td><%= check_box_tag 'lead_id[]' , lead.id %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            
+            <% if lead.escalated==true %>
+              <td><span class="label label-danger" title="Escalated">!</span></td>
+            <% elsif lead.escalated==false %>
+              <td><span class="label label-info">!</span></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            <td><%= lead.id %></td>
+            <td><%= lead.business_unit.name %></td>
+            <% if lead.anticipation=='Hot'%>
+              <td style="background-color: #ffd0d0!important">Hot</td> 
+            <% elsif lead.anticipation=='Good'%>
+              <td style="background-color: #aae5aa6e!important">Good</td> 
+            <% else %>
+              <td></td>
+            <%end%>
+            <td><%= lead.name %></td>
+            <td><%= link_to lead.mobile.to_s, "tel:+91"+(lead.mobile.to_s) %></td>
+            <% if current_personnel.organisation_id != 6 %>
+              <td><%= link_to lead.mobile.to_s, "tel:+91"+(lead.other_number.to_s) %></td>
+              <td><%= lead.email %></td>
+            <%end%>
+            <td><%= lead.budget_from %>-<%= lead.budget_to %></td>
+            <td><%= lead.flat_type %></td>
+            <td><%= lead.source_category.description %></td>
+            <% if current_personnel.expanded == true %>
+              <td>
+                <% if lead.customer_remarks == nil || lead.customer_remarks == '' %>
+                <%else%>
+                  <%= lead.customer_remarks%>
+                <%end%>
+              </td>
+            <%else%>
+              <td>
+                <% if lead.customer_remarks == nil || lead.customer_remarks == '' %>
+                <%else%>
+                  <span class="popoverData" data-content="<%= lead.customer_remarks%>" rel="popover" data-placement="top" data-trigger="hover">[...]</span>
+                <%end%>
+              </td>  
+            <%end%>
+            <%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+              <td>Qualified</td>
+            <%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+              <td>Interested In Site Visit</td>
+            <% elsif lead.osv == true %>
+              <td>OV</td>
+            <% elsif lead.osv== false && lead.status== nil %>
+              <td>Negotiation</td>
+            <% elsif lead.osv==nil  && lead.status==nil %>
+              <td>In Follow Up</td>
+            <% elsif lead.osv==nil && lead.status==false %>
+              <td>Site Visited</td>
+            <% elsif lead.osv== false && lead.status== false %>
+              <td>Field Visited</td>
+            <% elsif lead.lost_reason_id != nil %>
+              <td>Lost</td>
+            <% end %>
+            <td><%= lead.generated_on.try{|x| x.strftime("%d/%m/%y")} %></td>
+            <td><%= lead.generated_on.try{|x| x.strftime("%m/%d/%y")} %></td>
+            <% if lead.follow_ups != [] %>
+              <td><%= (lead.follow_ups.last.communication_time+19800).strftime("%d/%m/%y") %></td>
+              <td><%= (lead.follow_ups.last.communication_time+19800).strftime("%m/%d/%y") %></td>
+              <% if current_personnel.expanded == true %>
+                <td>
+                  <% if lead.follow_ups.last.remarks == nil || lead.follow_ups.last.remarks == '' %>
+                  <%else%>
+                    <%= lead.follow_ups.last.remarks%>
+                  <%end%>
+                </td>
+              <%else%>
+                <td>
+                  <% if lead.follow_ups.last.remarks == nil || lead.follow_ups.last.remarks == '' %>
+                  <%else%>
+                    <span class="popoverData" data-content="<%= lead.follow_ups.last.remarks%>" rel="popover" data-placement="top" data-trigger="hover">[...]</span>
+                  <%end%>
+                </td>     
+              <%end%>
+              <td><%= (lead.follow_ups.last.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+              <td><%= (lead.follow_ups.last.follow_up_time).strftime("%m/%d/%y") %></td>
+              <td>$<%= (lead.follow_ups.last.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+            <% else %>
+              <td>Not done</td> 
+              <td><%= (Time.now - 365.days).strftime("%m/%d/%y") %></td>
+              <td>NA</td>
+              <td>NA</td>
+              <td><%= (Time.now - 365.days).strftime("%m/%d/%y") %></td>
+              <td></td>
+            <% end %>
+            <% if current_personnel.organisation_id != 6 %>
+              <td><%= lead.score %></td>        
+            <%end%>
+            <% if current_personnel.status=='Marketing' || current_personnel.view_only==true %>
+              <td></td>
+            <% else %>
+              <td><abbr title="Lead Edit"> <%= link_to edit_lead_path(lead), class: "" do%>
+              <i class="glyphicon glyphicon-pencil edit_btn"></i></abbr>
+            <% end %></td>
+          <% end %> 
+            <td><%= submit_tag ">", name: lead.id, :class => 'btn btn-primary btn-xs' %></td>  
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <br>
+    <% if current_personnel.access_right==0 || current_personnel.access_right==2 || current_personnel.access_right == 4 %>
+      <%= render 'followup_update' %>
+    <% else %>
+    <% end %>
+  <% end %>
+
+  <style >
+    .dataTables_scrollHead{
+      height: 40px;
+    }
+    .dataTables_info{
+      display:inline-block;
+      float:left;
+    }
+   .dataTables_length{
+    display:inline-block;
+   float:right;
+   }
+   .fixedHeader-floating th { background-color: #2b3e50; }
+   .edit_btn{
+    width: 30px!important;
+   }
+    </style>
+    
+
+    <script>
+  $('.popoverData').popover();
+   </script>
+  <script>
+  $(document).ready(function(){
+  var FilterTable=$("#pending_followups").DataTable({  
+     "fixedHeader": true,   
+     "dom": '<"wrapper"lit>',
+     "bAutoWidth": false,
+     "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+     "bDeferRender": true,
+     "aoColumns": [
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                <% if current_personnel.organisation_id != 6%>
+                                  {"bSortable": true},
+                                  {"bSortable": true},
+                                <%end%>
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"bSortable": true},
+                                {"iDataSort": 14},
+                                {"bVisible": false},
+                                {"iDataSort": 16},
+                                {"bVisible": false},
+                                {"bSortable": true},
+                                {"iDataSort": 19},
+                                {"bVisible": false},
+                                {"bVisible": false},
+                                <% if current_personnel.organisation_id != 6%>
+                                  {"bSortable": true},
+                                <%end%>
+                                {"bSortable": true},
+                                {"bSortable": true}
+                               ],
+      "order": [[ 19, "desc" ]]
+  });
+
+  $("#filterbox").keyup(function() {
+          FilterTable.search(this.value).draw();
+      });
+  });
+
+  </script>
+<%end%>

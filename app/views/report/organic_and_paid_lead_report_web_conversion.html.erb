@@ -1,0 +1,118 @@
+<h1>Organic and Paid Leads for Meta web conversion</h1>
+<%= form_tag 'organic_and_paid_lead_report', :html => {:class => 'form-horizontal'} do %>
+	<div class="row">
+		<div class="col-lg-1">
+			Projects:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "business_unit_id", options_for_select(@projects, selected: @selected_project), :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "from", @from.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			TO:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "to", @to.to_date, :class => 'form-control'%>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Qualified</th>
+		<th>utm_source</th>
+	    <th>utm_campaign</th>
+	    <th>utm_medium</th>
+	    <th>utm_content</th>
+	    <th>utm_term</th>
+	    <th>communicated_through</th>
+	    <th>network</th>
+	    <th>campaignid</th>
+	    <th>adgroupid</th>
+	    <th>gclid</th>
+	    <th>target</th>
+	    <th>placement</th>
+	    <th>creative</th>
+	    <th>adposition</th>
+	    <th>keyword</th>
+	    <th>device</th>
+	    <th>extention_id</th>
+	    <th>target_id</th>
+	    <th>loc_interest_ms</th>
+	    <th>loc_physical_ms</th>
+	    <th>device_model</th>
+	    <th>match_type</th>
+	    <th>source_id</th>
+	    <th>fbclid</th>
+	</thead>
+	<tbody>
+		<% @leads.each do |lead| %>
+			<tr>
+				<td><%= lead.id%></td>
+				<td><%= lead.name%></td>
+				<td><%= lead.qualified_on %></td>
+				<% google_lead_detail = GoogleLeadDetail.find_by_lead_id(lead.id)%>
+				<% if google_lead_detail == nil%>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				<%else%>
+					<td><%= google_lead_detail.try(:utm_source)%></td>
+					<td><%= google_lead_detail.try(:utm_campaign)%></td>
+					<td><%= google_lead_detail.try(:utm_medium)%></td>
+					<td><%= google_lead_detail.try(:utm_content)%></td>
+					<td><%= google_lead_detail.try(:utm_term)%></td>
+					<td><%= google_lead_detail.try(:communicated_through)%></td>
+					<td><%= google_lead_detail.try(:network)%></td>
+					<td><%= google_lead_detail.try(:campaignid)%></td>
+					<td><%= google_lead_detail.try(:adgroupid)%></td>
+					<td><%= google_lead_detail.try(:gclid)%></td>
+					<td><%= google_lead_detail.try(:target)%></td>
+					<td><%= google_lead_detail.try(:placement)%></td>
+					<td><%= google_lead_detail.try(:creative)%></td>
+					<td><%= google_lead_detail.try(:adposition)%></td>
+					<td><%= google_lead_detail.try(:keyword)%></td>
+					<td><%= google_lead_detail.try(:device)%></td>
+					<td><%= google_lead_detail.try(:extention_id)%></td>
+					<td><%= google_lead_detail.try(:target_id)%></td>
+					<td><%= google_lead_detail.try(:loc_interest_ms)%></td>
+					<td><%= google_lead_detail.try(:loc_physical_ms)%></td>
+					<td><%= google_lead_detail.try(:device_model)%></td>
+					<td><%= google_lead_detail.try(:match_type)%></td>
+					<td><%= google_lead_detail.try(:source_id)%></td>
+					<td><%= google_lead_detail.try(:fbclid)%></td>
+				<%end%>
+			</tr>
+		<%end%>
+	</tbody>
+</table>

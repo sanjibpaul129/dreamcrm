@@ -1,0 +1,20 @@
+<p>Dear Sir,</p>
+
+<table border="1">
+  <thead>
+    <tr>
+       <th>reply</th>
+       <th>count</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @data.each do |reply,count| %>
+	      <tr>
+	        <td><%= reply %></td>
+	        <td><%= count %></td>
+	      </tr>
+    <% end %>
+  </tbody>
+</table>
+

@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" class="body">
+      <tr>
+        <td>&nbsp;</td>
+        <td class="container">
+          <div class="content">
+            <table class="main">
+              <tr>
+                <td class="wrapper">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td>
+                        <h1>Feedback Form</h1>
+                        <form method="post" action-xhr="https://www.realtybucket.com/webhook/site_visit_feedback">
+                          <div class="m1">
+                            <p>How likely are you to recommand this project to friends and colleagues?</p>  
+                            <input type="radio" id="rating1" name="rating" value="1" required>1
+                            <input type="radio" id="rating2" name="rating" value="2" required>2
+                            <input type="radio" id="rating3" name="rating" value="3" required>3
+                            <input type="radio" id="rating4" name="rating" value="4" required>4
+                            <input type="radio" id="rating5" name="rating" value="5" required>5
+                            <input type="radio" id="rating6" name="rating" value="6" required>6
+                            <input type="radio" id="rating7" name="rating" value="7" required>7
+                            <input type="radio" id="rating8" name="rating" value="8" required>8
+                            <input type="radio" id="rating9" name="rating" value="9" required>9
+                            <input type="radio" id="rating10" name="rating" value="10" required>10
+                            <%= hidden_field_tag "lead_id", @lead.id%>
+                          </div>  
+                          <div [submit-success]="feedbackSubmitted">
+                            Thank you for submitting feedback.
+                          </div>
+                          <div id="step2" [class]="showStep2 ? 'visible' : 'hidden'">
+                            <label for="info">Please tell us why you gave the above rating?</label>
+                            <textarea id="info" name="name" rows="4" cols="35"></textarea>
+                          </div>
+                          <button type="submit">Send feedback</button>
+                        </form>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+<h1>Call Report</h1>
+<%= form_tag 'call_report', :html => {:class => 'form-horizontal'} do %>  
+	<div class="row">
+		<div class="col-lg-1">
+			Project:
+		</div>
+		<div class="col-lg-3">
+			<%= select_tag "personnel_id", options_for_select(@personnels, selected: @personnel_id), :class => 'form-control'%>
+		</div>
+		<div class="col-lg-1">
+			From:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "from", @from.to_date, :class => "form-control" %>
+		</div>
+		<div class="col-lg-1">
+			To:
+		</div>
+		<div class="col-lg-2">
+			<%= date_field_tag "to", @to.to_date, :class => "form-control" %>
+		</div>
+		<div class="col-lg-2">
+			<%= submit_tag "View Details", :class => 'btn btn-primary'%>
+		</div>
+	</div>
+<%end%>
+<table class="customers">
+	<thead>
+		<th>Description</th>
+		<th>Number of Leads</th>
+	</thead>
+	<tbody>
+		<% @telephony_calls.each  do |key, value| %>
+			<tr>
+				<td><%= key %></td>
+				<td><%= value %></td>
+			</tr>
+		<%end%>
+	</tbody>
+</table>
+<h1>Cut Before Connected Records</h1>
+<table class="customers">
+	<thead>
+		<th>Lead Id</th>
+		<th>Name</th>
+		<th>Followup Remarks</th>
+	</thead>
+	<tbody>
+		<% @cut_before_connected.each do |telephony_call|%>
+			<tr>
+				<td><%= telephony_call.lead_id%></td>
+				<td><%= telephony_call.lead.name%></td>
+				<td><%= FollowUp.find_by_telephony_call_id(telephony_call.id).try(:remarks)%></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<h1>Call Cut after one ring</h1>
+<table class="customers">
+	<thead>
+		<th>Lead Id</th>
+		<th>Name</th>
+		<th>Followup Remarks</th>
+		<th>Recording</th>
+	</thead>
+	<tbody>
+		<% @cut_after_one_ring.each do |telephony_call|%>
+			<tr>
+				<td><%= telephony_call.lead_id%></td>
+				<td><%= telephony_call.lead.name%></td>
+				<td><%= FollowUp.find_by_telephony_call_id(telephony_call.id).try(:remarks)%></td>
+				<% if telephony_call.recording_url == "None"%>
+					<td></td>
+				<%else%>
+					<td><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), telephony_call.recording_url%></td>
+				<%end%>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<style>
+	.play_btn{
+      width: 30px!important;
+      height: auto;
+    }
+</style>

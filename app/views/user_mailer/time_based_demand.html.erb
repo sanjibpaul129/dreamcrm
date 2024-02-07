@@ -1,0 +1,28 @@
+ This is to inform you that demand for these flat are need to generated, the list is given below:<br>
+<b>Flats are:-</b>
+<table border="2">
+	<thead>
+		<th>Project</th>
+		<th>Block</th>
+		<th>Customer</th>
+		<th>Flat</th>
+		<th>Milestone</th>
+		<th>Due Date</th>
+		<th>Delay</th>
+		<th>Amount</th>
+	</thead>
+	<tbody>
+		<%@flats.each do |flat|%>
+			<tr>
+				<td><%= flat[0].block.business_unit.name%></td>
+				<td><%= flat[0].block.name%></td>
+				<td><%= CostSheet.find_by_flat_id(flat[0].id).lead.name%></td>
+				<td><%= flat[0].full_name%></td>
+				<td><%= flat[1]%></td>
+				<td><%= flat[2].to_date.strftime('%d/%m/%Y')%></td>
+				<td><%= flat[3]%></td>
+				<td><%= flat[4]%></td>
+			</tr>
+		<%end%>		
+	</tbody>
+</table>

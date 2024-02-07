@@ -1,0 +1,34 @@
+<div class="col-lg-4 col-lg-offset-4">
+  <div class="well bs-component">
+<!--   <legend>New other_project</legend> -->
+  <%= form_for @other_project, url: {action: @other_project_action} do |f| %>
+    <% if @other_project.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@other_project.errors.count, "error") %> prohibited this other_project from being saved:</h2>
+
+        <ul>
+        <% @other_project.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group row">
+      <div class="col-lg-3">
+        <%= f.label :'Name:' %>
+      </div>
+      <div class="col-lg-9">
+        <%= f.text_field :name, :class => 'form-control'%>
+      </div>
+    </div><br>
+    <div class="form-group row">
+      <div class="col-lg-4 col-lg-offset-4">
+        <%= f.submit :class => 'btn btn-primary'%>
+      </div>
+    </div>
+    <%= hidden_field_tag :other_project_id, @other_project.id %>
+  <% end %>
+  </div>
+</div>
+  

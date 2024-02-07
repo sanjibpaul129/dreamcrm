@@ -1,0 +1,29 @@
+<%@header = 'Maintenance Rate'%>
+<h1>Maintenance Charges</h1>
+<table id="customers" style="width: 100% height:100%">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Business Unit</th>
+      <th>Rate</th>
+      <th>Applicable From</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @maintainance_charges.each do |maintainance_charge|%>
+  		<tr>
+  			<td><%= maintainance_charge.company.name%></td>
+  			<td><%= maintainance_charge.business_unit.name%></td>
+  			<td><%= maintainance_charge.rate%></td>
+        <td><%= maintainance_charge.applicable_from.to_date%></td>
+  			<td><%= link_to 'Edit', maintainance_maintainance_edit_path(maintainance_charge), :class => 'edit_btn'%></td>
+  			<td><%= link_to 'Destroy', maintainance_maintainance_destroy_path(maintainance_charge), data: { confirm: 'Are you sure ?'}, :class => 'dlt_btn'%></td>
+        
+  		</tr>
+  	<%end%>
+  </tbody>
+</table><br>
+<%= link_to 'New Entry', maintainance_maintainance_new_path, :class => 'btn btn-primary' %>

@@ -1,0 +1,36 @@
+<%@header = 'Import Costing Report'%>
+<%= form_tag 'costing_report_import', multipart: true  do %>
+  <div class="col-lg-6 col-lg-offset-3">
+    <div class="well bs-component">
+      <center><legend>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspImport Costing Report</legend> </center>
+        <div class="row">
+          <div class="col-lg-4 col-lg-offset-1">
+            <%= select_month((Date.today-1.month), {},{:class => "form-control"}) %>
+          </div>
+          <div class="col-lg-4 col-lg-offset-1">
+            <%= select_year Date.today, {:start_year => Date.today.year, :end_year => -3.year.from_now.year}, :class => "form-control" %>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1">
+            <%= file_field_tag :file, class: 'filestyle', :'data-classButton' => 'btn btn-primary' %>
+          </div>
+        </div><br>
+        <center>
+          <%= button_tag type: 'submit', :class =>"btn btn-primary"  ,'data-toogle' => "tooltip",'title' => "Import Costing Report"  do %>
+            <%= content_tag :strong, 'Import' %>
+          <% end %>
+        </center>
+    </div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <div class="panel-title">
+          <b>INSTRUCTIONS:</b>
+        </div>
+      </div>
+      <div class="panel-body">
+        Populate as per headings(Campaign name, Ad Set Name, Ad name, Campaign ID, Ad set ID, Ad ID, Delivery status, Delivery level,  Result type, Results Amount spent (INR),  Reporting starts, Reporting ends)
+      </div>
+    </div>
+  </div>
+<% end %>

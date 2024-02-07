@@ -1,0 +1,2 @@
+module MarketingInstancesHelper
+end

@@ -1,0 +1,161 @@
+<%= form_tag 'broker_followup_entry', :html => {:class => 'form-horizontal'} do %>
+  <%= hidden_field_tag 'broker_contact_id', @broker_contact.id%>
+  <%= hidden_field_tag :telephony_call_id, nil, :id => 'telephony_call' %>
+  <div align="center">
+    <h3>
+      Broker: <%= @broker_contact.broker.name%>, Contact Name: <%= @broker_contact.name %>, - <%= @broker_contact.personnel.name %> <%= link_to "Edit", broker_setup_broker_contact_edit_path(@broker_contact), target: "_blank", class: "edit_btn"%>
+    </h3><br>
+    <h3 style="color: #000; font-size: 17px; font-weight: 800;">Reference: <%= @broker_contact.reference %></h3>
+  </div><br>
+  <table class="customers">
+    <thead>
+      <th>Updated on</th>
+      <th>Status</th>
+      <th>Remarks</th>
+      <th>Followup Date</th>
+      <th>Executive</th>
+      <th>Call Recording File</th>
+      <th>EntryTime</th>
+    </thead>
+    <tbody>
+      <% 
+        all_followups = []
+        broker_contact_follow_ups = @broker_contact.follow_ups 
+        broker_contact_follow_ups.each do |followup| 
+           all_followups += [followup] 
+        end 
+        @broker_contact.whatsapp_followups.each do |followup| 
+          all_followups += [followup]
+        end
+
+        all_followups = all_followups.sort_by{|x| [x.created_at, x.id]}
+      %>
+      <% all_followups.reverse.each do |followup|%>
+        <% if followup.class.table_name == 'whatsapp_followups' %>
+          <tr>
+            <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+            <% if followup.broker_contact.accept_invitation == true%>
+              <td>Accepted</td>
+            <%else%>
+              <td>Pending</td>
+            <%end%>
+            <td><%= followup.try(:remarks)%></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>
+          </tr>
+        <%else%>
+          <tr>
+            <td><%= (followup.communication_time+5.hours+30.minutes).strftime('%d/%m/%Y')%></td>
+            <td><%= followup.broker_status%></td>
+            <td><%= followup.try(:remarks)%></td>
+            <td><%= followup.follow_up_time.to_date.strftime("%d/%m/%Y")%></td>
+            <td><%= followup.personnel.name%></td>
+            <% if followup.telephony_call_id == nil || followup.telephony_call == nil%>
+              <td></td>
+            <%else%>
+              <% if followup.telephony_call.recording_url == nil || followup.telephony_call.recording_url == "" || followup.telephony_call.recording_url == "None"%>
+                <td></td>
+              <%else%>
+                <td><%= link_to image_tag("play btn.png", alt: "", :class => "play_btn"), followup.telephony_call.recording_url%></td>
+              <%end%>
+            <%end%>
+            <td><%= (followup.created_at+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M")%></td>
+          </tr>
+        <%end%>
+      <%end%>
+    </tbody>
+  </table>
+  <br>
+  <div class="container">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-4">
+          <div ><b><i><font color="#004fff"> To Followup On</font></i></b></div>
+          <%= date_field_tag "followup_date", Time.now.to_date, :class => 'form-control'%>
+        </div>
+        <div class="col-lg-2">
+          <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot', true %>27th November</p>
+          <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>28th November</p>
+          <p class="text-info"><%= radio_button_tag :anticipation , '' %>Not Decided</p>
+        </div>
+        <div class="col-lg-2">
+          <div ><b><i><font color="#004fff">Inactive</font></i></b></div>
+          <%= check_box_tag "inactive", true, nil%>
+        </div>
+        <div class="col-lg-4">
+          <div ><b><i><font color="#004fff">Status</font></i></b></div>
+          <% if @broker_contact.accept_invitation==true %>
+          <%= select_tag "status", options_for_select(["Invitation accepted", "Not Interested", "Site Visited"],selected: "Invitation Accepted"), :class => 'form-control'%>
+          <% elsif @broker_contact.accept_invitation==false %>
+          <%= select_tag "status", options_for_select(["Invitation accepted", "Not Interested", "Site Visited"],selected: "Not Interested"), :class => 'form-control'%>
+          <% else %>
+          <%= select_tag "status", options_for_select(["Invitation accepted", "Not Interested", "Site Visited"]), :class => 'form-control', :prompt => 'Please select'%>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2">
+          Whatsapp-details:
+        </div>
+        <div class="col-lg-3">
+          <%= select_tag 'whatsapp_templates[]', options_for_select(@gurukul_whatsapp_templates), :class => 'form-control, multi_select_style', :multiple => true %>
+        </div>
+        <div class="col-lg-2">
+          Head Count:
+        </div>
+        <div class="col-lg-3">
+          <%= number_field_tag "head_count", @broker_contact.try(:head_count), :class => 'form-control' %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div ><b><i><font color="#004fff">Follwoup Remarks</font></i></b></div>
+          <%= text_area_tag "remarks", "", :class => 'form-control' %>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-12">
+          <%= submit_tag 'Update', name: 'update', :class => 'btn btn-primary', id: 'follow_up_update', :disabled => true %>
+        </div>
+      </div>
+    </div><br>
+  </div>
+<%end%>
+<style >
+  .anticipation_div{
+    width: 10%;
+  }
+  .row {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  .play_btn{
+    width: 30px!important;
+    height: auto;
+  }
+</style>
+<script>
+  function updateFormEnabled() {
+    if (verifyAdSettings()) {
+        $('#follow_up_update').prop('disabled', false);
+        $('#follow_up_update').prop('value', 'Update');
+        document.getElementById('follow_up_update').removeAttribute('data-confirm');
+    } else {
+        $('#follow_up_update').prop('disabled', true);
+        $('#follow_up_update').prop('value', 'Pick Lost Reason');
+    }
+    if (BookingPicked()) {
+    } else {
+        document.getElementById('follow_up_update').setAttribute('data-confirm', "Are you sure this is a booking?");
+    }
+  }
+</script>
+<script>
+  $(document).ready(function() {
+  $(".multi_select_style").multiselect().multiselectfilter();
+  $(".ui-multiselect-all").hide();
+  $(".ui-multiselect-none").hide()
+  });
+</script>

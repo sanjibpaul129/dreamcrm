@@ -1,0 +1,34 @@
+<%@header = 'Organisations'%>
+<h1>Organisations</h1>
+
+<table id="customers">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Shortform</th>
+      <th>Email</th>
+      <th>API Key</th>
+      <th>Whatsapp Instance</th>
+      <th>Whatsapp Key</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @organisations.each do |organisation| %>
+      <tr>
+        <td><%= organisation.name %></td>
+        <td><%= organisation.shortform %></td>
+        <td><%= organisation.email %></td>
+        <td><%= organisation.api_key %></td>
+        <td><%= organisation.try(:whatsapp_instance)%></td>
+        <td><%= organisation.try(:whatsapp_key)%></td>
+        <td><%= link_to 'Edit', edit_organisation_path(organisation), :class => "edit_btn", :style => "text-decoration: none;"%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Organisation', new_organisation_path, :class => 'btn btn-primary' %>

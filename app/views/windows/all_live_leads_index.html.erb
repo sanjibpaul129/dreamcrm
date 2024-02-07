@@ -1,0 +1,284 @@
+<%@header = 'All Live Leads'%>
+<div align="center"><h3><b>All Live Leads</b></h3></div>
+<%= form_tag 'all_live_leads_index' do  %>
+  <div class="row">
+    <div class="col-lg-1">
+      <i>Projects</i>
+    </div>
+    <div class="col-lg-3">
+      <%= select_tag 'business_unit_id', options_for_select(@business_units, selected: @selected_business_unit_id), :prompt => 'Please Select', :class => 'form-control', :required => true %>
+    </div>
+    <div class="col-lg-2">
+      <i>Current Executive</i>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:site_executive, :current_executive, options_for_select(@executives, selected: @executive), {}, {:class => 'form-control selectpicker', data: { live_search: true }})   %>
+    </div>
+    <div class="col-lg-2">
+        <% if @qualified == 'true'%>
+          <%= check_box_tag 'qualified', true, nil, :checked => true%>
+        <%else%>
+          <%= check_box_tag 'qualified', true, nil%>
+        <%end%>Qualified<br>
+        <% if @interested == 'true'%>
+          <%= check_box_tag 'interested', true, nil, :checked => true%>
+        <%else%>
+          <%= check_box_tag 'interested', true, nil%>
+        <%end%>Interested in Site Visit<br>
+        <% if @site_visited == 'true'%>
+          <%= check_box_tag 'site_visited', true, nil, :checked => true%>
+        <%else%>
+          <%= check_box_tag 'site_visited', true, nil%>
+        <%end%>Site Visited<br>
+    </div>
+  </div>
+  
+  <div class="row">
+      <div class="col-lg-1">
+        <i>Since:</i>
+      </div>
+      <div class="col-lg-3">
+        <% if @since == nil %>
+          <%= date_field_tag 'since', '', :class => 'form-control' %>
+        <%else%>
+          <%= date_field_tag 'since', @since.to_date, :class => 'form-control' %>
+        <%end%>
+      </div>
+      <div class="col-lg-1">
+        <%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+      </div>
+  </div><br>
+  
+  <div class="row">
+    <% if current_personnel.email=='ayush@thejaingroup.com' || current_personnel.email=='rsoumyo@rajathomes.com' || current_personnel.email=='sumit@jsb.in.net'%>
+      <div class="col-lg-2">
+        <i>Transfer Leads to</i>
+      </div>
+      <div class="col-lg-3">
+       <%= select(:site_executive, :alloted_executive, options_for_select(@executives), {}, {:class => 'form-control'})   %>
+      </div>
+      <div class="col-lg-2">
+        <%= submit_tag 'Transfer Leads', :class => 'btn btn-primary'%>
+      </div>
+    <% end %>   
+  </div>
+  
+  <br>
+  <br>
+  <table class="customers" id="all_live_lead_index">
+    <thead>
+      <tr>
+        <% if current_personnel.status=='Admin' || current_personnel.status=='Back Office' %>
+          <th><%= check_box_tag "selectAll", "selectAll" %></th>
+        <% else %>
+          <th></th>
+        <% end %>
+        <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Type</th>
+        <th>Name</th>
+        <% if current_personnel.organisation_id != 1 || current_personnel.email == "ayush@thejaingroup.com"%>
+          <th>Mobile</th>
+          <th>Other No.</th>
+        <%end%>
+        <th>Email</th>
+        <th>Budget</th>
+        <th>BHK</th>
+        <th>Source</th>
+        <th>Remarks</th>
+        <th>Status</th>
+        <th>Generated on</th>
+        <th>Followup remarks</th>
+        <th>Last Followup Date</th>
+        <th>Next followup date</th>
+        <th>Imported On</th>
+        <th>Executive</th>
+        <th>Score</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <% if current_personnel.status=='Sales Executive'|| current_personnel.status=='Team Lead' %>
+            <td><%= radio_button_tag :lead_id , lead.id %></td>
+          <% elsif current_personnel.status=='Admin' || current_personnel.status=='Back Office' %>
+            <td><%= check_box_tag 'lead_id[]' , lead.id %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <% if lead.escalated==true %>
+            <td><span class="label label-danger">!</span></td>
+          <% elsif lead.escalated==false %>
+            <td><span class="label label-info">!</span></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td><%= lead.id %></td>
+          <td><%= lead.business_unit.name %></td>
+          <% if lead.anticipation=='Hot'%>
+            <td style="background-color: #ffd0d0!important">Hot</td> 
+          <% elsif lead.anticipation=='Good'%>
+            <td style="background-color: #aae5aa6e!important">Good</td> 
+          <% else %>
+            <td></td>
+          <%end%>
+          <td><%= lead.name %></td>
+          <% if current_personnel.organisation_id != 1  || current_personnel.email == "ayush@thejaingroup.com"%>
+            <td><%= lead.mobile %></td>
+            <td><%= lead.other_number %></td>
+          <%end%>
+          <td><%= lead.email %></td>
+          <td><%= lead.budget_from %>-<%= lead.budget_to %></td>
+          <td><%= lead.flat_type %></td>
+          <td><%= lead.source_category.heirarchy %></td>
+          <% if current_personnel.expanded == true %>
+            <td>
+              <% if lead.customer_remarks == nil || lead.customer_remarks == '' %>
+              <%else%>
+                <%= lead.customer_remarks%>
+              <%end%>
+            </td>
+          <%else%>
+            <td>
+              <% if lead.customer_remarks == nil || lead.customer_remarks == '' %>
+              <%else%>
+                <span class="popoverData" data-content="<%= lead.customer_remarks%>" rel="popover" data-placement="top" data-trigger="hover">[...]</span>
+              <%end%>
+            </td>  
+          <%end%>
+          <% if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+            <td>Qualified</td>
+          <% elsif lead.osv == true && lead.status == false && lead.interested_in_site_visit_on != nil %>
+            <td>Interested in Site Visit</td>
+          <% elsif lead.osv == true %>
+            <td>OV</td>
+          <% elsif lead.osv== false && lead.status== nil %>
+            <td>Negotiation</td>
+          <% elsif lead.osv==nil  && lead.status==nil %>
+            <td>In Follow Up</td>
+          <% elsif lead.osv==nil && lead.status==false %>
+            <td>Site Visited</td>
+          <% elsif lead.osv== false && lead.status== false %>
+            <td>Field Visited</td>
+          <%else%>
+            <td></td>
+          <% end %>
+
+          <td><%= lead.generated_on.strftime("%d/%m/%y") %></td>
+          <% if lead.follow_ups==[] %>
+          <td></td>
+          <% else %>
+            <% if current_personnel.expanded == true %>
+              <td>
+                <% if lead.follow_ups.last.remarks == nil || lead.follow_ups.last.remarks == '' %>
+                <%else%>
+                  <%= lead.follow_ups.last.remarks%>
+                <%end%>
+              </td>
+            <%else%>
+              <td>
+                <% if lead.follow_ups.last.remarks == nil || lead.follow_ups.last.remarks == '' %>
+                <%else%>
+                  <span class="popoverData" data-content="<%= lead.follow_ups.last.remarks%>" rel="popover" data-placement="top" data-trigger="hover">[...]</span>
+                <%end%>
+              </td>     
+            <%end%>
+          <% end %>  
+          <% if lead.follow_ups != [] %>
+            <td><%= (lead.follow_ups.last.communication_time+19800).strftime("%d/%m/%y") %></td>
+            <td><%= (lead.follow_ups.last.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+          <%else%>
+            <td>NA</td>
+            <td>NA</td>
+          <%end%>
+          <% date = lead.created_at + 19800 %>
+          <td><%= date.strftime("%d/%m/%y - %H:%M") %></td>
+          <td><%= lead.personnel.name%></td>
+          <td><%= lead.score %></td>
+          <% if current_personnel.status=='Marketing' || current_personnel.view_only==true %>
+            <td></td>
+          <% else %>
+            <td><%= link_to 'Edit', edit_lead_path(lead),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+          <% end %>
+          <td><%= lead.whatsapps.count %></td>        
+          <td><%= submit_tag ">", name: lead.id, :class => 'btn btn-primary btn-xs' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>  
+<style >
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+  .dividor{
+    border-bottom: 3px solid black!important;
+  }
+</style>
+
+
+  <script>
+$('.popoverData').popover();
+ </script>
+
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>
+<script>
+  $(document).ready(function(){
+   var FilterTable=$("#all_live_lead_index").DataTable({  
+   "fixedHeader": true,   
+   "dom": '<"wrapper"lit>',
+   "bAutoWidth": false,
+   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+   "bDeferRender": true,
+   "aoColumns": [
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              <% if current_personnel.organisation_id != 1 || current_personnel.email == "ayush@thejaingroup.com"%>
+                                {"bSortable": true},
+                                {"bSortable": true},
+                              <%end%>
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true},
+                              {"bSortable": true}
+                             ]
+
+});
+
+$("#filterbox").keyup(function() {
+        FilterTable.search(this.value).draw();
+    });
+});
+</script>

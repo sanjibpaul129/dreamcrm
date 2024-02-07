@@ -1,0 +1,77 @@
+<%= form_tag 'credit_note_update', :html => {:class => 'form-horizontal'} do %>
+  <%= hidden_field_tag :credit_note_entry_id, @credit_note.id %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <center><legend>&nbspEdit Credit Note Entry</legend></center>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Customer with flats:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= select_tag 'credit_note_entry[flat_id]', options_for_select(@customer_with_flats, selected: Flat.find_by_lead_id(@credit_note.lead_id).id), :class => 'form-control chosen', :prompt => 'Select Customer' %>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-3">
+          <%= label_tag :'Credit Note:' %>
+        </div>
+        <div class="col-lg-9">
+          <%= text_field_tag 'credit_note_entry[head]', @credit_note.head, :class => 'form-control'%>
+        </div>    
+      </div>
+      <br> 
+     <div class="row">
+        <div class="col-lg-2">
+          <%= label_tag :'Date:' %>
+        </div>
+        <div class="col-lg-4">
+          <%= date_field_tag 'credit_note_entry[date]', @credit_note.date.to_date, :class => 'form-control'%>
+        </div> 
+        <div class="col-lg-2">
+          <%= label_tag :'Amount:' %>
+        </div>      
+        <div class="col-lg-4">
+          <%= number_field_tag 'credit_note_entry[amount]', @credit_note.amount, required: true, step: "any", :class => 'form-control'%>
+        </div>
+      </div>
+<br>
+      <div class="row">
+        <div class="col-lg-2">
+            <%= label_tag :'Personnel Remarks:' %>
+        </div>
+        <div class="col-lg-10">
+          <%= text_area_tag 'credit_note_entry[remarks]', @credit_note.remarks, :class => 'form-control'%>
+        </div>
+     </div>
+ <br>    
+      <div class="row">
+        <div class="col-lg-2">
+            <%= label_tag :'Remarks To Show:' %>
+        </div>
+        <div class="col-lg-10">
+          <%= text_area_tag 'credit_note_entry[remarks_to_show]', @credit_note.remarks_to_show, :class => 'form-control'%>
+        </div>
+      </div>
+  <br>
+      <div class="form-group row">
+        <div class="col-lg-8 col-lg-offset-4">
+          <br>
+          <%= submit_tag 'Update Credit Note Entry',:class => 'btn btn-primary btn_width' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<style>
+  .well{
+    width: 700px !important;
+    height: auto !important;
+  }
+  .btn_width{
+    width: 50% !important;
+  }
+</style>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

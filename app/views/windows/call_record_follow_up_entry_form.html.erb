@@ -1,0 +1,239 @@
+<% flash.each do |key, value| %>
+<div class="<%= flash_class(key) %>">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Heads up!</strong> <%= value %>
+</div>
+<% end %>
+
+<div align="center"><h3><b>Followup History</b> of <%= @lead.name %>,<%= @lead.mobile %>,<%= @lead.email %>,<%= @lead.other_number %></h3></div>
+
+<div align="center">Call Details:Called at <%= (@call_record.occurred_at).strftime("%d/%m/%y-%H:%M") %> for <%= @call_record.call_length %>sec - status:  <%= @call_record.call_status %></div>
+
+<%= form_tag 'call_record_follow_up_entry' do  %>
+
+<div class="container">
+      <div class="form-group">
+      <%= hidden_field_tag :call_record_id, @call_record.id %>
+      <%= hidden_field_tag :leading_id, @lead.follow_ups[0].lead_id %>
+      <% @latest_followup=@lead.follow_ups.sort_by{|x| [x.communication_time, x.id] }.last %>
+      <!-- <div class="row" style="color:#df691a;padding:0px 5px;"> -->
+      
+      <% if @lead.personnel.status=='Admin' || @lead.personnel.status=='Back Office' || @lead.personnel.status=='Sales Executive' || @lead.personnel.status=='Team Lead' %>
+<!-- <first row start> -->
+<div class="row">
+        <div class="col-md-3 executive_div">
+          <div ><b><i><font color="#df691a">  Executive </font></i></b></div>
+            <%= select(:leading, :personnel, options_for_select(@executives, selected: @lead.personnel_id), {}, { :class => 'form-control' })   %>
+        </div> 
+      <% end %>
+
+       <div class="col-md-4">
+         <div ><b><i><font color="#df691a">  Followed up/Site Visited/Booked/Lost Date </font></i></b></div>
+           <%= date_field(:leading, :flexible_date, max: Date.today, :class => "form-control", :value => @latest_followup.follow_up_time.strftime('%Y-%m-%d')) %>
+       </div>
+         
+      <div class="col-md-3">
+        <div ><b><i><font color="#df691a">To Followup On</font></i></b></div>
+        <%= date_field(:leading, :followup_date, :class => "form-control", :value => ((@latest_followup.follow_up_time)+86400).strftime('%Y-%m-%d')) %>
+                    <%= time_select :leading, :followup_time, {ampm: true, minute_step: 30, default: 6.hours.from_now} %>
+      </div>    
+
+ <% if @lead.anticipation==''%>
+        <div class="col-md-2 list_design">
+          <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot' %>Hot</p>
+          <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+          <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+        </div>
+      <% elsif @lead.anticipation=='Hot' %>
+        <div class="col-md-2 list_design">
+          <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot', true %>Hot</p>
+          <p class="text-success"><%= radio_button_tag :anticipation , 'Good' %>Good</p>
+          <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+        </div>  
+        <% else %>
+        <div class="col-md-2 list_design">
+            <p class="text-danger"><%= radio_button_tag :anticipation , 'Hot' %>Hot</p>
+            <p class="text-success"><%= radio_button_tag :anticipation , 'Good', true %>Good</p>
+            <p class="text-info"><%= radio_button_tag :anticipation , '' %>Normal</p>
+        </div>  
+  <% end %>
+</div>
+
+<!-- <first row end> -->
+
+       <% old_status=0
+       if @latest_followup.osv == true 
+        old_status=1
+       elsif @latest_followup.osv== false && @latest_followup.status==nil 
+        old_status=8
+       elsif @latest_followup.osv== false && @latest_followup.status==false 
+        old_status=6 
+       elsif @latest_followup.osv==nil  && @latest_followup.status==nil 
+        old_status=0
+       elsif @latest_followup.osv==nil && @latest_followup.status==false 
+        old_status=2
+       elsif @latest_followup.status==true && @latest_followup.lead.lost_reason_id==nil
+        old_status=4
+       elsif @latest_followup.status==true
+        old_status=5
+       end %>
+<!--<second row start> -->
+<div class="row">
+      <div class="col-md-3">
+        <div ><b><i><font color="#df691a"> Status </font></i></b></div>
+          <%= select(:leading, :status, options_for_select([['Fresh Lead', 0], ['OV', 1], ['Site Visited',2 ], ['Repeat Site Visited',3 ], ['Field Visited',6 ],['Repeat Field Visited',7 ],['Negotiation',8 ],['Booked', 4],['Lost', 5], ],selected: old_status),{}, { :class => 'form-control' })   %>&nbsp;
+          <%= select(:leading, :lost_reason, options_for_select(@lost_reasons,selected: @latest_followup.lead.lost_reason_id),{:prompt => 'Reason for Lead Lost'}, { :class => 'form-control' })   %>
+      </div>
+     
+      <div class="col-md-3 follow_up_status_div">
+        <div ><b><i><font color="#df691a">Followup Remarks</font></i></b></div>
+          <%= text_field_tag(:remarks, nil, placeholder: 'Enter Followup Remarks', class: "form-control") %>
+      </div>
+    <div class="row">
+      <div class="col-md-6">
+         <div ><i>  &nbsp;</i></div>
+           <%= submit_tag 'Update',name: 'update', :class => 'btn btn-primary', id: 'follow_up_update' %>
+           <% params[:id]%>
+
+            <%= submit_tag 'SMS Followup', name: 'sms_followup', :class => 'btn btn-info' %>
+            
+             <%= submit_tag 'Email Followup', name: 'email_followup', :class => 'btn btn-info' %>
+      </div>
+
+     </div>
+ </div>
+ <!-- <second row ends> -->
+ <% end %>
+</div>
+</div>
+
+<table class="table table-striped table-hover " id="followup_history">
+  <thead>
+    <tr>
+      <th>Updated on</th>
+      <th>Updated on sort</th>
+      <th>Status</th>
+      <th>Remarks</th>
+      <th>Followup Date</th>
+      <th>Followup Date sort</th>
+      <th>Executive</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% all_followups = [] %>
+    <% @lead.follow_ups.each do |followup| %>
+      <% all_followups += [followup] %>
+    <% end %>
+    <% @lead.sms_followups.each do |followup| %>
+      <% all_followups += [followup] %>
+    <% end %>
+    <% @lead.email_followups.each do |followup| %>
+      <% all_followups += [followup] %>
+    <% end %>
+    <% @lead.call_records.each do |followup| %>
+      <% all_followups += [followup] %>
+    <% end %>
+
+    <% all_followups = all_followups.sort_by{|x| [x.created_at, x.id]} %>
+    <% last_follow_up_status='Fresh' %>
+    <% all_followups.reverse.each do |followup| %>
+    <% if followup.class.table_name == 'sms_followups' %>
+      <tr>
+       <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+       <td><%= followup.created_at %></td>
+       <td><%= last_follow_up_status %></td>
+       <td>SMS Sent</td>
+       <td></td>
+       <td></td>
+       <td><%= Lead.find(followup.lead_id).follow_ups.last.personnel.name %></td>  
+      </tr>
+    <% elsif followup.class.table_name == 'email_followups' %>
+      <tr>
+       <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+       <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+       <td><%= last_follow_up_status %></td>
+       <td>Email Sent</td>
+       <td></td>
+       <td></td>
+       <td><%= Lead.find(followup.lead_id).follow_ups.last.personnel.name %></td>  
+      </tr>
+    <% elsif followup.class.table_name == 'call_records' %>
+        <tr>
+         <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+         <td><%= (followup.created_at+19800).strftime("%d/%m/%y") %></td>
+         <td><%= last_follow_up_status %></td>
+         <td>Call <%= (followup.occurred_at).strftime("%d/%m/%y-%H:%M") %> for <%= followup.call_length %>sec </td>
+         <td></td>
+         <td></td>
+         <td><%= Lead.find(followup.lead_id).follow_ups.last.personnel.name %></td>  
+       </tr>  
+    <% else %>
+      <tr>
+       <td><%= (followup.communication_time+19800).strftime("%d/%m/%y") %></td>
+       <td><%= (followup.communication_time+19800).strftime("%m/%d/%y") %></td>
+       <td><%= followup.current_status %></td>
+       <td><%= followup.remarks %></td>
+       <td><%= (followup.follow_up_time).strftime("%d/%m/%y - %H:%M") %></td>
+       <td><%= (followup.follow_up_time).strftime("%m/%d/%y") %></td>
+       <td><%= followup.personnel.name %></td>  
+      </tr>
+    <% last_follow_up_status=followup.current_status %>  
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+
+<style >
+.list_design{
+  display: inline-block;
+}
+/*.executive_div{
+  width: 20%;
+}
+.follow_up_status_div{
+  width: 20%;
+}*/
+.anticipation_div{
+  width: 10%;
+}
+
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+  </style>
+
+<script>
+
+function updateFormEnabled() {
+    if (verifyAdSettings()) {
+        $('#follow_up_update').prop('disabled', false);
+        $('#follow_up_update').prop('value', 'Update');
+    } else {
+        $('#follow_up_update').prop('disabled', true);
+        $('#follow_up_update').prop('value', 'Pick Lost Reason');
+    }
+}
+
+function verifyAdSettings() {
+    if ($('#leading_lost_reason').val() == "" && $('#leading_status').val() == 5) {
+        return false;
+    } else {
+        return true
+    }
+}
+
+$('#leading_status').change(updateFormEnabled);
+$('#leading_lost_reason').change(updateFormEnabled);
+
+</script>  

@@ -1,0 +1,227 @@
+<% @credit_note=CreditNoteEntry.find(credit_note_id.to_i)%>
+<html>
+  <head>
+    <style>
+    * { margin: 0; padding: 0; }
+    /**/
+    body {font-family: Arial, Helvetica, sans-serif;}
+    #page-wrap { width: 850px; height: 455px; margin: 0 auto; background: #fff !important; border: 1px solid #000; }
+
+    textarea { border: 0; font: 14px Times, Serif; overflow: hidden; resize: none; }
+   
+    .delivery_to { border: 0; font: 14px Times, Serif; height:130px;width:240px; resize: none; }
+
+    table { border-collapse: collapse; width: 845px;}
+    table td, table th { border: 1px solid black !important; padding: 2px; background: #fff !important; color: #584d4d!important}
+
+    #header { height: 100px; width: 100%; margin: 10px 0; background: #fff; text-align: center; color: #584d4d;font: bold;text-decoration: uppercase;  padding: 4px 0px; }
+
+    .customeraddress { margin: 0 10px 0 0; width: 220px; height: 300px; float: left; }
+    /**/
+    .cc_mail_box{width: 200px; height: 25px; font: 14px Times, Serif; }
+    #attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; position: relative; top: 61px; }
+    #attachment_else_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none; float: left; right: 370px; position: relative; top: 61px; }
+    #regular_attachment_box{border: 0; font: 14px Times, Serif; height:120px;width:270px; resize: none;float:left; position: relative; bottom: 140px; left: 720px}
+    #found_ok {width: 25em;  height: 5em; float: center; position: relative; bottom: -57px; left: 235px}
+    #customer { overflow: hidden; }
+    #button { width: 250px; height: 50px; float: right; }
+    #smallbutton {width: 125px; height: 50px; float: right; }
+    #sidesmallbutton {width: 125px; height: 50px; float: right;}
+    #leftsmallbutton { width: 125px; height: 50px; float: left; }
+    #logo { text-align: right; float: right; position: relative; margin-top: 0px; margin-right: 60px; border: 1px solid #fff; max-width: 540px; max-height: 150px; overflow: hidden; float:center; }
+    #logoctr { display: none; }
+    #logo:hover #logoctr, #logo.edit #logoctr { display: block; text-align: right; line-height: 25px; background: #22222263; padding: 0 5px; }
+    #logohelp { text-align: left; display: none; font-style: italic; padding: 10px 5px;}
+    #logohelp input { margin-bottom: 5px; }
+    .edit #logohelp { display: block; }
+    .edit #save-logo, .edit #cancel-logo { display: inline; }
+    .edit #image, #save-logo, #cancel-logo, .edit #change-logo, .edit #delete-logo { display: none; }
+    #customer-title { font-size: 15px; font-weight: bold; }
+
+    #meta { margin-top: 1px; width: 845px; float: right; }
+
+    #meta td.meta-head { width: 200px; text-align: left; background: #22222263; }
+    #meta td textarea { width: 700px; text-align: left; }
+
+    #metadata { margin-top: 1px; width: 845px; float: left; }
+    #metadata td { text-align: left;  }
+    #metadata td.meta-head { width: 20px; text-align: left; background: #22222263; }
+    #metadata td textarea { height: 20px; text-align: left; width: 200px; }
+
+    #items { clear: both; width: 100%; margin: 30px 0 0 0 }
+    #items th { background: #c85e17; }
+    #items th.quantity { text-align: right; }
+    #items textarea { width: 80px; height: 50px; }
+    #items tr.item-row td { border-width: 0px; border-bottom: 1px solid black; vertical-align: top; }
+    #items td.description { width: 300px; }
+    #items td.item-name { width: 175px; }
+    #items td.description textarea, #items td.item-name textarea { width: 100%; }
+    #items td.total-line { border-right: 0; text-align: right; }
+    #items td.reg-nos { border-right: 0; text-align: center; text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 5px; }
+    #items td.quantity { text-align: right; }
+    #items td.quantity_centre { text-align: center; }
+
+    #items td.total-value { border-left: 0; padding: 10px; text-align: right; }
+    #items td.total-value textarea { height: 20px; background: none; }
+    #items td.balance { background: #c85e17; }
+    #items td.blank { border: 0; }
+    .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+
+    #terms { text-align: left; margin: 8px 0 0 0; }
+    #terms h5 { text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 10px; border-bottom: 1px solid black; padding: 0 0 4px 0; margin: 0 0 8px 0; }
+    #terms h3 { text-align: center; font: 10px Helvetica, Sans-Serif; letter-spacing: 4px; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+    #terms h4 { text-align: center; font: 15px Helvetica, Sans-Serif; letter-spacing: 4px; border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 4px 0; }
+
+    #terms textarea { width: 100%; text-align: left;}
+
+    .auto-textarea{height:auto; width:auto;}
+    .quatation_details{width:100px;}
+    .item_details{width:770px;text-align:justify;text-justify:inter-word;}
+    .delete-wpr { position: relative; }
+    .delete { display: block; color: #000; text-decoration: none; position: absolute; background: #EEEEEE; font-weight: bold; padding: 0px 3px; border: 1px solid; top: -6px; left: -22px; font-family: Verdana; font-size: 12px; }
+
+    .address { margin: 0 10px 10px 0; width: 200px; height: 120px; float: right;text-align: left; }
+    .customer_address {  border: 0; font: 14px Times, Serif; width:200px; text-align:left; float: right; }
+    .company_address { border: 0; font: 14px Times, Serif; width:240px; resize: none; text-align: left; float: left;   }
+    </style>
+  </head>
+
+  <body>
+    <table class="table table-striped table-hover metadata">
+      <tbody>
+        <tr>
+          <td colspan="2" style="text-align: center!important;"><%= image_tag(@credit_note.booking.cost_sheet.lead.personnel.organisation.group_logo, alt: "", class: "ledger-logo") %></td>
+          <td colspan="5" style="text-align: center!important;"><% if @credit_note.booking.cost_sheet.flat.block.name == 'Block-1'|| @credit_note.booking.cost_sheet.flat.block.name == 'Block-2' || @credit_note.booking.cost_sheet.flat.block.name == '2-1'|| @credit_note.booking.cost_sheet.flat.block.name == '2-2'|| @credit_note.booking.cost_sheet.flat.block.name == '2-3'%>
+                <p><b>Jain Group Projects Pvt. Ltd.</b><br><U>44/2A, Hazra Road, Kolkata-700019</U><br><U>Demand Money receipt</U><br><u>Project: <%=@credit_note.booking.cost_sheet.flat.block.business_unit.name %></u></p>
+            <%elsif @credit_note.booking.cost_sheet.flat.block.name == 'Block-3'|| @credit_note.booking.cost_sheet.flat.block.name == 'Block-4' || @credit_note.booking.cost_sheet.flat.block.name == '1-1'|| @credit_note.booking.cost_sheet.flat.block.name == '1-2'|| @credit_note.booking.cost_sheet.flat.block.name == '1-3'%>
+                <p><b>Dream Gateway Hotels Limited</b><br><U>44/2A, Hazra Road, Kolkata-700019</U><br><U>Demand Money receipt</U><br><u>Project: <%=@credit_note.booking.cost_sheet.flat.block.business_unit.name %></u></p>
+            <%else%>
+                <p><b>JSB Infrastructures</b><br><U>Jhalukpara, Dibrugarh-786001, Assam</U><br><U>Receipt Voucher</U><br><u>Project: <%=@credit_note.booking.cost_sheet.flat.block.business_unit.name %></u><br><u><%= @credit_note.booking.cost_sheet.flat.block.business_unit.try(:address_1)%>, <%= @credit_note.booking.cost_sheet.flat.block.business_unit.try(:address_2)%>, <%= @credit_note.booking.cost_sheet.flat.block.business_unit.try(:address_3)%>, <%= @credit_note.booking.cost_sheet.flat.block.business_unit.try(:address_4)%></u></p>
+            <%end%></td>
+          <td colspan="2" style="text-align: center!important;"><%= image_tag(@credit_note.booking.cost_sheet.flat.block.business_unit.logo, alt: "", class: "ledger-logo") %></td>
+        </tr>
+        <tr>
+          <td colspan="9"  style="text-align: right !important; color: #000 !important;">Generation Date: <%= @credit_note.date.to_date.strftime('%d/%m/%Y')%></td>
+        </tr>
+        <tr>
+          <td colspan="9" style="background-color: #0083ff!important;"><center><b style="color: #fff!important;">Credit Note</b></center></td>
+        </tr>
+        <tr>
+          <% if current_personnel.organisation_id == 6 %>
+            <td colspan="2"><b>Name of Customer:</b></td>
+          <%else%>
+            <td colspan="2"><b>Name of Owner:</b></td>
+          <%end%>
+          <td colspan="3"><b><%= @credit_note.booking.cost_sheet.lead.name%></b></td>
+          <td colspan="2"><%= @credit_note.booking.cost_sheet.flat.block.name%>, Flat-No. <%= @credit_note.booking.cost_sheet.flat.full_name%></td>
+          <% if current_personnel.organisation_id == 6 %>
+            <td colspan="1"><b>Area</b></td>
+            <td colspan="1"><%=@credit_note.booking.cost_sheet.flat.SBA %> sft</td>
+          <%else%>
+            <td colspan="1"><b><%=@credit_note.booking.cost_sheet.flat.SBA %> sft</b></td>
+            <td colspan="1"></td>
+          <%end%>
+        </tr>
+        <tr>
+          <td colspan="9"><b>Customer Address: </b><%= @credit_note.booking.cost_sheet.lead.try(:address)%>, <b>Area:</b><%= @credit_note.booking.cost_sheet.lead.try(:area).try(:name)%>, <b>City: </b><%= @credit_note.booking.cost_sheet.lead.try(:city).try(:name)%>, <b>Pincode: </b><%= @credit_note.booking.cost_sheet.lead.try(:pincode)%>, <b>State: </b><%= @credit_note.booking.cost_sheet.lead.try(:state)%></td>
+        </tr>
+        <tr>
+          <td colspan="3"><b>Amount: </b>₹ <%= comma_separated(@credit_note.amount.round)%></td>
+          <td colspan="6">Amount in words (Rs.): <b><i><%= @credit_note.amount.to_i.rupees%> only.</i></b></td>
+        </tr>
+        <tr>
+          <td colspan="9"><b>Remarks:</b> <%= @credit_note.try(:remarks)%></td>
+        </tr>
+        <tr>
+          <% if @credit_note.booking.cost_sheet.flat.block.name == 'Block-1'|| @credit_note.booking.cost_sheet.flat.block.name == 'Block-2' || @credit_note.booking.cost_sheet.flat.block.name == '2-1'|| @credit_note.booking.cost_sheet.flat.block.name == '2-2'|| @credit_note.booking.cost_sheet.flat.block.name == '2-3'%>
+            <td colspan="5">
+              Company Name: Jain Group Projects Pvt. Ltd.<br>
+              PAN: AACCJ1203D<br>
+              GSTIN: 19AACCJ1203D1Z7<br>
+              SAC CODE: 995411<br>
+              Bank Name : HDFC BANK LTD<br>
+              Bank Branch Add : South Calcutta Girls College Branch<br>
+              Kolkata : 700025<br>
+              Bank A/C No : 50200006506346<br>
+              IFSC : HDFC0001404
+            </td>
+          <%elsif @credit_note.booking.cost_sheet.flat.block.name == 'Block-3'|| @credit_note.booking.cost_sheet.flat.block.name == 'Block-4' || @credit_note.booking.cost_sheet.flat.block.name == '1-1'|| @credit_note.booking.cost_sheet.flat.block.name == '1-2'|| @credit_note.booking.cost_sheet.flat.block.name == '1-3'%>
+            <td colspan="5">
+          		Company Name: Dream Gateway Hotels Ltd.<br>
+      				PAN: AADCD0692H<br>
+      				GSTIN: AADCD0692H1ZL<br>
+      				SAC CODE: 995411<br>
+      				Bank Name : HDFC BANK LTD<br>
+      				Bank Branch Add : 72 SARAT BOSE ROAD<br>
+      				Kolkata : 700025<br>
+      				Bank A/C No : 50200006508062<br>
+      				IFSC : HDFC0001404
+			      </td>
+          <% elsif @credit_note.booking.cost_sheet.flat.block.business_unit.name=='JSB Jyoti Residency' %>
+          <td colspan="5">
+              Company Name: JSB Infrastructures<br>
+              GSTIN: 18AAHFJ8556F1Z0<br>
+              
+          </td>
+          <% elsif @credit_note.booking.cost_sheet.flat.block.business_unit.name=='JSB Springfield' %>
+          <td colspan="5">
+              Company Name: JSB Infrastructures<br>
+              GSTIN: 18AAHFJ8556F1Z0<br>
+              Bank Name : ICICI Bank<br>
+              Bank Branch Add : Dibrugarh Branch<br>
+              Dibrugarh : 786001<br>
+              Bank A/C No : 083905002568<br>
+              IFSC : ICIC0000839
+          </td>
+          <% elsif @credit_note.booking.cost_sheet.flat.block.business_unit.name=='JSB Lake Front' %>
+          <td colspan="5">
+              Company Name: JSB Infrastructures<br>
+              GSTIN: 18AAHFJ8556F1Z0<br>
+              Bank Name : ICICI Bank<br>
+              Bank Branch Add : Dibrugarh Branch<br>
+              Dibrugarh : 786001<br>
+              Bank A/C No : 083905002548<br>
+              IFSC : ICIC0000839
+          </td>
+          <% else %>
+          <td colspan="5">
+              Company Name: JSB Infrastructures<br>
+              GSTIN: 18AAHFJ8556F1Z0<br>
+              Bank Name : ICICI Bank<br>
+              Bank Branch Add : Dibrugarh Branch<br>
+              Dibrugarh : 786001<br>
+              Bank A/C No : 083905002463<br>
+              IFSC : ICIC0000839
+          </td>       
+          <%end%>
+        	<td colspan="4">
+            <% if @credit_note.booking.cost_sheet.flat.block.name == 'Block-1'|| @credit_note.booking.cost_sheet.flat.block.name == 'Block-2'|| @credit_note.booking.cost_sheet.flat.block.name == '2-1'|| @credit_note.booking.cost_sheet.flat.block.name == '2-2'|| @credit_note.booking.cost_sheet.flat.block.name == '2-3' %>
+              E & O.E.<br><br><br>For Jain Group Projects Pvt. Ltd.<br><br><br>This is a computer generated document no signature required
+            <%elsif @credit_note.booking.cost_sheet.flat.block.name == 'Block-3'|| @credit_note.booking.cost_sheet.flat.block.name == 'Block-4' || @credit_note.booking.cost_sheet.flat.block.name == '1-1'|| @credit_note.booking.cost_sheet.flat.block.name == '1-2'|| @credit_note.booking.cost_sheet.flat.block.name == '1-3'%>    
+              E & O.E.<br><br><br>For Dream Gateway Hotels Ltd.<br><br><br>This is a computer generated document no signature required
+            <%else%>
+              E & O.E.<br><br><br>JSB Infrastructures<br><br><br>This is a computer generated document no signature required
+            <%end%>
+        	</td>
+        </tr>
+      </tbody>
+    </table>  
+    <style type="text/css">
+      .ledger-logo{
+        width: 150px!important;
+        height: auto!important;
+      }
+      .table > thead > tr > th,
+      .table > tbody > tr > th,
+      .table > tfoot > tr > th,
+      .table > thead > tr > td,
+      .table > tbody > tr > td,
+      .table > tfoot > tr > td {
+        padding: 12px!important;
+        line-height: 1.42857143;
+        vertical-align: middle!important;
+        /*border-top: 1px solid transparent;*/
+      }
+    </style> 
+  </body>
+</html>

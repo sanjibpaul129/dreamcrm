@@ -1,0 +1,141 @@
+<%@header = 'Lead Search'%>
+<% flash.each do |key, value| %>
+<div class="<%= flash_class(key) %>">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Heads up!</strong> <%= value %>
+</div>
+<% end %>
+
+<div align="center"><h3><b>Leads</b></h3></div>
+<%= form_tag 'mobile_number_search' do  %>
+  <div class="col-xs-2">
+  <div><i>ID</i></div>
+  <%= number_field_tag(:id, nil, class: "form-control") %>
+  <%= submit_tag 'Search', name: 'id_search', :class => 'btn btn-primary btn-xs' %>
+  </div>
+  <div class="col-xs-3">
+  <div><i>Mobile No</i></div>
+  <%= number_field_tag(:mobile_no, nil, class: "form-control") %>
+  <%= submit_tag 'Search', name: 'mobile_search', :class => 'btn btn-primary btn-xs' %>
+  </div>
+  <div class="col-xs-3">
+  <div><i>Email</i></div>
+  <%= text_field_tag(:email, nil, class: "form-control") %>
+  <%= submit_tag 'Search', name: 'email_search', :class => 'btn btn-primary btn-xs' %>
+  </div>
+  <div class="col-xs-3">
+  <div><i>Name</i></div>
+  <%= text_field_tag(:name, nil, class: "form-control") %>
+  <%= submit_tag 'Search', name: 'name_search', :class => 'btn btn-primary btn-xs' %>
+  </div>
+
+  <% if @leads !=nil %>
+  <table class="customers" style="width: 100% height:100%">
+    <thead>
+      <tr>
+        <th></th>
+        <th><i class="glyphicon glyphicon-exclamation-sign"></i></th>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Name</th>
+        <% if current_personnel.business_unit.organisation_id == 1%>
+        <%else%>
+          <th>Mobile</th>
+          <th>Other No.</th>
+          <th>Email</th>
+        <%end%>
+        <th>Budget From</th>
+        <th>Budget To</th>
+        <th>BHK</th>
+        <th>Source</th>
+        <th>Remarks</th>
+        <th>Status</th>
+        <th>Lost Reason</th>
+        <th>Generated on</th>
+        <th>Imported on</th>
+        <th></th>
+        <th>Executive</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <td></td>
+          
+          <% if lead.escalated==true %>
+          <td><span class="label label-danger">!</span></td>
+          <% elsif lead.escalated==false %>
+          <td><span class="label label-info">!</span></td>
+          <% else %>
+          <td></td>
+          <% end %>
+        
+          <td><%= lead.id %></td>
+          <td><%= lead.business_unit.name %></td>
+          <td><%= lead.name %></td>
+          <% if current_personnel.business_unit.organisation_id == 1%>
+          <%else%>
+            <td><%= lead.mobile %></td>
+            <td><%= lead.other_number %></td>
+            <td><%= lead.email %></td>
+          <%end%>
+          <td><%= lead.budget_from %></td>
+          <td><%= lead.budget_to %></td>
+          <td><%= lead.flat_type %></td>
+          <td><%= lead.source_category.heirarchy %></td>
+          <td><%= lead.customer_remarks %></td>
+          <%if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+            <td>Qualified</td>
+          <%elsif lead.osv ==true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+            <td>Interested in Site Visit</td>
+          <% elsif lead.osv == true %>
+          <td>OSV</td>
+          <% elsif lead.osv== false %>
+          <td>Negotiation</td>
+          <% elsif lead.osv==nil  && lead.status==nil %>
+          <td>Fresh</td>
+          <% elsif lead.osv==nil && lead.status==false %>
+          <td>Site Visited</td>
+          <% elsif lead.status==true && lead.lost_reason_id==nil %>
+          <td>Booked</td>
+          <% else %>
+          <td>Lost</td>
+          <% end %>
+          <td><%= lead.lost_reason.try{|x| x.description}%></td>
+         <% if lead.generated_on!=nil %>
+         <td><%= (lead.generated_on+5.hours+30.minutes).strftime("%d/%m/%y") %></td>
+         <% else %>
+         <td>NA</td>
+         <% end %>
+
+         <td><%= lead.created_at.strftime("%d/%m/%y") %></td>
+         <% if current_personnel.view_only==true %>
+         <% else %>
+         <td><%= link_to 'Edit', edit_lead_path(lead), :class => "edit_btn btn-xs" %></td>
+         <% end %>
+          <td><%= lead.personnel.try(:name) %></td>        
+
+          <td><%= submit_tag ">", name: lead.id, :class => 'btn btn-primary btn-xs' %></td>  
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+  <% end %>
+<% end %>
+<style >
+  .dataTables_scrollHead{
+    height: 40px;
+  }
+  .dataTables_info{
+    display:inline-block;
+    float:left;
+  }
+ .dataTables_length{
+  display:inline-block;
+ float:right;
+ }
+ .fixedHeader-floating th { background-color: #2b3e50; }
+  </style>

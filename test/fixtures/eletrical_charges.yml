@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  applicable_from: 2020-07-31 19:28:06
+  business_unit_id: 1
+  company_id: 1
+  rate: 9.99
+
+two:
+  applicable_from: 2020-07-31 19:28:06
+  business_unit_id: 1
+  company_id: 1
+  rate: 9.99

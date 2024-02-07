@@ -1,0 +1,188 @@
+<%@header = 'All Leads Register'%>
+<% if current_personnel.email=='rima.bhadra@techshu.in' && SourceCategory.find(@source_category_selected).heirarchy.include?('Property Portals')%>
+Access Denied
+<% else %>
+<%= form_tag 'all_leads', :authenticity_token => true, :html => {:class => 'form-horizontal'}  do %>
+  <div class="row">
+    <div class="col-lg-2">
+      <%= select(:project, :selected, options_for_select(@projects, selected: params[:project].try{|x| x[:selected]}),{}, {:class => 'form-control'})  %>
+    </div>
+    <% if current_personnel.status != 'Sales Executive' %>
+      <div class="col-lg-2">
+        <%= select(:salesteam, :personnel, options_for_select(@sales_team, selected: @sales_person),{}, {:class => 'form-control'})  %>
+      </div>
+    <%end%>
+    <div class="col-lg-2">
+      <%= select(:salesteam, :source_category_id, options_for_select(@source_categories, selected: @source_category_selected),{}, {:class => 'form-control selectpicker', data: { live_search: true }})  %>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field(:range, :from, :value => @from,:class => 'form-control') %>
+    </div>
+    <div class="col-lg-2">
+      <%= date_field(:range, :to, :value => @to,:class => 'form-control') %>
+    </div>
+    <div class="col-lg-2">
+      with children
+      <% if @with_children == "true"%>
+        <%= check_box_tag 'with_children', true, nil, :checked => true%>
+      <%else%>
+        <%= check_box_tag 'with_children', true, nil%>
+      <%end%>
+    </div>
+  </div><br>
+  <div class="row">
+    <div class="col-lg-2">
+      no testing/duplicate
+    </div>
+    <div class="col-lg-1">
+      <% if @no_duplicate == "true"%>
+        <%= check_box_tag 'no_duplicate', true, nil, :checked => true%>
+      <%else%>
+        <%= check_box_tag 'no_duplicate', true, nil%>
+      <%end%>
+    </div>
+    <div class="col-lg-1">
+      Lead Type
+    </div>
+    <div class="col-lg-2">
+      <%= select_tag 'lead_type', options_for_select(@lead_types, selected: @lead_type), :prompt => 'Select Lead Type', :class => 'form-control', :onchange => 'populate_lost_reason()' %>
+    </div>
+    <% if @lead_type == 'Lost'%>
+      <div class="col-lg-2">
+        <%= select_tag 'lost_reason[selected]', options_for_select(@lost_reasons, selected: @selected_lost_reason), :class => 'form-control'%>
+      </div>
+    <%else%>
+      <div id="lost_reason">
+      </div>
+    <%end%>
+
+    <div class="col-lg-2">
+      <%= submit_tag "Refresh", name: "refresh", :class => 'btn btn-primary' %>
+      <% if current_personnel.email=='ayush@thejaingroup.com' || current_personnel.email=='customercare@oswalgroup.net' || current_personnel.email=='nakhyastra@thejaingroup.com' || current_personnel.email=='firdaus@thejaingroup.com' || current_personnel.email=='msankalan@rajathomes.com' || current_personnel.email=='tausif@alcoverealty.in' || current_personnel.email=='rsoumyo@rajathomes.com' %>
+      <%= submit_tag "Export", name: "export", :class => 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
+  <table class="customers" id="orderedtasks">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Lead id</th>
+        <th>Project</th>
+        <th>Name</th>
+        <% if current_personnel.organisation_id != 1 %>
+          <th>Mobile</th>
+          <th>Other No.</th>
+        <%end%>
+        <% if current_personnel.email == 'ayush@thejaingroup.com' %>
+          <th>Mobile</th>
+          <th>Other No.</th>
+        <%end%>
+        <th>Email</th>
+        <th>Source</th>
+        <th>Remarks</th>
+        <th>Status</th>
+        <th>LostReason</th>
+        <th>Area</th>
+        <th>Occupation</th>
+        <th>Generated on</th>
+        <th>Site Executive</th>
+        <th>FirstFlwpRmks</th>
+        <th>LastFlwpDt</th>
+        <th>LastFlwpRmks</th>
+        <th>SiteVisitDt</th>
+        <th>W(#)</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @leads.each do |lead| %>
+        <tr>
+          <% if current_personnel.email == 'rima.bhadra@techshu.in' || 'riddhi.gadhiya@beyondwalls.com'%>
+            <td></td>
+          <%else%>
+            <td><%= link_to 'Edit', edit_lead_path(lead),:class => 'edit_btn ', :style => "text-decoration: none"%></td>
+          <%end%>
+          <td><%= lead.id %></td>
+          <td><%= lead.business_unit.name %></td>
+          <td><%= lead.name %></td>
+          <% if current_personnel.organisation_id != 1 %>
+            <td><%= lead.mobile %></td>
+            <td><%= lead.other_number %></td>
+          <%end%>
+          <% if current_personnel.email == 'ayush@thejaingroup.com' %>
+            <td><%= lead.mobile %></td>
+            <td><%= lead.other_number %></td>
+          <%end%>
+          <td><%= lead.email %></td>
+          <td><%= lead.source_category.heirarchy %></td>
+          <td><%= lead.customer_remarks %></td>
+          <% if lead.osv == true && lead.status == false && lead.interested_in_site_visit_on == nil && lead.qualified_on != nil%>
+           <td>Qualified</td>
+           <td></td>
+          <% elsif lead.osv == true && lead.status == false && lead.interested_in_site_visit_on != nil%>
+           <td>Interested In Site Visit</td>
+           <td></td>
+          <% elsif lead.status == nil && lead.osv == nil%>
+           <td>Fresh</td>
+           <td></td>
+          <% elsif lead.status == nil && lead.osv == true%>
+           <td>OV</td>
+           <td></td>
+          <% elsif lead.status == nil && lead.osv == false %>
+           <td>Negotiation</td>
+           <td></td>
+          <% elsif lead.status== false %>
+           <td>Site Visited</td>
+           <td></td>
+          <% elsif lead.status== true && lead.lost_reason_id==nil %>
+           <td>Booked</td>
+           <td></td>
+          <% else %>
+           <td>Lost</td>
+           <td><%= lead.lost_reason.description %></td>
+          <% end %>
+          <td><%= lead.area.try{|x| x.name}%></td>
+          <td><%= lead.area.try{|x| x.description}%></td>
+          <td><%= (lead.generated_on+5.hours+30.minutes).strftime("%d/%m/%y-%H:%M") %></td>
+          <td><%= lead.personnel.name %></td>
+          <% if lead.follow_ups != [] %>
+            <% 
+              last_follow_up=lead.follow_ups.where(last: true)[0]
+              first_follow_up=lead.follow_ups.where(first: true)[0]
+            %>
+            <% if first_follow_up == nil%>
+              <td></td>
+            <%else%>
+              <td><%= first_follow_up.remarks%></td>
+            <%end%>
+            <td><%= last_follow_up.communication_time.strftime("%m/%d/%y") %></td>
+             <td><%= last_follow_up.remarks %></td>
+          <% else %>
+            <td></td>
+            <td></td>
+            <td></td>
+          <% end %>
+          <td><%= lead.site_visited_on.try{|x| x.strftime("%m/%d/%y")} %></td>
+          <td><%= lead.whatsapps.count %></td>
+          <td><%= submit_tag ">", name: lead.id, :class => 'btn btn-primary btn-xs' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+<% end %>
+<script>
+  function populate_lost_reason()
+  {
+    var lost_reason_type=event.target.value;
+    // console.log(lost_reason_type)
+    $.getScript('/windows/populate_lost_reason.js?type='+lost_reason_type);
+
+  }
+
+</script>
+<script type="text/javascript">
+  $(".chosen").chosen();
+</script>

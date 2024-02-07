@@ -1,0 +1,2 @@
+class GoogleCampaign < ApplicationRecord
+end

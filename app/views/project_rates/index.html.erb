@@ -1,0 +1,29 @@
+<h1>Listing project_rates</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Business unit</th>
+      <th>Base rate</th>
+      <th>Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @project_rates.each do |project_rate| %>
+      <tr>
+        <td><%= project_rate.business_unit_id %></td>
+        <td><%= project_rate.base_rate %></td>
+        <td><%= project_rate.date %></td>
+        <td><%= link_to 'Show', project_rate %></td>
+        <td><%= link_to 'Edit', edit_project_rate_path(project_rate) %></td>
+        <td><%= link_to 'Destroy', project_rate, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Project rate', new_project_rate_path %>

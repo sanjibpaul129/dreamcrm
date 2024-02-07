@@ -1,0 +1,207 @@
+<div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+
+<legend>&nbspGenerate Business unit</legend>
+
+<%= form_for @business_unit, :html => {:class => 'form-horizontal'} do |f| %>
+  <% if @business_unit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@business_unit.errors.count, "error") %> prohibited this business_unit from being saved:</h2>
+
+      <ul>
+      <% @business_unit.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+   <div class="form-group">
+    <%= f.label :name, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :name, :class => "form-control" %>
+  </div>
+  </div>
+
+<% if current_personnel.email=='ayush@thejaingroup.com' %>
+   <div class="form-group">
+    <%= f.label :organisation, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= select(:business_unit, :organisation_id, options_for_select(@organisations, selected: @business_unit.organisation_id),{}, { :class => 'form-control' })   %>
+  </div>
+   </div>
+<% else %>
+<%= hidden_field_tag 'business_unit[organisation_id]', @business_unit.organisation_id %>
+<% end %>   
+
+<% if current_personnel.email=='ayush@thejaingroup.com' %>
+
+     <div class="form-group">
+    <%= f.label :company, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= select(:business_unit, :company_id, options_for_select(@companies, selected: @business_unit.company_id),{}, { :class => 'form-control' })   %>
+  </div>
+   </div>
+<% else %>
+<%= hidden_field_tag 'business_unit[company_id]', @business_unit.company_id %>
+<% end %>   
+
+
+   <div class="form-group">
+    <%= f.label :base_rate, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.number_field :base_rate, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :open_covered_ratio, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :open_covered_ratio, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :address_1, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :address_1, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :address_2, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :address_2, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :address_3, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :address_3, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :address_4, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :address_4, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :email, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :email, :class => "form-control" %>
+  </div>
+  </div>
+
+
+   <div class="form-group">
+    <%= f.label :shortform, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :shortform, :class => "form-control" %>
+  </div>
+  </div>
+
+
+
+   <div class="form-group">
+    <%= f.label :logo, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :logo, :class => "form-control" %>
+  </div>
+  </div>
+
+   <div class="form-group">
+    <%= f.label :Walkthrough, :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :walkthrough, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :'Hira Registration No.', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :hira_registration_number, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :'Bank Name', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :bank_name, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :'Branch.', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :branch_address, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :'Account No.', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+    <%= f.text_field :account_number, :class => "form-control" %>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :'IFSC Code.', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+      <%= f.text_field :ifsc_code, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :'Locality:', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+      <%= f.text_field :locality, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :'Area', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+      <%= f.text_field :area, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :'City', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+      <%= f.text_field :city, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :'Pincode', :class => "col-lg-4 " %>
+    <div class="col-lg-8">
+      <%= f.text_field :pincode, :class => "form-control" %>
+    </div>
+  </div>
+
+    <div class="form-group">
+    <%= f.label :auto_allocate, :class => "col-lg-4 " %>
+        <div class="col-lg-8">
+          <% if @business_unit.auto_allocate==true %>
+          <%= check_box_tag 'business_unit[auto_allocate]', true, checked: true %>
+          <% else %>
+          <%= check_box_tag 'business_unit[auto_allocate]', true %>
+          <% end %>
+      </div>
+    </div>
+
+ <div class="form-group">
+      <div class="col-lg-8 col-lg-offset-2">
+    <%= f.submit :class => 'btn btn-primary btn-block'%>
+  </div>
+  </div>
+
+  </div>
+  </div>
+<% end %>
+

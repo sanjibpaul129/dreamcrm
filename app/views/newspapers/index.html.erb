@@ -1,0 +1,25 @@
+<%@header = 'Newspapers'%>
+<h1>Listing newspapers</h1>
+
+<table class="customers">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @newspapers.each do |newspaper| %>
+      <tr>
+        <td><%= newspaper.description %></td>
+        <td><%= link_to 'Edit', edit_newspaper_path(newspaper), :class => 'edit_btn'  %></td>
+        <td><%= link_to 'Destroy', newspaper, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'dlt_btn'  %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Newspaper', new_newspaper_path, :class => 'btn btn-primary'  %>

@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  follow_up_id: 1
+  date: 2019-07-28 15:58:15
+
+two:
+  follow_up_id: 1
+  date: 2019-07-28 15:58:15

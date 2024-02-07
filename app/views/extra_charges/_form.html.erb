@@ -1,0 +1,52 @@
+<%= form_for(@extra_charge) do |f| %>
+  <% if @extra_charge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@extra_charge.errors.count, "error") %> prohibited this extra_charge from being saved:</h2>
+
+      <ul>
+      <% @extra_charge.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-5 col-lg-offset-3">
+    <div class="well bs-component">
+      <legend>&nbspGenerate Extra Charges</legend>
+
+       <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Description', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-8">
+            <%= f.text_field :description, :class => 'form-control'%>
+          </div>
+        </div>
+      </div><br>
+       <div class="row">
+        <div class="form-group">    
+          <%= f.label :'Service tax', :class => 'col-lg-3 control-label' %>
+          <div class="col-lg-8">
+            <%= f.text_field :service_tax, :class => 'form-control'%>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-lg-6 col-lg-offset-4">
+          <br>
+          <%= f.submit :class => 'btn btn-primary btn-block btn_width'%>
+        </div>
+      </div>
+
+ 
+ <!--  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_field :description %>
+  </div> -->
+  <!-- <div class="field">
+    <%= f.label :service_tax %><br>
+    <%= f.text_field :service_tax %>
+  </div> -->
+ <!--  <div class="actions">
+    <%= f.submit %>
+  </div> -->
+<% end %>

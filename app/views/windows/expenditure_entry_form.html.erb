@@ -1,0 +1,105 @@
+<%@header = 'Marketing Expenditure'%>
+<%= form_tag 'expenditure_entry_form', :authenticity_token => true do %>
+  <div class="row">
+    <div class="col-lg-1">
+      <%= label_tag 'Project:'  %>
+    </div>
+    <div class="col-lg-3">
+      <%= select(:project, :selected, options_for_select(@projects, selected: @business_unit_id),{}, {:class => 'form-control'}) %>
+    </div>
+    <div class="col-lg-1">
+      <%= label_tag 'Month:'  %>
+    </div>
+    <div class="col-lg-2">
+      <% if params[:date] == nil%>
+        <%= select_month((Date.today-1.month), {},{:class => "form-control"}) %>
+      <%else%>
+        <%= select_month((@month), {},{:class => "form-control"}) %>
+      <%end%>
+    </div>
+    <div class="col-lg-1">
+        <%= label_tag 'Year:'  %>
+    </div>
+    <div class="col-lg-2">
+      <% if params[:date] == nil%>
+        <%= select_year Date.today, {:start_year => (Date.today+1.year).year, :end_year => -3.year.from_now.year}, :class => "form-control" %>
+      <%else%>
+        <%= select_year @year, {:start_year => (Date.today+1.year).year, :end_year => -3.year.from_now.year}, :class => "form-control" %>
+      <%end%>
+    </div>
+    <div class="col-lg-2">
+      <%= submit_tag 'Pick', :class => 'btn btn-primary', :style => 'width: 140px!important;' %> 
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    
+  </div>
+<% end %>
+<% if params[:project]==nil%>
+<%else%>
+  <%= form_tag 'expenditure_entry', :authenticity_token => true, :html => {:class => 'form-horizontal'}  do %>
+    <%= hidden_field_tag 'project', @business_unit_id %>
+    <%= hidden_field_tag :business_unit_id, @business_unit_id %>
+    <%= hidden_field_tag 'date[year]', @year %>
+    <%= hidden_field_tag 'date[month]', @month %>
+    <% if params[:project] != nil%>
+      <%= hidden_field_tag 'expenditure_entry[date]', @beginning_of_month.strftime('%Y-%m-%d') %>
+    <%end%>
+    <div class="row">
+      <div class="col-lg-12">
+       <table class="customers"  id="normal_report">
+        <thead>
+          <tr>
+            <th>Sources</th>
+            <th>PlannedAmount</th>
+            <th>ActualAmount</th>
+            <th>Planned Enquiries</th>
+            <th>Remarks</th> 
+          </tr> 
+        </thead>
+
+        <tbody>
+          <% @extra_previous_expenditures=@all_previous_expenditures %>
+          <% @sources_used_last_month.each do |source| %>
+            <% @previous_expenditure_of_used_source=@all_previous_expenditures.where(source_category_id: source[1]) %>
+            <% @extra_previous_expenditures=@extra_previous_expenditures-@previous_expenditure_of_used_source %>
+            <tr>
+              <td><%= source[0] %></td>
+              <td><%= text_field_tag('previous_month_budgeted['+(source[1].to_s)+']', @previous_expenditure_of_used_source[0].try(:budgeted_amount), :class => 'form-control') %></td>
+              <td><%= text_field_tag('previous_month_sources['+(source[1].to_s)+']', @previous_expenditure_of_used_source[0].try(:amount), :class => 'form-control') %></td>
+              <td><%= text_field_tag('previous_month_budgeted_enquiries['+(source[1].to_s)+']', @previous_expenditure_of_used_source[0].try(:budgeted_enquiries), :class => 'form-control') %></td>
+              <td><%= text_field_tag('previous_month_remarks['+(source[1].to_s)+']', @previous_expenditure_of_used_source[0].try(:remarks), :class => 'form-control') %></td> 
+            </tr>
+          <% end %>
+          <% 4.times do |open_count| %>
+            <tr>
+                <% if @extra_previous_expenditures[open_count]==nil %>
+                  <td><%= select(:source_category, open_count.to_s, options_for_select(@source_categories),{prompt: true}, {:class => 'form-control selectpicker', data: { live_search: true }})   %></td>
+                  <td><%= text_field_tag('budgeted_extra_sources['+open_count.to_s+']', nil, :class => 'form-control') %></td> 
+                  <td><%= text_field_tag('extra_sources['+open_count.to_s+']', nil, :class => 'form-control') %></td> 
+                  <td><%= text_field_tag('budgeted_extra_enquiries['+open_count.to_s+']', nil, :class => 'form-control') %></td>
+                  <td><%= text_field_tag('extra_remarks['+open_count.to_s+']', nil, :class => 'form-control') %></td>
+                <% else %>
+                  <td><%= select(:source_category, open_count.to_s, options_for_select(@source_categories, selected: @extra_previous_expenditures[open_count].source_category_id),{}, { :class => 'form-control selectpicker', data: { live_search: true }}) %></td>
+                  <td><%= text_field_tag('budgeted_extra_sources['+open_count.to_s+']', @extra_previous_expenditures[open_count].budgeted_amount, :class => 'form-control') %></td>
+                  <td><%= text_field_tag('extra_sources['+open_count.to_s+']', @extra_previous_expenditures[open_count].amount,:class => 'form-control') %></td>
+                  <td><%= text_field_tag('budgeted_extra_enquiries['+open_count.to_s+']', @extra_previous_expenditures[open_count].try(:budgeted_enquiries), :class => 'form-control') %></td>
+                  <td><%= text_field_tag('extra_remarks['+open_count.to_s+']', @extra_previous_expenditures[open_count].remarks, :class => 'form-control') %></td> 
+                <% end %>
+            </tr>
+          <% end %>  
+        </tbody>
+      </table>
+      </div>
+    </div><br>
+    <div class="row">
+      <div class="col-lg-2 col-lg-offset-6">
+         <%= submit_tag 'Enter', name: 'enter', :class => 'btn btn-primary', :id => 'enter_report', data: { disable_with: "Please wait..." } %>
+      </div>
+    </div>
+  <%end%>
+<%end%>
+<script type="text/javascript">
+    $(".chosen").chosen();
+</script>

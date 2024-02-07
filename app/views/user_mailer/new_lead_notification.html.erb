@@ -1,0 +1,9 @@
+Name:<%= @lead.name %>
+<br>
+Project:<%= @lead.business_unit.name %>
+<br>
+Remarks:<%= @lead.customer_remarks %>
+<br>
+Source:<%= @lead.source_category.description %>
+<br>
+Generated On:<%= DateTime.now.strftime("%d/%m/%y") %>

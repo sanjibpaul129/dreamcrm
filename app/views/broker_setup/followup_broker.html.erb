@@ -1,0 +1,94 @@
+<h1>Broker Followups</h1>
+<%= form_tag 'followup_broker' do  %>
+    <% if current_personnel.email == "ayush@thejaingroup.com" %>
+      	<div class="row">
+        	<div class="col-lg-1">
+          		<i>Executive</i>
+        	</div>
+    		<div class="col-lg-3">
+          		<%= select_tag "personnel_id", options_for_select(@executives, selected: @executive), :class => 'form-control', :prompt => 'Please Select'%>
+        	</div>
+        	<div class="col-lg-2">
+          		<%= submit_tag 'Refresh', :class => 'btn btn-primary' %>
+        	</div>
+      	</div>
+    <% end %>
+<% end %><br>
+<%= form_tag 'broker_followup_history' do  %>
+	<table class="customers" id="broker_followup">
+		<thead>
+			<th>Brkr cntct Id</th>
+			<th>Broker</th>
+			<th>Name</th>
+			<th>Status</th>
+			<th>Reference</th>
+			<th>Invitation Read</th>
+			<th>Reply</th>
+			<th>Acceptance</th>
+			<th>Head Count</th>
+			<th>Site Visited</th>
+			<th>Contract Signed</th>
+			<th>Attempted Calls</th>
+			<th>Connected Calls</th>
+			<th></th>
+			<th></th>
+		</thead>
+		<tbody>
+			<%@broker_contacts.each do |broker_contact|%>
+				<tr>
+					<td><%= broker_contact.id%></td>
+					<td><%= broker_contact.broker.name %></td>
+					<td><%= broker_contact.name%></td>
+					<td><%= broker_contact.current_status%></td>
+					<td><%= broker_contact.reference%></td>
+					<td><%= broker_contact.try(:invitation_read)%></td>
+					<td><%= broker_contact.try(:invitation_reply)%></td>
+					<td><%= broker_contact.accept_invitation %></td>
+					<td><b><%= broker_contact.head_count %></b></td>
+					<td><b><%= broker_contact.site_visited %></b></td>
+					<td><b><%= broker_contact.broker.broker_project_statuses.where(business_unit_id: 70)[0].contract_signed %></b></td>
+					<td><%= broker_contact.call_attempted %></td>
+					<td><%= broker_contact.call_connected %></td>
+					<td><%= submit_tag "Call", :name => "call[#{broker_contact.id}]" %></td>
+					<% if broker_contact.mobile_two == "" || broker_contact.mobile_two == nil%>
+						<td></td>
+					<%else%>
+						<td><%= submit_tag "Call Other No.", :name => "call_other_number[#{broker_contact.id}]" %></td>
+					<%end%>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+<%end%>
+<script>
+	$(document).ready(function(){
+	var FilterTable=$("#broker_followup").DataTable({  
+	   "fixedHeader": true,   
+	   "dom": '<"wrapper"lit>',
+	   "bAutoWidth": false,
+	   "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+	   "bDeferRender": true,
+	   "aoColumns": [
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true},
+	                              {"bSortable": true}
+	                             ]
+	});
+
+	$("#filterbox").keyup(function() {
+	        FilterTable.search(this.value).draw();
+	    });
+	});
+</script>
