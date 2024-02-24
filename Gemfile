@@ -10,7 +10,7 @@ gem 'pg', '~> 0.20'
 gem 'sass-rails'
 
 # Use Uglifier as compressor for JavaScript assets
-# gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails'
@@ -21,9 +21,9 @@ gem 'rails-controller-testing'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem 'e2mmap'
-gem 'scanf'
-gem 'thwait'
+# gem 'e2mmap'
+# gem 'scanf'
+# gem 'thwait'
 
 # gem 'execjs'
 # gem 'mini_racer'
@@ -75,7 +75,7 @@ gem 'puma_worker_killer'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 gem 'wkhtmltopdf-heroku'
-# gem 'postmark-rails', "~> 0.20.0"
+gem 'postmark-rails', "~> 0.20.0"
 # gem 'bcrypt-ruby'
 gem 'bcrypt'
 gem 'puma'

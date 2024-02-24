@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  
+
   # mount Ckeditor::Engine => '/ckeditor'
   get 'transaction/index'
   get 'setup/index'
