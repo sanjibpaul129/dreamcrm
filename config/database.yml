@@ -6,7 +6,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: new_precrm
+  database: precrm
   pool: 5
   port: 5432
   host: localhost
@@ -19,7 +19,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: new_precrm
+  database: precrm
   pool: 5
   username: shilpiruia
   password: Vasanhara@123
@@ -27,7 +27,7 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: new_precrm
+  database: precrm
   pool: 5
   username: shilpiruia
   password: Vasanhara@123
